@@ -1,0 +1,32 @@
+{
+  "name": "linear-elements",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run verify && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "verify": "tsx scripts/verify.ts",
+    "typecheck": "tsc --noEmit",
+    "e2e": "tsx scripts/e2e-gate.ts",
+    "sweep": "tsx scripts/sweep.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/katex": "^0.16.8",
+    "@types/node": "^26.6.3",
+    "ml-matrix": "^6.15.0",
+    "puppeteer-core": "^25.12.0",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2",
+    "vitest": "^5.0.3"
+  },
+  "dependencies": {
+    "katex": "^0.18.10"
+  }
+}
