@@ -7,13 +7,15 @@ import { renderMap } from './app/map';
 import { renderHome, renderGlossary, renderReport } from './app/pages';
 import { installPopovers } from './app/popover';
 import { progress, trail } from './app/state';
+import { reviewState } from './content/review';
 
-// 초안 표시: 사용자의 노드별 검토가 끝나면 false로 바꾼다.
+// 초안 배너
+//  · 노드 페이지: 그 노드의 검토 상태(src/content/reviews.json)를 따른다. 저자가 검토했고 그 뒤 바뀌지 않았으면 배너가 없다.
+//  · 홈과 그 밖의 페이지(지도, 용어, 보고서 …): 아래 DRAFT를 따른다. 전체 검토가 끝나면 false로 바꾼다.
 const DRAFT = true;
 
 const app = document.getElementById('app')!;
-document.body.classList.toggle('draft', DRAFT);
-app.innerHTML = `${DRAFT ? '<div class="draft-banner" role="note">초안 · 검토하며 고쳐 쓰고 있는 원고입니다.<span class="draft-more">&nbsp;내용과 관문은 바뀔 수 있습니다.</span></div>' : ''}
+app.innerHTML = `<div class="draft-banner" role="note"></div>
   <header class="topbar">
     <button class="menu-btn" aria-label="목차 열기">☰</button>
     <a class="brand" href="#/">선형 원론</a>
@@ -29,6 +31,24 @@ app.innerHTML = `${DRAFT ? '<div class="draft-banner" role="note">초안 · 검�
     <main class="main"></main>
   </div>`;
 const sidebar = app.querySelector<HTMLElement>('.sidebar')!;
+const banner = app.querySelector<HTMLElement>('.draft-banner')!;
+function setBanner(head: string | null, more = '') {
+  document.body.classList.toggle('draft', head !== null);
+  banner.innerHTML = head === null ? '' : `${head}${more ? `<span class="draft-more">&nbsp;${more}</span>` : ''}`;
+}
+function siteBanner() {
+  if (!DRAFT) return setBanner(null);
+  const nodes = BOOKS.flatMap((b) => b.nodes);
+  const done = nodes.filter((n) => reviewState(n) === 'reviewed').length;
+  setBanner('초안 · 검토하며 고쳐 쓰고 있는 원고입니다.', `저자가 검토를 마친 노드 ${done}/${nodes.length}.`);
+}
+function nodeBanner(id: string) {
+  const n = NODE_BY_ID.get(id);
+  const s = n ? reviewState(n) : 'reviewed';
+  if (s === 'reviewed') setBanner(null);
+  else if (s === 'changed') setBanner('검토 뒤 고친 노드 · 바뀐 부분은 저자가 아직 다시 검토하지 않았습니다.');
+  else setBanner('초안 · 이 노드는 저자가 아직 검토하지 않았습니다.', '내용과 관문은 바뀔 수 있습니다.');
+}
 const main = app.querySelector<HTMLElement>('.main')!;
 app.querySelector<HTMLButtonElement>('.menu-btn')!.onclick = () => document.body.classList.toggle('side-open');
 installPopovers(document.body);
@@ -61,12 +81,14 @@ async function route() {
   document.querySelectorAll('.topbar nav a').forEach((a) => a.classList.toggle('on', (a as HTMLAnchorElement).hash === `#/${parts[0] ?? ''}`));
   main.classList.toggle('wide', parts[0] === 'map');
   if (parts[0] === 'n' && parts[1]) {
+    nodeBanner(parts[1]);
     renderSidebar(parts[1]);
     cleanup = renderNode(main, parts[1], params.get('view'));
     const n = NODE_BY_ID.get(parts[1]);
     document.title = n ? `${n.title} · 선형 원론` : '선형 원론';
     return;
   }
+  siteBanner();
   renderSidebar();
   trail.clear();
   if (parts[0] === 'map') cleanup = renderMap(main, params.get('focus') ?? undefined);

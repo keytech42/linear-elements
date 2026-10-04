@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { BOOKS } from '../src/content/index';
 import { verify, RULES } from '../src/verify/verify';
 import { indexExports } from '../src/verify/code-index';
+import { reviewState } from '../src/content/review';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const sceneIds = new Set(
@@ -30,6 +31,8 @@ for (const i of r.issues) {
 const nodes = BOOKS.flatMap((b) => b.nodes);
 const written = nodes.filter((n) => n.status === 'written').length;
 console.log(`\n노드 ${nodes.length}개 (본문 완성 ${written}개) · 용어 ${r.termHome.size}개 · 의존 간선 ${r.edges.length}개 · 첫 등장 자동 링크 ${r.autoLinked}곳`);
+const rs = nodes.map(reviewState);
+console.log(`저자 검토: 검토함 ${rs.filter((s) => s === 'reviewed').length} · 검토 뒤 바뀜 ${rs.filter((s) => s === 'changed').length} · 초안 ${rs.filter((s) => s === 'draft').length}`);
 console.log(`error ${by.error} · warn ${by.warn} · info ${by.info}${showAll ? '' : ' (info는 --all로 표시)'}`);
 if (by.error) {
   console.log('\n규칙 설명:');

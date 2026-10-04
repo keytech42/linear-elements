@@ -191,3 +191,13 @@ describe('낱말 경계와 모든 등장 링크 (한 글자 용어)', () => {
     expect(links(r, 'n1')).toEqual(['향']);
   });
 });
+
+describe('검토 지문', () => {
+  it('같은 내용이면 같은 지문, 본문 한 글자가 바뀌면 다른 지문', async () => {
+    const { nodeHash } = await import('./review');
+    const n = { id: 'n', kind: 'def' as const, title: 't', status: 'written' as const, body: '가나다' };
+    expect(nodeHash(n)).toBe(nodeHash({ ...n }));
+    expect(nodeHash(n)).not.toBe(nodeHash({ ...n, body: '가나라' }));
+    expect(nodeHash(n)).toBe(nodeHash({ ...n, status: 'stub' as const })); // 상태 표시는 지문에 넣지 않는다
+  });
+});

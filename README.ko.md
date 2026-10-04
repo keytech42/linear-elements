@@ -27,6 +27,7 @@ npm test           # 수치 코어와 마크업 파서 테스트
 npm run typecheck
 npm run e2e        # 관문 동작 (이 컴퓨터의 Chrome 필요)
 npm run sweep      # 모든 노드를 열어 오류 확인 (Chrome 필요)
+npm run review     # 노드별 저자 검토 상태. `npm run review -- mark <id>`로 검토를 기록한다
 ```
 
 ## 구조

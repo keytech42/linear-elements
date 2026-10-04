@@ -10,7 +10,8 @@
     "verify": "tsx scripts/verify.ts",
     "typecheck": "tsc --noEmit",
     "e2e": "tsx scripts/e2e-gate.ts",
-    "sweep": "tsx scripts/sweep.ts"
+    "sweep": "tsx scripts/sweep.ts",
+    "review": "tsx scripts/review.ts"
   },
   "keywords": [],
   "author": "Keetaek Yang",

@@ -7,6 +7,7 @@
 //   이 한계는 검증 보고서 화면에도 그대로 적어 둔다.
 import type { Book, NodeDef, TermDecl, Predict } from '../content/schema';
 import { eig2 } from '../la/eig';
+import { REVIEWS, reviewState } from '../content/review';
 import { parseBlocks, parseInline, walkInlines, walkInlineList, walkBlocks, type Block, type Inline } from '../content/markup';
 
 export type Level = 'error' | 'warn' | 'info';
@@ -74,6 +75,8 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P022: { level: 'error', text: '예측의 정답 번호가 보기 범위를 벗어남' },
   P023: { level: 'error', text: '그림 예측의 행렬이 문제에 맞지 않음(2×2 아님, 실수 고유 방향 없음, 입력 없음)' },
   P024: { level: 'warn', text: '힌트가 3개를 넘음' },
+  P026: { level: 'warn', text: '저자가 검토한 뒤 내용이 바뀐 노드(다시 검토 필요)' },
+  P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
 };
 
 export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<string, string>): VerifyResult {
@@ -257,7 +260,11 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     if (n.status === 'written') autoLinked += autoLinkFirstMentions(pn, lexicon, (id) => order.get(termHome.get(id)!.node)! < here, (id) => termUse.set(id, (termUse.get(id) ?? 0) + 1));
   }
 
-  // 4. 죽은 정의, 고아
+  // 4. 검토 기록
+  for (const n of nodes) if (reviewState(n) === 'changed') push('P026', n.id, `${REVIEWS[n.id].on}에 검토한 뒤 바뀜. 다시 검토했으면 npm run review -- mark ${n.id}`);
+  for (const id of Object.keys(REVIEWS)) if (!order.has(id)) push('P027', id, `reviews.json의 '${id}'`);
+
+  // 5. 죽은 정의, 고아
   for (const [id, { node, decl }] of termHome) if (!termUse.get(id)) push('P014', node, `'${decl.ko}'(${id})`);
   const incoming = new Set(edges.map((e) => e.to));
   const last = books[books.length - 1];

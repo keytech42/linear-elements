@@ -5,6 +5,7 @@ import { RULES } from '../verify/verify';
 import { COLOR_TABLE } from '../render/colors';
 import { tex } from './render';
 import { progress } from './state';
+import { reviewState, REVIEWS } from '../content/review';
 
 export function renderHome(main: HTMLElement) {
   const written = ALL_NODES.filter((n) => n.status === 'written').length;
@@ -93,6 +94,7 @@ export function renderReport(main: HTMLElement) {
       <p><b>보장하지 못하는 것 — 설명의 충분성.</b> “늘어나는 비율”처럼 풀어 쓴 표현이 사실상 뒤의 개념을 쓰는 경우, 증명에 논리의 빈틈이 있는 경우, 그림이 암묵적으로 전제하는 개념은 잡지 못합니다. 이 빈틈은 사람(당신)의 “왜?”로만 메울 수 있습니다.</p>
     </aside>
     ${groups.join('')}
+    ${reviewSection()}
     <h2>규칙 목록</h2>
     <table class="tbl">${Object.entries(RULES).map(([k, v]) => `<tr><td><code>${k}</code></td><td>${v.level}</td><td>${v.text}</td></tr>`).join('')}</table>
   </section>`;
@@ -104,4 +106,23 @@ function escapeHtml(s: string) {
 
 export function kindLabel(id: string) {
   return KIND_LABEL[NODE_BY_ID.get(id)!.kind];
+}
+
+/** 저자 검토 현황: 권마다 검토함 / 검토 뒤 바뀜 / 초안. 기록은 npm run review -- mark <id> */
+function reviewSection(): string {
+  const label = { reviewed: '검토함', changed: '검토 뒤 바뀜', draft: '초안' } as const;
+  const all = ALL_NODES.map((n) => reviewState(n));
+  const rows = BOOKS.map((b) => {
+    const items = b.nodes
+      .map((n) => {
+        const s = reviewState(n);
+        return `<li class="rv rv-${s}"><span class="rv-tag">${label[s]}${s !== 'draft' ? ` · ${REVIEWS[n.id].on}` : ''}</span> <a href="#/n/${n.id}">${n.title}</a></li>`;
+      })
+      .join('');
+    const done = b.nodes.filter((n) => reviewState(n) === 'reviewed').length;
+    return `<details><summary>${b.num}권 ${b.title} — 검토함 ${done}/${b.nodes.length}</summary><ul class="rv-list">${items}</ul></details>`;
+  }).join('');
+  return `<h2>저자 검토</h2>
+    <p>저자가 노드를 검토하면 그때의 내용 지문을 기록합니다. 그 뒤 내용이 바뀌면 "검토 뒤 바뀜"으로 돌아갑니다(P026). 검토함 ${all.filter((s) => s === 'reviewed').length} · 검토 뒤 바뀜 ${all.filter((s) => s === 'changed').length} · 초안 ${all.filter((s) => s === 'draft').length}.</p>
+    ${rows}`;
 }
