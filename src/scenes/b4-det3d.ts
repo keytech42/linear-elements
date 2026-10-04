@@ -78,7 +78,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     ro.set(
       `<div>${chip('det A', C.x, 'det')} = ${fmt(d, 3)} <span class="dim">(부호 있는 부피)</span></div>` +
         `<div>부피 = ${fmt(Math.abs(d), 3)}, 향: ${Math.abs(d) < 1e-9 ? '말할 수 없음' : d > 0 ? '유지' : '뒤집힘'}</div>` +
-        `<div class="eq">세 열이 생성하는 것: ${what}</div>`,
+        `<div class="eq">세 열이 스팬하는 것: ${what}</div>`,
     );
     s.invalidate();
   }

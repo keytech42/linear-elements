@@ -34,17 +34,17 @@ const book: Book = {
           kind: 'choice',
           q: '가로축과 세로축을 합친 모임(두 직선 위의 벡터 전부)은 부분공간일까?',
           hints: [String.raw`가로축 위의 $(1, 0)$과 세로축 위의 $(0, 1)$을 더해 보라. 결과는 두 축 가운데 하나 위에 있는가?`],
-          choices: ['아니다. 서로 다른 축의 벡터를 더하면 밖으로 나간다', '그렇다. 원점을 지나는 직선 둘이므로', '그렇다. 두 축이 평면 전체를 생성하므로', '그렇다. 스칼라 곱을 해도 축 위에 남으므로'],
+          choices: ['아니다. 서로 다른 축의 벡터를 더하면 밖으로 나간다', '그렇다. 원점을 지나는 직선 둘이므로', '그렇다. 두 축이 평면 전체를 스팬하므로', '그렇다. 스칼라 곱을 해도 축 위에 남으므로'],
           answer: 0,
           why: [
             String.raw`$(1, 0) + (0, 1) = (1, 1)$은 어느 축 위에도 없다. 덧셈 조건이 깨진다.`,
             String.raw`직선 하나하나는 부분공간이지만, 둘을 **합친 것**은 아니다.`,
-            String.raw`두 축이 **생성하는** 것은 평면 전체(부분공간)지만, 두 축 **자체**는 평면이 아니다. 생성과 모임을 혼동했다.`,
+            String.raw`두 축이 **스팬하는** 것은 평면 전체(부분공간)지만, 두 축 **자체**는 평면이 아니다. 스팬과 모임을 혼동했다.`,
             String.raw`스칼라 곱 조건은 지키지만 덧셈 조건이 깨진다. 두 조건이 모두 필요하다. 거의 맞는 답이다.`,
           ],
         },
       ],
-      body: String.raw`[생성](t:t.span)은 언제나 "원점을 지나는 직선, 평면, …" 같은 모양이었다. 이런 모양들에 공통인 성질은 무엇일까?
+      body: String.raw`[스팬](t:t.span)은 언제나 "원점을 지나는 직선, 평면, …" 같은 모양이었다. 이런 모양들에 공통인 성질은 무엇일까?
 
 **정의.** 벡터들의 모임 $V$가 다음 두 조건을 만족하면 [부분공간](def:t.subspace)이라 한다(비어 있지 않을 때).
 1. $V$ 안의 두 벡터를 더해도 $V$ 안에 있다.
@@ -58,8 +58,8 @@ const book: Book = {
 
 ::predict p-offset
 
-### 생성은 언제나 부분공간이다
-$\mathbf{u}, \mathbf{w}$의 선형 결합 두 개를 더하면 $(c_1\mathbf{u} + c_2\mathbf{w}) + (d_1\mathbf{u} + d_2\mathbf{w}) = (c_1 + d_1)\mathbf{u} + (c_2 + d_2)\mathbf{w}$로 다시 선형 결합이다([여덟 규칙](why:prop.vector-rules)). 스칼라를 곱해도 마찬가지다. 그래서 생성은 부분공간이다. 거꾸로 평면의 부분공간은 모두 무언가의 생성이다(원점은 영벡터의 생성, 직선은 그 방향 벡터 하나의 생성, 평면은 기저 둘의 생성). 부분공간의 [차원](t:t.dimension)은 그 기저의 벡터 개수다.
+### 스팬은 언제나 부분공간이다
+$\mathbf{u}, \mathbf{w}$의 선형 결합 두 개를 더하면 $(c_1\mathbf{u} + c_2\mathbf{w}) + (d_1\mathbf{u} + d_2\mathbf{w}) = (c_1 + d_1)\mathbf{u} + (c_2 + d_2)\mathbf{w}$로 다시 선형 결합이다([여덟 규칙](why:prop.vector-rules)). 스칼라를 곱해도 마찬가지다. 그래서 스팬은 부분공간이다. 거꾸로 평면의 부분공간은 모두 무언가의 스팬이다(원점은 영벡터의 스팬, 직선은 그 방향 벡터 하나의 스팬, 평면은 기저 둘의 스팬). 부분공간의 [차원](t:t.dimension)은 그 기저의 벡터 개수다.
 
 ::predict p-union`,
       checks: [
@@ -77,7 +77,7 @@ $\mathbf{u}, \mathbf{w}$의 선형 결합 두 개를 더하면 $(c_1\mathbf{u} +
       title: '열공간: 출력이 닿을 수 있는 곳 전부',
       status: 'written',
       introduces: {
-        terms: [{ id: 't.column-space', ko: '열공간', en: 'column space', gloss: '행렬의 열들이 생성하는 부분공간. 곧 A𝐱가 될 수 있는 모든 벡터.' }],
+        terms: [{ id: 't.column-space', ko: '열공간', en: 'column space', gloss: '행렬의 열들이 스팬하는 부분공간. 곧 A𝐱가 될 수 있는 모든 벡터.' }],
         symbols: [{ tex: 'C(A)', meaning: '행렬 A의 열공간' }],
       },
       requires: ['def.subspace', 'def.matvec'],
@@ -102,7 +102,7 @@ $\mathbf{u}, \mathbf{w}$의 선형 결합 두 개를 더하면 $(c_1\mathbf{u} +
       ],
       body: String.raw`변환 $A$의 출력은 어디까지 닿을 수 있을까? 출력이 닿지 못하는 곳이 있다면, 그곳을 목표로 하는 [연립방정식](t:t.linear-system)은 풀리지 않는다.
 
-**정의.** 행렬 $A$의 열들이 생성하는 부분공간을 $A$의 [열공간](def:t.column-space)이라 하고 $C(A)$로 쓴다. [출력은 언제나 열들의 선형 결합](why:def.matvec)이고, 거꾸로 열들의 선형 결합은 모두 어떤 입력의 출력이므로, 열공간은 **$A$의 출력 전체**와 같다.
+**정의.** 행렬 $A$의 열들이 스팬하는 부분공간을 $A$의 [열공간](def:t.column-space)이라 하고 $C(A)$로 쓴다. [출력은 언제나 열들의 선형 결합](why:def.matvec)이고, 거꾸로 열들의 선형 결합은 모두 어떤 입력의 출력이므로, 열공간은 **$A$의 출력 전체**와 같다.
 
 $$C(A) = \{A\mathbf{x} : \mathbf{x}\text{는 아무 입력}\}$$
 
@@ -122,7 +122,7 @@ $$C(A) = \{A\mathbf{x} : \mathbf{x}\text{는 아무 입력}\}$$
           q: String.raw`2×2 행렬 $A$의 $\det A \ne 0$이다. 열공간은?`,
           choices: ['평면 전체', '원점을 지나는 직선', '원점 하나', '행렬마다 다르다'],
           answer: 0,
-          explain: String.raw`[행렬식이 0이 아니면 두 열은 독립](n:prop.det-zero)이고, 독립인 두 벡터는 평면 전체를 생성한다. 그래서 모든 $\mathbf{b}$에 해가 있다.`,
+          explain: String.raw`[행렬식이 0이 아니면 두 열은 독립](n:prop.det-zero)이고, 독립인 두 벡터는 평면 전체를 스팬한다. 그래서 모든 $\mathbf{b}$에 해가 있다.`,
         },
       ],
     },
@@ -336,7 +336,7 @@ $$n = \operatorname{rank}A + \dim N(A)$$
       kind: 'prop',
       title: '행공간과 영공간은 직교한다',
       status: 'written',
-      introduces: { terms: [{ id: 't.row-space', ko: '행공간', en: 'row space', gloss: '행렬의 행들이 생성하는 부분공간. Aᵀ의 열공간. 입력 공간에 산다.' }] },
+      introduces: { terms: [{ id: 't.row-space', ko: '행공간', en: 'row space', gloss: '행렬의 행들이 스팬하는 부분공간. Aᵀ의 열공간. 입력 공간에 산다.' }] },
       requires: ['prop.row-picture', 'def.null-space', 'def.orthogonal'],
       predicts: [
         {
@@ -359,7 +359,7 @@ $$n = \operatorname{rank}A + \dim N(A)$$
       ],
       body: String.raw`[영공간](t:t.null-space)은 "$A\mathbf{x} = \mathbf{0}$인 입력"으로 정의했다. 이 식을 [행의 관점](why:prop.row-picture)으로 읽으면 무엇이 보일까?
 
-**정의.** 행렬의 행들이 생성하는 부분공간을 [행공간](def:t.row-space)이라 한다. 행은 입력과 내적하는 벡터이므로 행공간은 **입력 공간**에 산다. 행공간은 $A^{\mathsf{T}}$의 열공간이기도 하다.
+**정의.** 행렬의 행들이 스팬하는 부분공간을 [행공간](def:t.row-space)이라 한다. 행은 입력과 내적하는 벡터이므로 행공간은 **입력 공간**에 산다. 행공간은 $A^{\mathsf{T}}$의 열공간이기도 하다.
 
 **명제.** 행공간의 모든 벡터와 영공간의 모든 벡터는 서로 [직교](t:t.orthogonal)한다.
 

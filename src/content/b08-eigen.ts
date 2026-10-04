@@ -81,7 +81,7 @@ const book: Book = {
       status: 'written',
       introduces: {
         terms: [
-          { id: 't.eigenvector', ko: '고유벡터', en: 'eigenvector', surfaces: ['고유 벡터'], gloss: '변환 뒤에도 자기가 놓인 직선(생성) 위에 그대로 있는, 영벡터가 아닌 벡터. A𝐯 = λ𝐯.' },
+          { id: 't.eigenvector', ko: '고유벡터', en: 'eigenvector', surfaces: ['고유 벡터'], gloss: '변환 뒤에도 자기가 놓인 직선(스팬) 위에 그대로 있는, 영벡터가 아닌 벡터. A𝐯 = λ𝐯.' },
           { id: 't.eigenvalue', ko: '고윳값', en: 'eigenvalue', surfaces: ['고유값'], gloss: '고유벡터가 늘어나는 배율. 음수면 뒤집히며 늘어나고, 0이면 원점으로 사라진다.' },
         ],
         symbols: [{ tex: String.raw`\lambda`, meaning: '고윳값' }],
@@ -127,7 +127,7 @@ $$\cy{A\mathbf{v}} = \lambda\,\cx{\mathbf{v}}, \qquad \mathbf{v} \ne \mathbf{0}$
 
 를 만족하면, $\mathbf{v}$를 $A$의 [고유벡터](def:t.eigenvector)라 하고 $\lambda$를 그 고유벡터의 [고윳값](def:t.eigenvalue)이라 한다.
 
-식을 읽는 법은 이렇다. 왼쪽은 "$\mathbf{v}$에 $A$를 한 결과"이고, 오른쪽은 "같은 $\mathbf{v}$를 그냥 $\lambda$배 한 결과"다. 둘이 같다는 것은 이 변환이 $\mathbf{v}$에게는 [스칼라 곱](t:t.scalar-mul)만 했다는 뜻이다. 그림으로는 출력 $A\mathbf{v}$가 $\mathbf{v}$의 [생성](t:t.span) 직선 위에 놓인다.
+식을 읽는 법은 이렇다. 왼쪽은 "$\mathbf{v}$에 $A$를 한 결과"이고, 오른쪽은 "같은 $\mathbf{v}$를 그냥 $\lambda$배 한 결과"다. 둘이 같다는 것은 이 변환이 $\mathbf{v}$에게는 [스칼라 곱](t:t.scalar-mul)만 했다는 뜻이다. 그림으로는 출력 $A\mathbf{v}$가 $\mathbf{v}$의 [스팬](t:t.span) 직선 위에 놓인다.
 
 ::predict p-zero
 

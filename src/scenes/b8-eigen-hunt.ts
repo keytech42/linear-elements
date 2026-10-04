@@ -82,7 +82,7 @@ const scene: SceneFn = (host, { bus, params }) => {
       if (info.kind === 'all') p.hud([{ text: '모든 직선이 평행 방향이다 (A = λI)', color: C.u }], 'tr');
       else dirsOf(info).forEach((d, i) => p.line([0, 0], d, { color: i ? C.v : C.u, width: 1.5, dash: [9, 6], key: i ? 'v2' : 'v1' }));
     }
-    // 𝐱가 놓인 직선(생성)
+    // 𝐱가 놓인 직선(스팬)
     p.line([0, 0], x, { color: par ? C.ok : C.x, width: par ? 3 : 1, dash: par ? [] : [3, 6], alpha: par ? 0.75 : 0.5 });
     if (!flat) {
       const r = 0.42;

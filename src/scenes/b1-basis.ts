@@ -73,7 +73,7 @@ const scene: SceneFn = (host, { bus, params }) => {
       html +=
         `<div>이 기저에 대한 ${chip('좌표', C.ink, 'coords')}: (${chip(fmt(k[0]), C.u, 'c1u')}, ${chip(fmt(k[1]), C.w, 'c2w')})</div>` +
         `<div class="eq">${chip(fmt(k[0]), C.u, 'c1u')}·${vtxt(u)} + ${chip(fmt(k[1]), C.w, 'c2w')}·${vtxt(w)} = ${vtxt(P)}</div>`;
-    else html += `<div class="dim">𝐮와 𝐰가 나란해서 평면 전체를 생성하지 못한다. 점이 그 직선 위에 있으면 좌표를 매기는 방법이 끝없이 많고, 아니면 하나도 없다.</div>`;
+    else html += `<div class="dim">𝐮와 𝐰가 평행해서 평면 전체를 스팬하지 못한다. 점이 그 직선 위에 있으면 좌표를 매기는 방법이 끝없이 많고, 아니면 하나도 없다.</div>`;
     ro.set(html);
     p.invalidate();
   }

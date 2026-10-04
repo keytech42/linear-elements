@@ -36,14 +36,14 @@ describe('0권·1권 도구', () => {
     // 단위원 위의 점은 원점에서 거리 1 (prop.cos-sin-identity)
     for (const t of [0.3, 1, 2.5, 4, 5.9]) expect(distance([0, 0], circlePoint(t))).toBeCloseTo(1);
   });
-  it('생성의 차원', () => {
+  it('스팬의 차원', () => {
     expect(spanDim([[0, 0]])).toBe(0);
     expect(spanDim([[1, 2], [2, 4]])).toBe(1);
     expect(spanDim([[2, 1], [-1, 1]])).toBe(2);
     expect(spanDim([[1, 0, 0], [0, 1, 0], [1, 1, 0]])).toBe(2);
     expect(spanDim([[1, 0, 0], [0, 1, 0], [0, 0, 1]])).toBe(3);
   });
-  it('나란함 판정과 계수 공식', () => {
+  it('평행함 판정과 계수 공식', () => {
     expect(cross2([1, 2], [2, 4])).toBe(0);
     expect(cross2([2, 1], [-1, 1])).toBe(3);
     expect(reachCoeffs([2, 1], [-1, 1], [1, 2])).toEqual([1, 1]);

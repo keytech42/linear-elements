@@ -40,7 +40,7 @@ export function angleOf(p: Vec): number {
 }
 
 /**
- * def.span, def.dimension — 벡터들의 생성이 몇 차원인가: 0 = 원점 한 점, 1 = 직선, 2 = 평면, 3 = 공간.
+ * def.span, def.dimension — 벡터들의 스팬이 몇 차원인가: 0 = 원점 한 점, 1 = 직선, 2 = 평면, 3 = 공간.
  * (6권의 랭크로 센다. 1권에서는 그림으로만 쓴다.)
  */
 export function spanDim(vs: Vec[], tol = 1e-9): number {
@@ -49,16 +49,16 @@ export function spanDim(vs: Vec[], tol = 1e-9): number {
 }
 
 /**
- * def.span — 평면의 두 벡터 𝐮, 𝐰가 나란한지 가리는 수 u₁w₂ − u₂w₁.
- * 0이면 나란하고(한쪽이 다른 쪽의 스칼라 배이거나 영벡터가 끼어 있고), 0이 아니면 둘이 평면 전체를 생성한다.
+ * def.span — 평면의 두 벡터 𝐮, 𝐰가 평행한지 가리는 수 u₁w₂ − u₂w₁.
+ * 0이면 평행하고(한쪽이 다른 쪽의 스칼라 배이거나 영벡터가 끼어 있고), 0이 아니면 둘이 평면 전체를 스팬한다.
  */
 export function cross2(u: Vec, w: Vec): number {
   return u[0] * w[1] - u[1] * w[0];
 }
 
 /**
- * def.span — 나란하지 않은 𝐮, 𝐰로 목표 𝐭에 닿는 계수 (c₁, c₂).
- * c₁𝐮 + c₂𝐰 = 𝐭 의 두 식에서 한 미지수를 지워 얻은 공식이다. 나란하면 null.
+ * def.span — 평행하지 않은 𝐮, 𝐰로 목표 𝐭에 닿는 계수 (c₁, c₂).
+ * c₁𝐮 + c₂𝐰 = 𝐭 의 두 식에서 한 미지수를 지워 얻은 공식이다. 평행하면 null.
  */
 export function reachCoeffs(u: Vec, w: Vec, t: Vec, tol = 1e-12): [number, number] | null {
   const D = cross2(u, w);

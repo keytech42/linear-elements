@@ -852,11 +852,11 @@ $$((AB)C)\mathbf{x} = (AB)(C\mathbf{x}) = A(B(C\mathbf{x})), \qquad (A(BC))\math
           id: 'p-fill',
           kind: 'choice',
           q: '3×2 행렬의 출력들은 3차원 공간 전체를 채울 수 있을까?',
-          hints: [String.raw`모든 출력은 두 열의 [선형 결합](n:def.linear-combination)이다. 벡터 두 개의 [생성](n:def.span)은 가장 커 봐야 무엇인가?`],
+          hints: [String.raw`모든 출력은 두 열의 [선형 결합](n:def.linear-combination)이다. 벡터 두 개의 [스팬](n:def.span)은 가장 커 봐야 무엇인가?`],
           choices: ['없다. 가장 커 봐야 원점을 지나는 평면 하나다', '있다. 출력이 3차원 벡터이므로', '열을 잘 고르면 있다', '없다. 언제나 직선 하나다'],
           answer: 0,
           why: [
-            String.raw`출력은 모두 두 열의 선형 결합이고, 두 벡터가 생성하는 것은 평면(두 열이 독립일 때) 이하다.`,
+            String.raw`출력은 모두 두 열의 선형 결합이고, 두 벡터가 스팬하는 것은 평면(두 열이 독립일 때) 이하다.`,
             String.raw`출력이 3차원 공간에 **산다**는 것과 3차원 공간을 **채운다**는 것은 다르다.`,
             String.raw`열이 두 개뿐이라 어떻게 골라도 평면을 넘지 못한다.`,
             String.raw`두 열이 독립이면 평면이다. 직선이 되는 것은 두 열이 같은 직선 위에 있을 때다.`,

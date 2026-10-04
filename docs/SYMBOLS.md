@@ -20,7 +20,7 @@
 | 𝐮, 𝐰 | 이름 없는 벡터(둘째, 셋째) | def.vector-add | 𝐮ᵢ는 9권의 왼쪽 특이벡터 |
 | 𝟎 | 영벡터 | def.vector | |
 | c | 스칼라 | def.scalar-mul | c₁, c₂: 선형 결합의 계수 |
-| span | 생성(span): 벡터들의 선형 결합 전체 | def.span | |
+| span | 스팬(span): 벡터들의 선형 결합 전체 | def.span | |
 | 𝐞₁, 𝐞₂, 𝐞₃ | 표준 기저 벡터 | def.basis | |
 | ℝⁿ | 숫자 n개짜리 벡터 전체 | def.dimension | |
 | n, m | 입력 차원(열 개수), 출력 차원(행 개수) | def.shape | |

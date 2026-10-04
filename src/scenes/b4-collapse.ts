@@ -62,7 +62,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const A = M(), d = det2(A), r = rank(A);
     ro.set(
       `<div>${chip('det A', C.x, 'det')} = ${fmt(d, 3)}</div>` +
-        `<div>열들이 생성하는 것: ${r === 2 ? '평면 전체' : r === 1 ? chip('직선 하나', C.y, 'line') : '점 하나(원점)'}</div>` +
+        `<div>열들이 스팬하는 것: ${r === 2 ? '평면 전체' : r === 1 ? chip('직선 하나', C.y, 'line') : '점 하나(원점)'}</div>` +
         `<div class="eq">${r === 2 ? '두 열은 선형 독립' : `<span style="color:${C.bad}">두 열은 선형 종속: a₂ = ${fmt(k)}·a₁</span>`}</div>`,
     );
     p.invalidate();

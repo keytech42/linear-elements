@@ -179,7 +179,7 @@ export function orthonormalize(vs: Vec[], tol = 1e-9): Vec[] {
   return out;
 }
 
-/** prop.row-null-perp — 정규직교 기저 qs가 생성하는 부분공간 위로 v를 정사영한다: Σ (q·v) q */
+/** prop.row-null-perp — 정규직교 기저 qs가 스팬하는 부분공간 위로 v를 정사영한다: Σ (q·v) q */
 export function projectOntoSpan(qs: Vec[], v: Vec): Vec {
   let p: Vec = new Array(v.length).fill(0);
   for (const q of qs) p = p.map((x, i) => x + dot(q, v) * q[i]);
