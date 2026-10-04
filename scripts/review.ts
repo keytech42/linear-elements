@@ -1,6 +1,6 @@
 // 노드별 검토 기록. 저자가 노드를 검토하고 나면 그때의 내용 지문을 src/content/reviews.json에 적는다.
 //   npm run review                      검토 상태 목록(검토함 / 검토 뒤 바뀜 / 초안)
-//   npm run review -- mark <id...>      지금 내용으로 검토했다고 기록 (장 전체: b0, b1 …)
+//   npm run review -- mark <id...>      지금 내용으로 검토했다고 기록 (장 전체: c0, c1 …)
 //   npm run review -- unmark <id...>    기록을 지운다
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -11,7 +11,7 @@ import { nodeHash, reviewState, type ReviewStamp } from '../src/content/review';
 const file = join(dirname(fileURLToPath(import.meta.url)), '../src/content/reviews.json');
 const reviews: Record<string, ReviewStamp> = JSON.parse(readFileSync(file, 'utf8'));
 const [cmd, ...args] = process.argv.slice(2);
-// 장 id(b0 …)를 주면 그 장의 노드 전부
+// 장 id(c0 …)를 주면 그 장의 노드 전부
 const ids = args.flatMap((a) => BOOKS.find((b) => b.id === a)?.nodes.map((n) => n.id) ?? [a]);
 const d = new Date();
 const today = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;

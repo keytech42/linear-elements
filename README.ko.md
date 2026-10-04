@@ -34,7 +34,7 @@ npm run review     # 노드별 저자 검토 상태. `npm run review -- mark <id
 
 | 경로 | 내용 |
 |---|---|
-| `src/content/` | 0~10장 본문(노드 데이터)과 마크업 파서 |
+| `src/content/` | 0~10장 본문(장마다 폴더, 노드마다 파일. `index.ts`가 노드 순서를 정한다)과 마크업 파서 |
 | `src/verify/` | 교수법 검증기, 첫 등장 자동 링크 |
 | `src/la/` | 직접 짠 수치 코어(벡터, 행렬, 고윳값, SVD) |
 | `src/scenes/` | 노드별 상호작용 장면 |
@@ -59,4 +59,4 @@ npm run review     # 노드별 저자 검토 상태. `npm run review -- mark <id
 이 저장소는 조건이 다른 두 부분으로 이루어진다. 정확한 범위는 [LICENSE](LICENSE)에 적었다.
 
 - **소스 코드**: MIT 라이선스.
-- **교재 콘텐츠**(`src/content/b*.ts`의 본문, `src/scenes/`의 장면, `docs/`): © 2026 Keetaek Yang, 모든 권리 보유.
+- **교재 콘텐츠**(`src/content/c*/` 장 폴더의 본문, `src/scenes/`의 장면, `docs/`): © 2026 Keetaek Yang, 모든 권리 보유.

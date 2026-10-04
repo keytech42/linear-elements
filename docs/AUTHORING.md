@@ -16,7 +16,7 @@ Vite + TypeScript, 프레임워크 없음, Canvas2D 렌더러와 수치 코어�
 ## 먼저 읽을 것 (필수)
 1. `docs/STYLE.md`: 문체 규칙. 엄격하므로 그대로 따른다.
 2. `docs/SYMBOLS.md`: 기호 예약표.
-3. `src/content/b02-matrix.ts`의 `def.matrix`, `def.matvec`: **기준 완성본**이다. 문체, 밀도, 왜? 칩, 점검 문제 설계를 여기에 맞춘다.
+3. `src/content/c02-matrix/def.matrix.ts`, `def.matvec.ts`: **기준 완성본**이다. 문체, 밀도, 왜? 칩, 점검 문제 설계를 여기에 맞춘다.
 4. `src/content/markup.ts`, `src/content/schema.ts`, `src/verify/verify.ts`
 5. 장면과 그리기 도구:
    - `src/scenes/transform-grid.ts`(기준 장면), `src/scenes/_lib/scene.ts`
@@ -69,7 +69,13 @@ Vite + TypeScript, 프레임워크 없음, Canvas2D 렌더러와 수치 코어�
 - 수학적·교육적으로 확신이 없는 부분
 
 ## 저자 검토 기록 (2026-10-04 결정)
-- 저자가 노드를 검토하면 `npm run review -- mark <노드id>`(장 전체는 `b0` 등)로 그때의 내용 지문을 `src/content/reviews.json`에 남긴다.
+- 저자가 노드를 검토하면 `npm run review -- mark <노드id>`(장 전체는 `c0` 등)로 그때의 내용 지문을 `src/content/reviews.json`에 남긴다.
 - 그 뒤 노드 내용이 바뀌면 검증기가 P026(검토 뒤 바뀜)으로 경고하고, 그 노드 페이지에는 "검토 뒤 고친 노드" 배너가 뜬다. 검토하지 않은 노드에는 "초안" 배너가 뜬다.
 - 지문에는 장면 코드가 들어가지 않는다. 장면을 고치면 그 노드를 손으로 다시 검토 대상으로 돌린다(`unmark`).
 - 홈과 그 밖의 페이지의 배너는 `src/main.ts`의 `DRAFT`가 정한다.
+
+## 파일 구성 (2026-10-04 결정)
+- 장마다 폴더 하나(`src/content/cNN-이름/`), 노드마다 파일 하나(`<노드 id>.ts`, `export default` 노드 객체).
+- 장 폴더의 `index.ts`가 장의 제목과 **노드 순서**를 정한다. 이 순서가 곧 읽는 순서이고, 검증기가 "정의 전 사용"을 판정하는 순서다.
+- 새 노드를 만들면 파일을 만들고 `index.ts`의 import와 `nodes` 목록에 넣는다. 목록에 없는 파일이나 id와 이름이 다른 파일은 `npm run verify`가 P028 오류로 잡는다(빌드가 멈춘다).
+- 노드 하나의 이력은 `git log -- src/content/<장 폴더>/<노드 id>.ts`로 본다.

@@ -1,6 +1,6 @@
 ---
 name: content-auditor
-description: 선형 원론 교재의 한 장을 독립적으로 감사한다. 관문 정답, 증명의 빈틈, 장 사이 기호·용어 일관성, 관문 앞 답 누설을 찾아 보고서만 낸다. 원고를 고치지 않는다. audit-book 스킬이 장 id(b0 … b10)를 주고 부른다.
+description: 선형 원론 교재의 한 장을 독립적으로 감사한다. 관문 정답, 증명의 빈틈, 장 사이 기호·용어 일관성, 관문 앞 답 누설을 찾아 보고서만 낸다. 원고를 고치지 않는다. audit-book 스킬이 장 id(c0 … c10)를 주고 부른다.
 tools: Read, Grep, Glob, Bash
 model: inherit
 ---
@@ -18,7 +18,7 @@ model: inherit
 1. `docs/STYLE.md` 전부(문장 규칙, 이름 규칙, 예측 먼저와 관문 난이도 규칙).
 2. `docs/SYMBOLS.md` 전부(기호 예약표).
 3. `src/content/schema.ts`(노드 데이터 형식)와 `src/content/markup.ts` 맨 위 주석(본문 문법).
-4. `src/content/index.ts`로 장 id와 파일을 찾고, 맡은 장의 파일을 **처음부터 끝까지** 읽는다.
+4. 맡은 장의 폴더(`src/content/cNN-…/`)를 찾는다. 그 폴더의 `index.ts`에서 노드 순서를 확인하고, 노드 파일을 그 순서대로 **모두, 처음부터 끝까지** 읽는다. 보고서의 자리는 노드 파일 기준(`파일:줄`)으로 적는다.
 5. 앞쪽 장은 필요한 만큼만 읽는다. 맡은 장이 `why:`, `n:`, `t:`로 기대는 노드와 용어를 Grep으로 찾아, 그 정의와 명제가 실제로 무엇을 말하는지 확인한다.
 6. `npm run verify`를 한 번 돌려 이미 알려진 경고를 확인한다.
 

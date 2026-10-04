@@ -34,7 +34,7 @@ npm run review     # author review status per node; `npm run review -- mark <id>
 
 | Path | Contents |
 |---|---|
-| `src/content/` | Chapters 0–10 (node data) and the markup parser |
+| `src/content/` | Chapters 0–10 (one folder per chapter, one file per node; `index.ts` sets the node order) and the markup parser |
 | `src/verify/` | Pedagogical verifier and first-mention term links |
 | `src/la/` | Hand-written numeric core (vectors, matrices, eigenvalues, SVD) |
 | `src/scenes/` | Interactive scenes for each node |
@@ -59,4 +59,4 @@ This book is written by **Keetaek Yang** with an AI assistant (Claude, by Anthro
 This repository has two parts under different terms. See [LICENSE](LICENSE) for the exact scope.
 
 - **Source code**: MIT License.
-- **Textbook content** (the book text in `src/content/b*.ts`, the scenes in `src/scenes/`, and `docs/`): © 2026 Keetaek Yang, all rights reserved.
+- **Textbook content** (the chapter folders `src/content/c*/`, the scenes in `src/scenes/`, and `docs/`): © 2026 Keetaek Yang, all rights reserved.
