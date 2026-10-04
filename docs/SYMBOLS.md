@@ -52,9 +52,9 @@
 | σᵢ | i번째 특이값 | prop.svd-ata | |
 | 𝐯ᵢ, 𝐮ᵢ | 오른쪽/왼쪽 특이벡터 | prop.svd-ata | |
 | U, Σ, V | SVD의 세 인자 | prop.svd | |
-| k | 낮은 랭크 근사에서 남기는 층 수 | prop.eckart-young | |
+| k | 저랭크 근사에서 남기는 '층' 수 | prop.eckart-young | |
 | A_k | 랭크 k 근사 | prop.eckart-young | |
-| W | 신경망 층의 가중치 행렬 | def.linear-layer | |
+| W | 신경망 레이어의 가중치 행렬 | def.linear-layer | |
 | r | LoRA의 랭크 | exp.lora | |
 | ΔW | 가중치의 변화량 | exp.lora | |
 | Π | 3D 장면의 화면 사영 행렬(2×3) | (3D 장면 설명) | P와 겹치지 않도록 |

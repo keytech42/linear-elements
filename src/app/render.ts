@@ -72,6 +72,12 @@ function renderBlock(b: Block, ctx: RenderCtx): Node {
       lab.className = 'note-label';
       lab.textContent = b.kind;
       a.appendChild(lab);
+      if (b.title) {
+        const t = document.createElement('div');
+        t.className = 'note-title';
+        t.appendChild(renderInlines(b.title));
+        a.appendChild(t);
+      }
       a.appendChild(renderBlocks(b.blocks, ctx));
       return a;
     }
@@ -161,6 +167,14 @@ function renderInline(x: Inline): Node {
       d.className = 'term-def';
       d.dataset.term = x.id;
       d.appendChild(renderInlines(x.c));
+      // 영어 표준 용어는 정의하는 자리에만 위첨자로 붙인다. 뒤에서 다시 나올 때는 용어 링크의 미리보기에 뜬다.
+      const en = V.termHome.get(x.id)?.decl.en;
+      if (en) {
+        const sup = document.createElement('sup');
+        sup.className = 'term-en';
+        sup.textContent = en;
+        d.appendChild(sup);
+      }
       return d;
     }
     case 'term': {

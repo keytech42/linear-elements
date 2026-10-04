@@ -1,11 +1,11 @@
-// 네 기본 부분공간 지도 (2×2): 입력 평면 = 행공간 + 영공간, 출력 평면 = 열공간 + 왼쪽 영공간 (exp.four-subspaces)
+// 네 기본 부분공간 지도 (2×2): 입력 평면 = 행공간 + 영공간, 출력 평면 = 열공간 + 좌영공간 (exp.four-subspaces)
 //
 // 매개변수
 //   A:  2×2 행렬 (기본 [[1,2],[3,6]], 랭크 1)
 //   x:  입력 벡터 (기본 [3,1]). 왼쪽 그림에서 끌 수 있다
 // 왼쪽(입력 평면): 하늘 직선 = 행공간, 연두 직선 = 영공간. 노란 x를 두 조각으로 나눈다:
 //   하늘 점선 = 행공간 조각 x_r, 연두 점선 = 영공간 조각 x_n.
-// 오른쪽(출력 평면): 분홍 띠 = 열공간, 회색 점선 = 왼쪽 영공간. 분홍 화살표 = Ax = A x_r.
+// 오른쪽(출력 평면): 분홍 띠 = 열공간, 회색 점선 = 좌영공간. 분홍 화살표 = Ax = A x_r.
 // 동기화 키: rowspace, null, colspace, leftnull, x, xr, xn, Ax
 import type { SceneFn } from './_lib/scene';
 import { layout, readout, hint } from './_lib/scene';
@@ -28,7 +28,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   let x: Vec = params.x ?? [3, 1];
 
   const { stage, panel } = layout(host);
-  const [sl, sr] = twoStages(stage, ['입력 평면 ℝ²: 행공간 + 영공간', '출력 평면 ℝ²: 열공간 + 왼쪽 영공간']);
+  const [sl, sr] = twoStages(stage, ['입력 평면 ℝ²: 행공간 + 영공간', '출력 평면 ℝ²: 열공간 + 좌영공간']);
   const L = new Plane(sl, { range: params.range ?? 4, bus, height: 340, noZoom: true });
   const R = new Plane(sr, { range: params.rangeR ?? 8, bus, height: 340, noZoom: true });
   L.handles.push({ key: 'x', get: () => x, set: (v) => ((x = v), sync()) });
@@ -79,7 +79,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const dn = nullBasis(A).length, dl = nullBasis(transpose(A)).length;
     const { xr, xn } = parts();
     let html = `<div>입력: 2 = ${chip(`행공간 ${r}`, C.u, 'rowspace')} + ${chip(`영공간 ${dn}`, C.v, 'null')}</div>`;
-    html += `<div>출력: 2 = ${chip(`열공간 ${r}`, C.y, 'colspace')} + ${chip(`왼쪽 영공간 ${dl}`, C.dim, 'leftnull')}</div>`;
+    html += `<div>출력: 2 = ${chip(`열공간 ${r}`, C.y, 'colspace')} + ${chip(`좌영공간 ${dl}`, C.dim, 'leftnull')}</div>`;
     html += `<div>${chip('x', C.x, 'x')} = ${chip(vecTxt(xr), C.u, 'xr')} + ${chip(vecTxt(xn), C.v, 'xn')}</div>`;
     html += `<div>A·x_r = ${vecTxt(matVec(A, xr))}, A·x_n = ${vecTxt(matVec(A, xn))}</div>`;
     html += `<div>${chip('Ax', C.y, 'Ax')} = ${vecTxt(matVec(A, x))}</div>`;

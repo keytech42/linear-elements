@@ -15,7 +15,7 @@ const book: Book = {
       introduces: {
         terms: [
           { id: 't.determinant', ko: '행렬식', en: 'determinant', gloss: '변환이 넓이(3차원에서는 부피)를 몇 배로 만드는지, 그리고 방향을 뒤집는지를 부호까지 담은 수.' },
-          { id: 't.orientation', ko: '방향(향)', en: 'orientation', surfaces: ['향'], gloss: 'e₁에서 e₂로 짧게 도는 쪽이 시계 반대 방향인지 시계 방향인지. 거울에 비추면 바뀐다.' },
+          { id: 't.orientation', ko: '향', en: 'orientation', boundary: true, everyMention: true, gloss: 'e₁에서 e₂로 짧게 도는 쪽이 시계 반대 방향인지 시계 방향인지. 거울에 비추면 바뀐다.' },
         ],
         symbols: [{ tex: String.raw`\det A`, meaning: '행렬 A의 행렬식' }],
       },
@@ -62,7 +62,7 @@ const book: Book = {
 - 반대(시계 방향)이면 **음수**,
 - 평행사변형이 납작해지면(두 열이 한 직선 위에 있으면) **0**이다.
 
-"도는 쪽"을 [방향](def:t.orientation)(향)이라 부른다. 왼손과 오른손의 차이와 같다. 거울에 비추면 바뀌고, 돌리기만 해서는 바뀌지 않는다.
+"도는 쪽"을 [향(向)](def:t.orientation)이라 부른다. 왼손과 오른손의 차이와 같다. 거울에 비추면 바뀌고, 돌리기만 해서는 바뀌지 않는다.
 
 ::scene b4-signed-area {}
 

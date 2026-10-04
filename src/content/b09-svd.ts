@@ -181,8 +181,8 @@ $$\|A\mathbf{x}\|^2 = (A\mathbf{x})\cdot(A\mathbf{x}) = \mathbf{x}\cdot\big(A^{\
       introduces: {
         terms: [
           { id: 't.singular-value', ko: '특이값', en: 'singular value', gloss: '행렬이 단위원을 보낸 타원의 반지름들. σ₁ ≥ σ₂ ≥ … ≥ 0. AᵀA의 고윳값의 제곱근.' },
-          { id: 't.right-singular', ko: '오른쪽 특이벡터', en: 'right singular vector', gloss: '입력 공간에서, 변환 뒤에도 서로 수직으로 남는 단위 방향들(𝐯ᵢ). AᵀA의 고유벡터.' },
-          { id: 't.left-singular', ko: '왼쪽 특이벡터', en: 'left singular vector', gloss: '출력 공간에서, 타원의 축 방향을 가리키는 단위 방향들(𝐮ᵢ = A𝐯ᵢ/σᵢ).' },
+          { id: 't.right-singular', ko: '오른쪽 특이벡터', en: 'right singular vector', surfaces: ['우특이벡터'], gloss: '줄여서 우특이벡터. 입력 공간에서, 변환 뒤에도 서로 수직으로 남는 단위 방향들(𝐯ᵢ). AᵀA의 고유벡터.' },
+          { id: 't.left-singular', ko: '왼쪽 특이벡터', en: 'left singular vector', surfaces: ['좌특이벡터'], gloss: '줄여서 좌특이벡터. 출력 공간에서, 타원의 축 방향을 가리키는 단위 방향들(𝐮ᵢ = A𝐯ᵢ/σᵢ).' },
         ],
         symbols: [
           { tex: String.raw`\sigma_i`, meaning: 'i번째 특이값' },
@@ -248,6 +248,8 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 - 그 고유벡터 $\mathbf{v}_i = \mathbf{q}_i$를 [오른쪽 특이벡터](def:t.right-singular)라 한다(입력 공간의 방향).
 - $\sigma_i > 0$이면 $\mathbf{u}_i = A\mathbf{v}_i / \sigma_i$를 [왼쪽 특이벡터](def:t.left-singular)라 한다(출력 공간의 방향). 정의에서 바로 $A\mathbf{v}_i = \sigma_i\mathbf{u}_i$이다.
 
+이 교재에서는 이 뒤로 두 이름을 줄여서 각각 **우특이벡터**, **좌특이벡터**라 적는다.
+
 ::scene b9-svd-ellipse {"svd": true}
 
 ### 앞 노드의 "놀라운 사실"이 풀린다
@@ -309,7 +311,7 @@ $$(A\mathbf{v}_1)\cdot(A\mathbf{v}_2) = \mathbf{v}_1\cdot(A^{\mathsf{T}}A\mathbf
         {
           id: 'p-vt',
           kind: 'choice',
-          q: String.raw`세 단계 가운데 첫째인 $V^{\mathsf{T}}$는 오른쪽 특이벡터 $\mathbf{v}_1$을 어디로 보낼까?`,
+          q: String.raw`세 단계 가운데 첫째인 $V^{\mathsf{T}}$는 우특이벡터 $\mathbf{v}_1$을 어디로 보낼까?`,
           choices: [String.raw`$\mathbf{e}_1$`, String.raw`$\mathbf{v}_1$ 그대로`, String.raw`$\sigma_1\mathbf{u}_1$`, String.raw`$\mathbf{u}_1$`],
           answer: 0,
           why: [
@@ -515,19 +517,22 @@ $m \times n$ 행렬은 숫자 $mn$개를 담는다. 랭크 1 행렬은 $\mathbf{
     {
       id: 'prop.svd-sum',
       kind: 'prop',
-      title: '행렬 = 랭크 1 층들의 합',
+      title: '행렬 = 랭크 1 \'층\'들의 합',
       status: 'written',
+      introduces: {
+        terms: [{ id: 't.svd-layer', ko: "'층'", en: 'rank-one term', surfaces: ["'층'"], gloss: 'SVD의 한 항 σᵢuᵢvᵢᵀ(랭크 1 행렬)를 이 교재가 비유로 부르는 이름. 행렬은 \'층\'들의 합이고, σᵢ가 큰 \'층\'부터 줄을 선다. 비유이므로 언제나 작은따옴표를 붙인다.' }],
+      },
       requires: ['prop.svd', 'def.outer-product'],
       predicts: [
         {
           id: 'p-drop',
           kind: 'choice',
-          q: String.raw`층 2를 버리고 층 1 $\sigma_1\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}}$만 남기면, 출력은 어떻게 될까?`,
-          choices: [String.raw`모든 출력이 $\mathbf{u}_1$ 방향의 직선 위로 모인다`, String.raw`$\mathbf{x}$가 $\mathbf{v}_1$ 위에 있을 때만 바뀌고, 나머지는 그대로다`, '층 2는 작으니 아무것도 눈에 띄게 바뀌지 않는다', '모든 출력이 0이 된다'],
+          q: String.raw`'층' 2를 버리고 '층' 1 $\sigma_1\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}}$만 남기면, 출력은 어떻게 될까?`,
+          choices: [String.raw`모든 출력이 $\mathbf{u}_1$ 방향의 직선 위로 모인다`, String.raw`$\mathbf{x}$가 $\mathbf{v}_1$ 위에 있을 때만 바뀌고, 나머지는 그대로다`, '\'층\' 2는 작으니 아무것도 눈에 띄게 바뀌지 않는다', '모든 출력이 0이 된다'],
           answer: 0,
           why: [
-            String.raw`층 1은 바깥곱이므로 랭크 1이다. 출력은 $(\mathbf{v}_1\cdot\mathbf{x})$배 한 $\mathbf{u}_1$뿐이다.`,
-            String.raw`거꾸로다. $\mathbf{x}$가 $\mathbf{v}_1$ 위에 있으면 층 2는 원래 0을 내므로 아무것도 바뀌지 않는다. 바뀌는 것은 나머지 방향들이다.`,
+            String.raw`'층' 1은 바깥곱이므로 랭크 1이다. 출력은 $(\mathbf{v}_1\cdot\mathbf{x})$배 한 $\mathbf{u}_1$뿐이다.`,
+            String.raw`거꾸로다. $\mathbf{x}$가 $\mathbf{v}_1$ 위에 있으면 '층' 2는 원래 0을 내므로 아무것도 바뀌지 않는다. 바뀌는 것은 나머지 방향들이다.`,
             String.raw`출력의 **크기**로는 크게 다르지 않을 수 있다($\sigma_2$가 작다면). 그러나 **모양**은 크게 바뀐다. 평면 전체가 직선 하나로 접힌다.`,
             String.raw`$\mathbf{v}_1$에 수직인 입력만 0으로 간다.`,
           ],
@@ -539,36 +544,41 @@ $m \times n$ 행렬은 숫자 $mn$개를 담는다. 랭크 1 행렬은 $\mathbf{
 
 $$A = \sigma_1\,\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}} + \sigma_2\,\mathbf{u}_2\mathbf{v}_2^{\mathsf{T}} \quad\left(n\text{차원에서는 } A = \sum_i \sigma_i\,\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}\right)$$
 
-각 항 $\sigma_i\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}$는 랭크 1 행렬이다. 이 항을 **층**이라 부르자. 층 $i$는 입력을 $\mathbf{v}_i$ 방향으로 읽고, $\sigma_i$배 해서, $\mathbf{u}_i$ 방향으로 쓴다.
+각 항 $\sigma_i\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}$는 랭크 1 행렬이다. 이 항을 ['층'](def:t.svd-layer)이라 부르자. '층' $i$는 입력을 $\mathbf{v}_i$ 방향으로 읽고, $\sigma_i$배 해서, $\mathbf{u}_i$ 방향으로 쓴다.
+
+> [!비유] '층'이라는 이름
+> 행렬을 랭크 1 행렬들의 합으로 나눈 것을, 층을 쌓은 것에 빗댄다. 비유가 덮는 것은 둘이다. '층'을 모두 합치면 원래 행렬이 되고, 빠지거나 남는 것이 없다. 그리고 '층'마다 두께에 해당하는 $\sigma_i$가 있어서, 두꺼운 '층'부터 차례로 놓인다. 비유가 깨지는 곳도 있다. 실제 층은 서로 다른 높이에 따로 놓이지만, 이 '층'들은 같은 자리에 겹쳐 **더해진다**. 그래서 한 '층'의 성분이 음수일 수 있고, 다른 '층'과 더해져 서로 지워질 수도 있다.
+>
+> 이 교재는 이 뜻으로 쓸 때 언제나 작은따옴표를 붙여 '층'이라 적는다. 비유로 붙인 이름이라는 표시다. 교과서에서는 보통 풀어서 "랭크 1 항"(rank-one term)이라 부른다.
 
 $$A\mathbf{x} = \sigma_1(\cv{\mathbf{v}_1}\cdot\cx{\mathbf{x}})\,\cu{\mathbf{u}_1} + \sigma_2(\cv{\mathbf{v}_2}\cdot\cx{\mathbf{x}})\,\cu{\mathbf{u}_2}$$
 
-층은 $\sigma$가 큰 것부터, 곧 **중요한 것부터** 줄을 선다.
+'층'은 $\sigma$가 큰 것부터, 곧 **중요한 것부터** 줄을 선다.
 
 ::predict p-drop
 
 ::scene b9-layers {}
 
 ### 장면에서 볼 것
-- 노란 $\mathbf{x}$를 끌면 초록 점 두 개가 움직인다. 초록 점은 $\mathbf{x}$를 $\mathbf{v}_1$, $\mathbf{v}_2$ 방향으로 [정사영](t:t.orth-projection)한 자리다. 층마다 그 길이에 $\sigma_i$를 곱해 $\mathbf{u}_i$ 방향의 하늘색 화살표를 내보낸다. 두 화살표를 이어 붙이면 분홍 $A\mathbf{x}$다.
-- 층 2를 끄면 격자 전체가 $\mathbf{u}_1$ 방향의 직선 하나로 접힌다. 남은 것은 랭크 1이다. 그래도 분홍 화살표는 원래 $A\mathbf{x}$에서 크게 벗어나지 않는다. $\sigma_2$가 $\sigma_1$보다 작아서 층 2의 기여가 작기 때문이다.
+- 노란 $\mathbf{x}$를 끌면 초록 점 두 개가 움직인다. 초록 점은 $\mathbf{x}$를 $\mathbf{v}_1$, $\mathbf{v}_2$ 방향으로 [정사영](t:t.orth-projection)한 자리다. '층'마다 그 길이에 $\sigma_i$를 곱해 $\mathbf{u}_i$ 방향의 하늘색 화살표를 내보낸다. 두 화살표를 이어 붙이면 분홍 $A\mathbf{x}$다.
+- '층' 2를 끄면 격자 전체가 $\mathbf{u}_1$ 방향의 직선 하나로 접힌다. 남은 것은 랭크 1이다. 그래도 분홍 화살표는 원래 $A\mathbf{x}$에서 크게 벗어나지 않는다. $\sigma_2$가 $\sigma_1$보다 작아서 '층' 2의 기여가 작기 때문이다.
 
 ### 예
 $A = \begin{bmatrix} 1.2 & 0.9 \\ 0.3 & 1.1 \end{bmatrix}$이면 $\sigma_1 \approx 1.7906$, $\mathbf{u}_1 \approx (0.8161, 0.5780)$, $\mathbf{v}_1 \approx (0.6437, 0.7652)$이고
 
 $$\sigma_1\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}} \approx \begin{bmatrix} 0.9406 & 1.1182 \\ 0.6662 & 0.7919 \end{bmatrix}, \qquad \sigma_2\mathbf{u}_2\mathbf{v}_2^{\mathsf{T}} \approx \begin{bmatrix} 0.2594 & -0.2182 \\ -0.3662 & 0.3081 \end{bmatrix}$$
 
-두 층을 더하면 정확히 $A$로 돌아온다. 첫째 층만으로도 $A$의 성분과 대략 비슷하다. 둘째 층은 "보정"에 해당한다. 장면의 수치와 맞춰 보라.`,
+두 '층'을 더하면 정확히 $A$로 돌아온다. 첫째 '층'만으로도 $A$의 성분과 대략 비슷하다. 둘째 '층'은 "보정"에 해당한다. 장면의 수치와 맞춰 보라.`,
       proof: String.raw`두 행렬이 같다는 것은 모든 입력에 대해 같은 출력을 낸다는 것이다([왜 그것으로 충분한가?](why:prop.basis-determines) 특히 $\mathbf{x} = \mathbf{e}_j$를 넣으면 두 행렬의 $j$번째 열이 같아진다). 그러므로 아무 $\mathbf{x}$에서 양쪽을 비교한다.
 
 왼쪽: $A\mathbf{x} = U(\Sigma(V^{\mathsf{T}}\mathbf{x}))$. [행의 관점](why:prop.row-picture)에서 $V^{\mathsf{T}}$의 행은 $\mathbf{v}_1^{\mathsf{T}}, \mathbf{v}_2^{\mathsf{T}}$이므로 $V^{\mathsf{T}}\mathbf{x} = (\mathbf{v}_1\cdot\mathbf{x}, \mathbf{v}_2\cdot\mathbf{x})$이다. $\Sigma$를 곱하면 $(\sigma_1\,\mathbf{v}_1\cdot\mathbf{x},\ \sigma_2\,\mathbf{v}_2\cdot\mathbf{x})$가 된다. 이 벡터를 $U$에 넣으면, [행렬-벡터 곱의 정의](why:def.matvec)에 따라 성분을 계수로 삼아 $U$의 열 $\mathbf{u}_1, \mathbf{u}_2$를 섞는다.
 
 $$A\mathbf{x} = (\sigma_1\,\mathbf{v}_1\cdot\mathbf{x})\,\mathbf{u}_1 + (\sigma_2\,\mathbf{v}_2\cdot\mathbf{x})\,\mathbf{u}_2$$
 
-오른쪽: [바깥곱의 작용](why:def.outer-product) $(\mathbf{u}\mathbf{v}^{\mathsf{T}})\mathbf{x} = (\mathbf{v}\cdot\mathbf{x})\mathbf{u}$를 층마다 쓰면 바로 위 식과 같다. 모든 $\mathbf{x}$에서 같으므로 두 행렬은 같다.`,
+오른쪽: [바깥곱의 작용](why:def.outer-product) $(\mathbf{u}\mathbf{v}^{\mathsf{T}})\mathbf{x} = (\mathbf{v}\cdot\mathbf{x})\mathbf{u}$를 '층'마다 쓰면 바로 위 식과 같다. 모든 $\mathbf{x}$에서 같으므로 두 행렬은 같다.`,
       checks: [
         {
-          q: '층 2를 끄고 층 1만 남긴 행렬 σ₁u₁v₁ᵀ의 랭크와 열공간은?',
+          q: '\'층\' 2를 끄고 \'층\' 1만 남긴 행렬 σ₁u₁v₁ᵀ의 랭크와 열공간은?',
           choices: ['랭크 1, 열공간은 u₁ 방향의 직선', '랭크 1, 열공간은 v₁ 방향의 직선', '랭크 2, 열공간은 평면 전체', 'σ₁에 따라 다르다'],
           answer: 0,
           explain: String.raw`바깥곱 $\mathbf{u}\mathbf{v}^{\mathsf{T}}$의 모든 열은 $\mathbf{u}$의 배수다. 그래서 출력은 모두 $\mathbf{u}_1$ 방향의 직선 위에 있다. $\mathbf{v}_1$은 "읽는" 방향이다. $\sigma_1 > 0$이기만 하면 랭크는 1이다.`,
@@ -582,12 +592,12 @@ $$A\mathbf{x} = (\sigma_1\,\mathbf{v}_1\cdot\mathbf{x})\,\mathbf{u}_1 + (\sigma_
       status: 'written',
       introduces: {
         terms: [
-          { id: 't.low-rank', ko: '낮은 랭크 근사', en: 'low-rank approximation', gloss: '랭크가 k 이하인 행렬 가운데 원래 행렬과 가장 가까운 것을 찾는 일.' },
+          { id: 't.low-rank', ko: '저랭크 근사', en: 'low-rank approximation', gloss: '랭크가 k 이하인 행렬 가운데 원래 행렬과 가장 가까운 것을 찾는 일.' },
           { id: 't.frobenius', ko: '프로베니우스 노름', en: 'Frobenius norm', gloss: '행렬의 모든 성분을 제곱해 더한 값의 제곱근. 행렬을 숫자 mn개짜리 긴 벡터로 보고 잰 길이.' },
         ],
         symbols: [
-          { tex: 'k', meaning: '낮은 랭크 근사에서 남기는 층의 수' },
-          { tex: 'A_k', meaning: '앞의 k개 층만 더한 랭크 k 근사' },
+          { tex: 'k', meaning: '저랭크 근사에서 남기는 \'층\'의 수' },
+          { tex: 'A_k', meaning: '앞의 k개 \'층\'만 더한 랭크 k 근사' },
           { tex: String.raw`\|A\|_F`, meaning: '행렬 A의 프로베니우스 노름' },
         ],
       },
@@ -597,22 +607,22 @@ $$A\mathbf{x} = (\sigma_1\,\mathbf{v}_1\cdot\mathbf{x})\,\mathbf{u}_1 + (\sigma_
         {
           id: 'p-err',
           kind: 'choice',
-          q: String.raw`특이값이 3, 2, 1인 3×3 행렬에서 앞의 층 하나만 남기고 나머지 두 층을 버렸다. 원래 행렬과의 거리(프로베니우스 노름)는 얼마일까?`,
+          q: String.raw`특이값이 3, 2, 1인 3×3 행렬에서 앞의 '층' 하나만 남기고 나머지 두 '층'을 버렸다. 원래 행렬과의 거리(프로베니우스 노름)는 얼마일까?`,
           hints: [
-            String.raw`버린 것은 층 2와 층 3이다. 남은 차이 $A - (\text{층 1})$은 그 두 층의 합이다.`,
-            String.raw`두 층은 서로 수직인 방향 $\mathbf{u}_2, \mathbf{u}_3$으로 내보낸다. 수직인 두 화살표를 합친 길이는 [피타고라스 정리](n:prop.pythagoras)로 잰다.`,
+            String.raw`버린 것은 '층' 2와 '층' 3이다. 남은 차이 $A - (\text{'층' 1})$은 그 두 '층'의 합이다.`,
+            String.raw`두 '층'은 서로 수직인 방향 $\mathbf{u}_2, \mathbf{u}_3$으로 내보낸다. 수직인 두 화살표를 합친 길이는 [피타고라스 정리](n:prop.pythagoras)로 잰다.`,
           ],
           choices: [String.raw`$\sqrt{5} \approx 2.24$`, '3 (= 2 + 1)', '2 (버린 것 가운데 가장 큰 특이값)', '1'],
           answer: 0,
           why: [
-            String.raw`버린 두 층은 서로 직교하는 방향에 놓여 있어서, 거리의 제곱이 $2^2 + 1^2 = 5$로 더해진다. 피타고라스 정리와 같은 모양이다. 아래 증명의 1번이 이것이다.`,
+            String.raw`버린 두 '층'은 서로 직교하는 방향에 놓여 있어서, 거리의 제곱이 $2^2 + 1^2 = 5$로 더해진다. 피타고라스 정리와 같은 모양이다. 아래 증명의 1번이 이것이다.`,
             String.raw`특이값을 그대로 더하는 것은 서로 수직인 두 변의 길이를 그대로 더하는 것과 같다. 거리는 제곱해서 더한 뒤 제곱근을 취해야 한다.`,
             String.raw`다른 거리(스펙트럼 노름: 가장 많이 늘어나는 배율로 잰 크기)로 재면 맞는 답이다. 프로베니우스 노름은 모든 성분을 함께 잰다.`,
-            String.raw`가장 작은 특이값 하나만 센 것이다. 버린 층은 두 개다.`,
+            String.raw`가장 작은 특이값 하나만 센 것이다. 버린 '층'은 두 개다.`,
           ],
         },
       ],
-      body: String.raw`[행렬을 층으로 나눌 수 있고, 층은 중요한 것부터 줄을 선다](why:prop.svd-sum). 그렇다면 앞의 $k$개 층만 남기고 나머지를 버리면 어떻게 될까? 버린 만큼 틀리게 된다. 그 틀림은 얼마나 큰가? 그리고 랭크 $k$ 행렬로 근사하는 다른 방법 가운데 이것보다 나은 것이 있는가?
+      body: String.raw`[행렬을 '층'으로 나눌 수 있고, '층'은 중요한 것부터 줄을 선다](why:prop.svd-sum). 그렇다면 앞의 $k$개 '층'만 남기고 나머지를 버리면 어떻게 될까? 버린 만큼 틀리게 된다. 그 틀림은 얼마나 큰가? 그리고 랭크 $k$ 행렬로 근사하는 다른 방법 가운데 이것보다 나은 것이 있는가?
 
 ### 두 행렬 사이의 거리
 "가깝다"를 재려면 행렬의 크기를 정해야 한다. $m \times n$ 행렬의 성분 $mn$개를 한 줄로 늘어놓으면 숫자 $mn$개짜리 벡터가 된다. 그 벡터의 [노름](t:t.norm)을 행렬의 [프로베니우스 노름](def:t.frobenius) $\|A\|_F$라 한다.
@@ -624,16 +634,16 @@ $$\|A\|_F^2 = \sum_{i,j} a_{ij}^2 = \|\mathbf{a}_1\|^2 + \|\mathbf{a}_2\|^2 + \c
 ::predict p-err
 
 ### 명제
-$A$의 SVD에서 앞의 $k$개 층만 더한 행렬을 $A_k = \sum_{i \le k}\sigma_i\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}$라 하자.
+$A$의 SVD에서 앞의 $k$개 '층'만 더한 행렬을 $A_k = \sum_{i \le k}\sigma_i\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}$라 하자.
 
 1. **틀린 만큼:** $\|A - A_k\|_F^2 = \sigma_{k+1}^2 + \sigma_{k+2}^2 + \cdots$ (버린 특이값의 제곱의 합).
 2. **가장 좋음(에카르트–영 정리):** 랭크가 $k$ 이하인 **모든** 행렬 $B$에 대해 $\|A - B\|_F \ge \|A - A_k\|_F$.
 
-곧 [낮은 랭크 근사](def:t.low-rank)의 정답은 SVD를 앞에서부터 잘라 내는 것이다. 이 명제는 근사의 방법뿐 아니라 **한계**도 알려 준다. 랭크 $k$로는 버린 특이값보다 더 잘 맞출 수 없다.
+곧 [저랭크 근사](def:t.low-rank)의 정답은 SVD를 앞에서부터 잘라 내는 것이다. 이 명제는 근사의 방법뿐 아니라 **한계**도 알려 준다. 랭크 $k$로는 버린 특이값보다 더 잘 맞출 수 없다.
 
 ### 예
 - $A = \begin{bmatrix} 1.2 & 0.9 \\ 0.3 & 1.1 \end{bmatrix}$, $k = 1$: $\|A - A_1\|_F = \sigma_2 \approx 0.586$. 다른 랭크 1 근사와 비교해 보자. 둘째 열을 버리고 첫째 열만 남긴 $B = \begin{bmatrix} 1.2 & 0 \\ 0.3 & 0 \end{bmatrix}$도 랭크 1이다. 그런데 $\|A - B\|_F = \|\mathbf{a}_2\| = \sqrt{2.02} \approx 1.421$로 두 배 넘게 틀린다.
-- 랭크 2인 $3 \times 3$ 행렬이면 $\sigma_3 = 0$이므로 $\|A - A_2\|_F = 0$이다. 층 두 개로 정확히 복원된다.
+- 랭크 2인 $3 \times 3$ 행렬이면 $\sigma_3 = 0$이므로 $\|A - A_2\|_F = 0$이다. '층' 두 개로 정확히 복원된다.
 
 > [!코드] 테스트가 이 명제를 확인한다
 > 이 저장소의 테스트 \`Eckart–Young\`은 무작위 12×9 행렬에서 $k = 0, 1, \dots, 9$마다 $\|A - A_k\|_F^2$와 버린 $\sigma^2$의 합이 소수점 아래 8자리까지 같은지 확인한다(1번 식). 2번의 "가장 좋음"은 무작위 검사로 확인할 수 있는 종류의 주장이 아니다. 그래서 아래 증명이 필요하다.`,
@@ -653,13 +663,13 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
           q: String.raw`특이값이 $10, 3, 1, 0.5$인 4×4 행렬을 랭크 2로 가장 잘 근사했을 때 오차 $\|A - A_2\|_F$는?`,
           choices: [String.raw`$\sqrt{1.25} \approx 1.118$`, '1.5', '1', String.raw`$\sqrt{9 + 1} \approx 3.16$`],
           answer: 0,
-          explain: String.raw`버린 특이값은 1과 0.5이므로 오차의 제곱은 $1^2 + 0.5^2 = 1.25$다. 특이값을 그대로 더한 1.5는 제곱을 빠뜨린 것이다. 1은 가장 큰 버린 특이값 $\sigma_3$뿐인데, 이 값은 다른 노름(스펙트럼 노름)에서의 오차다. 마지막 선택지는 남긴 층을 버린 층으로 착각한 것이다.`,
+          explain: String.raw`버린 특이값은 1과 0.5이므로 오차의 제곱은 $1^2 + 0.5^2 = 1.25$다. 특이값을 그대로 더한 1.5는 제곱을 빠뜨린 것이다. 1은 가장 큰 버린 특이값 $\sigma_3$뿐인데, 이 값은 다른 노름(스펙트럼 노름)에서의 오차다. 마지막 선택지는 남긴 '층'을 버린 '층'으로 착각한 것이다.`,
         },
         {
           q: '전체 크기 ‖A‖_F² = 110.25 (= 10² + 3² + 1² + 0.5²)일 때, 랭크 1 근사가 담는 "에너지"의 비율은?',
           choices: ['100/110.25 ≈ 90.7%', '10/14.5 ≈ 69%', '25%', '알 수 없다'],
           answer: 0,
-          explain: String.raw`$\|A_1\|_F^2 = \sigma_1^2 = 100$이다. 층들은 서로 직교하므로(보조 사실을 생각하라) 에너지가 제곱의 합으로 나뉜다. 그래서 특이값을 제곱해서 비교해야 한다. 특이값이 빠르게 줄어드는 행렬일수록 앞의 몇 층에 거의 모든 것이 담긴다. 다음 노드의 그림이 그런 예다.`,
+          explain: String.raw`$\|A_1\|_F^2 = \sigma_1^2 = 100$이다. '층'들은 서로 직교하므로(보조 사실을 생각하라) 에너지가 제곱의 합으로 나뉜다. 그래서 특이값을 제곱해서 비교해야 한다. 특이값이 빠르게 줄어드는 행렬일수록 앞의 '층' 몇 개에 거의 모든 것이 담긴다. 다음 노드의 그림이 그런 예다.`,
         },
       ],
       code: ['lowRankInto', 'frobenius'],
@@ -674,14 +684,14 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
         {
           id: 'p-plaid',
           kind: 'choice',
-          q: '가로 줄무늬 그림 하나와 세로 줄무늬 그림 하나를 더해 만든 체크무늬(112×112)를 완벽하게 되살리려면 층이 몇 개 필요할까?',
+          q: '가로 줄무늬 그림 하나와 세로 줄무늬 그림 하나를 더해 만든 체크무늬(112×112)를 완벽하게 되살리려면 \'층\'이 몇 개 필요할까?',
           choices: ['2개 이하', '줄무늬의 줄 수만큼', '112개 (그림의 한 변)', '근사만 할 수 있고 완벽하게 되살릴 수는 없다'],
           answer: 0,
           why: [
             String.raw`가로 줄무늬는 "세로로 변하는 패턴 × 가로로 모두 1"인 바깥곱이고, 세로 줄무늬는 그 반대다. 바깥곱 두 개의 합이므로 랭크가 2 이하다.`,
             String.raw`줄 수는 패턴 안에서 값이 몇 번 바뀌는지일 뿐이다. 랭크는 서로 다른 패턴의 **종류**를 센다.`,
             String.raw`아무 그림이라면 112개까지 필요할 수 있다. 이 그림은 구조가 단순하다.`,
-            String.raw`층을 모두 쓰면 SVD는 언제나 정확히 되살린다. 이 그림은 그보다 훨씬 적은 층으로 정확히 되살아난다.`,
+            String.raw`'층'을 모두 쓰면 SVD는 언제나 정확히 되살린다. 이 그림은 그보다 훨씬 적은 '층'으로 정확히 되살아난다.`,
           ],
         },
       ],
@@ -692,14 +702,14 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
 ::scene b9-image {"k": 8}
 
 ### 해 볼 것
-1. **글자**: $k$를 1부터 천천히 올려라. $k = 1$일 때의 그림은 가로 패턴 하나와 세로 패턴 하나의 곱이다([바깥곱](t:t.outer-product)). 그래서 십자 무늬 같은 흐린 얼룩으로 보인다. 몇 층부터 글자를 읽을 수 있는가? 그때 저장할 숫자는 원래의 몇 %인가?
+1. **글자**: $k$를 1부터 천천히 올려라. $k = 1$일 때의 그림은 가로 패턴 하나와 세로 패턴 하나의 곱이다([바깥곱](t:t.outer-product)). 그래서 십자 무늬 같은 흐린 얼룩으로 보인다. '층' 몇 개부터 글자를 읽을 수 있는가? 그때 저장할 숫자는 원래의 몇 %인가?
 2. **체크무늬**: 가로 줄무늬 하나와 세로 줄무늬 하나를 더해 만든 그림이다. 각각이 바깥곱이므로 이 그림의 [랭크](t:t.rank)는 2 이하다. $k = 2$에서 오차가 0이 되는 것을 확인하라. 막대그래프에서 셋째 특이값부터 0인 것도 보인다.
-3. **원**: 단순한 모양인데도 많은 층이 필요하다. 원의 윤곽은 "가로 패턴 × 세로 패턴"으로 나누기 어려운 모양이기 때문이다. 랭크는 그림이 사람 눈에 얼마나 단순한지를 재는 것이 아니다. **가로·세로 방향의 패턴 몇 개의 합으로 쓸 수 있는지**를 잰다.
-4. **k번째 층 하나**(오른쪽 그림): 층 하나는 음수 성분도 가진다(주황 = 음수, 하늘 = 양수). 앞쪽 층은 큰 덩어리를, 뒤쪽 층은 가장자리 같은 세부를 담는다.
+3. **원**: 단순한 모양인데도 많은 '층'이 필요하다. 원의 윤곽은 "가로 패턴 × 세로 패턴"으로 나누기 어려운 모양이기 때문이다. 랭크는 그림이 사람 눈에 얼마나 단순한지를 재는 것이 아니다. **가로·세로 방향의 패턴 몇 개의 합으로 쓸 수 있는지**를 잰다.
+4. **k번째 '층' 하나**(오른쪽 그림): '층' 하나는 음수 성분도 가진다(주황 = 음수, 하늘 = 양수). 앞쪽 '층'은 큰 덩어리를, 뒤쪽 '층'은 가장자리 같은 세부를 담는다.
 5. 내 그림을 올려 보라. 사진은 대개 특이값이 빠르게 줄어든다.
 
 ### 저장 비용 셈
-층 하나에는 $\mathbf{u}_i$($m$개), $\mathbf{v}_i$($n$개), $\sigma_i$(1개)가 필요하다. 그러므로 $k$층이면 숫자 $k(m + n + 1)$개다. 112×112 그림에서 $k = 8$이면 $8 \times 225 = 1800$개로, 원래 12544개의 약 14%다.
+'층' 하나에는 $\mathbf{u}_i$($m$개), $\mathbf{v}_i$($n$개), $\sigma_i$(1개)가 필요하다. 그러므로 '층'이 $k$개이면 숫자 $k(m + n + 1)$개다. 112×112 그림에서 $k = 8$이면 $8 \times 225 = 1800$개로, 원래 12544개의 약 14%다.
 
 > [!주의] 실제 이미지 압축은 SVD를 쓰지 않는다
 > JPEG 같은 실제 형식은 그림마다 다른 $\mathbf{u}_i, \mathbf{v}_i$를 저장하지 않는다. 대신 모든 그림에 똑같이 쓰는 고정된 기저(이산 코사인 변환)를 쓴다. SVD의 기저는 그 그림 하나에 최적이지만, 기저 자체를 함께 저장해야 하고 계산도 비싸다. "가장 좋은 근사"와 "가장 좋은 압축 형식"은 다른 문제다. 비용이 어디서 생기는지가 다르기 때문이다. 10권에서 비슷한 맞바꿈이 다시 나온다.`,
@@ -714,24 +724,24 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
         {
           id: 'p-v3',
           kind: 'choice',
-          q: String.raw`랭크가 2인 3×3 행렬에서, 특이값이 0인 오른쪽 특이벡터 $\mathbf{v}_3$는 네 부분공간 가운데 어디에 속할까?`,
-          choices: ['영공간', '행공간', '열공간', '왼쪽 영공간'],
+          q: String.raw`랭크가 2인 3×3 행렬에서, 특이값이 0인 우특이벡터 $\mathbf{v}_3$는 네 부분공간 가운데 어디에 속할까?`,
+          choices: ['영공간', '행공간', '열공간', '좌영공간'],
           answer: 0,
           why: [
             String.raw`$\|A\mathbf{v}_3\| = \sigma_3 = 0$이므로 $A\mathbf{v}_3 = \mathbf{0}$이다. 0으로 사라지는 입력, 곧 영공간이다.`,
             String.raw`행공간의 0이 아닌 벡터는 0이 아닌 출력을 낸다(행공간은 영공간과 직교하므로 영공간과 겹치는 벡터는 $\mathbf{0}$뿐이다). $\mathbf{v}_3$의 출력은 0이다.`,
             String.raw`$\mathbf{v}$들은 입력 공간의 벡터다. 열공간은 출력 공간에 있다.`,
-            String.raw`$\mathbf{v}$들은 입력 공간의 벡터다. 왼쪽 영공간은 출력 공간에 있다.`,
+            String.raw`$\mathbf{v}$들은 입력 공간의 벡터다. 좌영공간은 출력 공간에 있다.`,
           ],
         },
       ],
-      body: String.raw`6권에서 모든 행렬에 [네 기본 부분공간](n:exp.four-subspaces)이 있다는 것을 보았다. 입력 쪽의 [행공간](t:t.row-space)과 [영공간](t:t.null-space), 출력 쪽의 [열공간](t:t.column-space)과 [왼쪽 영공간](t:t.left-null)이다. 그런데 그 지도에는 좌표가 없었다. 각 공간이 몇 차원인지는 알았지만, 각 공간을 펼치는 "좋은" 기저가 무엇인지는 몰랐다. SVD는 네 공간 모두에 **정규직교** 기저를 한꺼번에 준다.
+      body: String.raw`6권에서 모든 행렬에 [네 기본 부분공간](n:exp.four-subspaces)이 있다는 것을 보았다. 입력 쪽의 [행공간](t:t.row-space)과 [영공간](t:t.null-space), 출력 쪽의 [열공간](t:t.column-space)과 [좌영공간](t:t.left-null)이다. 그런데 그 지도에는 좌표가 없었다. 각 공간이 몇 차원인지는 알았지만, 각 공간을 펼치는 "좋은" 기저가 무엇인지는 몰랐다. SVD는 네 공간 모두에 **정규직교** 기저를 한꺼번에 준다.
 
 ::predict p-v3
 
 **명제.** $A$가 $m \times n$이고 $\operatorname{rank} A$개의 특이값이 0보다 크다고 하자(나머지는 0). 그러면
 - $\mathbf{v}_1, \dots$ 가운데 앞의 $\operatorname{rank} A$개는 **행공간**의 정규직교 기저이고, 나머지 $\mathbf{v}_i$들은 **영공간**의 정규직교 기저다.
-- $\mathbf{u}_1, \dots$ 가운데 앞의 $\operatorname{rank} A$개는 **열공간**의 정규직교 기저이고, 나머지 $\mathbf{u}_i$들은 **왼쪽 영공간**의 정규직교 기저다.
+- $\mathbf{u}_1, \dots$ 가운데 앞의 $\operatorname{rank} A$개는 **열공간**의 정규직교 기저이고, 나머지 $\mathbf{u}_i$들은 **좌영공간**의 정규직교 기저다.
 - 행공간의 $\mathbf{v}_i$는 $A$에 의해 열공간의 $\mathbf{u}_i$로, 정확히 $\sigma_i$배 늘어나 짝지어진다.
 
 이렇게 보면 행렬이 하는 일 전체가 한 문장으로 요약된다. **입력 공간을 "살아남는 방향들"과 "사라지는 방향들"로 직교하게 나누고, 살아남는 방향들을 하나씩 출력의 방향에 짝지어 늘인다. 출력의 나머지 방향에는 아무것도 닿지 않는다.**
@@ -741,24 +751,24 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
 ### 장면에서 볼 것
 행렬 $A = \begin{bmatrix} 1 & 1 & 0 \\ 0 & 1 & 1 \\ 1 & 2 & 1 \end{bmatrix}$의 셋째 행은 첫째 행 + 둘째 행이다. 그래서 랭크가 2다. 특이값은 정확히 $3,\ 1,\ 0$이다($A^{\mathsf{T}}A$의 고윳값이 9, 1, 0).
 - 왼쪽(입력): 노란 단위 구 위에 초록 $\mathbf{v}_1, \mathbf{v}_2$가 행공간 평면을 펼친다. 점선 $\mathbf{v}_3$이 영공간이다.
-- 오른쪽(출력): 단위 구가 분홍 **납작한 타원판**이 된다. 그 판이 놓인 평면이 열공간이고, 판에 수직인 점선 $\mathbf{u}_3$이 왼쪽 영공간이다.
-- 행렬의 셋째 행을 바꿔 랭크를 3으로 만들면 판이 부풀어 타원체가 된다. 영공간과 왼쪽 영공간은 사라진다.
+- 오른쪽(출력): 단위 구가 분홍 **납작한 타원판**이 된다. 그 판이 놓인 평면이 열공간이고, 판에 수직인 점선 $\mathbf{u}_3$이 좌영공간이다.
+- 행렬의 셋째 행을 바꿔 랭크를 3으로 만들면 판이 부풀어 타원체가 된다. 영공간과 좌영공간은 사라진다.
 
 ### 예 (2×2)
-랭크 1인 $A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$: [앞에서](n:prop.svd-ata) 구한 대로 $\sigma_1 = 5$, $\sigma_2 = 0$, $\mathbf{v}_1 = (1, 2)/\sqrt{5}$, $\mathbf{v}_2 = (-2, 1)/\sqrt{5}$다. 행공간은 $\mathbf{v}_1$ 방향(행 $(1, 2)$의 방향과 같다), 영공간은 $\mathbf{v}_2$ 방향이다. $\mathbf{u}_1 = A\mathbf{v}_1/5 = (1, 2)/\sqrt{5}$는 열공간의 방향(열 $(1, 2)$의 방향과 같다), $\mathbf{u}_2 = (-2, 1)/\sqrt{5}$는 왼쪽 영공간의 방향이다. 이 행렬은 대칭이라 입력 쪽과 출력 쪽 공간이 같은 직선이지만, 일반적으로는 다르다.`,
+랭크 1인 $A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$: [앞에서](n:prop.svd-ata) 구한 대로 $\sigma_1 = 5$, $\sigma_2 = 0$, $\mathbf{v}_1 = (1, 2)/\sqrt{5}$, $\mathbf{v}_2 = (-2, 1)/\sqrt{5}$다. 행공간은 $\mathbf{v}_1$ 방향(행 $(1, 2)$의 방향과 같다), 영공간은 $\mathbf{v}_2$ 방향이다. $\mathbf{u}_1 = A\mathbf{v}_1/5 = (1, 2)/\sqrt{5}$는 열공간의 방향(열 $(1, 2)$의 방향과 같다), $\mathbf{u}_2 = (-2, 1)/\sqrt{5}$는 좌영공간의 방향이다. 이 행렬은 대칭이라 입력 쪽과 출력 쪽 공간이 같은 직선이지만, 일반적으로는 다르다.`,
       proof: String.raw`**영공간.** 특이값이 0인 $i$에 대해 $\|A\mathbf{v}_i\|^2 = \sigma_i^2 = 0$이므로 $A\mathbf{v}_i = \mathbf{0}$이다. 그래서 이런 $\mathbf{v}_i$들은 영공간에 있다. 그 개수는 $n - \operatorname{rank}A$이고, [영공간의 차원도 정확히 그만큼](why:prop.rank-nullity)이다. 정규직교 벡터들은 [선형 독립](t:t.lin-indep)이므로, 영공간 안에서 그 차원만큼의 독립 벡터는 기저가 된다.
 
 **행공간.** [행공간은 영공간과 직교한다](why:prop.row-null-perp). 앞의 $\operatorname{rank}A$개의 $\mathbf{v}_i$는 영공간의 기저인 나머지 $\mathbf{v}_j$와 모두 직교한다. 그런데 입력 공간 $\mathbb{R}^n$에서 영공간에 수직인 벡터 전체가 행공간이고, 행공간의 차원은 $\operatorname{rank}A$다. 그 안에서 $\operatorname{rank}A$개의 정규직교 벡터는 기저가 된다. (여기서 "영공간에 수직인 것 전체 = 행공간"은 [6권의 네 부분공간 지도에서 차원을 세어 얻은 사실](why:exp.four-subspaces)이다.)
 
 **열공간.** $\sigma_i > 0$이면 $\mathbf{u}_i = A(\mathbf{v}_i/\sigma_i)$이므로 $\mathbf{u}_i$는 출력이 닿는 곳, 곧 열공간에 있다. 개수가 $\operatorname{rank}A$ = [열공간의 차원](why:def.rank)이고 정규직교이므로 기저다.
 
-**왼쪽 영공간.** 나머지 $\mathbf{u}_i$는 앞의 $\mathbf{u}$들, 곧 열공간의 기저와 모두 직교한다. 그러므로 열공간 전체와 직교하고, 그것이 왼쪽 영공간이다. 다른 식으로 보면, $A^{\mathsf{T}} = V\Sigma^{\mathsf{T}}U^{\mathsf{T}}$에서 $A^{\mathsf{T}}\mathbf{u}_i = \sigma_i\mathbf{v}_i = \mathbf{0}$이다.`,
+**좌영공간.** 나머지 $\mathbf{u}_i$는 앞의 $\mathbf{u}$들, 곧 열공간의 기저와 모두 직교한다. 그러므로 열공간 전체와 직교하고, 그것이 좌영공간이다. 다른 식으로 보면, $A^{\mathsf{T}} = V\Sigma^{\mathsf{T}}U^{\mathsf{T}}$에서 $A^{\mathsf{T}}\mathbf{u}_i = \sigma_i\mathbf{v}_i = \mathbf{0}$이다.`,
       checks: [
         {
-          q: '5×3 행렬의 특이값이 4, 2, 0이다. 네 부분공간의 차원은 (행공간, 영공간, 열공간, 왼쪽 영공간) 순서로?',
+          q: '5×3 행렬의 특이값이 4, 2, 0이다. 네 부분공간의 차원은 (행공간, 영공간, 열공간, 좌영공간) 순서로?',
           choices: ['(2, 1, 2, 3)', '(3, 0, 3, 2)', '(2, 1, 2, 1)', '(2, 3, 2, 1)'],
           answer: 0,
-          explain: String.raw`0보다 큰 특이값이 2개이므로 랭크는 2다. 입력은 $\mathbb{R}^3$이므로 영공간은 $3 - 2 = 1$차원이다. 출력은 $\mathbb{R}^5$이므로 왼쪽 영공간은 $5 - 2 = 3$차원이다. 입력 쪽 두 공간의 차원을 더하면 열의 수 3, 출력 쪽 두 공간의 차원을 더하면 행의 수 5다.`,
+          explain: String.raw`0보다 큰 특이값이 2개이므로 랭크는 2다. 입력은 $\mathbb{R}^3$이므로 영공간은 $3 - 2 = 1$차원이다. 출력은 $\mathbb{R}^5$이므로 좌영공간은 $5 - 2 = 3$차원이다. 입력 쪽 두 공간의 차원을 더하면 열의 수 3, 출력 쪽 두 공간의 차원을 더하면 행의 수 5다.`,
         },
       ],
       code: ['svd'],

@@ -1,5 +1,5 @@
 // 원론 지도: 모든 노드와 의존 관계를 한 장에. 한 노드를 고르면
-//   - 그 노드가 기대는 모든 노드(거슬러 오르기)가 약속까지 이어져 빛나고
+//   - 그 노드가 기대는 모든 노드(거슬러 오르기)가 공리까지 이어져 빛나고
 //   - 그 노드에 기대는 모든 노드(내려가기)가 다른 색으로 빛난다.
 // 배치: 권마다 한 줄(위→아래), 줄 안에서는 교재 순서(왼→오).
 import { BOOKS, NODE_BY_ID, BOOK_OF, V, ancestors, descendants } from './data';
@@ -116,7 +116,7 @@ export function renderMap(main: HTMLElement, focus?: string): () => void {
       <div class="kicker"><span class="kind kind-${n.kind}">${KIND_LABEL[n.kind]}</span> ${BOOK_OF.get(id)!.num}권</div>
       <h2>${n.title}</h2>
       <a class="btn" href="#/n/${id}">이 노드 읽기 →</a>
-      <p class="dim">거슬러 오르면 <b class="up-c">${up.size}개</b> 노드에 기대고, 그 끝은 약속 ${chain.length}개(${chain.map((c) => NODE_BY_ID.get(c)!.title).join(', ') || '없음'})입니다. 이 노드에 기대는 노드는 <b class="down-c">${down.size}개</b>입니다.</p>
+      <p class="dim">거슬러 오르면 <b class="up-c">${up.size}개</b> 노드에 기대고, 그 끝은 공리 ${chain.length}개(${chain.map((c) => NODE_BY_ID.get(c)!.title).join(', ') || '없음'})입니다. 이 노드에 기대는 노드는 <b class="down-c">${down.size}개</b>입니다.</p>
       <h3>거슬러 오르기 (교재 순서)</h3>
       <ol class="chain">${[...up].map((x) => `<li class="${progress.isDone(x) ? 'done' : ''}"><a href="#/n/${x}">${BOOK_OF.get(x)!.num}권 · ${NODE_BY_ID.get(x)!.title}</a></li>`).join('')}</ol>`;
     const p = pos.get(id)!;

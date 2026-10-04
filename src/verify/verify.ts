@@ -31,8 +31,10 @@ export interface VerifyResult {
   edges: Edge[];
   order: Map<string, number>;
   termHome: Map<string, { node: string; decl: TermDecl }>;
-  /** 노드별로 파싱한 결과(렌더러가 다시 파싱하지 않도록) */
+  /** 노드별로 파싱한 결과(렌더러가 다시 파싱하지 않도록). 첫 등장 자동 링크가 이미 들어 있다. */
   parsed: Map<string, ParsedNode>;
+  /** 첫 등장 자동 링크로 바꾼 자리의 수 */
+  autoLinked: number;
 }
 
 export interface ParsedNode {
@@ -104,14 +106,17 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   }
 
   // 3. 원문 어휘 스캔 준비: (표면형, 용어id) 를 긴 것부터
-  const lexicon: { surface: string; id: string }[] = [];
+  //    한 글자 표면형은 다른 낱말 속에 섞이기 쉬워서(향 ⊂ 방향, 영향, 편향) 낱말 경계(boundary)를 켠 용어만 넣는다.
+  const lexicon: LexEntry[] = [];
   for (const [id, { decl }] of termHome) {
     if (decl.everyday) continue;
-    for (const s of new Set([decl.ko, ...(decl.surfaces ?? [])])) if (s.length >= 2) lexicon.push({ surface: s, id });
+    for (const s of new Set([decl.ko, ...(decl.surfaces ?? [])]))
+      if (s.length >= 2 || decl.boundary) lexicon.push({ surface: s, id, boundary: decl.boundary, every: decl.everyMention });
   }
   lexicon.sort((a, b) => b.surface.length - a.surface.length);
 
   const termUse = new Map<string, number>();
+  let autoLinked = 0;
   const parsed = new Map<string, ParsedNode>();
 
   for (const n of nodes) {
@@ -233,12 +238,9 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     const reported = new Set<string>();
     for (const x of n.status === 'written' ? plainTextRuns(allBlocks, pn) : []) {
       const consumed = new Array(x.length).fill(false);
-      for (const { surface, id } of lexicon) {
-        let from = 0;
-        for (;;) {
-          const k = x.indexOf(surface, from);
-          if (k < 0) break;
-          from = k + 1;
+      for (const e of lexicon) {
+        const { surface, id } = e;
+        for (const k of occurrences(x, e)) {
           if (consumed.slice(k, k + surface.length).some(Boolean)) continue;
           for (let q = k; q < k + surface.length; q++) consumed[q] = true;
           const home = termHome.get(id)!;
@@ -249,6 +251,10 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
         }
       }
     }
+
+    // 첫 등장 자동 링크: 위키백과처럼, 앞쪽 노드에서 정의한 용어가 이 노드에서 처음 나오는 자리를 용어 링크로 바꾼다.
+    // 그래서 한참 뒤의 노드에서도 용어에 마우스를 올리면 정의가 뜬다. 렌더러는 이 parsed를 그대로 그린다.
+    if (n.status === 'written') autoLinked += autoLinkFirstMentions(pn, lexicon, (id) => order.get(termHome.get(id)!.node)! < here, (id) => termUse.set(id, (termUse.get(id) ?? 0) + 1));
   }
 
   // 4. 죽은 정의, 고아
@@ -257,7 +263,117 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   const last = books[books.length - 1];
   for (const n of nodes) if (!incoming.has(n.id) && n.kind !== 'exp' && !last.nodes.includes(n)) push('P006', n.id, n.title);
 
-  return { issues, edges, order, termHome, parsed };
+  return { issues, edges, order, termHome, parsed, autoLinked };
+}
+
+export interface LexEntry {
+  surface: string;
+  id: string;
+  /** 낱말 경계에서만 찾는다(TermDecl.boundary) */
+  boundary?: boolean;
+  /** 첫 등장만이 아니라 모든 등장을 링크한다(TermDecl.everyMention) */
+  every?: boolean;
+}
+
+// 낱말 경계: 앞에 한글이 붙어 있지 않고, 뒤에는 조사·공백·문장 부호가 오거나 글이 끝난다.
+// 그래서 "향이", "향을"은 잡고 "방향", "편향", "향하다", "향후"는 잡지 않는다.
+const HANGUL = /[가-힣]/;
+const AFTER_OK = /^(?:$|[\s.,;:!?·()\[\]'"’”…\-—–]|이|가|은|는|을|를|의|에|도|과|와|만|으로|로|까지|부터|처럼|보다)/;
+
+/** 글 s 안에서 표면형이 나오는 자리들(경계 조건을 지키는 것만) */
+export function* occurrences(s: string, e: LexEntry): Generator<number> {
+  for (let k = s.indexOf(e.surface); k >= 0; k = s.indexOf(e.surface, k + 1)) {
+    if (e.boundary && ((k > 0 && HANGUL.test(s[k - 1])) || !AFTER_OK.test(s.slice(k + e.surface.length)))) continue;
+    yield k;
+  }
+}
+
+/**
+ * 노드를 독자가 읽는 순서(본문 → 관문은 놓인 자리에서 → 증명 → 점검)로 훑으며,
+ * 아직 링크가 없는 용어의 첫 등장을 { t: 'term' } 으로 바꾼다. 바꾼 개수를 돌려준다.
+ * 건너뛰는 자리: 소제목(링크를 달지 않는 자리), 보기 단추(누르면 링크로 떠나 버린다), 수식과 코드, 이미 표시된 글.
+ */
+export function autoLinkFirstMentions(
+  pn: ParsedNode,
+  lexicon: LexEntry[],
+  eligible: (id: string) => boolean,
+  onLink: (id: string) => void,
+): number {
+  const marked = new Set<string>();
+  // 모든 등장을 링크하는 용어는, 그 용어를 정의하는 노드 안에서도 정의한 자리 뒤부터 링크한다.
+  const definedHere = new Set<string>();
+  let count = 0;
+  const inl = (list: Inline[], link: boolean) => {
+    for (let i = 0; i < list.length; i++) {
+      const x = list[i];
+      if (x.t === 'b' || x.t === 'sync') inl(x.c, link);
+      else if (x.t === 'def' || x.t === 'term' || x.t === 'fwd') {
+        marked.add(x.id);
+        if (x.t === 'def') definedHere.add(x.id);
+      }
+      else if (x.t === 'text' && link) {
+        const s = x.v;
+        const consumed = new Array(s.length).fill(false);
+        const hits: { k: number; len: number; id: string }[] = [];
+        for (const e of lexicon) {
+          const { surface, id } = e;
+          for (const k of occurrences(s, e)) {
+            if (consumed.slice(k, k + surface.length).some(Boolean)) continue;
+            for (let q = k; q < k + surface.length; q++) consumed[q] = true;
+            const ok = e.every ? eligible(id) || definedHere.has(id) : !marked.has(id) && !hits.some((h) => h.id === id) && eligible(id);
+            if (ok) hits.push({ k, len: surface.length, id });
+          }
+        }
+        if (!hits.length) continue;
+        hits.sort((a, b) => a.k - b.k);
+        const out: Inline[] = [];
+        let at = 0;
+        for (const h of hits) {
+          if (h.k > at) out.push({ t: 'text', v: s.slice(at, h.k) });
+          out.push({ t: 'term', id: h.id, c: [{ t: 'text', v: s.slice(h.k, h.k + h.len) }] });
+          marked.add(h.id);
+          onLink(h.id);
+          at = h.k + h.len;
+        }
+        if (at < s.length) out.push({ t: 'text', v: s.slice(at) });
+        list.splice(i, 1, ...out);
+        i += out.length - 1;
+        count += hits.length;
+      }
+    }
+  };
+  const blk = (list: Block[]) => {
+    for (const b of list) {
+      if (b.t === 'p') inl(b.c, true);
+      else if (b.t === 'h') inl(b.c, false);
+      else if (b.t === 'ul') for (const it of b.items) inl(it, true);
+      else if (b.t === 'note') {
+        if (b.title) inl(b.title, false);
+        blk(b.blocks);
+      }
+      else if (b.t === 'predict') {
+        const pp = pn.predicts.get(b.id);
+        if (!pp) continue;
+        inl(pp.q, true);
+        for (const c of pp.choices) inl(c, false);
+        // 힌트와 보기별 해설은 펼쳐 볼 때만 보이므로, 그 안의 링크가 본문의 첫 등장 링크를 대신하지 않게 한다.
+        const before = [...marked];
+        const restore = () => (marked.clear(), before.forEach((id) => marked.add(id)));
+        for (const h of pp.hints) blk(h);
+        restore();
+        for (const w of pp.why) if (w) (blk(w), restore());
+        if (pp.reveal) blk(pp.reveal);
+      }
+    }
+  };
+  blk(pn.body);
+  if (pn.proof) blk(pn.proof);
+  for (const c of pn.checks) {
+    inl(c.q, true);
+    for (const ch of c.choices) inl(ch, false);
+    blk(c.explain);
+  }
+  return count;
 }
 
 /** 표시(def/term/fwd/링크) 밖에 있는 순수 텍스트 조각들 */
@@ -271,6 +387,7 @@ function plainTextRuns(blocks: Block[], pn: ParsedNode): string[] {
   };
   for (const b of walkBlocks(blocks)) {
     if (b.t === 'p' || b.t === 'h') visit(b.c);
+    else if (b.t === 'note' && b.title) visit(b.title);
     else if (b.t === 'ul') b.items.forEach(visit);
   }
   for (const c of pn.checks) {

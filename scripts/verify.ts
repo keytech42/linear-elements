@@ -29,7 +29,7 @@ for (const i of r.issues) {
 }
 const nodes = BOOKS.flatMap((b) => b.nodes);
 const written = nodes.filter((n) => n.status === 'written').length;
-console.log(`\n노드 ${nodes.length}개 (본문 완성 ${written}개) · 용어 ${r.termHome.size}개 · 의존 간선 ${r.edges.length}개`);
+console.log(`\n노드 ${nodes.length}개 (본문 완성 ${written}개) · 용어 ${r.termHome.size}개 · 의존 간선 ${r.edges.length}개 · 첫 등장 자동 링크 ${r.autoLinked}곳`);
 console.log(`error ${by.error} · warn ${by.warn} · info ${by.info}${showAll ? '' : ' (info는 --all로 표시)'}`);
 if (by.error) {
   console.log('\n규칙 설명:');

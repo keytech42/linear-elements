@@ -54,20 +54,20 @@ const scene: SceneFn = (host, { bus, params }) => {
     for (const k of [0, 1]) {
       if (!on[k]) continue;
       const out = scale(r.S[k] * dot(v[k], x), u[k]);
-      p.arrow(tip, add(tip, out), { color: C.u, width: 2, dash: [6, 3], key: `L${k + 1}`, label: `층${k + 1}` });
+      p.arrow(tip, add(tip, out), { color: C.u, width: 2, dash: [6, 3], key: `L${k + 1}`, label: `'층' ${k + 1}` });
       tip = add(tip, out);
     }
     p.arrow([0, 0], matVec(M, x), { color: C.y, label: on[0] && on[1] ? 'Ax' : '근사', key: 'Ax' });
-    p.hud([{ text: on[0] && on[1] ? '두 층을 모두 더하면 A 그대로' : on[0] || on[1] ? '층 하나 = 랭크 1: 평면 전체가 직선 하나로' : '층이 없으면 모든 것이 원점으로' }], 'bl');
+    p.hud([{ text: on[0] && on[1] ? '두 \'층\'을 모두 더하면 A 그대로' : on[0] || on[1] ? '\'층\' 하나 = 랭크 1: 평면 전체가 직선 하나로' : '\'층\'이 없으면 모든 것이 원점으로' }], 'bl');
   };
 
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const med = matrixEditor(eds, { name: 'A', get: () => A, set: (B) => ((A = B), sync()) });
-  toggle(panel, '층 1: σ₁ u₁ v₁ᵀ', () => on[0], (b) => ((on[0] = b), sync()));
-  toggle(panel, '층 2: σ₂ u₂ v₂ᵀ', () => on[1], (b) => ((on[1] = b), sync()));
+  toggle(panel, '\'층\' 1: σ₁ u₁ v₁ᵀ', () => on[0], (b) => ((on[0] = b), sync()));
+  toggle(panel, '\'층\' 2: σ₂ u₂ v₂ᵀ', () => on[1], (b) => ((on[1] = b), sync()));
   const ro = readout(panel);
-  hint(panel, '노란 x를 끌어 보세요. 초록 점은 x를 v₁, v₂ 방향으로 읽은 값(내적)입니다. 층 i는 그 값에 σᵢ를 곱해 uᵢ 방향으로 내보냅니다.');
+  hint(panel, '노란 x를 끌어 보세요. 초록 점은 x를 v₁, v₂ 방향으로 읽은 값(내적)입니다. \'층\' i는 그 값에 σᵢ를 곱해 uᵢ 방향으로 내보냅니다.');
 
   function sync() {
     med.refresh();
@@ -76,8 +76,8 @@ const scene: SceneFn = (host, { bus, params }) => {
     ro.set(
       `<div>${chip('v₁·x', C.v, 'v1')} = ${fmt(c[0])} → ${chip(`σ₁(v₁·x) = ${fmt(r.S[0] * c[0])}`, C.u, 'L1')} 만큼 u₁ 방향</div>` +
         `<div>${chip('v₂·x', C.v, 'v2')} = ${fmt(c[1])} → ${chip(`σ₂(v₂·x) = ${fmt(r.S[1] * c[1])}`, C.u, 'L2')} 만큼 u₂ 방향</div>` +
-        `<div class="dim">층 1 = [${layer(0).map((row) => row.map((v) => fmt(v)).join(', ')).join('; ')}]</div>` +
-        `<div class="dim">층 2 = [${layer(1).map((row) => row.map((v) => fmt(v)).join(', ')).join('; ')}]</div>`,
+        `<div class="dim">'층' 1 = [${layer(0).map((row) => row.map((v) => fmt(v)).join(', ')).join('; ')}]</div>` +
+        `<div class="dim">'층' 2 = [${layer(1).map((row) => row.map((v) => fmt(v)).join(', ')).join('; ')}]</div>`,
     );
     p.invalidate();
   }

@@ -7,7 +7,7 @@
 //   ### 제목                      소제목
 //   - 항목                        목록 (연속된 줄)
 //   1. 항목                       번호 목록 (연속된 줄)
-//   > [!비유] …                   상자. 종류: 비유, 주의, 직관, 질문, 코드, 참고(기본)
+//   > [!비유] 제목                상자. 종류: 비유, 주의, 직관, 질문, 코드, 참고(기본). 첫 줄의 나머지는 상자의 제목
 //   그 밖                         문단
 //
 // ── 인라인 문법 ────────────────────────────────────────────────────
@@ -40,7 +40,7 @@ export type Block =
   | { t: 'math'; tex: string }
   | { t: 'scene'; id: string; params: Record<string, unknown> }
   | { t: 'predict'; id: string }
-  | { t: 'note'; kind: NoteKind; blocks: Block[] };
+  | { t: 'note'; kind: NoteKind; title?: Inline[]; blocks: Block[] };
 
 const NOTE_KINDS: NoteKind[] = ['비유', '주의', '직관', '질문', '코드', '참고'];
 
@@ -109,13 +109,17 @@ export function parseBlocks(src: string): Block[] {
       const buf: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('>')) buf.push(lines[i++].trim().replace(/^>\s?/, ''));
       let kind: NoteKind = '참고';
+      let title: Inline[] | undefined;
       const km = /^\[!(\S+?)\]\s*/.exec(buf[0]);
       if (km) {
         if (!NOTE_KINDS.includes(km[1] as NoteKind)) throw new Error(`알 수 없는 상자 종류: ${km[1]}`);
         kind = km[1] as NoteKind;
-        buf[0] = buf[0].slice(km[0].length);
+        // 첫 줄에서 종류 표시 뒤에 남은 글은 상자의 제목이다(본문 첫 문장에 이어 붙이지 않는다).
+        const rest = buf[0].slice(km[0].length).trim();
+        if (rest) title = parseInline(rest);
+        buf.shift();
       }
-      out.push({ t: 'note', kind, blocks: parseBlocks(buf.join('\n')) });
+      out.push({ t: 'note', kind, ...(title ? { title } : {}), blocks: parseBlocks(buf.join('\n')) });
       continue;
     }
     const buf: string[] = [];
@@ -234,7 +238,10 @@ export function* walkInlines(blocks: Block[]): Generator<Inline> {
   for (const b of blocks) {
     if (b.t === 'p' || b.t === 'h') yield* walkInlineList(b.c);
     else if (b.t === 'ul') for (const it of b.items) yield* walkInlineList(it);
-    else if (b.t === 'note') yield* walkInlines(b.blocks);
+    else if (b.t === 'note') {
+      if (b.title) yield* walkInlineList(b.title);
+      yield* walkInlines(b.blocks);
+    }
     else if (b.t === 'math') yield { t: 'math', tex: b.tex };
   }
 }

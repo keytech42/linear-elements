@@ -1,7 +1,7 @@
 // SVD가 네 기본 부분공간에 좌표를 준다 (prop.svd-four-subspaces)
 // 왼쪽 = 입력 공간 ℝ³, 오른쪽 = 출력 공간 ℝ³. 랭크 2인 3×3 행렬.
 //   입력:  𝐯₁, 𝐯₂ (행공간을 펼치는 평면) · 𝐯₃ (영공간: 0으로 사라지는 방향)
-//   출력:  𝐮₁, 𝐮₂ (열공간 평면) · 𝐮₃ (왼쪽 영공간: 어떤 입력으로도 닿지 않는 방향)
+//   출력:  𝐮₁, 𝐮₂ (열공간 평면) · 𝐮₃ (좌영공간: 어떤 입력으로도 닿지 않는 방향)
 // 입력의 단위 구(위도선 몇 개)가 출력에서는 열공간 안의 납작한 타원판이 된다.
 //
 // 매개변수: A (3×3, 기본 [[1,1,0],[0,1,1],[1,2,1]] — 셋째 행 = 첫째 행 + 둘째 행)
@@ -89,7 +89,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     u.forEach((uk, k) => {
       const isLeftNull = k >= rk;
       if (isLeftNull) s.seg(scale(-2.5, uk), scale(2.5, uk), { color: C.u, width: 1, dash: [4, 4] });
-      s.arrow([0, 0, 0], isLeftNull ? uk : scale(r.S[k], uk), { color: C.u, label: isLeftNull ? `u${'₁₂₃'[k]} (왼쪽 영공간)` : `σ${'₁₂₃'[k]}u${'₁₂₃'[k]}`, key: `u${k + 1}` });
+      s.arrow([0, 0, 0], isLeftNull ? uk : scale(r.S[k], uk), { color: C.u, label: isLeftNull ? `u${'₁₂₃'[k]} (좌영공간)` : `σ${'₁₂₃'[k]}u${'₁₂₃'[k]}`, key: `u${k + 1}` });
     });
   };
 
@@ -101,7 +101,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   panel.appendChild(eds);
   const med = matrixEditor(eds, { name: 'A', get: () => A, set: (B) => ((A = B), sync()) });
   const ro = readout(panel);
-  hint(panel, '어느 쪽 그림이든 끌면 두 그림이 함께 돕니다. 노란 단위 구가 분홍 납작한 판이 되는 것을 보세요. 판의 평면이 열공간, 판에 수직인 점선이 왼쪽 영공간입니다. 셋째 행을 첫째 행 + 둘째 행이 아니게 바꾸면 랭크가 3이 되어 판이 부풀어 오릅니다.');
+  hint(panel, '어느 쪽 그림이든 끌면 두 그림이 함께 돕니다. 노란 단위 구가 분홍 납작한 판이 되는 것을 보세요. 판의 평면이 열공간, 판에 수직인 점선이 좌영공간입니다. 셋째 행을 첫째 행 + 둘째 행이 아니게 바꾸면 랭크가 3이 되어 판이 부풀어 오릅니다.');
 
   function sync() {
     med.refresh();
@@ -112,7 +112,7 @@ const scene: SceneFn = (host, { bus, params }) => {
         `<div>${chip('행공간', C.v, 'v1')} = span(v₁…v${'₀₁₂₃'[rk]}) · 차원 ${rk}</div>` +
         `<div>${chip('영공간', C.v, 'v3')} 차원 ${3 - rk} <span class="dim">(3 = ${rk} + ${3 - rk})</span></div>` +
         `<div>${chip('열공간', C.u, 'u1')} = span(u₁…u${'₀₁₂₃'[rk]}) · 차원 ${rk}</div>` +
-        `<div>${chip('왼쪽 영공간', C.u, 'u3')} 차원 ${3 - rk}</div>`,
+        `<div>${chip('좌영공간', C.u, 'u3')} 차원 ${3 - rk}</div>`,
     );
     sIn.invalidate();
     sOut.invalidate();

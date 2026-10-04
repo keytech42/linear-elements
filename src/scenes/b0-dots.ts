@@ -3,6 +3,8 @@
 // 가로 n개씩 m줄로 놓은 점 배열. 개수는 m × n 이다.
 //  · "¼바퀴 돌리기": 배열을 통째로 돌리면 가로 m개씩 n줄이 된다. 점은 하나도 생기거나 없어지지 않는다 → m × n = n × m (교환법칙의 경험)
 //  · 나누기 선: 각 줄을 앞의 k개와 뒤의 n − k개로 가르면 m × n = m × k + m × (n − k) (분배법칙의 경험)
+//    나누기 선을 보일 때는 돌리기 단추를 두지 않는다. 한 장면에 한 법칙만 보이기 위해서다.
+//    (돌린 그림은 오른쪽 분배법칙 (b + c)a = ba + ca 를 보여 주는데, 그것은 그림이 아니라 prop.arith-first에서 증명한다.)
 //
 // 매개변수
 //   m:     줄 수 (기본 3)
@@ -44,14 +46,12 @@ const scene: SceneFn = (host, { bus, params }) => {
       const xs = (k - 0.5) * gap - cx;
       p.seg([xs, cy + 0.6], [xs, -cy - 0.6], { color: C.dim, width: 1.5, dash: [5, 4] });
     }
-    p.hud([{ text: turn === 1 ? '¼바퀴 돌린 뒤' : '처음 배열' }], 'tl');
+    if (k === null) p.hud([{ text: turn === 1 ? '¼바퀴 돌린 뒤' : '처음 배열' }], 'tl');
   };
 
   const ro = readout(panel);
   let stop: (() => void) | null = null;
-  buttons(panel, [
-    { label: '↻ ¼바퀴 돌리기', on: () => go(turn < 0.5 ? 1 : 0) },
-  ]);
+  if (k === null) buttons(panel, [{ label: '↻ ¼바퀴 돌리기', on: () => go(turn < 0.5 ? 1 : 0) }]);
   const go = (to: number) => {
     stop?.();
     const from = turn;

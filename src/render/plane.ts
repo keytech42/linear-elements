@@ -1,5 +1,5 @@
 // 2차원 평면 렌더러 (Canvas2D, 의존성 없음).
-// 좌표 약속: 수학 좌표(오른쪽이 x+, 위쪽이 y+). 화면 좌표는 아래쪽이 y+ 이므로 S()에서 y 부호를 뒤집는다.
+// 좌표 규약: 수학 좌표(오른쪽이 x+, 위쪽이 y+). 화면 좌표는 아래쪽이 y+ 이므로 S()에서 y 부호를 뒤집는다.
 // 그리기 방식: 상태가 바뀌면 invalidate() → 다음 animation frame에서 draw()를 처음부터 다시 실행한다(즉시 모드).
 import type { Vec } from '../la/vec';
 import type { Mat } from '../la/mat';

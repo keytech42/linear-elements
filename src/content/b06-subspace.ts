@@ -379,7 +379,7 @@ $$n = \operatorname{rank}A + \dim N(A)$$
       kind: 'exp',
       title: '네 기본 부분공간 지도',
       status: 'written',
-      introduces: { terms: [{ id: 't.left-null', ko: '왼쪽 영공간', en: 'left null space', gloss: 'Aᵀ의 영공간. 열공간과 직교하는, 출력 공간에서 닿을 수 없는 방향들.' }] },
+      introduces: { terms: [{ id: 't.left-null', ko: '왼쪽 영공간', en: 'left null space', surfaces: ['좌영공간'], gloss: 'Aᵀ의 영공간. 줄여서 좌영공간. 열공간과 직교하는, 출력 공간에서 닿을 수 없는 방향들.' }] },
       requires: ['prop.rank-nullity', 'prop.row-null-perp', 'def.transpose'],
       predicts: [
         {
@@ -399,12 +399,12 @@ $$n = \operatorname{rank}A + \dim N(A)$$
         {
           id: 'p-dims',
           kind: 'choice',
-          q: '랭크 1인 2×2 행렬의 네 공간(행공간, 영공간, 열공간, 왼쪽 영공간)의 차원은 차례로?',
-          hints: [String.raw`입력 2 = 행공간 + 영공간, 출력 2 = 열공간 + 왼쪽 영공간. 행공간과 열공간의 차원은 둘 다 랭크다(아래).`],
+          q: '랭크 1인 2×2 행렬의 네 공간(행공간, 영공간, 열공간, 좌영공간)의 차원은 차례로?',
+          hints: [String.raw`입력 2 = 행공간 + 영공간, 출력 2 = 열공간 + 좌영공간. 행공간과 열공간의 차원은 둘 다 랭크다(아래).`],
           choices: ['1, 1, 1, 1', '1, 1, 2, 0', '2, 0, 1, 1', '1, 2, 1, 2'],
           answer: 0,
           why: [
-            String.raw`네 공간이 모두 직선이다. 입력 평면은 행공간 직선과 영공간 직선으로, 출력 평면은 열공간 직선과 왼쪽 영공간 직선으로 나뉜다.`,
+            String.raw`네 공간이 모두 직선이다. 입력 평면은 행공간 직선과 영공간 직선으로, 출력 평면은 열공간 직선과 좌영공간 직선으로 나뉜다.`,
             String.raw`랭크가 1이면 열공간은 직선(1차원)이다.`,
             String.raw`행공간의 차원도 랭크(1)다.`,
             String.raw`입력 평면은 2차원뿐이라 1 + 2가 될 수 없다.`,
@@ -415,7 +415,7 @@ $$n = \operatorname{rank}A + \dim N(A)$$
       body: String.raw`지금까지 본 공간들을 한 장의 지도로 모으자. 모든 행렬 $A$($m \times n$)에는 네 개의 기본 부분공간이 있다.
 
 - **입력 공간 $\mathbb{R}^n$**: [행공간](t:t.row-space)(살아남는 방향, 차원 = 랭크)과 [영공간](t:t.null-space)(사라지는 방향, 차원 = $n$ − 랭크). [둘은 서로 직교한다](why:prop.row-null-perp).
-- **출력 공간 $\mathbb{R}^m$**: [열공간](t:t.column-space)(닿을 수 있는 곳, 차원 = 랭크)과 [왼쪽 영공간](def:t.left-null)(닿을 수 없는 방향, 차원 = $m$ − 랭크). 왼쪽 영공간은 $A^{\mathsf{T}}$의 영공간이고, 열공간과 직교한다($A^{\mathsf{T}}$에 같은 명제를 쓰면 된다).
+- **출력 공간 $\mathbb{R}^m$**: [열공간](t:t.column-space)(닿을 수 있는 곳, 차원 = 랭크)과 [왼쪽 영공간](def:t.left-null)(닿을 수 없는 방향, 차원 = $m$ − 랭크). 이 교재에서는 이 뒤로 이 공간을 줄여서 **좌영공간**이라 적는다. 좌영공간은 $A^{\mathsf{T}}$의 영공간이고, 열공간과 직교한다($A^{\mathsf{T}}$에 같은 명제를 쓰면 된다).
 
 ::scene b6-four {}
 
@@ -436,7 +436,7 @@ $$\dim(\text{행공간}) = \dim(\text{열공간}) = \operatorname{rank}A$$
 이 지도는 각 공간이 몇 차원인지는 말해 주지만, 각 공간을 펼치는 **좋은 기저**, 그리고 행공간의 방향 하나하나가 열공간의 어느 방향으로 얼마나 늘어나 가는지는 말해 주지 않는다. 9권의 [특이값 분해](fwd:t.svd)가 이 지도에 좌표를 그려 넣는다.`,
       checks: [
         {
-          q: '4×3 행렬의 랭크가 3이다. 영공간과 왼쪽 영공간의 차원은?',
+          q: '4×3 행렬의 랭크가 3이다. 영공간과 좌영공간의 차원은?',
           choices: ['0과 1', '1과 0', '0과 0', '1과 1'],
           answer: 0,
           explain: String.raw`입력 3 − 랭크 3 = 0(영공간은 원점뿐, 서로 다른 입력은 서로 다른 출력). 출력 4 − 랭크 3 = 1(출력 공간에 닿지 못하는 방향이 하나 남는다). 그래서 $A\mathbf{x} = \mathbf{b}$는 해가 없거나 하나다.`,

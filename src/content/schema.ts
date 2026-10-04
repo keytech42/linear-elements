@@ -3,18 +3,27 @@
 
 /**
  * 노드 종류 (유클리드 『원론』의 구성을 따른다)
- *  ax   약속(공리): 증명 없이 받아들이는 출발점. 산수의 규칙, 넓이의 규칙.
+ *  ax   공리: 증명하지 않고 받아들이기로 정한 출발점. 수의 규칙, 넓이의 규칙.
  *  def  정의: 이름을 붙인다. 참/거짓이 없다.
- *  prop 명제: 앞의 약속과 정의만으로 증명되는 사실.
+ *  prop 명제: 앞의 공리, 정의, 명제만으로 증명되는 사실.
+ * (표기를 고르는 일은 "규약"이라 부르고 노드 종류로 두지 않는다. 바꿔도 수학이 같기 때문이다.)
  *  exp  탐구: 손으로 만지며 다음 정의/명제를 예감하게 하는 장면.
  */
 export type Kind = 'ax' | 'def' | 'prop' | 'exp';
 
 export const KIND_LABEL: Record<Kind, string> = {
-  ax: '약속',
+  ax: '공리',
   def: '정의',
   prop: '명제',
   exp: '탐구',
+};
+
+/** 노드 종류의 영어 표준 용어. 노드 머리의 배지에만 위첨자로 붙인다. */
+export const KIND_EN: Record<Kind, string> = {
+  ax: 'axiom',
+  def: 'definition',
+  prop: 'proposition',
+  exp: 'exploration',
 };
 
 export interface TermDecl {
@@ -28,6 +37,10 @@ export interface TermDecl {
   surfaces?: string[];
   /** 일상어와 겹치는 용어(예: 공간, 차원). P008 스캔에서 제외한다. */
   everyday?: boolean;
+  /** 낱말 경계에서만 찾는다: 앞에 한글이 붙지 않고 뒤에 조사·공백·문장 부호가 올 때만. 한 글자 이름(향)은 이것을 켜야 스캔과 자동 링크에 들어간다. */
+  boundary?: boolean;
+  /** 노드마다 첫 등장만이 아니라 모든 등장을 링크한다(혼동이 큰 짧은 이름용). */
+  everyMention?: boolean;
   /** 용어 팝오버에 띄울 한 줄 정의 */
   gloss: string;
 }

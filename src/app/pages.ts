@@ -25,7 +25,7 @@ export function renderHome(main: HTMLElement) {
     <div class="home-grid">
       <div class="home-card"><h3>세 표현의 동기화</h3><p>행렬의 칸, 그림의 화살표, 식의 항이 같은 대상을 가리키면 같은 색이고, 하나를 가리키면 셋이 함께 빛납니다. <b>색도 기호입니다.</b></p></div>
       <div class="home-card"><h3>유리 상자</h3><p>화면의 모든 수는 이 저장소의 <code>src/la</code>에 있는 손으로 짠 함수가 계산합니다. 각 노드의 “이 노드의 코드”에서 그 원문을 그대로 읽을 수 있습니다. 라이브러리는 테스트의 심판으로만 씁니다.</p></div>
-      <div class="home-card"><h3>원론 지도</h3><p>모든 노드는 앞의 노드에 기댑니다. 어떤 명제든 골라서 <b>약속(공리)까지 거슬러 오를</b> 수 있습니다.</p></div>
+      <div class="home-card"><h3>원론 지도</h3><p>모든 노드는 앞의 노드에 기댑니다. 어떤 명제든 골라서 <b>공리까지 거슬러 오를</b> 수 있습니다.</p></div>
       <div class="home-card"><h3>눈 훈련장</h3><p>행렬을 보면 그림이, 그림을 보면 행렬이 떠오르도록 반복 훈련합니다. 이해와 숙련은 다른 목표입니다.</p></div>
     </div>
     <h2>목차</h2>

@@ -121,13 +121,13 @@ const scene: SceneFn = (host, { params }) => {
     return { cv, c };
   };
   const fOrig = fig('원래 그림 (랭크 = 행렬의 랭크)');
-  const fApprox = fig('앞의 k개 층의 합 A_k');
-  const fLayer = fig('k번째 층 하나 σ_k u_k v_kᵀ');
+  const fApprox = fig('앞의 k개 \'층\'의 합 A_k');
+  const fLayer = fig('k번째 \'층\' 하나 σ_k u_k v_kᵀ');
   const panel = el('div', 'scene-panel');
   panel.style.borderLeft = '0';
   panel.style.borderTop = '1px solid var(--line)';
   root.appendChild(panel);
-  const ks = slider(panel, { label: '층의 수 k', min: 0, max: Math.min(m, n), step: 1, get: () => k, set: (v) => ((k = v), redraw()), format: (v) => String(v) });
+  const ks = slider(panel, { label: '\'층\'의 수 k', min: 0, max: Math.min(m, n), step: 1, get: () => k, set: (v) => ((k = v), redraw()), format: (v) => String(v) });
   const chartBox = el('div', 'chart-box');
   panel.appendChild(chartBox);
   const chart = new Chart(chartBox, 130);
@@ -139,11 +139,11 @@ const scene: SceneFn = (host, { params }) => {
   panel.appendChild(file);
   buttons(panel, [
     { label: '글자', on: () => load(preset('letters')) },
-    { label: '체크무늬', on: () => load(preset('plaid')), title: '가로 줄무늬와 세로 줄무늬의 합. 몇 층이면 완벽해질까?' },
+    { label: '체크무늬', on: () => load(preset('plaid')), title: '가로 줄무늬와 세로 줄무늬의 합. \'층\'이 몇 개면 완벽해질까?' },
     { label: '원', on: () => load(preset('circle')) },
     { label: '내 그림 올리기', on: () => file.click() },
   ]);
-  hint(panel, '체크무늬를 골라 k를 1, 2, 3으로 올려 보세요. 원은 왜 그렇게 많은 층이 필요할까요? (원의 윤곽은 가로·세로 방향의 패턴으로 나누기 어렵습니다.)');
+  hint(panel, '체크무늬를 골라 k를 1, 2, 3으로 올려 보세요. 원은 왜 그렇게 많은 \'층\'이 필요할까요? (원의 윤곽은 가로·세로 방향의 패턴으로 나누기 어렵습니다.)');
 
   file.addEventListener('change', () => {
     const f = file.files?.[0];
@@ -215,7 +215,7 @@ const scene: SceneFn = (host, { params }) => {
     const L = Math.min(r.S.length, 60);
     c.xr = [0.5, L + 0.5];
     c.yr = [0, r.S[0] * 1.05];
-    c.frame('i (층 번호)', 'σᵢ', [0, r.S[0]]);
+    c.frame('i (\'층\' 번호)', 'σᵢ', [0, r.S[0]]);
     for (let i = 0; i < L; i++) c.bar(i + 1, r.S[i], 1, i < k ? C.u : 'rgba(124,196,255,0.22)');
     if (k > 0 && k <= L) c.vline(k + 0.5, C.x, `k=${k}`);
   };

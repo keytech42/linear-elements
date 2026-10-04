@@ -112,3 +112,82 @@ describe('검증기 규칙', () => {
     expect(r.filter((x) => x !== 'P014' && x !== 'P006')).toEqual([]);
   });
 });
+
+describe('첫 등장 자동 링크', () => {
+  const mk = (nodes: Book['nodes']): Book[] => [{ id: 'b', num: 0, title: '', subtitle: '', nodes }];
+  const T = { id: 't.a', ko: '가나다', gloss: '' };
+  const def = { id: 'n1', kind: 'def' as const, title: '', status: 'written' as const, introduces: { terms: [T] }, body: '[가나다](def:t.a)' };
+  const terms = (xs: { t: string; id?: string }[]) => xs.filter((x) => x.t === 'term').map((x) => x.id);
+
+  it('뒤 노드의 첫 등장만 링크가 된다. 소제목은 건너뛴다', () => {
+    const r = verify(mk([def, { id: 'n2', kind: 'def', title: '', status: 'written', body: '### 가나다\n\n가나다는 둘째 가나다다.' }]), new Set(), new Map());
+    const [h, p] = r.parsed.get('n2')!.body as { c: { t: string; id?: string }[] }[];
+    expect(terms(h.c)).toEqual([]);
+    expect(terms(p.c)).toEqual(['t.a']);
+    expect(r.autoLinked).toBe(1);
+  });
+  it('보기 단추에는 달지 않고, 힌트 안의 링크는 본문의 첫 등장을 대신하지 않는다', () => {
+    const r = verify(
+      mk([
+        def,
+        {
+          id: 'n2',
+          kind: 'def',
+          title: '',
+          status: 'written',
+          predicts: [{ id: 'p', kind: 'choice', q: '물음', choices: ['가나다', '아님'], answer: 0, hints: ['가나다를 보라'] }],
+          body: '::predict p\n\n답은 가나다다.',
+        },
+      ]),
+      new Set(),
+      new Map(),
+    );
+    const pn = r.parsed.get('n2')!;
+    const pp = pn.predicts.get('p')!;
+    expect(terms(pp.choices[0] as { t: string }[])).toEqual([]);
+    expect(terms((pp.hints[0][0] as { c: { t: string }[] }).c)).toEqual(['t.a']);
+    expect(terms((pn.body[1] as { c: { t: string }[] }).c)).toEqual(['t.a']);
+  });
+  it('정의한 노드 안에서는 자기 자신에게 링크를 달지 않는다', () => {
+    const r = verify(mk([{ ...def, body: '가나다를 먼저 말하고 [가나다](def:t.a)를 정의한다.' }]), new Set(), new Map());
+    expect(r.autoLinked).toBe(0);
+  });
+});
+
+describe('상자 제목', () => {
+  it('첫 줄의 나머지는 제목이고, 본문에 이어 붙지 않는다', () => {
+    const [b] = parseBlocks('> [!주의] 경험과 증명\n> 그림은 한 경우다.\n>\n> 둘째 문단.');
+    expect(b.t).toBe('note');
+    if (b.t !== 'note') return;
+    expect(b.kind).toBe('주의');
+    expect(b.title).toEqual([{ t: 'text', v: '경험과 증명' }]);
+    expect(b.blocks.map((x) => x.t)).toEqual(['p', 'p']);
+  });
+  it('제목이 없으면 title도 없다', () => {
+    const [b] = parseBlocks('> [!참고]\n> 내용');
+    expect(b.t === 'note' && 'title' in b).toBe(false);
+  });
+});
+
+describe('낱말 경계와 모든 등장 링크 (한 글자 용어)', () => {
+  const mk = (nodes: Book['nodes']): Book[] => [{ id: 'b', num: 0, title: '', subtitle: '', nodes }];
+  const H = { id: 't.h', ko: '향', gloss: '', boundary: true, everyMention: true };
+  const links = (r: ReturnType<typeof verify>, id: string) =>
+    (r.parsed.get(id)!.body[0] as { c: { t: string; c?: { v: string }[] }[] }).c.filter((x) => x.t === 'term').map((x) => x.c![0].v);
+
+  it('향이·향을은 잡고 방향·편향·향하다·향후는 잡지 않는다', () => {
+    const r = verify(
+      mk([
+        { id: 'n1', kind: 'def', title: '', status: 'written', introduces: { terms: [H] }, body: '[향](def:t.h)' },
+        { id: 'n2', kind: 'def', title: '', status: 'written', body: '방향과 편향은 다르다. 향이 뒤집히면 향을 되돌린다. 위로 향하는 화살표, 향후의 일.' },
+      ]),
+      new Set(),
+      new Map(),
+    );
+    expect(links(r, 'n2')).toEqual(['향', '향']);
+  });
+  it('모든 등장 링크는 정의한 노드 안에서도 정의한 자리 뒤부터 단다', () => {
+    const r = verify(mk([{ id: 'n1', kind: 'def', title: '', status: 'written', introduces: { terms: [H] }, body: '향이 먼저. [향](def:t.h)을 정한다. 향은 뒤집힌다.' }]), new Set(), new Map());
+    expect(links(r, 'n1')).toEqual(['향']);
+  });
+});

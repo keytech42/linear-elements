@@ -1,6 +1,6 @@
 // 노드 읽기 화면.
 import { NODE_BY_ID, BOOK_OF, ALL_NODES, V, prereqs, dependents, codeOf } from './data';
-import { KIND_LABEL } from '../content/schema';
+import { KIND_LABEL, KIND_EN } from '../content/schema';
 import { renderBlocks, renderInlines, type RenderCtx } from './render';
 import { progress, trail } from './state';
 import { SyncBus } from '../sync/bus';
@@ -41,7 +41,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
 
   const head = document.createElement('header');
   head.className = 'node-head';
-  head.innerHTML = `<div class="kicker"><span class="kind kind-${node.kind}">${KIND_LABEL[node.kind]}</span> ${book.num}권 ${book.title} · <code>${node.id}</code></div><h1>${node.title}</h1>`;
+  head.innerHTML = `<div class="kicker"><span class="kind kind-${node.kind}">${KIND_LABEL[node.kind]}<sup class="term-en">${KIND_EN[node.kind]}</sup></span> ${book.num}권 ${book.title} · <code>${node.id}</code></div><h1>${node.title}</h1>`;
   art.appendChild(head);
 
   // 읽기 모드: 예측하며 읽기(관문이 잠겨 있음) / 펼쳐 보기(모두 열림)
