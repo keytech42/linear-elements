@@ -1,6 +1,6 @@
 [한국어](README.ko.md)
 
-# Linear Elements (선형 원론)
+# Linear Algebra: The Elements (선형 원론)
 
 An interactive linear algebra textbook that assumes the reader knows only arithmetic, and goes all the way to the singular value decomposition (SVD) and LoRA. **The textbook itself is written in Korean.**
 

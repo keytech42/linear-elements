@@ -1,6 +1,6 @@
 [English](README.md)
 
-# 선형 원론
+# 선형 원론 (Linear Algebra: The Elements)
 
 독자가 산수만 안다고 가정하고, 특이값 분해(SVD)와 LoRA까지 가는 상호작용 선형대수 교재다.
 
