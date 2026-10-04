@@ -37,7 +37,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const s = add(u, w);
     if (par) {
       p.poly([[0, 0], u, s, w], { fill: 'rgba(231,235,243,0.06)' });
-      p.arrow([0, 0], w, { color: C.v, width: 1.5, dash: [5, 4], alpha: 0.7, key: 'wu' });
+      p.arrow([0, 0], w, { color: C.w, width: 1.5, dash: [5, 4], alpha: 0.7, key: 'wu' });
       p.arrow(w, s, { color: C.u, width: 1.5, dash: [5, 4], alpha: 0.7, key: 'wu' });
     }
     if (comp) {
@@ -51,14 +51,14 @@ const scene: SceneFn = (host, { bus, params }) => {
     }
     p.arrow([0, 0], s, { color: C.ink, label: 'u + w', key: 'sum' });
     p.arrow([0, 0], u, { color: C.u, label: 'u', key: 'u' });
-    p.arrow(u, s, { color: C.v, label: 'w', key: 'w' });
+    p.arrow(u, s, { color: C.w, label: 'w', key: 'w' });
     p.hud([{ text: '하늘 화살표 끝과 연두 화살표 끝을 끌어 보세요' }], 'bl');
   };
 
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (v) => ((u = v), sync()) });
-  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (v) => ((w = v), sync()) });
+  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.w, get: () => w, set: (v) => ((w = v), sync()) });
   if (params.parToggle ?? true) toggle(panel, '반대 순서(w 다음 u)도 보기', () => par, (b) => ((par = b), sync()));
   toggle(panel, '가로 이동과 세로 이동을 따로 보기', () => comp, (b) => ((comp = b), sync()));
   const ro = readout(panel);
@@ -69,7 +69,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     ew.refresh();
     const s = add(u, w);
     let html =
-      `<div>${chip('u', C.u, 'u')} + ${chip('w', C.v, 'w')} = ${colHtml(u, { color: C.u })} + ${colHtml(w, { color: C.v })} = ${colHtml(s, { key: 'sum' })}</div>` +
+      `<div>${chip('u', C.u, 'u')} + ${chip('w', C.w, 'w')} = ${colHtml(u, { color: C.u })} + ${colHtml(w, { color: C.w })} = ${colHtml(s, { key: 'sum' })}</div>` +
       `<div>가로: ${chip(`${fmt(u[0])} + ${fmt(w[0])} = ${fmt(s[0])}`, C.c1, 'h')}</div>` +
       `<div>세로: ${chip(`${fmt(u[1])} + ${fmt(w[1])} = ${fmt(s[1])}`, C.c2, 'vv')}</div>`;
     if (par) html += `<div class="dim">점선(${chip('w 다음 u', C.ink, 'wu')})도 같은 점 ${'(' + fmt(s[0]) + ', ' + fmt(s[1]) + ')'}에 도착한다.</div>`;

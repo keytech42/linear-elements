@@ -40,25 +40,25 @@ const scene: SceneFn = (host, { bus, params }) => {
     if (k) {
       const a = scale(k[0], u);
       p.arrow([0, 0], a, { color: C.u, width: 2, dash: [5, 4], key: 'c1u' });
-      p.arrow(a, P, { color: C.v, width: 2, dash: [5, 4], key: 'c2w' });
+      p.arrow(a, P, { color: C.w, width: 2, dash: [5, 4], key: 'c2w' });
     }
     p.arrow([0, 0], u, { color: C.u, label: 'u', key: 'u' });
-    p.arrow([0, 0], w, { color: C.v, label: 'w', key: 'w' });
+    p.arrow([0, 0], w, { color: C.w, label: 'w', key: 'w' });
     p.dot(P, { color: C.ink, r: 5, key: 'p' });
     p.text(P, '점', { color: C.ink, dx: 10, dy: -12 });
-    p.hud([{ text: k ? 'u, w 끝과 흰 점을 끌어 보세요' : 'u와 w가 나란하다: 기저가 아니다' }], 'bl');
+    p.hud([{ text: k ? 'u, w 끝과 흰 점을 끌어 보세요' : 'u와 w가 평행하다: 기저가 아니다' }], 'bl');
   };
 
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (v) => ((u = v), sync()) });
-  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (v) => ((w = v), sync()) });
+  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.w, get: () => w, set: (v) => ((w = v), sync()) });
   const ep = vectorEditor(eds, { name: '점', key: 'p', color: C.ink, get: () => P, set: (v) => ((P = v), sync()) });
   toggle(panel, '기울어진 격자 보기', () => grid, (b) => ((grid = b), sync()));
   buttons(panel, [
     { label: '표준 기저', on: () => ((u = [1, 0]), (w = [0, 1]), sync()), title: 'u = e₁, w = e₂' },
     { label: '기울어진 기저', on: () => ((u = [2, 1]), (w = [1, 2]), sync()) },
-    { label: '나란한 둘', on: () => ((u = [1, 1]), (w = [2, 2]), sync()) },
+    { label: '평행한 둘', on: () => ((u = [1, 1]), (w = [2, 2]), sync()) },
   ]);
   const ro = readout(panel);
   hint(panel, '파란 격자의 한 칸은 𝐮 방향으로 한 걸음, 𝐰 방향으로 한 걸음입니다. 흰 점이 격자의 어느 칸에 있는지 세는 것이 좌표를 읽는 것입니다.');
@@ -71,8 +71,8 @@ const scene: SceneFn = (host, { bus, params }) => {
     let html = `<div>표준 좌표: ${chip('점', C.ink, 'p')} = ${vtxt(P)}</div>`;
     if (k)
       html +=
-        `<div>이 기저에 대한 ${chip('좌표', C.ink, 'coords')}: (${chip(fmt(k[0]), C.u, 'c1u')}, ${chip(fmt(k[1]), C.v, 'c2w')})</div>` +
-        `<div class="eq">${chip(fmt(k[0]), C.u, 'c1u')}·${vtxt(u)} + ${chip(fmt(k[1]), C.v, 'c2w')}·${vtxt(w)} = ${vtxt(P)}</div>`;
+        `<div>이 기저에 대한 ${chip('좌표', C.ink, 'coords')}: (${chip(fmt(k[0]), C.u, 'c1u')}, ${chip(fmt(k[1]), C.w, 'c2w')})</div>` +
+        `<div class="eq">${chip(fmt(k[0]), C.u, 'c1u')}·${vtxt(u)} + ${chip(fmt(k[1]), C.w, 'c2w')}·${vtxt(w)} = ${vtxt(P)}</div>`;
     else html += `<div class="dim">𝐮와 𝐰가 나란해서 평면 전체를 생성하지 못한다. 점이 그 직선 위에 있으면 좌표를 매기는 방법이 끝없이 많고, 아니면 하나도 없다.</div>`;
     ro.set(html);
     p.invalidate();

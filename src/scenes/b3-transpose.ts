@@ -34,7 +34,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.grid();
     p.tgrid(A, { color: 'rgba(120,170,255,0.18)' });
     p.arrow([0, 0], matVec(A, x), { color: C.y, label: 'Ax', key: 'Ax' });
-    p.arrow([0, 0], w, { color: C.u, label: 'w', key: 'w' });
+    p.arrow([0, 0], w, { color: C.w, label: 'w', key: 'w' });
   };
   pr.draw = (p) => {
     p.grid();
@@ -49,7 +49,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   const eds2 = panel.appendChild(document.createElement('div'));
   eds2.className = 'eds';
   const ex = vectorEditor(eds2, { name: 'x', key: 'x', color: C.x, get: () => x, set: (v) => ((x = v), sync()) });
-  const ew = vectorEditor(eds2, { name: 'w', key: 'w', color: C.u, get: () => w, set: (v) => ((w = v), sync()) });
+  const ew = vectorEditor(eds2, { name: 'w', key: 'w', color: C.w, get: () => w, set: (v) => ((w = v), sync()) });
   const ro = readout(panel);
   hint(panel, '오른쪽에서 𝐱를, 왼쪽에서 𝐰를 끌어 보세요. 행렬 A의 칸을 바꿔도 두 내적은 언제나 같습니다.');
 

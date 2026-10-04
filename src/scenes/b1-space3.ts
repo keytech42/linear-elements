@@ -48,7 +48,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const vs = third ? [u, w, v] : [u, w];
     for (const k of coeffs) s.dot(linComb(third ? k : k.slice(0, 2), vs), { color: C.ink, r: 1.8, alpha: 0.6 });
     s.arrow([0, 0, 0], u, { color: C.u, label: 'u', key: 'u' });
-    s.arrow([0, 0, 0], w, { color: C.v, label: 'w', key: 'w' });
+    s.arrow([0, 0, 0], w, { color: C.w, label: 'w', key: 'w' });
     if (third) {
       s.arrow([0, 0, 0], v, { color: C.ink, label: 'v', key: 'v' });
       if (q.length >= 1) {
@@ -61,7 +61,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (x) => ((u = x), sync()) });
-  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (x) => ((w = x), sync()) });
+  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.w, get: () => w, set: (x) => ((w = x), sync()) });
   const ev = vectorEditor(eds, { name: 'v', key: 'v', color: C.ink, get: () => v, set: (x) => ((v = x), sync()) });
   const tg = toggle(panel, '셋째 벡터 v 쓰기', () => third, (b) => ((third = b), (ev.el.style.opacity = b ? '1' : '0.35'), sync()));
   buttons(panel, [

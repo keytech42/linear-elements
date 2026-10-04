@@ -34,7 +34,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const s = add(u, w);
     // 입력 쪽(옅게): 𝐮, 𝐰, 𝐮 + 𝐰
     p.arrow([0, 0], u, { color: C.u, width: 1.5, alpha: 0.6, label: 'u', key: 'u' });
-    p.arrow([0, 0], w, { color: C.v, width: 1.5, alpha: 0.6, label: 'w', key: 'w' });
+    p.arrow([0, 0], w, { color: C.w, width: 1.5, alpha: 0.6, label: 'w', key: 'w' });
     p.seg(u, s, { color: C.dim, dash: [3, 4], width: 1 });
     p.seg(w, s, { color: C.dim, dash: [3, 4], width: 1 });
     p.dot(s, { color: C.dim, r: 3 });
@@ -44,9 +44,9 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.seg(Tu, sumOf, { color: C.y, dash: [5, 4], width: 1.2, alpha: 0.7 });
     p.seg(Tw, sumOf, { color: C.y, dash: [5, 4], width: 1.2, alpha: 0.7 });
     p.dot(Tu, { color: C.u, r: 4 });
-    p.dot(Tw, { color: C.v, r: 4 });
+    p.dot(Tw, { color: C.w, r: 4 });
     p.text(Tu, 'T(u)', { color: C.u, dx: 8, dy: -8 });
-    p.text(Tw, 'T(w)', { color: C.v, dx: 8, dy: -8 });
+    p.text(Tw, 'T(w)', { color: C.w, dx: 8, dy: -8 });
     p.dot(sumOf, { color: C.y, r: 6, key: 'sumOf' });
     p.text(sumOf, 'T(u)+T(w)', { color: C.y, dx: 10, dy: 12 });
     p.dot(ofSum, { color: C.ink, r: 5, key: 'ofSum' });

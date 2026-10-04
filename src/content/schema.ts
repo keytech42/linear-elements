@@ -1,3 +1,8 @@
+import type { C } from '../render/colors';
+
+/** 색 이름(색도 기호다) */
+export type ColorKey = keyof typeof C;
+
 // 콘텐츠 스키마. 이 앱의 진짜 핵심은 렌더러가 아니라 이 구조다.
 // 모든 노드는 데이터이고, 검증기(src/verify)가 이 데이터만 읽고 "정의 전 사용"과 "앞쪽을 가리키는 왜?"를 잡아낸다.
 
@@ -83,6 +88,8 @@ export type Predict =
       show?: ('cols' | 'x' | 'tgrid' | 'circle')[];
       /** cols를 보일 때 두 열의 이름표 (기본 ['Ae₁', 'Ae₂']). 행렬을 배우기 전의 노드에서는 ['u', 'w'] 등으로 바꾼다 */
       colLabels?: [string, string];
+      /** cols를 보일 때 두 열의 색(src/render/colors.ts의 C 이름, 기본 ['c1', 'c2']). 열이 u, w를 뜻하면 ['u', 'w'] */
+      colColors?: [ColorKey, ColorKey];
       /** 맞았다고 볼 오차: Ax는 단위 길이(기본 0.3), 방향은 도(기본 8) */
       tol?: number;
       reveal?: string;

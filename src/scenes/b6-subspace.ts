@@ -37,8 +37,8 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.line(base(), d, { color: C.ink, width: 2, alpha: 0.55 });
     const u = at(su), w = at(sw), s = add(u, w), cu = scale(c, u);
     p.arrow([0, 0], u, { color: C.u, label: 'u', key: 'u' });
-    p.arrow([0, 0], w, { color: C.v, label: 'w', key: 'w' });
-    p.arrow(u, s, { color: C.v, width: 1.2, dash: [4, 4], alpha: 0.6 });
+    p.arrow([0, 0], w, { color: C.w, label: 'w', key: 'w' });
+    p.arrow(u, s, { color: C.w, width: 1.2, dash: [4, 4], alpha: 0.6 });
     p.arrow([0, 0], s, { color: C.ink, label: 'u + w', key: 'sum' });
     p.arrow([0, 0], cu, { color: C.u, width: 1.8, dash: [6, 4], label: `${fmt(c)}u`, key: 'cu' });
     for (const [v, key] of [[s, 'sum'], [cu, 'cu']] as [Vec, string][]) p.dot(v, { color: onLine(v) ? C.ok : C.bad, r: 5, key });
@@ -55,7 +55,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     sc.refresh();
     const u = at(su), w = at(sw), s = add(u, w), cu = scale(c, u);
     const yes = (v: Vec) => (onLine(v) ? `<span style="color:${C.ok}">직선 위</span>` : `<span style="color:${C.bad}">직선 밖</span>`);
-    let html = `<div>${chip('u', C.u, 'u')} = ${vecTxt(u)}, ${chip('w', C.v, 'w')} = ${vecTxt(w)}</div>`;
+    let html = `<div>${chip('u', C.u, 'u')} = ${vecTxt(u)}, ${chip('w', C.w, 'w')} = ${vecTxt(w)}</div>`;
     html += `<div>${chip('u + w', C.ink, 'sum')} = ${vecTxt(s)} → ${yes(s)}</div>`;
     html += `<div>${chip(`${fmt(c)}u`, C.u, 'cu')} = ${vecTxt(cu)} → ${yes(cu)}</div>`;
     html += `<div>${chip('𝟎', C.ink, 'zero')} → ${yes([0, 0])}</div>`;

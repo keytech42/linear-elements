@@ -14,6 +14,7 @@ export const C = {
   y: '#ff6bd5', // 출력 벡터 Ax
   u: '#7cc4ff', // 일반 벡터 u (벡터 덧셈 등)
   v: '#a6e36a', // 일반 벡터 v
+  w: '#e0a3ff', // 일반 벡터 w (u와 짝을 이루는 둘째 벡터)
   ok: '#5fd38d',
   bad: '#ff5d6c',
   area: 'rgba(245,197,66,0.16)',
@@ -27,7 +28,8 @@ export const COLOR_TABLE: { color: string; name: string; meaning: string }[] = [
   { color: C.c3, name: '보라', meaning: '셋째 표준 기저 벡터 e₃, 그리고 행렬의 3열 (3차원 장면)' },
   { color: C.x, name: '노랑', meaning: '변환에 넣는 입력 벡터 x' },
   { color: C.y, name: '분홍', meaning: '변환이 내놓는 출력 벡터 Ax' },
-  { color: C.u, name: '하늘', meaning: '이름 없는 일반 벡터 u (덧셈·결합 장면)' },
-  { color: C.v, name: '연두', meaning: '이름 없는 일반 벡터 v (덧셈·결합 장면)' },
+  { color: C.u, name: '하늘', meaning: '이름 없는 일반 벡터 u' },
+  { color: C.v, name: '연두', meaning: '이름 없는 일반 벡터 v' },
+  { color: C.w, name: '라일락', meaning: '이름 없는 일반 벡터 w (u와 짝을 이루는 둘째 벡터)' },
   { color: C.tgrid, name: '파란 격자', meaning: '변환된 뒤의 격자' },
 ];

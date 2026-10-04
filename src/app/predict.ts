@@ -264,8 +264,9 @@ function pointPlane(host: HTMLElement, d: PointDef, get: () => Vec, set: (v: Vec
     if (show.has('circle') || d.target === 'v1') p.curve((t) => [Math.cos(t), Math.sin(t)], 0, 2 * Math.PI, 80, { color: C.dim, width: 1, dash: [3, 4] });
     if (show.has('cols')) {
       const [l1, l2] = d.colLabels ?? ['Ae₁', 'Ae₂'];
-      p.arrow([0, 0], col(A, 0), { color: C.c1, label: l1, width: 2 });
-      p.arrow([0, 0], col(A, 1), { color: C.c2, label: l2, width: 2 });
+      const [k1, k2] = d.colColors ?? ['c1', 'c2'];
+      p.arrow([0, 0], col(A, 0), { color: C[k1], label: l1, width: 2 });
+      p.arrow([0, 0], col(A, 1), { color: C[k2], label: l2, width: 2 });
     }
     if (show.has('x') && d.x) p.arrow([0, 0], d.x, { color: C.x, label: 'x', width: 2 });
     const mine = reveal ? reveal.mine : get();

@@ -7,7 +7,7 @@
 //   u, w:   처음 두 벡터 (기본 [1, 2], [2, -1])
 //   one:    𝐰를 빼고 𝐮 하나만 쓸지 (기본 false)
 //   fill:   처음에 찍어 둘 점의 개수 (기본 0)
-//   presets: 보기 단추(하나, 나란한 둘, 나란하지 않은 둘, 영벡터)를 보일지 (기본 true)
+//   presets: 보기 단추(하나, 평행한 둘, 평행하지 않은 둘, 영벡터)를 보일지 (기본 true)
 // 동기화 키: u, w, span, cross
 import type { SceneFn } from './_lib/scene';
 import { layout, readout, hint } from './_lib/scene';
@@ -49,7 +49,7 @@ const scene: SceneFn = (host, { bus, params }) => {
       p.line([0, 0], dir, { color: C.ink, width: 1, alpha: 0.25, key: 'span' });
     }
     for (const [a, b] of coeffs) p.dot(linComb(useW ? [a, b] : [a], vs), { color: C.ink, r: 1.8, alpha: 0.55 });
-    if (useW) p.arrow([0, 0], w, { color: C.v, label: 'w', key: 'w' });
+    if (useW) p.arrow([0, 0], w, { color: C.w, label: 'w', key: 'w' });
     p.arrow([0, 0], u, { color: C.u, label: 'u', key: 'u' });
     p.dot([0, 0], { color: C.ink, r: 3 });
     p.hud([{ text: `찍은 점 ${coeffs.length}개` }], 'bl');
@@ -58,7 +58,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (v) => ((u = v), sync()) });
-  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (v) => ((w = v), sync()) });
+  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.w, get: () => w, set: (v) => ((w = v), sync()) });
   const tg = toggle(panel, 'w도 쓰기', () => useW, (b) => ((useW = b), (ew.el.style.opacity = b ? '1' : '0.35'), sync()));
   ew.el.style.opacity = useW ? '1' : '0.35';
   buttons(panel, [
@@ -76,8 +76,8 @@ const scene: SceneFn = (host, { bus, params }) => {
     };
     buttons(panel, [
       { label: '하나', on: () => set([1, 2], null) },
-      { label: '나란한 둘', on: () => set([1, 2], [-2, -4]) },
-      { label: '나란하지 않은 둘', on: () => set([1, 2], [2, -1]) },
+      { label: '평행한 둘', on: () => set([1, 2], [-2, -4]) },
+      { label: '평행하지 않은 둘', on: () => set([1, 2], [2, -1]) },
       { label: '영벡터', on: () => set([0, 0], null) },
     ]);
   }
@@ -92,7 +92,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     const names = ['원점 한 점', '원점을 지나는 직선 하나', '평면 전체'];
     let html = `<div>${chip(useW ? 'span(u, w)' : 'span(u)', C.ink, 'span')} = <b>${names[d]}</b></div>`;
     if (useW) html += `<div>${chip('u₁w₂ − u₂w₁', C.ink, 'cross')} = ${fmt(u[0])}·${fmt(w[1])} − ${fmt(u[1])}·${fmt(w[0])} = ${fmt(cross2(u, w))}</div>`;
-    if (useW) html += `<div class="dim">${d === 2 ? '0이 아니다: 두 벡터가 나란하지 않다.' : '0이다: 두 벡터가 나란하거나 영벡터가 끼어 있다.'}</div>`;
+    if (useW) html += `<div class="dim">${d === 2 ? '0이 아니다: 두 벡터가 평행하지 않다.' : '0이다: 두 벡터가 평행하거나 영벡터가 끼어 있다.'}</div>`;
     ro.set(html);
     p.invalidate();
   }

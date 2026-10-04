@@ -43,9 +43,9 @@ const scene: SceneFn = (host, { bus, params }) => {
       p.text(target, '목표', { color: hit() ? C.ok : C.ink, dx: 12, dy: -12, size: 13 });
     }
     p.arrow([0, 0], a, { color: C.u, width: 2, dash: [5, 4], key: 'c1u' });
-    p.arrow(a, add(a, scale(c2, w)), { color: C.v, width: 2, dash: [5, 4], key: 'c2w' });
+    p.arrow(a, add(a, scale(c2, w)), { color: C.w, width: 2, dash: [5, 4], key: 'c2w' });
     p.arrow([0, 0], u, { color: C.u, label: 'u', key: 'u' });
-    p.arrow([0, 0], w, { color: C.v, label: 'w', key: 'w' });
+    p.arrow([0, 0], w, { color: C.w, label: 'w', key: 'w' });
     p.arrow([0, 0], r, { color: C.ink, label: 'c₁u + c₂w', key: 'combo' });
     p.hud([{ text: target ? (hit() ? '목표에 닿았다' : '손잡이 c₁, c₂로 목표에 닿아 보세요') : 'u, w 끝을 끌고, 오른쪽에서 c₁, c₂를 바꿔 보세요' }], 'bl');
   };
@@ -53,7 +53,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   const eds = panel.appendChild(document.createElement('div'));
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (v) => ((u = v), sync()) });
-  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (v) => ((w = v), sync()) });
+  const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.w, get: () => w, set: (v) => ((w = v), sync()) });
   const s1 = slider(panel, { label: 'c₁', key: 'c1', min: -3, max: 3, step: 0.05, get: () => c1, set: (x) => ((c1 = x), sync()) });
   const s2 = slider(panel, { label: 'c₂', key: 'c2', min: -3, max: 3, step: 0.05, get: () => c2, set: (x) => ((c2 = x), sync()) });
   if (target !== null || params.challenge) {
@@ -88,12 +88,12 @@ const scene: SceneFn = (host, { bus, params }) => {
     s2.refresh();
     const r = linComb([c1, c2], [u, w]);
     let html =
-      `<div>${chip(fmt(c1), C.u, 'c1')}·${chip('u', C.u, 'u')} + ${chip(fmt(c2), C.v, 'c2')}·${chip('w', C.v, 'w')}</div>` +
-      `<div>= ${chip(vtxt(scale(c1, u)), C.u, 'c1u')} + ${chip(vtxt(scale(c2, w)), C.v, 'c2w')} = ${chip(vtxt(r), C.ink, 'combo')}</div>`;
+      `<div>${chip(fmt(c1), C.u, 'c1')}·${chip('u', C.u, 'u')} + ${chip(fmt(c2), C.w, 'c2')}·${chip('w', C.w, 'w')}</div>` +
+      `<div>= ${chip(vtxt(scale(c1, u)), C.u, 'c1u')} + ${chip(vtxt(scale(c2, w)), C.w, 'c2w')} = ${chip(vtxt(r), C.ink, 'combo')}</div>`;
     if (target) {
       const k = reachCoeffs(u, w, target);
       html += `<div>${chip('목표', C.ink, 'target')} ${vtxt(target)}까지 남은 이동: ${vtxt(sub(target, r))}</div>`;
-      if (!k) html += `<div class="dim">지금 u와 w는 나란하다. 이 둘로는 한 직선 위의 점에만 닿는다.</div>`;
+      if (!k) html += `<div class="dim">지금 u와 w는 평행하다. 이 둘로는 한 직선 위의 점에만 닿는다.</div>`;
       else if (hit()) html += `<div style="color:${C.ok}">닿았다: c₁ = ${fmt(c1)}, c₂ = ${fmt(c2)}</div>`;
     }
     ro.set(html);
