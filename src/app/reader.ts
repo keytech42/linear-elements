@@ -41,7 +41,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
 
   const head = document.createElement('header');
   head.className = 'node-head';
-  head.innerHTML = `<div class="kicker"><span class="kind kind-${node.kind}">${KIND_LABEL[node.kind]}<sup class="term-en">${KIND_EN[node.kind]}</sup></span> ${book.num}권 ${book.title} · <code>${node.id}</code></div><h1>${node.title}</h1>`;
+  head.innerHTML = `<div class="kicker"><span class="kind kind-${node.kind}">${KIND_LABEL[node.kind]}<sup class="term-en">${KIND_EN[node.kind]}</sup></span> ${book.num}장 ${book.title} · <code>${node.id}</code></div><h1>${node.title}</h1>`;
   art.appendChild(head);
 
   // 읽기 모드: 예측하며 읽기(관문이 잠겨 있음) / 펼쳐 보기(모두 열림)
@@ -208,7 +208,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
       const li = document.createElement('li');
       if (w.answeredBy) {
         const n = NODE_BY_ID.get(w.answeredBy);
-        li.innerHTML = `${w.q} <span class="dim">→ 뒤에서 답함:</span> <a class="nlink" data-to="${w.answeredBy}" href="#/n/${w.answeredBy}">${BOOK_OF.get(w.answeredBy)?.num}권 · ${n?.title}</a>`;
+        li.innerHTML = `${w.q} <span class="dim">→ 뒤에서 답함:</span> <a class="nlink" data-to="${w.answeredBy}" href="#/n/${w.answeredBy}">${BOOK_OF.get(w.answeredBy)?.num}장 · ${n?.title}</a>`;
       } else li.innerHTML = `${w.q} <span class="warn-dot">이 교재 안에서는 답하지 않음</span>`;
       ul.appendChild(li);
     }
@@ -264,7 +264,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
       a.className = 'chip-node';
       a.href = `#/n/${d}`;
       a.dataset.node = d;
-      a.innerHTML = `<span class="kind kind-${n.kind}">${KIND_LABEL[n.kind]}</span>${BOOK_OF.get(d)!.num}권 · ${n.title}`;
+      a.innerHTML = `<span class="kind kind-${n.kind}">${KIND_LABEL[n.kind]}</span>${BOOK_OF.get(d)!.num}장 · ${n.title}`;
       bl.appendChild(a);
     }
     foot.appendChild(bl);

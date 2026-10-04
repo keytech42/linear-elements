@@ -1,4 +1,4 @@
-// 권의 순서가 곧 노드의 전체 순서다. 검증기는 이 순서로 "정의 전 사용"을 판정한다.
+// 장의 순서가 곧 노드의 전체 순서다. 검증기는 이 순서로 "정의 전 사용"을 판정한다.
 import type { Book, NodeDef } from './schema';
 import b0 from './b00-ground';
 import b1 from './b01-vector';

@@ -1,6 +1,6 @@
 import type { Book } from './schema';
 
-// 3권 — 길이, 각도, 내적. "곱해서 더하기"라는 숫자 계산이 왜 길이와 각도를 재는가.
+// 3장 — 길이, 각도, 내적. "곱해서 더하기"라는 숫자 계산이 왜 길이와 각도를 재는가.
 const book: Book = {
   id: 'b3',
   num: 3,
@@ -256,7 +256,7 @@ $$\mathbf{u}\cdot\mathbf{v} = u_1v_1 + u_2v_2 \quad (\text{성분이 } n\text{�
           choices: [String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\sqrt{10} \approx 6.32$`, String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\times(3 + 1) = 8$`, String.raw`$\mathbf{v}$가 $\mathbf{u}$에 수직일 때, 0`, '방향과 상관없이 같다'],
           answer: 0,
           why: [
-            String.raw`$\cos\theta$는 $\theta = 0$일 때 가장 크다(1). 그때 값은 $\sqrt{10}\times2$다. 9권에서 "가장 많이 늘어나는 방향"을 찾을 때 같은 생각을 쓴다.`,
+            String.raw`$\cos\theta$는 $\theta = 0$일 때 가장 크다(1). 그때 값은 $\sqrt{10}\times2$다. 9장에서 "가장 많이 늘어나는 방향"을 찾을 때 같은 생각을 쓴다.`,
             String.raw`방향은 맞지만 값이 틀렸다. 같은 방향의 길이 2인 벡터는 $2\mathbf{u}/\|\mathbf{u}\|$이고, 성분을 그냥 더한 $3 + 1$은 길이가 아니다.`,
             String.raw`수직일 때는 내적이 가장 작은 것이 아니라 0이다. 가장 작은(가장 음수인) 것은 반대 방향일 때다.`,
             String.raw`$\cos\theta$가 방향에 따라 바뀐다.`,
@@ -297,7 +297,7 @@ $\|\mathbf{v}\|\cos\theta$는 $\mathbf{v}$의 끝에서 $\mathbf{u}$ 방향 직�
 - $\mathbf{u}\cdot\mathbf{v} = 0$: 각이 정확히 90°다.
 - $\mathbf{u}\cdot\mathbf{v} < 0$: 각이 90°보다 크다(대체로 반대쪽을 본다).
 
-그래서 각을 직접 재지 않아도, 곱해서 더하기 한 번으로 두 벡터가 얼마나 같은 쪽을 보는지 안다. 10권의 신경망에서 뉴런 하나가 하는 일이 바로 이것이다.
+그래서 각을 직접 재지 않아도, 곱해서 더하기 한 번으로 두 벡터가 얼마나 같은 쪽을 보는지 안다. 10장의 신경망에서 뉴런 하나가 하는 일이 바로 이것이다.
 
 ::predict p-eq
 
@@ -349,7 +349,7 @@ $$\|\mathbf{u} - \mathbf{v}\|^2 = (\mathbf{u} - \mathbf{v})\cdot(\mathbf{u} - \m
           choices: ['(−b, a)', '(b, a)', '(−a, −b)', '(a, −b)'],
           answer: 0,
           why: [
-            String.raw`$a(-b) + ba = 0$이고 길이는 $\sqrt{b^2 + a^2}$로 같다. 2권에서 본 [90° 회전](n:prop.rotation-matrix)의 결과와 같다. 반대쪽 $(b, -a)$도 답이다.`,
+            String.raw`$a(-b) + ba = 0$이고 길이는 $\sqrt{b^2 + a^2}$로 같다. 2장에서 본 [90° 회전](n:prop.rotation-matrix)의 결과와 같다. 반대쪽 $(b, -a)$도 답이다.`,
             String.raw`$(a, b)\cdot(b, a) = 2ab$이므로 $a$나 $b$가 0일 때만 직교한다. 부호 하나를 빠뜨렸다.`,
             String.raw`그것은 반대 방향(180°)이다. 내적이 $-(a^2 + b^2)$로 가장 작다.`,
             String.raw`그것은 가로축에 비친 것이다. 내적은 $a^2 - b^2$이다.`,
@@ -372,7 +372,7 @@ $$\|\mathbf{u} - \mathbf{v}\|^2 = (\mathbf{u} - \mathbf{v})\cdot(\mathbf{u} - \m
 - $(1, 1)/\sqrt{2}$와 $(1, -1)/\sqrt{2}$: 내적 $(1 - 1)/2 = 0$, 길이 각각 1. 정규직교다. 표준 기저를 45° 돌린 것이다.
 - $(1, 2, 2)/3$, $(2, 1, -2)/3$, $(2, -2, 1)/3$: 둘씩 내적하면 $(2 + 2 - 4)/9 = 0$, $(2 - 4 + 2)/9 = 0$, $(4 - 2 - 2)/9 = 0$이고 길이는 모두 1이다. 3차원의 정규직교 벡터 셋이다.
 
-정규직교 벡터들은 9권까지 계속 등장한다. 9권의 [특이값 분해](fwd:t.svd)가 만드는 $U$와 $V$의 열이 바로 정규직교 벡터들이다.`,
+정규직교 벡터들은 9장까지 계속 등장한다. 9장의 [특이값 분해](fwd:t.svd)가 만드는 $U$와 $V$의 열이 바로 정규직교 벡터들이다.`,
       checks: [
         {
           q: String.raw`$(3, t)$가 $(2, -6)$과 직교하는 $t$는?`,
@@ -412,7 +412,7 @@ $$\|\mathbf{u} - \mathbf{v}\|^2 = (\mathbf{u} - \mathbf{v})\cdot(\mathbf{u} - \m
           choices: [String.raw`$(\mathbf{u}\cdot\mathbf{v})\,\mathbf{u}$`, String.raw`$\mathbf{u}\cdot\mathbf{v}$ (수 하나)`, String.raw`$\mathbf{v}$ 그대로`, String.raw`$\mathbf{u}$ 그대로`],
           answer: 0,
           why: [
-            String.raw`분모가 1이 된다. 그래서 **단위벡터 방향의 좌표는 내적 한 번**으로 구한다. 9권의 증명이 이 사실을 쓴다.`,
+            String.raw`분모가 1이 된다. 그래서 **단위벡터 방향의 좌표는 내적 한 번**으로 구한다. 9장의 증명이 이 사실을 쓴다.`,
             String.raw`내적은 그림자의 부호 있는 **길이**(수)다. 정사영은 그 길이만큼 $\mathbf{u}$ 방향으로 간 **벡터**다. 거의 맞는 답이다.`,
             String.raw`$\mathbf{v}$가 이미 그 직선 위에 있을 때만 그렇다.`,
             String.raw`$\mathbf{u}$ 방향이지만 길이가 $\mathbf{v}$에 따라 달라야 한다.`,
@@ -472,7 +472,7 @@ $$(\mathbf{v} - t\mathbf{u})\cdot\mathbf{u} = \mathbf{v}\cdot\mathbf{u} - t\,(\m
           choices: [String.raw`원점을 지나고 $(1, 2)$에 수직인 직선`, String.raw`$(1, 2)$ 방향의 직선`, '원점 한 점', '평면 전체'],
           answer: 0,
           why: [
-            String.raw`$(1, 2)\cdot\mathbf{x} = 0$은 $\mathbf{x}$가 $(1, 2)$와 [직교](n:def.orthogonal)한다는 뜻이다. 그런 $\mathbf{x}$는 $(-2, 1)$ 방향의 직선을 이룬다. 6권에서 이 생각이 "[행공간](fwd:t.row-space)과 [영공간](fwd:t.null-space)은 직교한다"가 된다.`,
+            String.raw`$(1, 2)\cdot\mathbf{x} = 0$은 $\mathbf{x}$가 $(1, 2)$와 [직교](n:def.orthogonal)한다는 뜻이다. 그런 $\mathbf{x}$는 $(-2, 1)$ 방향의 직선을 이룬다. 6장에서 이 생각이 "[행공간](fwd:t.row-space)과 [영공간](fwd:t.null-space)은 직교한다"가 된다.`,
             String.raw`그 방향의 입력은 오히려 첫째 성분을 크게 만든다: $(1, 2)\cdot(1, 2) = 5$.`,
             String.raw`$(-2, 1)$도 첫째 성분이 0이다. 원점만이 아니다.`,
             String.raw`$(1, 0)$을 넣으면 첫째 성분이 1이다.`,
@@ -480,7 +480,7 @@ $$(\mathbf{v} - t\mathbf{u})\cdot\mathbf{u} = \mathbf{v}\cdot\mathbf{u} - t\,(\m
         },
       ],
       openWhys: [],
-      body: String.raw`2권에서 [행렬-벡터 곱](t:t.matvec)을 "열들의 선형 결합"으로 정의했다. 그런데 학교에서는 "행 × 열"로 곱셈을 배웠을 것이다. 두 계산법은 어떻게 같은 답을 내는가?
+      body: String.raw`2장에서 [행렬-벡터 곱](t:t.matvec)을 "열들의 선형 결합"으로 정의했다. 그런데 학교에서는 "행 × 열"로 곱셈을 배웠을 것이다. 두 계산법은 어떻게 같은 답을 내는가?
 
 ::predict p-row
 
@@ -503,7 +503,7 @@ $$(A\mathbf{x})_i = (A\text{의 } i\text{번째 행})\cdot\mathbf{x}$$
 - 3×2 행렬 $\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{bmatrix}$과 $\mathbf{x} = (3, 4)$: 세 행과 내적하면 $(3, 4, 7)$. 행이 세 개이므로 출력의 성분도 셋이다.
 
 > [!코드] 두 구현, 한 답
-> \`matVec\`은 열의 관점으로, \`matVecRows\`는 행의 관점으로 계산한다. 테스트는 무작위 행렬 100개에서 두 함수의 답이 소수점 아래 12자리까지 같은지 확인한다. 2권의 미뤄 둔 질문, "학교에서 배운 행 × 열 계산은 정의와 어떻게 같은가?"의 답이 이 노드다.`,
+> \`matVec\`은 열의 관점으로, \`matVecRows\`는 행의 관점으로 계산한다. 테스트는 무작위 행렬 100개에서 두 함수의 답이 소수점 아래 12자리까지 같은지 확인한다. 2장의 미뤄 둔 질문, "학교에서 배운 행 × 열 계산은 정의와 어떻게 같은가?"의 답이 이 노드다.`,
       proof: String.raw`[행렬-벡터 곱의 정의](why:def.matvec)에 따라 $A\mathbf{x} = x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + \cdots + x_n\mathbf{a}_n$이다. 이 벡터의 $i$번째 성분만 보면, 각 열 $\mathbf{a}_j$의 $i$번째 성분 $a_{ij}$에 $x_j$를 곱해 더한 것이다([벡터 덧셈과 스칼라 곱은 성분마다 한다](why:prop.add-componentwise)).
 
 $$(A\mathbf{x})_i = x_1a_{i1} + x_2a_{i2} + \cdots + x_na_{in}$$
@@ -533,7 +533,7 @@ $$(A\mathbf{x})_i = x_1a_{i1} + x_2a_{i2} + \cdots + x_na_{in}$$
           choices: [String.raw`반대로 $\theta$만큼 돌리는 회전 $R_{-\theta}$`, '같은 회전 그대로', '가로축에 비치는 반사', String.raw`$\theta + 90°$ 회전`],
           answer: 0,
           why: [
-            String.raw`첫째 열이 $-\theta$ 자리의 점, 둘째 열 $(\sin\theta, \cos\theta)$는 그것을 90° 돌린 점이다. 곧 $R_{-\theta}$다. 회전의 전치는 회전을 되돌린다. 5권에서 이것이 "[직교 행렬](fwd:t.orth-matrix)의 [역행렬](fwd:t.inverse)은 전치"가 된다.`,
+            String.raw`첫째 열이 $-\theta$ 자리의 점, 둘째 열 $(\sin\theta, \cos\theta)$는 그것을 90° 돌린 점이다. 곧 $R_{-\theta}$다. 회전의 전치는 회전을 되돌린다. 5장에서 이것이 "[직교 행렬](fwd:t.orth-matrix)의 [역행렬](fwd:t.inverse)은 전치"가 된다.`,
             String.raw`$\theta = 0°$, $180°$일 때만 같다. 일반적으로는 대각선 밖의 부호가 바뀐다.`,
             String.raw`첫째 열만 보면 그렇게 보이지만, 둘째 열 $(\sin\theta, \cos\theta)$까지 보면 회전이다.`,
             String.raw`$\theta + 90°$ 회전의 첫째 열은 $(-\sin\theta, \cos\theta)$다.`,
@@ -561,7 +561,7 @@ $A$의 $i$번째 행이 $A^{\mathsf{T}}$의 $i$번째 열이 된다. 그래서 [
           q: String.raw`$A$가 4×3이면 $A^{\mathsf{T}}A$와 $AA^{\mathsf{T}}$의 모양은?`,
           choices: ['3×3과 4×4', '4×4와 3×3', '둘 다 4×3', '곱할 수 없다'],
           answer: 0,
-          explain: String.raw`$A^{\mathsf{T}}$는 3×4다. $(3\times4)(4\times3) = 3\times3$, $(4\times3)(3\times4) = 4\times4$. [안쪽 차원이 맞는다](n:prop.shape-rule). 9권에서 $A^{\mathsf{T}}A$가 주인공이 된다.`,
+          explain: String.raw`$A^{\mathsf{T}}$는 3×4다. $(3\times4)(4\times3) = 3\times3$, $(4\times3)(3\times4) = 4\times4$. [안쪽 차원이 맞는다](n:prop.shape-rule). 9장에서 $A^{\mathsf{T}}A$가 주인공이 된다.`,
         },
       ],
       code: ['transpose'],
@@ -747,7 +747,7 @@ $$\text{열이 정규직교} \iff Q^{\mathsf{T}}Q = I$$
 
 ::predict p-all
 
-그러므로 평면의 직교 행렬은 회전 $R_\theta$와 반사 $\begin{bmatrix} \cos\theta & \sin\theta \\ \sin\theta & -\cos\theta \end{bmatrix}$ 두 종류뿐이다. 9권의 [특이값 분해](fwd:t.svd) $U\Sigma V^{\mathsf{T}}$에서 $U$와 $V$가 바로 이것들이다.`,
+그러므로 평면의 직교 행렬은 회전 $R_\theta$와 반사 $\begin{bmatrix} \cos\theta & \sin\theta \\ \sin\theta & -\cos\theta \end{bmatrix}$ 두 종류뿐이다. 9장의 [특이값 분해](fwd:t.svd) $U\Sigma V^{\mathsf{T}}$에서 $U$와 $V$가 바로 이것들이다.`,
       proof: String.raw`[전치의 정체](why:prop.transpose-dot)를 $A = Q$, $\mathbf{y}$ 자리에 $Q\mathbf{y}$를 넣어 쓰면
 
 $$(Q\mathbf{x})\cdot(Q\mathbf{y}) = \mathbf{x}\cdot(Q^{\mathsf{T}}Q\mathbf{y}) = \mathbf{x}\cdot(I\mathbf{y}) = \mathbf{x}\cdot\mathbf{y}$$

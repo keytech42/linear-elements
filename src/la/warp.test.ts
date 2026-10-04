@@ -1,4 +1,4 @@
-// 2권 변환들(warp.ts)의 성질 검증: 선형인 것은 두 등식을 지키고, 선형이 아닌 것은 어긋난다.
+// 2장 변환들(warp.ts)의 성질 검증: 선형인 것은 두 등식을 지키고, 선형이 아닌 것은 어긋난다.
 import { describe, it, expect } from 'vitest';
 import { translateBy, bend, twist, linearMap, blendMap, additivityPair, homogeneityPair } from './warp';
 import { sub, norm } from './vec';
@@ -62,7 +62,7 @@ describe('섞기', () => {
   });
 });
 
-describe('2권 본문의 수치 (회전, 합성)', () => {
+describe('2장 본문의 수치 (회전, 합성)', () => {
   it('R(90°) = [[0,−1],[1,0]], R(30°)(2,0) = (√3, 1)', () => {
     const R = rotation(Math.PI / 2);
     expect(gap(R[0], [0, -1]) + gap(R[1], [1, 0])).toBeLessThan(1e-12);

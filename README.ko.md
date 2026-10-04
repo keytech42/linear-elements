@@ -34,7 +34,7 @@ npm run review     # 노드별 저자 검토 상태. `npm run review -- mark <id
 
 | 경로 | 내용 |
 |---|---|
-| `src/content/` | 0~10권 본문(노드 데이터)과 마크업 파서 |
+| `src/content/` | 0~10장 본문(노드 데이터)과 마크업 파서 |
 | `src/verify/` | 교수법 검증기, 첫 등장 자동 링크 |
 | `src/la/` | 직접 짠 수치 코어(벡터, 행렬, 고윳값, SVD) |
 | `src/scenes/` | 노드별 상호작용 장면 |

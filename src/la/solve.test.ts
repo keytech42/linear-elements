@@ -1,4 +1,4 @@
-// 소거, 랭크, 영공간, 해의 분류 검증 (5–7권). ml-matrix는 심판으로만 쓴다.
+// 소거, 랭크, 영공간, 해의 분류 검증 (5–7장). ml-matrix는 심판으로만 쓴다.
 import { describe, it, expect } from 'vitest';
 import { Matrix, inverse as mlInverse } from 'ml-matrix';
 import { matMul, matVec, identity, transpose, det2, det3, frobenius, matAdd, matScale, type Mat } from './mat';

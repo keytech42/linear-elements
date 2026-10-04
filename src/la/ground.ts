@@ -1,4 +1,4 @@
-// 0권·1권(출발점, 벡터)의 작은 도구들. 각 함수 위 주석의 노드 id가 그 수학적 근거가 있는 자리다.
+// 0장·1장(출발점, 벡터)의 작은 도구들. 각 함수 위 주석의 노드 id가 그 수학적 근거가 있는 자리다.
 import { type Vec, linComb } from './vec';
 import { fromCols } from './mat';
 import { rank } from './solve';
@@ -41,7 +41,7 @@ export function angleOf(p: Vec): number {
 
 /**
  * def.span, def.dimension — 벡터들의 스팬이 몇 차원인가: 0 = 원점 한 점, 1 = 직선, 2 = 평면, 3 = 공간.
- * (6권의 랭크로 센다. 1권에서는 그림으로만 쓴다.)
+ * (6장의 랭크로 센다. 1장에서는 그림으로만 쓴다.)
  */
 export function spanDim(vs: Vec[], tol = 1e-9): number {
   if (!vs.length) return 0;

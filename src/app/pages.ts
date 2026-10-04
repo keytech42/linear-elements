@@ -17,7 +17,7 @@ export function renderHome(main: HTMLElement) {
       <h1>화살표에서 SVD까지,<br/>당연한 것을 하나도 당연하게 넘기지 않는 선형대수</h1>
       <p>이 교재는 독자가 산수만 안다고 가정하고 출발합니다. 모든 <b>정의</b>와 <b>명제</b>는 앞에 놓인 것만으로 세워지고, 읽다가 “왜?”라고 물을 만한 자리마다 그 답이 있는 앞쪽 노드로 가는 <span class="why"><span class="why-badge">왜?</span></span> 칩이 달려 있습니다. 이 규칙은 <a href="#/verify">검증기</a>가 기계적으로 확인합니다.</p>
       <div class="home-cta">
-        <a class="btn primary" href="#/n/${first.id}">0권부터 시작하기</a>
+        <a class="btn primary" href="#/n/${first.id}">0장부터 시작하기</a>
         <a class="btn" href="#/map?focus=exp.lora">지도에서 끝(LoRA)부터 보기</a>
         <a class="btn" href="#/n/def.matvec">맛보기: 행렬 × 벡터</a>
       </div>
@@ -58,13 +58,13 @@ export function renderGlossary(main: HTMLElement) {
     <table class="tbl">${COLOR_TABLE.map((c) => `<tr><td><span class="swatch" style="background:${c.color}"></span> ${c.name}</td><td>${c.meaning}</td></tr>`).join('')}</table>
     <h2>기호 (${syms.length})</h2>
     <table class="tbl"><tr><th>기호</th><th>가리키는 것</th><th>처음 나온 곳</th><th>비고</th></tr>
-    ${syms.map((s) => `<tr><td>${tex(s.tex)}</td><td>${s.meaning}</td><td><a href="#/n/${s.node}">${BOOK_OF.get(s.node)!.num}권 · ${NODE_BY_ID.get(s.node)!.title}</a></td><td class="dim">${s.note ?? ''}</td></tr>`).join('')}</table>
+    ${syms.map((s) => `<tr><td>${tex(s.tex)}</td><td>${s.meaning}</td><td><a href="#/n/${s.node}">${BOOK_OF.get(s.node)!.num}장 · ${NODE_BY_ID.get(s.node)!.title}</a></td><td class="dim">${s.note ?? ''}</td></tr>`).join('')}</table>
     <h2>용어 (${terms.length})</h2>
     <table class="tbl"><tr><th>용어</th><th>영어</th><th>한 줄 정의</th><th>정의한 곳</th><th>참조</th></tr>
     ${terms
       .map(
         ([id, { node, decl }]) =>
-          `<tr><td><b>${decl.ko}</b></td><td class="dim">${decl.en ?? ''}</td><td>${decl.gloss}</td><td><a href="#/n/${node}">${BOOK_OF.get(node)!.num}권 · ${NODE_BY_ID.get(node)!.title}</a>${NODE_BY_ID.get(node)!.status === 'stub' ? ' <span class="dim">(예정)</span>' : ''}</td><td class="dim">${useCount.get(node) ? '' : ''}${id}</td></tr>`,
+          `<tr><td><b>${decl.ko}</b></td><td class="dim">${decl.en ?? ''}</td><td>${decl.gloss}</td><td><a href="#/n/${node}">${BOOK_OF.get(node)!.num}장 · ${NODE_BY_ID.get(node)!.title}</a>${NODE_BY_ID.get(node)!.status === 'stub' ? ' <span class="dim">(예정)</span>' : ''}</td><td class="dim">${useCount.get(node) ? '' : ''}${id}</td></tr>`,
       )
       .join('')}</table>
   </section>`;
@@ -108,7 +108,7 @@ export function kindLabel(id: string) {
   return KIND_LABEL[NODE_BY_ID.get(id)!.kind];
 }
 
-/** 저자 검토 현황: 권마다 검토함 / 검토 뒤 바뀜 / 초안. 기록은 npm run review -- mark <id> */
+/** 저자 검토 현황: 장마다 검토함 / 검토 뒤 바뀜 / 초안. 기록은 npm run review -- mark <id> */
 function reviewSection(): string {
   const label = { reviewed: '검토함', changed: '검토 뒤 바뀜', draft: '초안' } as const;
   const all = ALL_NODES.map((n) => reviewState(n));
@@ -120,7 +120,7 @@ function reviewSection(): string {
       })
       .join('');
     const done = b.nodes.filter((n) => reviewState(n) === 'reviewed').length;
-    return `<details><summary>${b.num}권 ${b.title} — 검토함 ${done}/${b.nodes.length}</summary><ul class="rv-list">${items}</ul></details>`;
+    return `<details><summary>${b.num}장 ${b.title} — 검토함 ${done}/${b.nodes.length}</summary><ul class="rv-list">${items}</ul></details>`;
   }).join('');
   return `<h2>저자 검토</h2>
     <p>저자가 노드를 검토하면 그때의 내용 지문을 기록합니다. 그 뒤 내용이 바뀌면 "검토 뒤 바뀜"으로 돌아갑니다(P026). 검토함 ${all.filter((s) => s === 'reviewed').length} · 검토 뒤 바뀜 ${all.filter((s) => s === 'changed').length} · 초안 ${all.filter((s) => s === 'draft').length}.</p>

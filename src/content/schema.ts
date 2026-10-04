@@ -120,7 +120,7 @@ export interface NodeDef {
 
 export interface Book {
   id: string;
-  /** 권 번호 (0부터) */
+  /** 장 번호 (0부터) */
   num: number;
   title: string;
   subtitle: string;

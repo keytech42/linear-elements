@@ -1,4 +1,4 @@
-// 2권(def.transformation, def.linear-map, prop.linear-grid)의 장면이 쓰는 변환들.
+// 2장(def.transformation, def.linear-map, prop.linear-grid)의 장면이 쓰는 변환들.
 // 대부분은 일부러 "선형이 아닌" 변환이다. 선형 변환이 무엇인지는 선형이 아닌 것과 나란히 볼 때 또렷해진다.
 import { type Vec, add, scale, norm } from './vec';
 import { matVec, rotation, type Mat } from './mat';

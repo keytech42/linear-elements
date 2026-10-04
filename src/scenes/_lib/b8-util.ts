@@ -1,8 +1,8 @@
-// 8권 장면 공용 도우미.
+// 8장 장면 공용 도우미.
 //  - eigenDirs: eig2(src/la/eig.ts)의 결과를 장면이 쓰기 좋은 모양(고유 방향 목록)으로 정리한다.
 //  - plotMap / plotLines: Plane 위에 가로·세로 배율이 다른 작은 그래프를 그린다.
 //    (Plane은 가로·세로 1단위를 같은 픽셀로 그리므로, 그래프 좌표를 Plane 좌표로 옮기는 지도가 필요하다.)
-//  - PRESETS: 8권 장면들이 함께 쓰는 보기 행렬.
+//  - PRESETS: 8장 장면들이 함께 쓰는 보기 행렬.
 import type { Plane } from '../../render/plane';
 import type { Mat } from '../../la/mat';
 import type { Vec } from '../../la/vec';

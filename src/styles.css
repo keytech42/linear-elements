@@ -274,7 +274,7 @@ a.nlink { color: #9cc8ff; }
 .verdict.ok { color: var(--ok); } .verdict.bad { color: var(--bad); }
 .num-in { width: 64px; font: inherit; font-weight: 600; text-align: center; color: var(--ink); background: var(--bg); border: 1px solid #4a5a78; border-radius: 6px; padding: 2px 4px; }
 
-/* ── 9권 장면 보조 ───────────────────────────── */
+/* ── 9장 장면 보조 ───────────────────────────── */
 .chart-box { border-top: 1px solid var(--line); padding: 4px 6px 2px; }
 .svd-formula { font-family: 'KaTeX_Main', serif; font-size: 26px; letter-spacing: 0.02em; }
 .svd-formula .stg { padding: 0 4px; border-radius: 6px; color: var(--dim); transition: color 0.15s, background 0.15s; }

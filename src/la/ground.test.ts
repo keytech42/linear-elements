@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { distance, circlePoint, angleOf, spanDim, cross2, reachCoeffs, mix2, displacement, chain, hypotenuse } from './ground';
 
-describe('0권·1권 도구', () => {
+describe('0장·1장 도구', () => {
   it('수직선: 변위는 출발점과 무관하고, 이어 붙이기는 순서와 무관하다', () => {
     expect(displacement(3, -1)).toBe(-4);
     expect(chain(-6, [displacement(3, -1)])).toBe(-10);

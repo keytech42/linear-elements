@@ -34,7 +34,7 @@ npm run review     # author review status per node; `npm run review -- mark <id>
 
 | Path | Contents |
 |---|---|
-| `src/content/` | Books 0–10 (node data) and the markup parser |
+| `src/content/` | Chapters 0–10 (node data) and the markup parser |
 | `src/verify/` | Pedagogical verifier and first-mention term links |
 | `src/la/` | Hand-written numeric core (vectors, matrices, eigenvalues, SVD) |
 | `src/scenes/` | Interactive scenes for each node |

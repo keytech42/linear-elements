@@ -1,6 +1,6 @@
 import type { Book } from './schema';
 
-// 9권 — 특이값 분해. 이 교재 전체가 향하는 목적지.
+// 9장 — 특이값 분해. 이 교재 전체가 향하는 목적지.
 // 증명의 뼈대: AᵀA는 대칭 → 스펙트럼 정리 → "가장 많이 늘어나는 방향"이 서로 수직 → A = UΣVᵀ
 const book: Book = {
   id: 'b9',
@@ -26,7 +26,7 @@ const book: Book = {
           choices: ['타원 (납작해지면 선분)', '한쪽이 불룩한 달걀 모양', '평행사변형', '행렬마다 아무 모양이나 될 수 있다'],
           answer: 0,
           why: [
-            String.raw`아래 그림으로 확인하고, 증명은 이 권의 셋째 노드에서 한다.`,
+            String.raw`아래 그림으로 확인하고, 증명은 이 장의 셋째 노드에서 한다.`,
             String.raw`선형 변환은 $\mathbf{x}$와 $-\mathbf{x}$를 정반대 자리로 보낸다($A(-\mathbf{x}) = -A\mathbf{x}$). 그래서 상은 원점에 대해 대칭이고, 한쪽만 불룩할 수 없다.`,
             String.raw`평행사변형은 단위 **정사각형**의 상이다. 원에는 꼭짓점이 없고, 선형 변환은 없던 꼭짓점을 만들지 않는다(평면이 선으로 납작해지는 경우는 빼고).`,
             String.raw`선형 변환은 격자를 곧고 평행하고 고르게 둔다. 그래서 상의 모양은 "원을 고르게 늘이고 기울인 것"으로 제한된다. 아무 모양이나 될 수는 없다.`,
@@ -44,12 +44,12 @@ const book: Book = {
           why: [
             String.raw`같은 직선 위의 단위 입력은 $\mathbf{x}$와 $-\mathbf{x}$뿐이고, 둘은 똑같은 길이로 늘어난다. 그러니 가장 많이 늘어나는 방향과 가장 적게 늘어나는 방향이 같은 직선이라면, 모든 방향이 똑같이 늘어나는 경우(예: 회전)뿐이다.`,
             String.raw`45°가 나오는 행렬은 없다. 아래 그림에서 여러 행렬로 확인해 보라.`,
-            String.raw`어떤 행렬이든 90°다. 이 사실이 이 권 전체의 출발점이고, 다음 두 노드에서 증명한다.`,
+            String.raw`어떤 행렬이든 90°다. 이 사실이 이 장 전체의 출발점이고, 다음 두 노드에서 증명한다.`,
             String.raw`직관적으로는 그렇게 보이지만, 어떤 행렬이든 90°다. 일반적인 선형 변환은 직각을 지키지 않는데도 그렇다. 그래서 놀라운 사실이다.`,
           ],
         },
       ],
-      body: String.raw`8권에서 [대칭 행렬](t:t.symmetric)은 [단위원](t:t.unit-circle)을 [타원](t:t.ellipse)으로 보내고, 그 타원의 두 축이 [고유벡터](t:t.eigenvector) 방향이라는 것을 보았다. [왜 그랬는가?](why:prop.sym-ellipse) 그런데 대부분의 행렬은 대칭이 아니다. 대칭이 아닌 행렬은 단위원을 무엇으로 보낼까?
+      body: String.raw`8장에서 [대칭 행렬](t:t.symmetric)은 [단위원](t:t.unit-circle)을 [타원](t:t.ellipse)으로 보내고, 그 타원의 두 축이 [고유벡터](t:t.eigenvector) 방향이라는 것을 보았다. [왜 그랬는가?](why:prop.sym-ellipse) 그런데 대부분의 행렬은 대칭이 아니다. 대칭이 아닌 행렬은 단위원을 무엇으로 보낼까?
 
 그림을 보기 전에 두 가지를 먼저 예측하자.
 
@@ -222,7 +222,7 @@ $$\|A\mathbf{x}\|^2 = (A\mathbf{x})\cdot(A\mathbf{x}) = \mathbf{x}\cdot\big(A^{\
           ],
         },
       ],
-      body: String.raw`앞 노드의 식 $\|A\mathbf{x}\|^2 = \mathbf{x}\cdot(A^{\mathsf{T}}A\mathbf{x})$에서 $S = A^{\mathsf{T}}A$라고 쓰자. [S는 대칭이다](why:prop.ata-symmetric). 그러면 8권의 [스펙트럼 정리](t:t.spectral)를 쓸 수 있다. 서로 직교하는 단위 [고유벡터](t:t.eigenvector) $\mathbf{q}_1, \mathbf{q}_2$가 있고, 그 [고윳값](t:t.eigenvalue)을 $\lambda_1 \ge \lambda_2$라 하자. [왜 이런 고유벡터가 있는가?](why:prop.spectral) 그리고 [이 고윳값은 0 이상이다](why:prop.ata-symmetric).
+      body: String.raw`앞 노드의 식 $\|A\mathbf{x}\|^2 = \mathbf{x}\cdot(A^{\mathsf{T}}A\mathbf{x})$에서 $S = A^{\mathsf{T}}A$라고 쓰자. [S는 대칭이다](why:prop.ata-symmetric). 그러면 8장의 [스펙트럼 정리](t:t.spectral)를 쓸 수 있다. 서로 직교하는 단위 [고유벡터](t:t.eigenvector) $\mathbf{q}_1, \mathbf{q}_2$가 있고, 그 [고윳값](t:t.eigenvalue)을 $\lambda_1 \ge \lambda_2$라 하자. [왜 이런 고유벡터가 있는가?](why:prop.spectral) 그리고 [이 고윳값은 0 이상이다](why:prop.ata-symmetric).
 
 이제 질문은 이것이다. **길이가 1인 입력 $\mathbf{x}$ 가운데 $\mathbf{x}\cdot S\mathbf{x}$를 가장 크게 만드는 것은 무엇인가?**
 
@@ -255,7 +255,7 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 ### 앞 노드의 "놀라운 사실"이 풀린다
 - **입력 쪽 두 방향이 수직인 이유:** $\mathbf{v}_1, \mathbf{v}_2$는 대칭 행렬 $A^{\mathsf{T}}A$의 서로 다른 고윳값의 고유벡터다. 대칭 행렬의 그런 고유벡터는 언제나 직교한다. [왜?](why:prop.spectral)
 - **출력 쪽 두 축도 수직인 이유:** 아래 증명의 둘째 부분.
-- **고유 방향과 다른 이유:** 특이벡터는 $A$의 고유벡터가 아니라 $A^{\mathsf{T}}A$의 고유벡터다. $A$가 대칭이면 $A^{\mathsf{T}}A = A^2$이 되고, 이때는 $A$의 고유벡터가 그대로 $A^2$의 고유벡터이므로 두 방향이 같아진다. 8권에서 본 그림이 바로 이 특별한 경우였다.
+- **고유 방향과 다른 이유:** 특이벡터는 $A$의 고유벡터가 아니라 $A^{\mathsf{T}}A$의 고유벡터다. $A$가 대칭이면 $A^{\mathsf{T}}A = A^2$이 되고, 이때는 $A$의 고유벡터가 그대로 $A^2$의 고유벡터이므로 두 방향이 같아진다. 8장에서 본 그림이 바로 이 특별한 경우였다.
 
 ### 예
 - 앞 노드의 $A = \begin{bmatrix} 1.2 & 0.9 \\ 0.3 & 1.1 \end{bmatrix}$: $A^{\mathsf{T}}A = \begin{bmatrix} 1.53 & 1.41 \\ 1.41 & 2.02 \end{bmatrix}$의 [특성방정식](t:t.char-eq)은 $\lambda^2 - 3.55\lambda + 1.1025 = 0$이고, 근은 $\lambda_1 \approx 3.2062$, $\lambda_2 \approx 0.3439$다. 따라서 $\sigma_1 \approx 1.7906$, $\sigma_2 \approx 0.5864$. 그림의 수치와 비교해 보라. 검산: $\sigma_1\sigma_2 \approx 1.05$이고 $\det A = 1.2\cdot1.1 - 0.9\cdot0.3 = 1.05$다. 이 일치는 우연이 아니다(다음 노드의 점검 문제).
@@ -265,7 +265,7 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 > 아래 \`svd2\`는 이 노드의 증명을 한 단계씩 그대로 옮겼다: (1) $A^{\mathsf{T}}A$를 만들고, (2) 대칭 행렬의 고유분해(\`symEig\`, 야코비 회전)로 $\mathbf{v}_i$와 $\lambda_i$를 얻고, (3) $\sigma_i = \sqrt{\lambda_i}$, (4) $\mathbf{u}_i = A\mathbf{v}_i/\sigma_i$. $\sigma_2 = 0$이면 (4)의 나눗셈을 할 수 없으므로 $\mathbf{u}_1$에 수직인 아무 단위벡터로 $\mathbf{u}_2$를 채운다. 수치 계산 전문 라이브러리는 정밀도 때문에 $A^{\mathsf{T}}A$를 만들지 않는 다른 길(이 저장소의 \`svd\`가 쓰는 한쪽 야코비 방법 등)을 쓴다. $A^{\mathsf{T}}A$를 만들면 작은 특이값의 유효 숫자가 절반쯤 사라지기 때문이다. 교과서의 증명과 실무의 알고리즘이 갈라지는 지점이다.
 
 ### n차원으로
-위 논증은 차원과 상관없다. $n \times n$ 대칭 행렬 $A^{\mathsf{T}}A$의 정규직교 고유벡터 $\mathbf{q}_1, \dots, \mathbf{q}_n$으로 $\mathbf{x}$를 적으면 $\|A\mathbf{x}\|^2 = \sum_i \lambda_i c_i^2$, $\sum_i c_i^2 = 1$이 되어 똑같이 가중 평균이다. 그래서 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_n \ge 0$이 생긴다. 다만 이 일반화는 $n$차원의 스펙트럼 정리에 기댄다. 8권에서 그 정리를 어디까지 증명했는지 확인하라.`,
+위 논증은 차원과 상관없다. $n \times n$ 대칭 행렬 $A^{\mathsf{T}}A$의 정규직교 고유벡터 $\mathbf{q}_1, \dots, \mathbf{q}_n$으로 $\mathbf{x}$를 적으면 $\|A\mathbf{x}\|^2 = \sum_i \lambda_i c_i^2$, $\sum_i c_i^2 = 1$이 되어 똑같이 가중 평균이다. 그래서 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_n \ge 0$이 생긴다. 다만 이 일반화는 $n$차원의 스펙트럼 정리에 기댄다. 8장에서 그 정리를 어디까지 증명했는지 확인하라.`,
       proof: String.raw`**최대·최소.** 본문에서 보였듯 $\mathbf{x} = c_1\mathbf{q}_1 + c_2\mathbf{q}_2$, $c_1^2 + c_2^2 = 1$일 때 $\|A\mathbf{x}\|^2 = \lambda_1c_1^2 + \lambda_2c_2^2$이다. $c_2^2 = 1 - c_1^2$을 넣으면
 
 $$\|A\mathbf{x}\|^2 = \lambda_2 + (\lambda_1 - \lambda_2)\,c_1^2$$
@@ -373,7 +373,7 @@ $$A = \h{s3}{U}\,\h{s2}{\Sigma}\,\h{s1}{V^{\mathsf{T}}}$$
 - 반사가 들어간 $A = \begin{bmatrix} 2 & 1 \\ 0 & -1 \end{bmatrix}$ ($\det A = -2$): $\sigma_1 \approx 2.2882$, $\sigma_2 \approx 0.8740$이고, $V$를 회전으로 고르면 $U$에 반사가 하나 들어간다($\det U = -1$). 장면의 행렬을 이 값으로 바꾸고 3단계를 보라. 반사는 회전을 이어 붙여서는 만들 수 없다. 그래서 애니메이션에서는 한 축이 0을 지나며 뒤집힌다.
 
 ### 직사각 행렬도
-$A$가 $m \times n$이어도 같은 논증이 된다. $A^{\mathsf{T}}A$($n \times n$)에서 $\mathbf{v}_i$와 $\sigma_i$를 얻고, $\mathbf{u}_i = A\mathbf{v}_i/\sigma_i$는 $\mathbb{R}^m$의 정규직교 벡터들이다. 예를 들어 $A = \begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{bmatrix}$이면 $A^{\mathsf{T}}A = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$이고 고윳값은 3과 1이다. 그래서 $\sigma_1 = \sqrt{3}$, $\sigma_2 = 1$, $\mathbf{v}_1 = (1, 1)/\sqrt{2}$, $\mathbf{u}_1 = A\mathbf{v}_1/\sqrt{3} = (1, 1, 2)/\sqrt{6}$이다. 평면의 단위원이 3차원 공간 안의 기울어진 평면 위에 놓인 타원이 된다. 출력 공간은 3차원인데 [열공간](t:t.column-space)은 2차원이므로, $\mathbf{u}_1, \mathbf{u}_2$에 수직인 방향 $\mathbf{u}_3$가 하나 남는다. 어떤 입력으로도 닿지 않는 방향이다. 이 방향의 정체는 이 권의 마지막 노드에서 다룬다. 이 저장소의 \`svd\`는 이런 직사각 행렬을 위한 함수다.
+$A$가 $m \times n$이어도 같은 논증이 된다. $A^{\mathsf{T}}A$($n \times n$)에서 $\mathbf{v}_i$와 $\sigma_i$를 얻고, $\mathbf{u}_i = A\mathbf{v}_i/\sigma_i$는 $\mathbb{R}^m$의 정규직교 벡터들이다. 예를 들어 $A = \begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{bmatrix}$이면 $A^{\mathsf{T}}A = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$이고 고윳값은 3과 1이다. 그래서 $\sigma_1 = \sqrt{3}$, $\sigma_2 = 1$, $\mathbf{v}_1 = (1, 1)/\sqrt{2}$, $\mathbf{u}_1 = A\mathbf{v}_1/\sqrt{3} = (1, 1, 2)/\sqrt{6}$이다. 평면의 단위원이 3차원 공간 안의 기울어진 평면 위에 놓인 타원이 된다. 출력 공간은 3차원인데 [열공간](t:t.column-space)은 2차원이므로, $\mathbf{u}_1, \mathbf{u}_2$에 수직인 방향 $\mathbf{u}_3$가 하나 남는다. 어떤 입력으로도 닿지 않는 방향이다. 이 방향의 정체는 이 장의 마지막 노드에서 다룬다. 이 저장소의 \`svd\`는 이런 직사각 행렬을 위한 함수다.
 
 ### 무엇이 유일한가
 특이값 $\sigma_i$는 $A$만으로 정해진다($A^{\mathsf{T}}A$의 고윳값이므로). 특이벡터는 그렇지 않다. $\mathbf{v}_i$와 $\mathbf{u}_i$의 부호를 **함께** 바꿔도 $A\mathbf{v}_i = \sigma_i\mathbf{u}_i$가 유지된다. 또 $\sigma_1 = \sigma_2$이면(예: 회전 행렬) 어느 직교 쌍이든 $\mathbf{v}_1, \mathbf{v}_2$가 될 수 있다. 그러므로 "A의 SVD"는 하나의 분해가 아니라, 같은 $\Sigma$를 공유하는 분해들의 모임이다.`,
@@ -450,7 +450,7 @@ $$A = A(VV^{\mathsf{T}}) = (AV)V^{\mathsf{T}} = U\Sigma V^{\mathsf{T}}$$
 - 목표의 [행렬식](t:t.determinant)이 음수인데 뒤집기를 끄면, 아무리 돌려도 화살표 순서(주황에서 청록으로 도는 방향)를 맞출 수 없다. [왜?](why:prop.det-sign)
 
 > [!직관] 숙련의 기준
-> 행렬 하나를 보고 "대략 몇 도 돌리고, 대략 몇 배와 몇 배로 늘이고, 다시 몇 도 돈다"를 어림할 수 있게 되면 이 권의 목표에 닿은 것이다. 훈련장의 "SVD 어림" 연습이 이 감각을 반복 훈련한다.`,
+> 행렬 하나를 보고 "대략 몇 도 돌리고, 대략 몇 배와 몇 배로 늘이고, 다시 몇 도 돈다"를 어림할 수 있게 되면 이 장의 목표에 닿은 것이다. 훈련장의 "SVD 어림" 연습이 이 감각을 반복 훈련한다.`,
     },
     {
       id: 'def.outer-product',
@@ -497,7 +497,7 @@ $$A = A(VV^{\mathsf{T}}) = (AV)V^{\mathsf{T}} = U\Sigma V^{\mathsf{T}}$$
 랭크가 1이면 열공간이 직선 하나이므로, 그 직선을 따라가는 벡터 $\mathbf{u}$를 하나 고르면 모든 열이 $\mathbf{a}_j = c_j\mathbf{u}$ 꼴이다. 계수들을 모은 벡터를 $\mathbf{c}$라 하면 $A = \mathbf{u}\mathbf{c}^{\mathsf{T}}$이다. [열을 나란히 세운 것이 행렬이기 때문이다](why:def.matrix).
 
 ### 저장 비용
-$m \times n$ 행렬은 숫자 $mn$개를 담는다. 랭크 1 행렬은 $\mathbf{u}$와 $\mathbf{v}$, 숫자 $m + n$개면 충분하다. $m = n = 1000$이면 100만 개 대 2000개다. 이 차이가 다음 두 노드와 10권 [LoRA](fwd:t.lora)의 출발점이다.`,
+$m \times n$ 행렬은 숫자 $mn$개를 담는다. 랭크 1 행렬은 $\mathbf{u}$와 $\mathbf{v}$, 숫자 $m + n$개면 충분하다. $m = n = 1000$이면 100만 개 대 2000개다. 이 차이가 다음 두 노드와 10장 [LoRA](fwd:t.lora)의 출발점이다.`,
       checks: [
         {
           q: String.raw`$\mathbf{u} = (1, -1, 2)$, $\mathbf{v} = (3, 0)$일 때 $\mathbf{u}\mathbf{v}^{\mathsf{T}}$의 모양과 둘째 열은?`,
@@ -712,7 +712,7 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
 '층' 하나에는 $\mathbf{u}_i$($m$개), $\mathbf{v}_i$($n$개), $\sigma_i$(1개)가 필요하다. 그러므로 '층'이 $k$개이면 숫자 $k(m + n + 1)$개다. 112×112 그림에서 $k = 8$이면 $8 \times 225 = 1800$개로, 원래 12544개의 약 14%다.
 
 > [!주의] 실제 이미지 압축은 SVD를 쓰지 않는다
-> JPEG 같은 실제 형식은 그림마다 다른 $\mathbf{u}_i, \mathbf{v}_i$를 저장하지 않는다. 대신 모든 그림에 똑같이 쓰는 고정된 기저(이산 코사인 변환)를 쓴다. SVD의 기저는 그 그림 하나에 최적이지만, 기저 자체를 함께 저장해야 하고 계산도 비싸다. "가장 좋은 근사"와 "가장 좋은 압축 형식"은 다른 문제다. 비용이 어디서 생기는지가 다르기 때문이다. 10권에서 비슷한 맞바꿈이 다시 나온다.`,
+> JPEG 같은 실제 형식은 그림마다 다른 $\mathbf{u}_i, \mathbf{v}_i$를 저장하지 않는다. 대신 모든 그림에 똑같이 쓰는 고정된 기저(이산 코사인 변환)를 쓴다. SVD의 기저는 그 그림 하나에 최적이지만, 기저 자체를 함께 저장해야 하고 계산도 비싸다. "가장 좋은 근사"와 "가장 좋은 압축 형식"은 다른 문제다. 비용이 어디서 생기는지가 다르기 때문이다. 10장에서 비슷한 맞바꿈이 다시 나온다.`,
     },
     {
       id: 'prop.svd-four-subspaces',
@@ -735,7 +735,7 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
           ],
         },
       ],
-      body: String.raw`6권에서 모든 행렬에 [네 기본 부분공간](n:exp.four-subspaces)이 있다는 것을 보았다. 입력 쪽의 [행공간](t:t.row-space)과 [영공간](t:t.null-space), 출력 쪽의 [열공간](t:t.column-space)과 [좌영공간](t:t.left-null)이다. 그런데 그 지도에는 좌표가 없었다. 각 공간이 몇 차원인지는 알았지만, 각 공간을 펼치는 "좋은" 기저가 무엇인지는 몰랐다. SVD는 네 공간 모두에 **정규직교** 기저를 한꺼번에 준다.
+      body: String.raw`6장에서 모든 행렬에 [네 기본 부분공간](n:exp.four-subspaces)이 있다는 것을 보았다. 입력 쪽의 [행공간](t:t.row-space)과 [영공간](t:t.null-space), 출력 쪽의 [열공간](t:t.column-space)과 [좌영공간](t:t.left-null)이다. 그런데 그 지도에는 좌표가 없었다. 각 공간이 몇 차원인지는 알았지만, 각 공간을 펼치는 "좋은" 기저가 무엇인지는 몰랐다. SVD는 네 공간 모두에 **정규직교** 기저를 한꺼번에 준다.
 
 ::predict p-v3
 
@@ -758,7 +758,7 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
 랭크 1인 $A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$: [앞에서](n:prop.svd-ata) 구한 대로 $\sigma_1 = 5$, $\sigma_2 = 0$, $\mathbf{v}_1 = (1, 2)/\sqrt{5}$, $\mathbf{v}_2 = (-2, 1)/\sqrt{5}$다. 행공간은 $\mathbf{v}_1$ 방향(행 $(1, 2)$의 방향과 같다), 영공간은 $\mathbf{v}_2$ 방향이다. $\mathbf{u}_1 = A\mathbf{v}_1/5 = (1, 2)/\sqrt{5}$는 열공간의 방향(열 $(1, 2)$의 방향과 같다), $\mathbf{u}_2 = (-2, 1)/\sqrt{5}$는 좌영공간의 방향이다. 이 행렬은 대칭이라 입력 쪽과 출력 쪽 공간이 같은 직선이지만, 일반적으로는 다르다.`,
       proof: String.raw`**영공간.** 특이값이 0인 $i$에 대해 $\|A\mathbf{v}_i\|^2 = \sigma_i^2 = 0$이므로 $A\mathbf{v}_i = \mathbf{0}$이다. 그래서 이런 $\mathbf{v}_i$들은 영공간에 있다. 그 개수는 $n - \operatorname{rank}A$이고, [영공간의 차원도 정확히 그만큼](why:prop.rank-nullity)이다. 정규직교 벡터들은 [선형 독립](t:t.lin-indep)이므로, 영공간 안에서 그 차원만큼의 독립 벡터는 기저가 된다.
 
-**행공간.** [행공간은 영공간과 직교한다](why:prop.row-null-perp). 앞의 $\operatorname{rank}A$개의 $\mathbf{v}_i$는 영공간의 기저인 나머지 $\mathbf{v}_j$와 모두 직교한다. 그런데 입력 공간 $\mathbb{R}^n$에서 영공간에 수직인 벡터 전체가 행공간이고, 행공간의 차원은 $\operatorname{rank}A$다. 그 안에서 $\operatorname{rank}A$개의 정규직교 벡터는 기저가 된다. (여기서 "영공간에 수직인 것 전체 = 행공간"은 [6권의 네 부분공간 지도에서 차원을 세어 얻은 사실](why:exp.four-subspaces)이다.)
+**행공간.** [행공간은 영공간과 직교한다](why:prop.row-null-perp). 앞의 $\operatorname{rank}A$개의 $\mathbf{v}_i$는 영공간의 기저인 나머지 $\mathbf{v}_j$와 모두 직교한다. 그런데 입력 공간 $\mathbb{R}^n$에서 영공간에 수직인 벡터 전체가 행공간이고, 행공간의 차원은 $\operatorname{rank}A$다. 그 안에서 $\operatorname{rank}A$개의 정규직교 벡터는 기저가 된다. (여기서 "영공간에 수직인 것 전체 = 행공간"은 [6장의 네 부분공간 지도에서 차원을 세어 얻은 사실](why:exp.four-subspaces)이다.)
 
 **열공간.** $\sigma_i > 0$이면 $\mathbf{u}_i = A(\mathbf{v}_i/\sigma_i)$이므로 $\mathbf{u}_i$는 출력이 닿는 곳, 곧 열공간에 있다. 개수가 $\operatorname{rank}A$ = [열공간의 차원](why:def.rank)이고 정규직교이므로 기저다.
 

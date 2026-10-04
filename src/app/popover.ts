@@ -51,13 +51,13 @@ function show(el: HTMLElement) {
     const d = home.decl;
     const node = NODE_BY_ID.get(home.node)!;
     pop.innerHTML = `<div class="pop-kicker">용어 · ${d.en ?? ''}</div><div class="pop-title">${d.ko}</div><p>${escape(d.gloss)}</p>
-      <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}권 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? ' ✓' : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
+      <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}장 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? ' ✓' : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
   } else if (to) {
     const node = NODE_BY_ID.get(to);
     if (!node) return;
     const kick = document.createElement('div');
     kick.className = 'pop-kicker';
-    kick.textContent = `${BOOK_OF.get(to)!.num}권 · ${KIND_LABEL[node.kind]}${node.status === 'stub' ? ' · 집필 예정' : ''}`;
+    kick.textContent = `${BOOK_OF.get(to)!.num}장 · ${KIND_LABEL[node.kind]}${node.status === 'stub' ? ' · 집필 예정' : ''}`;
     const title = document.createElement('div');
     title.className = 'pop-title';
     title.textContent = node.title;

@@ -1,4 +1,4 @@
-// 0권(출발점) 장면들이 같이 쓰는 작은 도구: 눈금 있는 수직선, 축 눈금 숫자, 조각을 굳은 채로 옮기기.
+// 0장(출발점) 장면들이 같이 쓰는 작은 도구: 눈금 있는 수직선, 축 눈금 숫자, 조각을 굳은 채로 옮기기.
 import type { Plane } from '../../render/plane';
 import type { Vec } from '../../la/vec';
 import { C } from '../../render/colors';
