@@ -29,21 +29,30 @@ code { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monos
 .dim { color: var(--dim); }
 
 /* ── 틀 ─────────────────────────────────────── */
-.topbar { position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 18px; height: 52px; padding: 0 18px; background: rgba(14,17,22,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+/* 초안 배너: 검토가 끝나기 전까지 맨 위에 얇게 띄운다(src/main.ts의 DRAFT). 높이는 --banner-h 하나로 정하고, 머리 높이를 쓰는 곳은 모두 --head-h를 쓴다. */
+/* --head-h는 --banner-h를 바꾸는 요소(body)에서 계산해야 한다. :root에서 계산하면 0px일 때의 값이 그대로 물려 내려온다. */
+body { --banner-h: 0px; --head-h: calc(52px + var(--banner-h)); }
+body.draft { --banner-h: 26px; }
+.draft-banner { position: sticky; top: 0; z-index: 21; height: var(--banner-h); display: flex; align-items: center; justify-content: center; padding: 0 12px; font-size: 12.5px; line-height: 1; color: var(--bg); background: var(--accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.topbar { position: sticky; top: var(--banner-h); z-index: 20; display: flex; align-items: center; gap: 18px; height: 52px; padding: 0 18px; background: rgba(14,17,22,0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .brand { font-weight: 700; color: var(--ink); letter-spacing: -0.01em; font-size: 17px; }
 .topbar nav { display: flex; gap: 4px; margin-left: auto; }
 .topbar nav a { color: var(--ink2); padding: 6px 12px; border-radius: 8px; font-size: 14px; }
 .topbar nav a.on, .topbar nav a:hover { background: var(--bg3); color: var(--ink); text-decoration: none; }
 .menu-btn { display: none; background: none; border: 0; color: var(--ink); font-size: 20px; cursor: pointer; }
-.layout { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - 52px); }
-.sidebar { position: sticky; top: 52px; height: calc(100vh - 52px); overflow-y: auto; border-right: 1px solid var(--line); padding: 10px 8px 40px; font-size: 13.5px; line-height: 1.45; }
+.layout { display: grid; grid-template-columns: 290px 1fr; min-height: calc(100vh - var(--head-h)); }
+.sidebar { position: sticky; top: var(--head-h); height: calc(100vh - var(--head-h)); overflow-y: auto; border-right: 1px solid var(--line); padding: 10px 8px 40px; font-size: 13.5px; line-height: 1.45; }
 .main { min-width: 0; padding: 28px 40px 120px; }
 .main.wide { padding: 0; }
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
-  .sidebar { position: fixed; left: 0; top: 52px; width: 300px; z-index: 30; background: var(--bg); transform: translateX(-100%); transition: transform 0.2s; }
+  .sidebar { position: fixed; left: 0; top: var(--head-h); width: 300px; z-index: 30; background: var(--bg); transform: translateX(-100%); transition: transform 0.2s; }
   body.side-open .sidebar { transform: none; }
   .menu-btn { display: block; }
+  .draft-more { display: none; }
+  .topbar { gap: 10px; padding: 0 12px; }
+  .brand, .topbar nav a { white-space: nowrap; }
+  .topbar nav a { padding: 6px 7px; font-size: 13px; }
   .main { padding: 20px 16px 100px; }
 }
 
@@ -222,7 +231,7 @@ a.nlink { color: #9cc8ff; }
 .page details { margin: 6px 0; } .page summary { cursor: pointer; }
 
 /* ── 지도 ───────────────────────────────────── */
-.map-wrap { display: grid; grid-template-columns: 1fr 340px; height: calc(100vh - 52px); }
+.map-wrap { display: grid; grid-template-columns: 1fr 340px; height: calc(100vh - var(--head-h)); }
 .map-scroll { overflow: auto; }
 .map-side { border-left: 1px solid var(--line); padding: 18px 20px; overflow-y: auto; font-size: 14px; }
 .map-side h2 { margin: 6px 0 10px; font-size: 20px; line-height: 1.35; }

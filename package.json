@@ -13,7 +13,7 @@
     "sweep": "tsx scripts/sweep.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Keetaek Yang",
   "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "devDependencies": {

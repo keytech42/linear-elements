@@ -8,8 +8,12 @@ import { renderHome, renderGlossary, renderReport } from './app/pages';
 import { installPopovers } from './app/popover';
 import { progress, trail } from './app/state';
 
+// 초안 표시: 사용자의 노드별 검토가 끝나면 false로 바꾼다.
+const DRAFT = true;
+
 const app = document.getElementById('app')!;
-app.innerHTML = `
+document.body.classList.toggle('draft', DRAFT);
+app.innerHTML = `${DRAFT ? '<div class="draft-banner" role="note">초안 · 검토하며 고쳐 쓰고 있는 원고입니다.<span class="draft-more">&nbsp;내용과 관문은 바뀔 수 있습니다.</span></div>' : ''}
   <header class="topbar">
     <button class="menu-btn" aria-label="목차 열기">☰</button>
     <a class="brand" href="#/">선형 원론</a>

@@ -44,9 +44,18 @@ npm run sweep      # opens every node and checks for errors (needs a local Chrom
 
 On every push to `main`, GitHub Actions (`.github/workflows/deploy.yml`) runs the tests, the type check, and the build, then deploys to GitHub Pages. If the verifier reports any error, nothing is deployed.
 
+## How this book is made
+
+This book is written by **Keetaek Yang** with an AI assistant (Claude, by Anthropic). The AI drafts; the author decides what stays.
+
+- **The author sets the goals and the rules.** The author defined what the book must do: build everything up from arithmetic, answer every "why?" earlier in the book, and leave no black boxes. The Euclid-style structure and the writing rules in `docs/STYLE.md` are the author's requirements. Other design choices, such as the predict-first format, were proposed in discussion with the AI and decided by the author.
+- **The first draft was produced with the AI under those rules.** This covers the text, the code, and the verifier that checks the rules.
+- **The author then reviews the book node by node.** In review the author questions each claim and proof, chooses the terminology, and decides every structural change. Gaps found in review are fixed or recorded openly as unanswered questions.
+- **The review is in progress.** This is why the site shows a draft banner. The decisions made in review are recorded in `docs/` and in the commit history.
+
 ## License
 
 This repository has two parts under different terms. See [LICENSE](LICENSE) for the exact scope.
 
 - **Source code**: MIT License.
-- **Textbook content** (the book text in `src/content/b*.ts`, the scenes in `src/scenes/`, and `docs/`): © 2026 keytech42, all rights reserved.
+- **Textbook content** (the book text in `src/content/b*.ts`, the scenes in `src/scenes/`, and `docs/`): © 2026 Keetaek Yang, all rights reserved.
