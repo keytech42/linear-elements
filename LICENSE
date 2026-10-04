@@ -1,0 +1,53 @@
+This repository contains two kinds of material under different terms.
+
+  1. Textbook content: all rights reserved (Part A).
+  2. Source code: MIT License (Part B).
+
+The textbook content is:
+
+  - the book files src/content/b*.ts, including all prose, formulas,
+    predictions (gate questions, choices, hints, explanations), exercises,
+    and glossary entries;
+  - everything in src/scenes/ (the interactive figures and their text);
+  - everything in docs/.
+
+Everything else in this repository is source code, including the markup
+parser and schema in src/content/ (markup.ts, schema.ts, index.ts,
+katex-macros.ts), src/verify/, src/la/, src/render/, src/app/, src/sync/,
+src/ui/, and scripts/.
+
+
+Part A. Textbook content
+------------------------
+
+Copyright (c) 2026 keytech42. All rights reserved.
+
+No permission is granted to copy, modify, translate, distribute, publish,
+sell, or otherwise use the textbook content, in whole or in part, without
+prior written permission from the copyright holder, except where the
+applicable law allows it (for example, quotation or fair use) and except
+for viewing and forking on GitHub as allowed by the GitHub Terms of Service.
+
+
+Part B. Source code (MIT License)
+---------------------------------
+
+Copyright (c) 2026 keytech42
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

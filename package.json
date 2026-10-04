@@ -1,7 +1,7 @@
 {
   "name": "linear-elements",
   "version": "1.0.0",
-  "description": "",
+  "description": "Interactive, predict-first linear algebra textbook (in Korean): from arithmetic to SVD and LoRA.",
   "scripts": {
     "dev": "vite",
     "build": "npm run verify && vite build",
@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "SEE LICENSE IN LICENSE",
   "type": "module",
   "devDependencies": {
     "@types/katex": "^0.16.8",

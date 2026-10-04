@@ -14,7 +14,7 @@ export function renderHome(main: HTMLElement) {
     <div class="home-hero">
       <div class="kicker">선형 원론 · Elements of Linear Maps</div>
       <h1>화살표에서 SVD까지,<br/>당연한 것을 하나도 당연하게 넘기지 않는 선형대수</h1>
-      <p>이 교재는 산수만 아는 사람에서 출발합니다. 모든 <b>정의</b>와 <b>명제</b>는 앞에 놓인 것만으로 세워지고, 읽다가 “왜?”라고 물을 만한 자리마다 그 답이 있는 앞쪽 노드로 가는 <span class="why"><span class="why-badge">왜?</span></span> 칩이 달려 있습니다. 이 규칙은 <a href="#/verify">검증기</a>가 기계적으로 확인합니다.</p>
+      <p>이 교재는 독자가 산수만 안다고 가정하고 출발합니다. 모든 <b>정의</b>와 <b>명제</b>는 앞에 놓인 것만으로 세워지고, 읽다가 “왜?”라고 물을 만한 자리마다 그 답이 있는 앞쪽 노드로 가는 <span class="why"><span class="why-badge">왜?</span></span> 칩이 달려 있습니다. 이 규칙은 <a href="#/verify">검증기</a>가 기계적으로 확인합니다.</p>
       <div class="home-cta">
         <a class="btn primary" href="#/n/${first.id}">0권부터 시작하기</a>
         <a class="btn" href="#/map?focus=exp.lora">지도에서 끝(LoRA)부터 보기</a>

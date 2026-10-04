@@ -1,0 +1,46 @@
+# main에 올라오면 검사한 뒤 GitHub Pages에 배포한다.
+# 순서: 테스트 → 타입 검사 → 빌드(교수법 검증기가 먼저 돈다. error가 하나라도 있으면 배포하지 않는다)
+# e2e와 sweep은 이 컴퓨터의 Chrome을 쓰므로 여기서는 돌리지 않는다.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26 # 로컬에서 검증한 버전과 맞춘다
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+      - run: npm run build
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
