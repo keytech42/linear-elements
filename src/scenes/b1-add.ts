@@ -8,6 +8,7 @@
 //   u:    처음 𝐮 (기본 [2, 1])
 //   w:    처음 𝐰 (기본 [-1, 2])
 //   par:  반대 순서와 평행사변형을 보일지 (기본 false)
+//   parToggle: 반대 순서 토글을 둘지 (기본 true). 교환법칙을 묻는 관문 앞의 장면에서는 false로 둔다(답 누설 방지).
 //   comp: 가로·세로 이동을 따로 보일지 (기본 false)
 // 동기화 키: u, w, sum, wu (반대 순서), h (가로 이동의 합), vv (세로 이동의 합)
 import type { SceneFn } from './_lib/scene';
@@ -58,7 +59,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   eds.className = 'eds';
   const eu = vectorEditor(eds, { name: 'u', key: 'u', color: C.u, get: () => u, set: (v) => ((u = v), sync()) });
   const ew = vectorEditor(eds, { name: 'w', key: 'w', color: C.v, get: () => w, set: (v) => ((w = v), sync()) });
-  toggle(panel, '반대 순서(w 다음 u)도 보기', () => par, (b) => ((par = b), sync()));
+  if (params.parToggle ?? true) toggle(panel, '반대 순서(w 다음 u)도 보기', () => par, (b) => ((par = b), sync()));
   toggle(panel, '가로 이동과 세로 이동을 따로 보기', () => comp, (b) => ((comp = b), sync()));
   const ro = readout(panel);
   hint(panel, '연두 화살표의 손잡이는 끝점에 있습니다. 끌면 𝐰가 바뀌고, 𝐮의 끝에서 출발하는 모양은 그대로 유지됩니다.');
