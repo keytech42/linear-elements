@@ -5,7 +5,7 @@ import { RULES } from '../verify/verify';
 import { COLOR_TABLE } from '../render/colors';
 import { tex } from './render';
 import { progress } from './state';
-import { reviewState, REVIEWS } from '../content/review';
+import { reviewState, REVIEWS, stampLabel } from '../content/review';
 
 export function renderHome(main: HTMLElement) {
   const written = ALL_NODES.filter((n) => n.status === 'written').length;
@@ -116,7 +116,7 @@ function reviewSection(): string {
     const items = b.nodes
       .map((n) => {
         const s = reviewState(n);
-        return `<li class="rv rv-${s}"><span class="rv-tag">${label[s]}${s !== 'draft' ? ` · ${REVIEWS[n.id].on}` : ''}</span> <a href="#/n/${n.id}">${n.title}</a></li>`;
+        return `<li class="rv rv-${s}"><span class="rv-tag">${label[s]}${s !== 'draft' ? ` · ${stampLabel(REVIEWS[n.id])}` : ''}</span> <a href="#/n/${n.id}">${n.title}</a></li>`;
       })
       .join('');
     const done = b.nodes.filter((n) => reviewState(n) === 'reviewed').length;

@@ -7,10 +7,14 @@ import type { NodeDef } from './schema';
 import reviews from './reviews.json';
 
 export interface ReviewStamp {
-  /** 검토한 날(YYYY-MM-DD) */
+  /** 검토한 때. 지역 시간대가 붙은 ISO 8601(예: 2026-10-07T17:42:10+09:00). 예전 기록은 날짜(YYYY-MM-DD)만 있다. */
   on: string;
-  /** 검토할 때의 내용 지문 */
+  /** 검토할 때의 내용 지문. 수정 감지는 이 값으로 한다(시각은 감지에 쓰지 않는다). */
   hash: string;
+  /** 검토할 때의 HEAD 커밋. "검토 이후 무엇이 바뀌었나"를 보여 줄 때 기준이 된다(npm run review -- diff). */
+  commit?: string;
+  /** 검토할 때 노드 파일에 커밋하지 않은 수정이 있었는가. 그러면 commit 기준 diff에 검토 전 수정도 섞인다. */
+  dirty?: boolean;
 }
 
 export const REVIEWS: Record<string, ReviewStamp> = reviews as Record<string, ReviewStamp>;
@@ -30,6 +34,20 @@ export function nodeHash(n: NodeDef): string {
   h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
   h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
   return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(36);
+}
+
+/** 지역 시간대가 붙은 ISO 8601. toISOString()은 UTC로 바꿔 버리므로 직접 만든다. */
+export function isoLocal(d: Date): string {
+  const p = (x: number) => String(Math.abs(x)).padStart(2, '0');
+  const off = -d.getTimezoneOffset(); // 분. 서울이면 +540
+  const sign = off >= 0 ? '+' : '-';
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}T${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}${sign}${p(Math.trunc(off / 60))}:${p(off % 60)}`;
+}
+
+/** 사람이 읽는 표기: "2026-10-07 17:42". 날짜만 있는 예전 기록은 그대로. */
+export function stampLabel(r: ReviewStamp): string {
+  const m = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(r.on);
+  return m ? `${m[1]} ${m[2]}` : r.on;
 }
 
 export function reviewState(n: NodeDef): ReviewState {

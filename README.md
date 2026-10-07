@@ -27,7 +27,7 @@ npm test           # numeric core and markup parser tests
 npm run typecheck
 npm run e2e        # gate behavior (needs a local Chrome)
 npm run sweep      # opens every node and checks for errors (needs a local Chrome)
-npm run review     # author review status per node; `npm run review -- mark <id>` records a review
+npm run review     # author review status per node; `mark <id>` records a review, `diff <id>` shows what changed since
 ```
 
 ## Structure
