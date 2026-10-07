@@ -77,6 +77,7 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P024: { level: 'warn', text: '힌트가 3개를 넘음' },
   P026: { level: 'warn', text: '저자가 검토한 뒤 내용이 바뀐 노드(다시 검토 필요)' },
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
+  P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
 };
 
 export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<string, string>): VerifyResult {
@@ -259,6 +260,24 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     // 그래서 한참 뒤의 노드에서도 용어에 마우스를 올리면 정의가 뜬다. 렌더러는 이 parsed를 그대로 그린다.
     if (n.status === 'written') autoLinked += autoLinkFirstMentions(pn, lexicon, (id) => order.get(termHome.get(id)!.node)! < here, (id) => termUse.set(id, (termUse.get(id) ?? 0) + 1));
   }
+
+  // 3-1. 미뤄 둔 질문과 답하는 자리: "뒤에서 답함"이라고 적었으면 그 노드에 ::answers 표지가 있어야 하고, 표지는 실제로 미뤄 둔 질문을 가리켜야 한다.
+  const answersIn = new Map<string, Set<string>>();
+  for (const n of nodes) {
+    const pn = parsed.get(n.id);
+    if (!pn) continue;
+    const froms = new Set<string>();
+    for (const b of walkBlocks([...pn.body, ...(pn.proof ?? [])])) if (b.t === 'answers') froms.add(b.from);
+    answersIn.set(n.id, froms);
+    for (const from of froms) {
+      const src = nodes.find((x) => x.id === from);
+      if (!src) push('P029', n.id, `::answers ${from}: 없는 노드`);
+      else if (!src.openWhys?.some((w) => w.answeredBy === n.id)) push('P029', n.id, `::answers ${from}: ${from}의 openWhys에 이 노드에서 답한다는 질문이 없음`);
+    }
+  }
+  for (const n of nodes)
+    for (const w of n.openWhys ?? [])
+      if (w.answeredBy && order.has(w.answeredBy) && !answersIn.get(w.answeredBy)?.has(n.id)) push('P029', n.id, `"${w.q}" → ${w.answeredBy}에 ::answers ${n.id} 표지가 없음`);
 
   // 4. 검토 기록
   for (const n of nodes) if (reviewState(n) === 'changed') push('P026', n.id, `${REVIEWS[n.id].on}에 검토한 뒤 바뀜. 다시 검토했으면 npm run review -- mark ${n.id}`);

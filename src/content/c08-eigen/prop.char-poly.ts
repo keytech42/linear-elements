@@ -45,7 +45,7 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?', answeredBy: 'prop.no-real-eigen' }],
+  openWhys: [{ q: '판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?', answeredBy: null }],
   body: String.raw`[앞의 탐구](n:exp.eigen-hunt)처럼 그림에서 고유벡터를 찾을 수는 있다. 그러나 정확한 값을 얻으려면 계산이 필요하다. $A\mathbf{v} = \lambda\mathbf{v}$를 만족하는 $\lambda$는 어떻게 구할까? 미지수가 $\lambda$와 $\mathbf{v}$ 둘이라 막막해 보인다. 먼저 식을 옮겨 써 보자.
 
 $$A\mathbf{v} = \lambda\mathbf{v} \iff A\mathbf{v} - \lambda I\mathbf{v} = \mathbf{0} \iff (A - \lambda I)\mathbf{v} = \mathbf{0}$$

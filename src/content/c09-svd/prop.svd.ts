@@ -71,7 +71,9 @@ $$A = \h{s3}{U}\,\h{s2}{\Sigma}\,\h{s1}{V^{\mathsf{T}}}$$
 ::scene c9-svd-steps {}
 
 ### 그래서 단위원의 상은 정확히 타원이다
-[앞에서 미뤄 둔 질문](n:exp.circle-to-ellipse)의 답이다. 1단계의 직교 행렬은 [길이를 바꾸지 않으므로](why:prop.orthogonal-preserves) 단위원을 단위원으로 보낸다. 2단계는 원을 서로 수직인 두 축 방향으로 각각 $\sigma_1$배, $\sigma_2$배 늘인다. 이것이 [타원의 정의](t:t.ellipse) 그대로다. 3단계는 타원을 돌리거나 뒤집을 뿐이므로 타원은 타원으로 남는다. $\sigma_2 = 0$이면 2단계에서 원이 선분으로 납작해진다.
+::answers exp.circle-to-ellipse
+
+1단계의 직교 행렬은 [길이를 바꾸지 않으므로](why:prop.orthogonal-preserves) 단위원을 단위원으로 보낸다. 2단계는 원을 서로 수직인 두 축 방향으로 각각 $\sigma_1$배, $\sigma_2$배 늘인다. 이것이 [타원의 정의](t:t.ellipse) 그대로다. 3단계는 타원을 돌리거나 뒤집을 뿐이므로 타원은 타원으로 남는다. $\sigma_2 = 0$이면 2단계에서 원이 선분으로 납작해진다.
 
 ::predict p-flip
 

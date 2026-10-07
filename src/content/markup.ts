@@ -4,6 +4,7 @@
 //   $$ … $$                      가운데 정렬 수식 (여러 줄 가능)
 //   ::scene 장면id {json}         살아 있는 그림
 //   ::predict 예측id              예측 관문 (노드의 predicts 에 정의, 맨 위 단계에만)
+//   ::answers 노드id              앞 노드가 openWhys로 미뤄 둔 질문에 여기서 답한다는 표지 (P029)
 //   ### 제목                      소제목
 //   - 항목                        목록 (연속된 줄)
 //   1. 항목                       번호 목록 (연속된 줄)
@@ -40,6 +41,7 @@ export type Block =
   | { t: 'math'; tex: string }
   | { t: 'scene'; id: string; params: Record<string, unknown> }
   | { t: 'predict'; id: string }
+  | { t: 'answers'; from: string }
   | { t: 'note'; kind: NoteKind; title?: Inline[]; blocks: Block[] };
 
 const NOTE_KINDS: NoteKind[] = ['비유', '주의', '직관', '질문', '코드', '참고'];
@@ -82,6 +84,13 @@ export function parseBlocks(src: string): Block[] {
       const m = /^::predict\s+([\w.-]+)\s*$/.exec(tl);
       if (!m) throw new Error(`예측 문법 오류: ${tl}`);
       out.push({ t: 'predict', id: m[1] });
+      i++;
+      continue;
+    }
+    if (tl.startsWith('::answers')) {
+      const m = /^::answers\s+([\w.-]+)\s*$/.exec(tl);
+      if (!m) throw new Error(`답 표지 문법 오류: ${tl}`);
+      out.push({ t: 'answers', from: m[1] });
       i++;
       continue;
     }

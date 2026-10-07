@@ -3,7 +3,7 @@ import katex from 'katex';
 import type { Block, Inline } from '../content/markup';
 import { expandSyncMacros } from '../content/markup';
 import { KATEX_MACROS } from '../content/katex-macros';
-import { SCENES, V, NODE_BY_ID } from './data';
+import { SCENES, V, NODE_BY_ID, BOOK_OF } from './data';
 import { progress } from './state';
 import type { SyncBus } from '../sync/bus';
 
@@ -30,6 +30,8 @@ export interface RenderCtx {
   cleanups: (() => void)[];
   /** 장면을 그리지 않는다(팝오버 미리보기) */
   noScenes?: boolean;
+  /** 지금 그리는 노드의 id (답 표지가 이 노드에서 답하는 질문만 고르는 데 쓴다) */
+  node?: string;
 }
 
 export function renderBlocks(blocks: Block[], ctx: RenderCtx): DocumentFragment {
@@ -79,6 +81,34 @@ function renderBlock(b: Block, ctx: RenderCtx): Node {
         a.appendChild(t);
       }
       a.appendChild(renderBlocks(b.blocks, ctx));
+      return a;
+    }
+    case 'answers': {
+      // 앞 노드가 "아직 여기서 답하지 않은 질문"으로 미뤄 둔 질문에, 바로 아래에서 답한다는 표지.
+      const from = NODE_BY_ID.get(b.from);
+      const a = document.createElement('aside');
+      a.className = 'answers-box';
+      a.id = `answers-${b.from}`;
+      const lab = document.createElement('div');
+      lab.className = 'answers-label';
+      lab.append('앞에서 미뤄 둔 질문 · ');
+      const back = document.createElement('a');
+      back.className = 'nlink';
+      back.href = `#/n/${b.from}`;
+      back.textContent = `${BOOK_OF.get(b.from)?.num}장 · ${from?.title ?? b.from}`;
+      lab.appendChild(back);
+      a.appendChild(lab);
+      for (const w of from?.openWhys ?? []) {
+        if (!w.answeredBy || (ctx.node && w.answeredBy !== ctx.node)) continue;
+        const q = document.createElement('div');
+        q.className = 'answers-q';
+        q.textContent = w.q;
+        a.appendChild(q);
+      }
+      const hint = document.createElement('div');
+      hint.className = 'answers-hint dim';
+      hint.textContent = '아래가 그 답이다.';
+      a.appendChild(hint);
       return a;
     }
     case 'predict': {

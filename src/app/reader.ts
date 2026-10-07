@@ -19,7 +19,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   const book = BOOK_OF.get(id)!;
   const pn = V.parsed.get(id);
   const bus = new SyncBus();
-  const ctx: RenderCtx = { bus, cleanups: [] };
+  const ctx: RenderCtx = { bus, cleanups: [], node: id };
   const art = document.createElement('article');
   art.className = `node node-${node.kind}`;
 
@@ -45,17 +45,27 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   art.appendChild(head);
 
   // 읽기 모드: 예측하며 읽기(관문이 잠겨 있음) / 펼쳐 보기(모두 열림)
-  // 왜? 칩을 따라 들어왔거나, 이해했다고 표시한 노드라면 펼쳐서 연다(답을 찾으러 온 사람에게 퀴즈를 내지 않는다).
+  // 왜? 칩이나 미뤄 둔 질문의 바로가기를 따라 들어왔거나, 이해했다고 표시한 노드라면 펼쳐서 연다(답을 찾으러 온 사람에게 퀴즈를 내지 않는다).
+  // 펼쳐 보기는 예측을 기록하지 않으므로, 나중에 순서대로 읽을 때 관문은 그대로 남아 있다.
   const nPred = node.predicts?.length ?? 0;
   const byWhy = sessionStorage.getItem('le.arrivedByWhy') === id;
   sessionStorage.removeItem('le.arrivedByWhy');
-  const review = nPred > 0 && (view === 'all' || (view !== 'predict' && (byWhy || progress.isDone(id))));
+  const shortcut = JSON.parse(sessionStorage.getItem('le.shortcut') ?? 'null') as { to: string; from: string } | null;
+  sessionStorage.removeItem('le.shortcut');
+  const byShortcut = shortcut?.to === id ? shortcut.from : null;
+  const review = nPred > 0 && (view === 'all' || (view !== 'predict' && (byWhy || !!byShortcut || progress.isDone(id))));
   if (nPred) {
     const mode = document.createElement('div');
     mode.className = 'mode-switch';
     mode.innerHTML =
       `<a href="#/n/${id}?view=predict" class="${review ? '' : 'on'}">예측하며 읽기</a><a href="#/n/${id}?view=all" class="${review ? 'on' : ''}">펼쳐 보기</a>` +
-      (review && byWhy ? '<span class="dim">왜? 칩을 따라와서 펼쳐 열었습니다</span>' : review && view !== 'all' ? '<span class="dim">이해했다고 표시한 노드라 펼쳐 열었습니다</span>' : '');
+      (review && byShortcut
+        ? '<span class="dim">바로가기로 와서 펼쳐 열었습니다. 관문의 예측은 기록되지 않았으니, 처음부터 순서대로 읽으려면 "예측하며 읽기"를 고르세요</span>'
+        : review && byWhy
+          ? '<span class="dim">왜? 칩을 따라와서 펼쳐 열었습니다</span>'
+          : review && view !== 'all'
+            ? '<span class="dim">이해했다고 표시한 노드라 펼쳐 열었습니다</span>'
+            : '');
     head.appendChild(mode);
   }
 
@@ -204,11 +214,17 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
     sec.className = 'open-whys';
     sec.innerHTML = '<h2>아직 여기서 답하지 않은 질문</h2>';
     const ul = document.createElement('ul');
+    const here = ALL_NODES.findIndex((n) => n.id === id);
     for (const w of node.openWhys) {
       const li = document.createElement('li');
       if (w.answeredBy) {
-        const n = NODE_BY_ID.get(w.answeredBy);
-        li.innerHTML = `${w.q} <span class="dim">→ 뒤에서 답함:</span> <a class="nlink" data-to="${w.answeredBy}" href="#/n/${w.answeredBy}">${BOOK_OF.get(w.answeredBy)?.num}장 · ${n?.title}</a>`;
+        // 순서대로 읽을 사람에게는 답이 어디쯤 있는지를, 지금 답을 보려는 사람에게는 바로가기를 준다.
+        const to = w.answeredBy;
+        const n = NODE_BY_ID.get(to);
+        const gap = ALL_NODES.findIndex((x) => x.id === to) - here;
+        const where = gap === 1 ? '바로 다음 노드' : `${gap}개 노드 뒤`;
+        li.innerHTML = `${w.q} <span class="dim">→ 뒤에서 답함: ${BOOK_OF.get(to)?.num}장 · ${n?.title} (${where})</span> <a class="shortcut" data-to="${to}" href="#/n/${to}" title="답이 있는 자리로 건너뛴다. 그 노드는 관문을 펼쳐 연 채로 열리고, 예측은 기록되지 않는다.">답으로 바로가기 ↷</a>`;
+        li.querySelector<HTMLAnchorElement>('a.shortcut')!.dataset.q = w.q;
       } else li.innerHTML = `${w.q} <span class="warn-dot">이 교재 안에서는 답하지 않음</span>`;
       ul.appendChild(li);
     }
@@ -284,21 +300,52 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   main.innerHTML = '';
   main.appendChild(art);
 
-  // 왜? 칩을 누르면 지금 자리를 기억한다
+  // 왜? 칩이나 바로가기를 누르면 지금 자리를 기억한다
   art.addEventListener('click', (e) => {
     const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.why');
     if (a) {
       trail.push({ node: id, scroll: window.scrollY, q: a.dataset.q ?? '' });
       sessionStorage.setItem('le.arrivedByWhy', a.dataset.to ?? '');
     }
+    const s = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.shortcut');
+    if (s) {
+      trail.push({ node: id, scroll: window.scrollY, q: s.dataset.q ?? '' });
+      sessionStorage.setItem('le.shortcut', JSON.stringify({ to: s.dataset.to, from: id }));
+    }
   });
 
   refreshLocks();
   const offDom = bus.bindDom(art);
   const restore = sessionStorage.getItem('le.restoreScroll');
+  // 답 표지 바로 앞이 소제목이면 소제목부터 보이게 한다.
+  const box = byShortcut ? art.querySelector<HTMLElement>(`#answers-${CSS.escape(byShortcut)}`) : null;
+  const target = box?.previousElementSibling?.tagName === 'H3' ? (box.previousElementSibling as HTMLElement) : box;
   if (restore) {
     sessionStorage.removeItem('le.restoreScroll');
     requestAnimationFrame(() => window.scrollTo(0, +restore));
+  } else if (target) {
+    // 바로가기: 답이 있는 자리로 내려가고, 잠깐 빛나게 해서 어디가 답인지 보이게 한다.
+    // 머리의 안내는 화면 밖에 있으므로, 건너뛰어 왔다는 것과 두 갈래 길(처음부터 / 돌아가기)을 착지한 자리에 적는다.
+    const note = document.createElement('div');
+    note.className = 'answers-arrived';
+    const seg = segEls.findIndex((s) => s.contains(box!));
+    const skipped = seg === -1 ? gateIds.length : seg; // 답 표지보다 앞에 있는 관문 수
+    note.innerHTML =
+      `<span>↷ 바로가기로 건너뛰어 왔습니다. 이 노드의 앞부분${skipped ? `과 관문 ${skipped}개를` : '을'} 지나쳤습니다.` +
+      `${nPred ? ' 이 노드의 관문은 모두 펼쳐 열려 있고, 예측은 기록되지 않습니다.' : ''}</span> `;
+    const top = document.createElement('a');
+    top.href = `#/n/${id}?view=predict`;
+    top.textContent = '이 노드를 처음부터 읽기';
+    const back = document.createElement('button');
+    back.textContent = '← 질문으로 돌아가기';
+    back.onclick = () => art.querySelector<HTMLButtonElement>('.trail-bar')?.click();
+    note.append(top, ' · ', back);
+    box!.insertBefore(note, box!.querySelector('.answers-hint'));
+    // 위쪽 장면이 그려지며 높이가 바뀔 수 있으므로 조금 뒤에 한 번 더 맞춘다.
+    const go = () => target.scrollIntoView({ block: 'start' });
+    requestAnimationFrame(go);
+    setTimeout(go, 400);
+    box!.classList.add('flash');
   } else window.scrollTo(0, 0);
 
   return () => {

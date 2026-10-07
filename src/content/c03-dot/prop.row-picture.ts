@@ -37,7 +37,9 @@ const node: NodeDef = {
     },
   ],
   openWhys: [],
-  body: String.raw`2장에서 [행렬-벡터 곱](t:t.matvec)을 "열들의 선형 결합"으로 정의했다. 그런데 학교에서는 "행 × 열"로 곱셈을 배웠을 것이다. 두 계산법은 어떻게 같은 답을 내는가?
+  body: String.raw`::answers def.matvec
+
+2장에서 [행렬-벡터 곱](t:t.matvec)을 "열들의 선형 결합"으로 정의했다. 그런데 학교에서는 "행 × 열"로 곱셈을 배웠을 것이다. 두 계산법은 어떻게 같은 답을 내는가?
 
 ::predict p-row
 
@@ -60,7 +62,7 @@ $$(A\mathbf{x})_i = (A\text{의 } i\text{번째 행})\cdot\mathbf{x}$$
 - 3×2 행렬 $\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{bmatrix}$과 $\mathbf{x} = (3, 4)$: 세 행과 내적하면 $(3, 4, 7)$. 행이 세 개이므로 출력의 성분도 셋이다.
 
 > [!코드] 두 구현, 한 답
-> \`matVec\`은 열의 관점으로, \`matVecRows\`는 행의 관점으로 계산한다. 테스트는 무작위 행렬 100개에서 두 함수의 답이 소수점 아래 12자리까지 같은지 확인한다. 2장의 미뤄 둔 질문, "학교에서 배운 행 × 열 계산은 정의와 어떻게 같은가?"의 답이 이 노드다.`,
+> \`matVec\`은 열의 관점으로, \`matVecRows\`는 행의 관점으로 계산한다. 테스트는 무작위 행렬 100개에서 두 함수의 답이 소수점 아래 12자리까지 같은지 확인한다.`,
   proof: String.raw`[행렬-벡터 곱의 정의](why:def.matvec)에 따라 $A\mathbf{x} = x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + \cdots + x_n\mathbf{a}_n$이다. 이 벡터의 $i$번째 성분만 보면, 각 열 $\mathbf{a}_j$의 $i$번째 성분 $a_{ij}$에 $x_j$를 곱해 더한 것이다([벡터 덧셈과 스칼라 곱은 성분마다 한다](why:prop.add-componentwise)).
 
 $$(A\mathbf{x})_i = x_1a_{i1} + x_2a_{i2} + \cdots + x_na_{in}$$

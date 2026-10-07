@@ -104,6 +104,15 @@ describe('검증기 규칙', () => {
   it('P010 없는 장면', () => {
     expect(rules(mk([{ id: 'n1', kind: 'exp', title: '', status: 'written', body: '::scene nope' }]))).toContain('P010');
   });
+  it('P029 미뤄 둔 질문과 답 표지의 짝', () => {
+    const ask = { id: 'n1', kind: 'exp' as const, title: '', status: 'written' as const, body: '질문을 남긴다', openWhys: [{ q: '왜?', answeredBy: 'n2' }] };
+    // 짝이 맞으면 조용하다
+    expect(rules(mk([ask, { id: 'n2', kind: 'exp', title: '', status: 'written', body: '::answers n1\n\n답이다.' }]))).not.toContain('P029');
+    // 답한다고 했는데 표지가 없다
+    expect(rules(mk([ask, { id: 'n2', kind: 'exp', title: '', status: 'written', body: '답이다.' }]))).toContain('P029');
+    // 표지가 미뤄 둔 질문이 없는 노드를 가리킨다
+    expect(rules(mk([{ ...ask, openWhys: [] }, { id: 'n2', kind: 'exp', title: '', status: 'written', body: '::answers n1' }]))).toContain('P029');
+  });
   it('fwd: 예고는 허용', () => {
     const r = rules(mk([
       { id: 'n1', kind: 'def', title: '', status: 'written', body: '[가나다](fwd:t.a)' },
