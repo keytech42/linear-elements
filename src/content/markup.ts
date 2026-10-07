@@ -5,6 +5,9 @@
 //   ::scene 장면id {json}         살아 있는 그림
 //   ::predict 예측id              예측 관문 (노드의 predicts 에 정의, 맨 위 단계에만)
 //   ::answers 노드id              앞 노드가 openWhys로 미뤄 둔 질문에 여기서 답한다는 표지 (P029)
+//   ::chain                       등식 줄. 다음 줄부터 빈 줄까지 한 줄에 한 단계: "TeX ∵ 근거(인라인 문법)"
+//     0a = (0 + 0)a ∵ 0의 공리      첫 줄은 왼쪽 변까지 적고, 다음 줄은 "= …"처럼 관계 기호부터 적는다.
+//     = 0a + 0a ∵ 명제 1           근거는 오른쪽 칸에 "∵ …"로 그려진다. 근거가 없는 줄은 ∵를 쓰지 않는다.
 //   ### 제목                      소제목
 //   - 항목                        목록 (연속된 줄)
 //   1. 항목                       번호 목록 (연속된 줄)
@@ -37,11 +40,12 @@ export type NoteKind = '비유' | '주의' | '직관' | '질문' | '코드' | '�
 export type Block =
   | { t: 'p'; c: Inline[] }
   | { t: 'h'; c: Inline[] }
-  | { t: 'ul'; items: Inline[][]; ordered?: boolean }
+  | { t: 'ul'; items: Inline[][]; ordered?: boolean; start?: number }
   | { t: 'math'; tex: string }
   | { t: 'scene'; id: string; params: Record<string, unknown> }
   | { t: 'predict'; id: string }
   | { t: 'answers'; from: string }
+  | { t: 'chain'; rows: { lhs: string; rhs: string; why?: Inline[] }[] }
   | { t: 'note'; kind: NoteKind; title?: Inline[]; blocks: Block[] };
 
 const NOTE_KINDS: NoteKind[] = ['비유', '주의', '직관', '질문', '코드', '참고'];
@@ -94,6 +98,23 @@ export function parseBlocks(src: string): Block[] {
       i++;
       continue;
     }
+    if (tl === '::chain') {
+      i++;
+      const rows: { lhs: string; rhs: string; why?: Inline[] }[] = [];
+      while (i < lines.length && !isBlank(lines[i])) {
+        const raw = lines[i++].trim();
+        const k = raw.indexOf('∵');
+        const texPart = (k === -1 ? raw : raw.slice(0, k)).trim();
+        const why = k === -1 ? undefined : parseInline(raw.slice(k + 1).trim());
+        const r = splitAtRelation(texPart);
+        if (!r) throw new Error(`등식 줄에 관계 기호(=, <, >, \\le, \\ge, \\ne)가 없음: ${raw}`);
+        if (rows.length > 0 && r.lhs) throw new Error(`등식 줄의 둘째 줄부터는 관계 기호로 시작해야 함: ${raw}`);
+        rows.push({ lhs: r.lhs, rhs: r.rhs, ...(why ? { why } : {}) });
+      }
+      if (!rows.length) throw new Error('빈 등식 줄(::chain)');
+      out.push({ t: 'chain', rows });
+      continue;
+    }
     if (tl.startsWith('### ')) {
       out.push({ t: 'h', c: parseInline(tl.slice(4)) });
       i++;
@@ -102,6 +123,7 @@ export function parseBlocks(src: string): Block[] {
     const bullet = /^(- |\d+\. )/;
     if (bullet.test(tl)) {
       const ordered = !tl.startsWith('- ');
+      const start = ordered ? parseInt(tl, 10) : 1; // "4. …"로 시작하는 번호 목록은 4부터 센다
       const same = (s: string) => (ordered ? /^\d+\. /.test(s) : s.startsWith('- '));
       const items: Inline[][] = [];
       while (i < lines.length && same(lines[i].trim())) {
@@ -111,7 +133,7 @@ export function parseBlocks(src: string): Block[] {
         while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !bullet.test(lines[i].trim())) text += ' ' + lines[i++].trim();
         items.push(parseInline(text));
       }
-      out.push({ t: 'ul', items, ordered });
+      out.push({ t: 'ul', items, ordered, ...(start !== 1 ? { start } : {}) });
       continue;
     }
     if (tl.startsWith('>')) {
@@ -237,6 +259,19 @@ export function expandSyncMacros(tex: string): string {
   return tex.replace(/\\h\{([\w.-]+)\}\{/g, (_, k) => `\\htmlData{sync=${k}}{`);
 }
 
+/** TeX 한 줄을 중괄호 밖의 첫 관계 기호 앞뒤로 가른다. 관계 기호는 오른쪽에 붙는다: "a = b" → ["a", "= b"]. */
+export function splitAtRelation(tex: string): { lhs: string; rhs: string } | null {
+  let depth = 0;
+  for (let i = 0; i < tex.length; i++) {
+    const c = tex[i];
+    if (c === '{') depth++;
+    else if (c === '}') depth--;
+    else if (depth === 0 && (c === '=' || c === '<' || c === '>' || /^\\(le|ge|ne|leq|geq|neq)(?![a-zA-Z])/.test(tex.slice(i))))
+      return { lhs: tex.slice(0, i).trim(), rhs: tex.slice(i).trim() };
+  }
+  return null;
+}
+
 /** 수식 안의 동기화 키를 모두 뽑는다(검증기용). */
 export function syncKeysInTex(tex: string): string[] {
   return [...tex.matchAll(/\\h\{([\w.-]+)\}/g)].map((m) => m[1]);
@@ -252,6 +287,11 @@ export function* walkInlines(blocks: Block[]): Generator<Inline> {
       yield* walkInlines(b.blocks);
     }
     else if (b.t === 'math') yield { t: 'math', tex: b.tex };
+    else if (b.t === 'chain')
+      for (const r of b.rows) {
+        yield { t: 'math', tex: `${r.lhs} ${r.rhs}` };
+        if (r.why) yield* walkInlineList(r.why);
+      }
   }
 }
 

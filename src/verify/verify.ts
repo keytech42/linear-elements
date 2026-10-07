@@ -7,7 +7,7 @@
 //   이 한계는 검증 보고서 화면에도 그대로 적어 둔다.
 import type { Book, NodeDef, TermDecl, Predict } from '../content/schema';
 import { eig2 } from '../la/eig';
-import { REVIEWS, reviewState } from '../content/review';
+import { REVIEWS, reviewState, stampLabel } from '../content/review';
 import { parseBlocks, parseInline, walkInlines, walkInlineList, walkBlocks, type Block, type Inline } from '../content/markup';
 
 export type Level = 'error' | 'warn' | 'info';
@@ -280,7 +280,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
       if (w.answeredBy && order.has(w.answeredBy) && !answersIn.get(w.answeredBy)?.has(n.id)) push('P029', n.id, `"${w.q}" → ${w.answeredBy}에 ::answers ${n.id} 표지가 없음`);
 
   // 4. 검토 기록
-  for (const n of nodes) if (reviewState(n) === 'changed') push('P026', n.id, `${REVIEWS[n.id].on}에 검토한 뒤 바뀜. 다시 검토했으면 npm run review -- mark ${n.id}`);
+  for (const n of nodes) if (reviewState(n) === 'changed') push('P026', n.id, `${stampLabel(REVIEWS[n.id])}에 검토한 뒤 바뀜. 바뀐 부분: npm run review -- diff ${n.id} · 다시 검토했으면 npm run review -- mark ${n.id}`);
   for (const id of Object.keys(REVIEWS)) if (!order.has(id)) push('P027', id, `reviews.json의 '${id}'`);
 
   // 5. 죽은 정의, 고아
@@ -373,6 +373,9 @@ export function autoLinkFirstMentions(
       if (b.t === 'p') inl(b.c, true);
       else if (b.t === 'h') inl(b.c, false);
       else if (b.t === 'ul') for (const it of b.items) inl(it, true);
+      else if (b.t === 'chain') {
+        for (const r of b.rows) if (r.why) inl(r.why, true);
+      }
       else if (b.t === 'note') {
         if (b.title) inl(b.title, false);
         blk(b.blocks);
@@ -415,6 +418,9 @@ function plainTextRuns(blocks: Block[], pn: ParsedNode): string[] {
     if (b.t === 'p' || b.t === 'h') visit(b.c);
     else if (b.t === 'note' && b.title) visit(b.title);
     else if (b.t === 'ul') b.items.forEach(visit);
+    else if (b.t === 'chain') {
+      for (const r of b.rows) if (r.why) visit(r.why);
+    }
   }
   for (const c of pn.checks) {
     visit(c.q);

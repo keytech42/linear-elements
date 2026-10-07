@@ -1,4 +1,5 @@
 import type { Book } from '../schema';
+import intro_reading from './intro.reading';
 import ax_arith from './ax.arith';
 import prop_arith_first from './prop.arith-first';
 import prop_neg_times_neg from './prop.neg-times-neg';
@@ -19,6 +20,7 @@ const book: Book = {
   title: '출발점',
   subtitle: '산수에서 평면으로',
   nodes: [
+    intro_reading,
     ax_arith,
     prop_arith_first,
     prop_neg_times_neg,

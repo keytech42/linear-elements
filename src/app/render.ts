@@ -54,6 +54,7 @@ function renderBlock(b: Block, ctx: RenderCtx): Node {
     }
     case 'ul': {
       const ul = document.createElement(b.ordered ? 'ol' : 'ul');
+      if (b.start) (ul as HTMLOListElement).start = b.start;
       for (const it of b.items) {
         const li = document.createElement('li');
         li.appendChild(renderInlines(it));
@@ -82,6 +83,29 @@ function renderBlock(b: Block, ctx: RenderCtx): Node {
       }
       a.appendChild(renderBlocks(b.blocks, ctx));
       return a;
+    }
+    case 'chain': {
+      // 등식 줄: 왼쪽 변 | 관계 기호와 오른쪽 변 | ∵ 근거. 관계 기호가 한 세로줄에 서서, 무엇이 무엇과 같은지가 한눈에 보인다.
+      const g = document.createElement('div');
+      g.className = 'chain';
+      for (const r of b.rows) {
+        const l = document.createElement('div');
+        l.className = 'chain-lhs';
+        l.innerHTML = r.lhs ? tex(`\\displaystyle ${r.lhs}`) : '';
+        const m = document.createElement('div');
+        m.className = 'chain-rhs';
+        m.innerHTML = tex(`\\displaystyle {}${r.rhs}`);
+        const w = document.createElement('div');
+        w.className = 'chain-why';
+        if (r.why) {
+          const mark = document.createElement('span');
+          mark.className = 'chain-because';
+          mark.textContent = '∵ ';
+          w.append(mark, renderInlines(r.why));
+        }
+        g.append(l, m, w);
+      }
+      return g;
     }
     case 'answers': {
       // 앞 노드가 "아직 여기서 답하지 않은 질문"으로 미뤄 둔 질문에, 바로 아래에서 답한다는 표지.

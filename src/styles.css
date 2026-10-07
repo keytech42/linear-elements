@@ -16,6 +16,7 @@
   --k-def: #7cc4ff;
   --k-prop: #f5c542;
   --k-exp: #5fd38d;
+  --k-intro: #b9c1d3;
   --up: #7cc4ff;
   --down: #ff9f6b;
   --radius: 10px;
@@ -74,6 +75,7 @@ body.draft { --banner-h: 26px; }
 .kind-def { color: var(--k-def); background: rgba(124,196,255,0.12); }
 .kind-prop { color: var(--k-prop); background: rgba(245,197,66,0.12); }
 .kind-exp { color: var(--k-exp); background: rgba(95,211,141,0.12); }
+.kind-intro { color: var(--k-intro); background: rgba(185,193,211,0.12); }
 
 /* ── 노드 ───────────────────────────────────── */
 .node { max-width: 980px; margin: 0 auto; }
@@ -89,6 +91,16 @@ body.draft { --banner-h: 26px; }
 .node-body h3, .proof h3 { font-size: 19px; margin: 34px 0 6px; letter-spacing: -0.01em; }
 .node-body p, .node-body ul { max-width: 760px; }
 .math-block { overflow-x: auto; overflow-y: hidden; padding: 6px 0; margin: 10px 0; }
+/* 등식 줄(::chain): 왼쪽 변 | 관계 기호부터 | ∵ 근거. 좁은 화면에서는 근거가 그 줄 아래로 내려간다. */
+.chain { display: grid; grid-template-columns: max-content max-content minmax(12em, 1fr); column-gap: 0.4em; row-gap: 4px; align-items: baseline; margin: 12px 0 12px 1.2em; overflow-x: auto; }
+.chain-lhs { text-align: right; }
+.chain-why { color: var(--ink2); font-size: 14px; padding-left: 1.6em; }
+.chain-because { color: var(--dim); }
+@media (max-width: 700px) {
+  .chain { grid-template-columns: max-content 1fr; margin-left: 0; }
+  .chain-why { grid-column: 2; padding-left: 0.6em; margin-bottom: 4px; }
+  .chain-why:empty { display: none; }
+}
 .math-inline .katex { font-size: 1.04em; }
 .stub-banner { border: 1px dashed #3a4760; border-radius: var(--radius); padding: 10px 14px; color: var(--ink2); margin-bottom: 14px; font-size: 14px; }
 
@@ -271,6 +283,7 @@ a.shortcut { font-size: 13px; color: #9cc8ff; white-space: nowrap; margin-left: 
 .map-node.kind-def .map-kind { fill: var(--k-def); }
 .map-node.kind-prop .map-kind { fill: var(--k-prop); }
 .map-node.kind-exp .map-kind { fill: var(--k-exp); }
+.map-node.kind-intro .map-kind { fill: var(--k-intro); }
 .map-title { fill: var(--ink); font-size: 12.5px; }
 .empty { color: var(--dim); padding: 40px; }
 

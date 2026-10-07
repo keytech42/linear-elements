@@ -1,6 +1,10 @@
 // 마크업 파서 고정 테스트. 검증기는 이 파서를 믿으므로, 파서가 틀리면 검증기도 틀린다.
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { parseBlocks, parseInline, syncKeysInTex, expandSyncMacros } from './markup';
+
+// 이 파일의 검증기 테스트는 가짜 노드로 돈다. 실제 검토 기록(reviews.json)을 읽으면, 저자가 노드를 검토할 때마다
+// 가짜 책에 없는 id가 P027로 잡혀 테스트가 깨진다. 그래서 검토 기록을 빈 것으로 바꿔 끼운다.
+vi.mock('./reviews.json', () => ({ default: {} }));
 import { verify } from '../verify/verify';
 import type { Book } from './schema';
 
@@ -43,9 +47,29 @@ $$a = b$$
     const b = parseBlocks('$$\na\n+ b\n$$');
     expect(b).toEqual([{ t: 'math', tex: 'a\n+ b' }]);
   });
+  it('등식 줄: 첫 관계 기호에서 가르고, ∵ 뒤는 근거', () => {
+    const b = parseBlocks('::chain\n0a = (0 + 0)a ∵ 0의 공리\n= 0a + 0a ∵ [명제 1](n:x)\n\\le 3\n\n뒤');
+    expect(b[0]).toMatchObject({
+      t: 'chain',
+      rows: [
+        { lhs: '0a', rhs: '= (0 + 0)a', why: [{ t: 'text', v: '0의 공리' }] },
+        { lhs: '', rhs: '= 0a + 0a', why: [{ t: 'link', to: 'x' }] },
+        { lhs: '', rhs: '\\le 3' },
+      ],
+    });
+    expect(b[1]).toMatchObject({ t: 'p' });
+    // 중괄호 안의 = 는 가르지 않는다
+    expect(parseBlocks('::chain\n\\tfrac{a=b}{2} = c')[0]).toMatchObject({ rows: [{ lhs: '\\tfrac{a=b}{2}', rhs: '= c' }] });
+    // 둘째 줄부터 왼쪽 변이 있으면 오류
+    expect(() => parseBlocks('::chain\na = b\nc = d')).toThrow();
+  });
 });
 
 describe('번호 목록', () => {
+  it('4. 로 시작하면 4부터 센다', () => {
+    expect(parseBlocks('4. 넷\n5. 다섯')[0]).toMatchObject({ t: 'ul', ordered: true, start: 4 });
+    expect(parseBlocks('1. 하나')[0]).not.toHaveProperty('start');
+  });
   it('1. 2. 는 ol, 문단과 섞이지 않는다', () => {
     const b = parseBlocks('앞 문단\n1. 하나\n2. 둘\n\n뒤');
     expect(b.map((x) => x.t)).toEqual(['p', 'ul', 'p']);

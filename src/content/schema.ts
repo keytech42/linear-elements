@@ -13,14 +13,16 @@ export type ColorKey = keyof typeof C;
  *  prop 명제: 앞의 공리, 정의, 명제만으로 증명되는 사실.
  * (표기를 고르는 일은 "규약"이라 부르고 노드 종류로 두지 않는다. 바꿔도 수학이 같기 때문이다.)
  *  exp  탐구: 손으로 만지며 다음 정의/명제를 예감하게 하는 장면.
+ *  intro 들어가며: 수학 내용이 아니라 이 교재를 읽고 공부하는 법. 위 넷 가운데 어디에도 속하지 않는다(0장 맨 앞에 하나).
  */
-export type Kind = 'ax' | 'def' | 'prop' | 'exp';
+export type Kind = 'ax' | 'def' | 'prop' | 'exp' | 'intro';
 
 export const KIND_LABEL: Record<Kind, string> = {
   ax: '공리',
   def: '정의',
   prop: '명제',
   exp: '탐구',
+  intro: '들어가며',
 };
 
 /** 노드 종류의 영어 표준 용어. 노드 머리의 배지에만 위첨자로 붙인다. */
@@ -29,6 +31,7 @@ export const KIND_EN: Record<Kind, string> = {
   def: 'definition',
   prop: 'proposition',
   exp: 'exploration',
+  intro: 'introduction',
 };
 
 export interface TermDecl {
