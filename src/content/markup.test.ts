@@ -164,6 +164,9 @@ describe('검증기 규칙', () => {
     // 표시 없는 번호. 횟수를 말하는 "12번 곱한"은 잡지 않는다
     expect(rules(mk([ax, { ...p1, body: '- [](label:m1) 가\n- [](label:m2) 나\n\n공리 2와 0의 공리로, 1번을 쓴다.' }])).filter((x) => x === 'P031').length).toBe(3);
     expect(rules(mk([{ id: 'e.r', kind: 'exp', title: '', status: 'written', body: '30°씩 12번 곱한다.' }]))).not.toContain('P031');
+    // 목록 번호를 잇는 "1 ⇔ 2"는 잡고, 이름을 드러낸 "(가) ⇔ (나)"와 수식 속 화살표는 잡지 않는다
+    expect(rules(mk([{ id: 'e.s', kind: 'exp', title: '', status: 'written', body: '**1 ⇔ 2.** 증명' }]))).toContain('P031');
+    expect(rules(mk([{ id: 'e.t', kind: 'exp', title: '', status: 'written', body: '**(가) ⇔ (나).** $x \\Rightarrow 2$' }]))).not.toContain('P031');
   });
   it('증명 표지와 키가 달린 왜? 칩', () => {
     expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });

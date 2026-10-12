@@ -101,7 +101,7 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
   P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 번호를 손으로 적음, 번호 이름표를 공리·명제 노드 밖에 둠)' },
   P032: { level: 'error', text: '명제와 그 증명의 짝이 맞지 않음(증명이 있는 명제 노드에 명제 이름표가 없음, 명제가 여럿인데 ::proves가 빠짐, 없는 명제를 가리키는 ::proves)' },
-  P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "규칙 n", "n번", "0의 공리"처럼 적음([](ref:…)로 적을 것)' },
+  P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "규칙 n", "n번", "0의 공리", "1 ⇔ 2"처럼 적음([](ref:…)로 적거나, 항목 앞에 이름을 드러내 적을 것)' },
   P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
 };
 
@@ -590,11 +590,11 @@ function fixJosaAfterNames(blocks: Block[], pn: ParsedNode) {
   }
 }
 
-/** 참조 표시 없이 적은 "공리 5", "명제 2", "증명 1", "0의 공리" (P031). 이름표와 참조 안의 글은 보지 않는다. */
+/** 참조 표시 없이 적은 "공리 5", "명제 2", "증명 1", "0의 공리", 목록 번호를 잇는 "1 ⇔ 2" (P031). 이름표와 참조 안의 글은 보지 않는다. */
 function unmarkedNumbers(blocks: Block[], pn: ParsedNode): string[] {
   const found: string[] = [];
   // "n번"은 목록의 n째 항목을 가리킬 때만 잡는다("2번은", "1번(", "(1번)", "1번 식"). "12번 곱한"처럼 횟수를 말할 때는 잡지 않는다.
-  const re = /(공리|명제|증명|규칙) ?\d+|[01]의 공리|\d+번(?=[은는이가을를의에과와(),.~]|\s*식|$)/g;
+  const re = /(공리|명제|증명|규칙) ?\d+|[01]의 공리|\d+번(?=[은는이가을를의에과와(),.~]|\s*식|$)|(?<!\d|\d\.)\d ?[⇔⇒] ?\d(?!\d|\.\d)/g;
   const visit = (list: Inline[]) => {
     for (const x of list) {
       if (x.t === 'ref' || x.t === 'label') continue;

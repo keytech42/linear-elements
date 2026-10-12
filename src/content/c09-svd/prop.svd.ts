@@ -62,9 +62,9 @@ $$A = \h{s3}{U}\,\h{s2}{\Sigma}\,\h{s1}{V^{\mathsf{T}}}$$
 
 ::predict p-vt
 
-1. $V^{\mathsf{T}}$: **회전(또는 반사).** $V^{\mathsf{T}}\mathbf{v}_1 = \mathbf{e}_1$, $V^{\mathsf{T}}\mathbf{v}_2 = \mathbf{e}_2$다. $V^{\mathsf{T}}$의 행이 $\mathbf{v}_1, \mathbf{v}_2$이므로 [행의 관점](why:prop.row-picture)으로 $V^{\mathsf{T}}\mathbf{v}_1 = (\mathbf{v}_1\cdot\mathbf{v}_1, \mathbf{v}_2\cdot\mathbf{v}_1) = (1, 0)$이기 때문이다. 특별한 두 방향을 좌표축 위에 올려놓는 단계다.
-2. $\Sigma$: **축 방향으로 따로따로 늘이기.** 가로축을 $\sigma_1$배, 세로축을 $\sigma_2$배 한다.
-3. $U$: **회전(또는 반사).** $\mathbf{e}_1$을 $\mathbf{u}_1$로, $\mathbf{e}_2$를 $\mathbf{u}_2$로 보낸다.
+- **1단계.** $V^{\mathsf{T}}$: **회전(또는 반사).** $V^{\mathsf{T}}\mathbf{v}_1 = \mathbf{e}_1$, $V^{\mathsf{T}}\mathbf{v}_2 = \mathbf{e}_2$다. $V^{\mathsf{T}}$의 행이 $\mathbf{v}_1, \mathbf{v}_2$이므로 [행의 관점](why:prop.row-picture)으로 $V^{\mathsf{T}}\mathbf{v}_1 = (\mathbf{v}_1\cdot\mathbf{v}_1, \mathbf{v}_2\cdot\mathbf{v}_1) = (1, 0)$이기 때문이다. 특별한 두 방향을 좌표축 위에 올려놓는 단계다.
+- **2단계.** $\Sigma$: **축 방향으로 따로따로 늘이기.** 가로축을 $\sigma_1$배, 세로축을 $\sigma_2$배 한다.
+- **3단계.** $U$: **회전(또는 반사).** $\mathbf{e}_1$을 $\mathbf{u}_1$로, $\mathbf{e}_2$를 $\mathbf{u}_2$로 보낸다.
 
 아래 장면에서 단계를 하나씩 실행해 보라. 노란 F가 회전인지 반사인지를 구별해 준다.
 

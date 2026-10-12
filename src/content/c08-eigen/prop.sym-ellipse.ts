@@ -56,9 +56,9 @@ const node: NodeDef = {
 그렇다면 대칭이 아닌 행렬에서 타원의 축은 어디서 오는가? 축을 만드는 입력 방향은 서로 수직인가? 이것이 9장의 첫 질문이다.`,
   proof: String.raw`$S\mathbf{x} = Q(\Lambda(Q^{\mathsf{T}}\mathbf{x}))$를 오른쪽부터 따라간다.
 
-1. $Q^{\mathsf{T}}$는 직교 행렬이므로 [길이를 바꾸지 않는다](why:prop.orthogonal-preserves). 그래서 단위원 위의 점을 단위원 위의 점으로 보내고, 단위원 전체를 단위원 전체로 보낸다(되돌리는 $Q$도 단위원을 단위원으로 보내기 때문이다).
-2. $\Lambda$는 가로 방향을 $\lambda_1$배, 세로 방향을 $\lambda_2$배 한다. 그래서 단위원을 축이 $\mathbf{e}_1, \mathbf{e}_2$이고 반지름이 $|\lambda_1|, |\lambda_2|$인 타원으로 보낸다. 배율이 음수이면 그 방향으로 뒤집히지만, 원은 원점에 대해 대칭이므로 상의 모양은 반지름 $|\lambda|$짜리와 같다. 이것이 [타원의 정의](t:t.ellipse) 그대로다.
-3. $Q$는 $\mathbf{e}_1$을 $\mathbf{q}_1$로, $\mathbf{e}_2$를 $\mathbf{q}_2$로 보내면서 길이와 직각을 지킨다. 그래서 2의 타원을 축이 $\mathbf{q}_1, \mathbf{q}_2$인 같은 크기의 타원으로 옮긴다.`,
+- **1단계.** $Q^{\mathsf{T}}$는 직교 행렬이므로 [길이를 바꾸지 않는다](why:prop.orthogonal-preserves). 그래서 단위원 위의 점을 단위원 위의 점으로 보내고, 단위원 전체를 단위원 전체로 보낸다(되돌리는 $Q$도 단위원을 단위원으로 보내기 때문이다).
+- **2단계.** $\Lambda$는 가로 방향을 $\lambda_1$배, 세로 방향을 $\lambda_2$배 한다. 그래서 단위원을 축이 $\mathbf{e}_1, \mathbf{e}_2$이고 반지름이 $|\lambda_1|, |\lambda_2|$인 타원으로 보낸다. 배율이 음수이면 그 방향으로 뒤집히지만, 원은 원점에 대해 대칭이므로 상의 모양은 반지름 $|\lambda|$짜리와 같다. 이것이 [타원의 정의](t:t.ellipse) 그대로다.
+- **3단계.** $Q$는 $\mathbf{e}_1$을 $\mathbf{q}_1$로, $\mathbf{e}_2$를 $\mathbf{q}_2$로 보내면서 길이와 직각을 지킨다. 그래서 2단계의 타원을 축이 $\mathbf{q}_1, \mathbf{q}_2$인 같은 크기의 타원으로 옮긴다.`,
   checks: [
     {
       q: String.raw`$S = \begin{bmatrix} 3 & 0 \\ 0 & -1 \end{bmatrix}$은 단위원을 어떤 타원으로 보내는가?`,
