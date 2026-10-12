@@ -156,6 +156,26 @@ describe('검증기 규칙', () => {
     // 표시 없는 번호
     expect(rules(mk([ax, { ...ok, body: '공리 2와 0의 공리로.' }])).filter((r) => r === 'P031').length).toBe(2);
   });
+  it('증명 표지와 키가 달린 왜? 칩', () => {
+    expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });
+    expect(parseInline('[왜?](why:p.y#m1)')[0]).toMatchObject({ t: 'why', to: 'p.y', key: 'm1' });
+    expect(parseInline('[왜?](why:p.y)')[0]).not.toHaveProperty('key');
+  });
+  it('P032 명제와 증명의 짝, 뒤에서 쓰이는 곳', () => {
+    const one = { id: 'p.a', kind: 'prop' as const, title: '', status: 'written' as const, body: '[명제](label:main). 가', proof: '증명' };
+    const two = { id: 'p.b', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [명제 1](label:x) 가\n- [명제 2](label:y) 나', proof: '::proves x\n\n가의 증명\n\n::proves y\n\n나의 증명' };
+    const user = { id: 'e.c', kind: 'exp' as const, title: '', status: 'written' as const, body: '[왜?](why:p.a) [왜?](why:p.b#y)' };
+    const r = verify(mk([one, two, user]), new Set(), new Map());
+    expect(r.issues.filter((i) => i.rule === 'P032')).toEqual([]);
+    // 명제가 하나면 노드를 가리키는 왜? 칩도 그 명제가 쓰인 곳이다. 여럿이면 키가 달린 칩만 센다.
+    expect(r.uses.get('p.a#main')).toEqual(['e.c']);
+    expect(r.uses.get('p.b#y')).toEqual(['e.c']);
+    expect(r.uses.get('p.b#x')).toBeUndefined();
+    // 이름표 없는 명제, 명제가 여럿인데 표지가 빠짐, 없는 명제를 가리키는 표지
+    expect(rules(mk([{ ...one, body: '**명제.** 가' }]))).toContain('P032');
+    expect(rules(mk([{ ...two, proof: '::proves x\n\n가의 증명' }]))).toContain('P032');
+    expect(rules(mk([{ ...one, proof: '::proves nope\n\n증명' }]))).toContain('P032');
+  });
   it('fwd: 예고는 허용', () => {
     const r = rules(mk([
       { id: 'n1', kind: 'def', title: '', status: 'written', body: '[가나다](fwd:t.a)' },

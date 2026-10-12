@@ -50,7 +50,7 @@ const node: NodeDef = {
 
 새 좌표로 적은 행렬은 대각선에만 고윳값이 있고 나머지는 0이다. 이런 행렬을 [대각 행렬](def:t.diagonal)이라 하고, 이렇게 다시 적는 일을 [대각화](def:t.diagonalize)라 한다.
 
-**명제.** 2×2 행렬 $A$가 서로 다른 직선 위의 고유벡터 $\mathbf{v}_1, \mathbf{v}_2$(고윳값 $\lambda_1, \lambda_2$)를 가진다고 하자. $P$를 두 고유벡터를 열로 세운 행렬, $D$를 고윳값을 대각에 놓은 행렬이라 하면
+[명제](label:main). 2×2 행렬 $A$가 서로 다른 직선 위의 고유벡터 $\mathbf{v}_1, \mathbf{v}_2$(고윳값 $\lambda_1, \lambda_2$)를 가진다고 하자. $P$를 두 고유벡터를 열로 세운 행렬, $D$를 고윳값을 대각에 놓은 행렬이라 하면
 
 $$P = \begin{bmatrix} | & | \\ \mathbf{v}_1 & \mathbf{v}_2 \\ | & | \end{bmatrix}, \quad D = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{bmatrix}, \qquad A = PDP^{-1}$$
 

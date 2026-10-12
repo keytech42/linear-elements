@@ -24,7 +24,7 @@ const node: NodeDef = {
   ],
   body: String.raw`넓이는 음수일 수 없다. 그런데 [행렬식의 공식](n:prop.det-formula)은 음수를 내기도 한다. 그 음수는 정확히 무엇을 뜻할까?
 
-**명제.** $\det A < 0$인 것은 $A$가 [향](t:t.orientation)을 뒤집는 것과 같다. 기하적으로 2×2 행렬식은
+[명제](label:main). $\det A < 0$인 것은 $A$가 [향](t:t.orientation)을 뒤집는 것과 같다. 기하적으로 2×2 행렬식은
 
 $$\det A = (R_{90°}\,\mathbf{a}_1)\cdot\mathbf{a}_2$$
 

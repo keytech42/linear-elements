@@ -30,7 +30,7 @@ const node: NodeDef = {
 
 ::predict p-mid
 
-**명제.** [선형 변환](t:t.linear-map)은
+[명제](label:main). [선형 변환](t:t.linear-map)은
 1. 원점을 원점으로 보낸다.
 2. 직선을 직선으로(또는 한 점으로) 보낸다.
 3. 평행한 직선들을 평행한 직선들로 보낸다.

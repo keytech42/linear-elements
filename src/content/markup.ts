@@ -5,6 +5,7 @@
 //   ::scene 장면id {json}         살아 있는 그림
 //   ::predict 예측id              예측 관문 (노드의 predicts 에 정의, 맨 위 단계에만)
 //   ::answers 노드id              앞 노드가 openWhys로 미뤄 둔 질문에 여기서 답한다는 표지 (P029)
+//   ::proves 키                   증명 안에서: 여기서부터 이 노드의 이름표 [명제 n](label:키)의 증명이다 (P032)
 //   ::chain                       등식 줄. 다음 줄부터 빈 줄까지 한 줄에 한 단계: "TeX ∵ 근거(인라인 문법)"
 //     0a = (0 + 0)a ∵ 0의 공리      첫 줄은 왼쪽 변까지 적고, 다음 줄은 "= …"처럼 관계 기호부터 적는다.
 //     = 0a + 0a ∵ 명제 1           근거는 오른쪽 칸에 "∵ …"로 그려진다. 근거가 없는 줄은 ∵를 쓰지 않는다.
@@ -21,8 +22,8 @@
 //   [표면형](def:용어id)  이 노드가 그 용어를 "정의하는" 자리
 //   [표면형](t:용어id)    이미 정의된 용어를 쓰는 자리 (P001)
 //   [표면형](fwd:용어id)  아직 정의되지 않은 용어를 "예고"하는 자리 (뒤쪽만 허용)
-//   [질문?](why:노드id)   왜? 칩. 답이 있는 앞쪽 노드를 가리킨다 (P003)
-//   [글](n:노드id)        노드 링크 (앞쪽만 허용)
+//   [질문?](why:노드id)   왜? 칩. 답이 있는 앞쪽 노드를 가리킨다 (P003). why:노드id#키 는 그 노드의 이름표 하나를 가리킨다
+//   [글](n:노드id)        노드 링크 (앞쪽만 허용). n:노드id#키 는 그 노드의 이름표 하나로 가는 링크
 //   [글](sync:키)         동기화 고리가 걸린 글 조각
 //   [공리 5](label:키)    이름표 선언: 이 자리의 공리·명제에 이름을 붙인다(굵게, 앵커). 키는 노드 안에서 하나뿐 (P030)
 //   [공리 5](ref:키)      이름표 참조: 같은 노드는 ref:키, 앞 노드는 ref:노드id#키. 글에 이름표 이름이 들어 있어야 한다.
@@ -34,8 +35,8 @@ export type Inline =
   | { t: 'math'; tex: string }
   | { t: 'code'; v: string }
   | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
-  | { t: 'why'; to: string; q: string }
-  | { t: 'link'; to: string; c: Inline[] }
+  | { t: 'why'; to: string; key?: string; q: string }
+  | { t: 'link'; to: string; key?: string; c: Inline[] }
   | { t: 'sync'; key: string; c: Inline[] }
   | { t: 'label'; key: string; c: Inline[] }
   /** node는 파서가 비워 두면(같은 노드) 검증기가 채운다 */
@@ -51,6 +52,7 @@ export type Block =
   | { t: 'scene'; id: string; params: Record<string, unknown> }
   | { t: 'predict'; id: string }
   | { t: 'answers'; from: string }
+  | { t: 'proves'; key: string }
   | { t: 'chain'; rows: { lhs: string; rhs: string; why?: Inline[] }[] }
   | { t: 'note'; kind: NoteKind; title?: Inline[]; blocks: Block[] };
 
@@ -101,6 +103,13 @@ export function parseBlocks(src: string): Block[] {
       const m = /^::answers\s+([\w.-]+)\s*$/.exec(tl);
       if (!m) throw new Error(`답 표지 문법 오류: ${tl}`);
       out.push({ t: 'answers', from: m[1] });
+      i++;
+      continue;
+    }
+    if (tl.startsWith('::proves')) {
+      const m = /^::proves\s+([\w.-]+)\s*$/.exec(tl);
+      if (!m) throw new Error(`증명 표지 문법 오류: ${tl}`);
+      out.push({ t: 'proves', key: m[1] });
       i++;
       continue;
     }
@@ -218,8 +227,14 @@ export function parseInline(src: string): Inline[] {
           flush();
           const inner = src.slice(i + 1, close);
           const [, kind, id] = m;
-          if (kind === 'why') out.push({ t: 'why', to: id, q: inner });
-          else if (kind === 'n') out.push({ t: 'link', to: id, c: parseInline(inner) });
+          if (kind === 'why') {
+            const k = id.indexOf('#');
+            out.push(k >= 0 ? { t: 'why', to: id.slice(0, k), key: id.slice(k + 1), q: inner } : { t: 'why', to: id, q: inner });
+          }
+          else if (kind === 'n') {
+            const k = id.indexOf('#');
+            out.push(k >= 0 ? { t: 'link', to: id.slice(0, k), key: id.slice(k + 1), c: parseInline(inner) } : { t: 'link', to: id, c: parseInline(inner) });
+          }
           else if (kind === 'sync') out.push({ t: 'sync', key: id, c: parseInline(inner) });
           else if (kind === 'label') out.push({ t: 'label', key: id, c: parseInline(inner) });
           else if (kind === 'ref') {

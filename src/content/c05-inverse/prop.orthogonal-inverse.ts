@@ -40,7 +40,7 @@ const node: NodeDef = {
 
 ::predict p-cost
 
-**명제.** 직교 행렬 $Q$는 가역이고 $Q^{-1} = Q^{\mathsf{T}}$이다. 그러므로 $QQ^{\mathsf{T}} = I$이기도 하고, $Q$의 행들도 정규직교다.
+[명제](label:main). 직교 행렬 $Q$는 가역이고 $Q^{-1} = Q^{\mathsf{T}}$이다. 그러므로 $QQ^{\mathsf{T}} = I$이기도 하고, $Q$의 행들도 정규직교다.
 
 ::scene c5-undo {"A": [[0.8, -0.6], [0.6, 0.8]], "showT": true}
 

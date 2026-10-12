@@ -44,7 +44,7 @@ const node: NodeDef = {
   ],
   body: String.raw`[직교 행렬](t:t.orth-matrix)은 기저의 자들을 모양 그대로 옮긴다. 그렇다면 **모든** 벡터의 길이와 각도도 그대로일까?
 
-**명제.** 직교 행렬 $Q$는 내적을 지킨다: $(Q\mathbf{x})\cdot(Q\mathbf{y}) = \mathbf{x}\cdot\mathbf{y}$. 그러므로 길이도($\|Q\mathbf{x}\| = \|\mathbf{x}\|$), 각도도 지킨다.
+[명제](label:main). 직교 행렬 $Q$는 내적을 지킨다: $(Q\mathbf{x})\cdot(Q\mathbf{y}) = \mathbf{x}\cdot\mathbf{y}$. 그러므로 길이도($\|Q\mathbf{x}\| = \|\mathbf{x}\|$), 각도도 지킨다.
 
 ::scene c3-orthogonal {"reflect": true}
 

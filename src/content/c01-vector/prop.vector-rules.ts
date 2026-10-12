@@ -46,7 +46,7 @@ const node: NodeDef = {
 
 결론부터 적는다. 아래 여덟 규칙이 모두 성립하고, 그 증명은 모두 같은 한 가지 요령으로 된다. **성분 하나하나에서 [수의 계산 규칙](why:ax.arith)을 쓴다.**
 
-**명제.** 모든 벡터 $\mathbf{u}$, $\mathbf{v}$, $\mathbf{w}$와 모든 스칼라 $c$, $c_1$, $c_2$에 대해 다음이 성립한다.
+[명제](label:main). 모든 벡터 $\mathbf{u}$, $\mathbf{v}$, $\mathbf{w}$와 모든 스칼라 $c$, $c_1$, $c_2$에 대해 다음이 성립한다.
 
 1. $\mathbf{u} + \mathbf{w} = \mathbf{w} + \mathbf{u}$ (덧셈의 순서를 바꿔도 된다)
 2. $(\mathbf{u} + \mathbf{v}) + \mathbf{w} = \mathbf{u} + (\mathbf{v} + \mathbf{w})$ (덧셈을 묶는 방법을 바꿔도 된다)
@@ -90,7 +90,7 @@ const node: NodeDef = {
 - **규칙 1** (덧셈의 [교환법칙](t:t.commutative)): 첫째 성분 $u_1 + w_1 = w_1 + u_1$. 둘째 성분도 같다.
 - **규칙 2** (덧셈의 [결합법칙](t:t.associative)): 첫째 성분 $(u_1 + v_1) + w_1 = u_1 + (v_1 + w_1)$.
 - **규칙 3** (0을 더해도 그대로): $v_1 + 0 = v_1$.
-- **규칙 4**: $-\mathbf{v} = (-1)\mathbf{v}$의 첫째 성분은 [$(-1)v_1 = -v_1$](why:prop.neg-times-neg)이므로 $v_1 + (-v_1) = 0$. 그러므로 $\mathbf{v} + (-\mathbf{v})$의 성분은 모두 0이고 영벡터다.
+- **규칙 4**: $-\mathbf{v} = (-1)\mathbf{v}$의 첫째 성분은 [$(-1)v_1 = -v_1$](why:prop.neg-times-neg#neg-one)이므로 $v_1 + (-v_1) = 0$. 그러므로 $\mathbf{v} + (-\mathbf{v})$의 성분은 모두 0이고 영벡터다.
 - **규칙 5** (곱셈의 결합법칙): $c_1(c_2v_1) = (c_1c_2)v_1$.
 - **규칙 6** (1을 곱해도 그대로): $1\cdot v_1 = v_1$.
 - **규칙 7** ([분배법칙](t:t.distributive)): $c(\mathbf{u} + \mathbf{w})$의 첫째 성분은 $c(u_1 + w_1) = cu_1 + cw_1$이고, 이것은 $c\mathbf{u} + c\mathbf{w}$의 첫째 성분이다.

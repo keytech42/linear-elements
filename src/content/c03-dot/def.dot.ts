@@ -16,7 +16,7 @@ const node: NodeDef = {
       kind: 'choice',
       q: String.raw`$\|\mathbf{u} + \mathbf{w}\|^2$을 성분으로 전개하면, $\|\mathbf{u}\|^2 + \|\mathbf{w}\|^2$에 무엇이 더 붙을까? (2차원)`,
       hints: [
-        String.raw`$\mathbf{u} + \mathbf{w}$의 첫째 성분은 $u_1 + w_1$이다. $(u_1 + w_1)^2$을 [전개](n:prop.arith-first)하면?`,
+        String.raw`$\mathbf{u} + \mathbf{w}$의 첫째 성분은 $u_1 + w_1$이다. $(u_1 + w_1)^2$을 [전개](n:prop.arith-first#square)하면?`,
         String.raw`$(u_1 + w_1)^2 + (u_2 + w_2)^2$을 전개해 $u$끼리, $w$끼리, 섞인 것끼리 모아 보라.`,
       ],
       choices: [String.raw`$2(u_1w_1 + u_2w_2)$`, '아무것도 붙지 않는다 (언제나 피타고라스)', String.raw`$2\|\mathbf{u}\|\,\|\mathbf{w}\|$`, String.raw`$u_1w_2 + u_2w_1$`],

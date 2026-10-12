@@ -20,7 +20,7 @@ const node: NodeDef = {
       kind: 'point',
       q: String.raw`$\mathbf{v} = (2, -1)$이다. $-1.5\,\mathbf{v}$는 원점에서 출발해 어디에서 끝날까? 분홍 점을 끌어 놓아라.`,
       hints: [
-        String.raw`정의대로 성분마다 $-1.5$를 곱한다. 둘째 성분은 음수 × 음수다. [그 결과의 부호는 앞에서 정했다](n:prop.neg-times-neg).`,
+        String.raw`정의대로 성분마다 $-1.5$를 곱한다. 둘째 성분은 음수 × 음수다. [그 결과의 부호는 앞에서 정했다](n:prop.neg-times-neg#neg-prod).`,
         String.raw`첫째 성분은 $-1.5 \times 2 = -3$이다. 둘째 성분 $-1.5 \times (-1)$을 구하라.`,
       ],
       A: [[-1.5, 0], [0, -1.5]],
@@ -56,7 +56,7 @@ $$\h{cv}{c\mathbf{v}} = c\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \begin{bmatr
 
 ::predict p-neg
 
-답은 $(-3, 1.5)$다. 성분마다 곱하면 $(-1.5 \times 2,\ -1.5 \times (-1))$이고, 둘째 성분은 [음수 × 음수 = 양수](why:prop.neg-times-neg)이므로 $1.5$다. 같은 직선 위에서 화살표가 뒤집혔다. 그렇다면 $c$를 모든 수로 바꾸면 끝점은 어디를 지나갈까?
+답은 $(-3, 1.5)$다. 성분마다 곱하면 $(-1.5 \times 2,\ -1.5 \times (-1))$이고, 둘째 성분은 [음수 × 음수 = 양수](why:prop.neg-times-neg#neg-prod)이므로 $1.5$다. 같은 직선 위에서 화살표가 뒤집혔다. 그렇다면 $c$를 모든 수로 바꾸면 끝점은 어디를 지나갈까?
 
 ::predict p-line
 
@@ -72,7 +72,7 @@ $$\h{cv}{c\mathbf{v}} = c\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \begin{bmatr
 
 ::scene c1-scale {"v": [2, -1], "c": -1.5, "line": false}
 
-어느 경우든 화살표는 처음 화살표가 놓인 직선을 벗어나지 않는다. 이유는 이렇다. 가로 이동과 세로 이동이 **같은 수 $c$로** 곱해지므로, "가로로 한 칸 갈 때 세로로 얼마 가는가"라는 기울기가 바뀌지 않는다. 예를 들어 $(2, -1)$은 가로 2에 세로 −1이고, $(4, -2)$도 $(-3, 1.5)$도 가로 대 세로가 똑같이 $2 : -1$이다. $c$가 음수이면 두 성분의 부호가 함께 바뀌므로 같은 직선 위에서 반대쪽을 가리킨다. 그리고 화살표의 길이는 $c \ge 0$이면 $c$배, $c < 0$이면 $-c$배가 된다. $c \ge 0$이면 [피타고라스 정리](t:t.pythagoras)에 따라 새 길이는 $\sqrt{c^2v_1^2 + c^2v_2^2}$이다. 그런데 $c\sqrt{v_1^2 + v_2^2}$도 0 이상이고 제곱하면 $c^2v_1^2 + c^2v_2^2$이므로, [제곱근은 하나뿐](why:prop.neg-times-neg)이라는 사실에 따라 새 길이는 $c\sqrt{v_1^2 + v_2^2}$, 곧 처음 길이의 $c$배다. $c < 0$이면 $c^2 = (-c)^2$이고 $-c$가 0 이상이므로, 같은 계산에서 $c$ 대신 $-c$를 쓰면 된다.
+어느 경우든 화살표는 처음 화살표가 놓인 직선을 벗어나지 않는다. 이유는 이렇다. 가로 이동과 세로 이동이 **같은 수 $c$로** 곱해지므로, "가로로 한 칸 갈 때 세로로 얼마 가는가"라는 기울기가 바뀌지 않는다. 예를 들어 $(2, -1)$은 가로 2에 세로 −1이고, $(4, -2)$도 $(-3, 1.5)$도 가로 대 세로가 똑같이 $2 : -1$이다. $c$가 음수이면 두 성분의 부호가 함께 바뀌므로 같은 직선 위에서 반대쪽을 가리킨다. 그리고 화살표의 길이는 $c \ge 0$이면 $c$배, $c < 0$이면 $-c$배가 된다. $c \ge 0$이면 [피타고라스 정리](t:t.pythagoras)에 따라 새 길이는 $\sqrt{c^2v_1^2 + c^2v_2^2}$이다. 그런데 $c\sqrt{v_1^2 + v_2^2}$도 0 이상이고 제곱하면 $c^2v_1^2 + c^2v_2^2$이므로, [제곱근은 하나뿐](why:prop.neg-times-neg#sqrt-unique)이라는 사실에 따라 새 길이는 $c\sqrt{v_1^2 + v_2^2}$, 곧 처음 길이의 $c$배다. $c < 0$이면 $c^2 = (-c)^2$이고 $-c$가 0 이상이므로, 같은 계산에서 $c$ 대신 $-c$를 쓰면 된다.
 
 ::scene c1-scale {"v": [2, -1], "c": -3, "trail": true}
 
@@ -88,7 +88,7 @@ $$\h{cv}{c\mathbf{v}} = c\begin{bmatrix} v_1 \\ v_2 \end{bmatrix} = \begin{bmatr
 이 직선은 앞으로 여러 번 나온다. $\mathbf{v} = \mathbf{0}$이면 $c\mathbf{0} = \mathbf{0}$이므로 직선이 아니라 원점 한 점만 남는다. 그래서 정의에서 영벡터를 뺐다.
 
 ### 두 번 뒤집으면 제자리
-$(-1)\big((-1)\mathbf{v}\big)$의 첫째 성분은 $(-1)\cdot\big((-1)\cdot v_1\big) = v_1$이다([음수 × 음수 = 양수](why:prop.neg-times-neg)). 둘째 성분도 같다. 그러므로 두 번 뒤집은 화살표는 처음 화살표와 같다. $(-1)\mathbf{v}$를 줄여서 $-\mathbf{v}$로 쓴다. $-\mathbf{v}$는 $\mathbf{v}$와 크기가 같고 반대쪽을 가리키며, $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$이다.
+$(-1)\big((-1)\mathbf{v}\big)$의 첫째 성분은 $(-1)\cdot\big((-1)\cdot v_1\big) = v_1$이다([음수 × 음수 = 양수](why:prop.neg-times-neg#minus-one-sq)). 둘째 성분도 같다. 그러므로 두 번 뒤집은 화살표는 처음 화살표와 같다. $(-1)\mathbf{v}$를 줄여서 $-\mathbf{v}$로 쓴다. $-\mathbf{v}$는 $\mathbf{v}$와 크기가 같고 반대쪽을 가리키며, $\mathbf{v} + (-\mathbf{v}) = \mathbf{0}$이다.
 
 ### 뺄셈
 $\mathbf{w} - \mathbf{u}$는 $\mathbf{w} + (-\mathbf{u})$로 정한다. 성분으로는 $(w_1 - u_1,\ w_2 - u_2)$다. 그림으로는 **$\mathbf{u}$의 머리에서 $\mathbf{w}$의 머리로 가는 화살표**다. 두 벡터를 원점에서 그렸을 때 $\mathbf{u} + (\mathbf{w} - \mathbf{u}) = \mathbf{w}$이기 때문이다. 예: $\mathbf{u} = (1, 1)$, $\mathbf{w} = (3, 2)$이면 $\mathbf{w} - \mathbf{u} = (2, 1)$이고, 실제로 점 $(1, 1)$에서 점 $(3, 2)$로 가는 이동이다. [두 점에서 벡터를 읽는 법(도착점 − 출발점)](n:def.vector)이 바로 이 뺄셈이었다.`,
@@ -103,7 +103,7 @@ $\mathbf{w} - \mathbf{u}$는 $\mathbf{w} + (-\mathbf{u})$로 정한다. 성분�
       q: String.raw`$\mathbf{v} \ne \mathbf{0}$인데 $c\mathbf{v} = \mathbf{0}$이다. $c$는?`,
       choices: ['0', '1', '−1', '어떤 수든 될 수 있다'],
       answer: 0,
-      explain: String.raw`$\mathbf{v}$의 성분 가운데 0이 아닌 것이 있다. 그 성분에 $c$를 곱한 것이 0이 되려면, [곱이 0이면 한쪽은 0](why:prop.arith-first)이고 그 성분은 0이 아니므로 $c = 0$이어야 한다. $c = -1$이면 $-\mathbf{v}$가 되어 반대쪽을 가리킬 뿐 영벡터가 되지 않는다.`,
+      explain: String.raw`$\mathbf{v}$의 성분 가운데 0이 아닌 것이 있다. 그 성분에 $c$를 곱한 것이 0이 되려면, [곱이 0이면 한쪽은 0](why:prop.arith-first#zero-product)이고 그 성분은 0이 아니므로 $c = 0$이어야 한다. $c = -1$이면 $-\mathbf{v}$가 되어 반대쪽을 가리킬 뿐 영벡터가 되지 않는다.`,
     },
   ],
   code: ['scale'],

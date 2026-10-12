@@ -29,7 +29,7 @@ const node: NodeDef = {
 
 ::predict p-order
 
-**명제.** $A$, $B$가 [가역](t:t.invertible)이면 $AB$도 가역이고
+[명제](label:main). $A$, $B$가 [가역](t:t.invertible)이면 $AB$도 가역이고
 
 $$(AB)^{-1} = B^{-1}A^{-1}$$
 

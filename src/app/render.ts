@@ -107,6 +107,23 @@ function renderBlock(b: Block, ctx: RenderCtx): Node {
       }
       return g;
     }
+    case 'proves': {
+      // 증명의 한 부분이 어느 명제의 증명인지 밝히는 머리. 명제 쪽의 "증명 ↓"이 여기로 오고, "↑"는 명제로 돌아간다.
+      const l = V.labels.get(`${ctx.node}#${b.key}`);
+      const name = l?.name ?? b.key;
+      const d = document.createElement('div');
+      d.className = 'proves';
+      d.id = `proof-${b.key}`;
+      const h = document.createElement('strong');
+      h.textContent = `${name}의 증명`;
+      const back = document.createElement('a');
+      back.className = 'ref proves-back';
+      back.href = `#/n/${ctx.node ?? ''}`;
+      back.dataset.ref = `${ctx.node}#${b.key}`;
+      back.textContent = `↑ ${name}`;
+      d.append(h, ' ', back);
+      return d;
+    }
     case 'answers': {
       // 앞 노드가 "아직 여기서 답하지 않은 질문"으로 미뤄 둔 질문에, 바로 아래에서 답한다는 표지.
       const from = NODE_BY_ID.get(b.from);
@@ -258,6 +275,7 @@ function renderInline(x: Inline): Node {
       a.className = 'why';
       a.href = `#/n/${x.to}`;
       a.dataset.to = x.to;
+      if (x.key) a.dataset.ref = `${x.to}#${x.key}`; // 그 노드의 이름표 하나(명제 3 …)를 가리키는 왜? 칩
       a.dataset.q = x.q;
       const badge = document.createElement('span');
       badge.className = 'why-badge';
@@ -288,6 +306,7 @@ function renderInline(x: Inline): Node {
       a.className = 'nlink';
       a.href = `#/n/${x.to}`;
       a.dataset.to = x.to;
+      if (x.key) a.dataset.ref = `${x.to}#${x.key}`; // 그 노드의 이름표 하나로 가는 링크
       a.appendChild(renderInlines(x.c));
       return a;
     }

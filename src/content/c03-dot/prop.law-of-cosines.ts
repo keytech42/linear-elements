@@ -44,7 +44,7 @@ const node: NodeDef = {
 
 ::predict p-obtuse
 
-**명제([코사인 법칙](def:t.law-of-cosines)).** 두 변의 길이가 $a$, $b$이고 그 사이의 각이 $\theta$인 삼각형에서, 맞은편 변의 길이 $c$는
+[명제](label:main)([코사인 법칙](def:t.law-of-cosines)). 두 변의 길이가 $a$, $b$이고 그 사이의 각이 $\theta$인 삼각형에서, 맞은편 변의 길이 $c$는
 
 $$c^2 = a^2 + b^2 - 2ab\cos\theta$$
 
@@ -67,7 +67,7 @@ $$c^2 = a^2 + b^2 - 2ab\cos\theta$$
 
 $$c^2 = (a - b\cos\theta)^2 + (0 - b\sin\theta)^2 = a^2 - 2ab\cos\theta + b^2\cos^2\theta + b^2\sin^2\theta$$
 
-이다. 전개에는 [$(p - q)^2 = p^2 - 2pq + q^2$](why:prop.arith-first)을 썼다. 마지막 두 항을 묶으면 $b^2(\cos^2\theta + \sin^2\theta) = b^2$이다([왜 1인가?](why:prop.cos-sin-identity)). 그러므로 $c^2 = a^2 + b^2 - 2ab\cos\theta$다. 이 계산은 $\theta$가 예각이든 둔각이든 그대로 통한다. 좌표의 부호가 제곱 속에서 처리되기 때문이다.`,
+이다. 전개에는 $(p - q)^2 = p^2 - 2pq + q^2$을 썼다. [전개 공식](why:prop.arith-first#square) $(a + b)^2 = a^2 + 2ab + b^2$에 $a = p$, $b = -q$를 넣으면 $p^2 + 2p(-q) + (-q)^2$이고, [음수끼리의 곱](why:prop.neg-times-neg#neg-prod)에 따라 $(-q)^2 = q^2$이고, [$a(-b) = -(ab)$](why:prop.neg-times-neg#neg-one)에 따라 $2p(-q) = -2pq$이기 때문이다. 마지막 두 항을 묶으면 $b^2(\cos^2\theta + \sin^2\theta) = b^2$이다([왜 1인가?](why:prop.cos-sin-identity)). 그러므로 $c^2 = a^2 + b^2 - 2ab\cos\theta$다. 이 계산은 $\theta$가 예각이든 둔각이든 그대로 통한다. 좌표의 부호가 제곱 속에서 처리되기 때문이다.`,
 };
 
 export default node;

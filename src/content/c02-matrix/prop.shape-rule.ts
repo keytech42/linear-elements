@@ -29,7 +29,7 @@ const node: NodeDef = {
 
 ::predict p-rule
 
-**명제.** $A$가 $m \times k$, $B$가 $k' \times n$일 때, $AB$는 $k = k'$일 때만 정의되고, 그때 모양은 $m \times n$이다. 이 문단의 $k$, $k'$은 안쪽 차원을 가리키는 이 노드만의 이름이다.
+[명제](label:main). $A$가 $m \times k$, $B$가 $k' \times n$일 때, $AB$는 $k = k'$일 때만 정의되고, 그때 모양은 $m \times n$이다. 이 문단의 $k$, $k'$은 안쪽 차원을 가리키는 이 노드만의 이름이다.
 
 $$\underbrace{A}_{m \times k}\ \underbrace{B}_{k \times n} = \underbrace{AB}_{m \times n}$$
 

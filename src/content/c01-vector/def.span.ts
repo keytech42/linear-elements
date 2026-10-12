@@ -84,7 +84,7 @@ $$c_1 = \frac{xw_2 - yw_1}{u_1w_2 - u_2w_1}, \qquad c_2 = \frac{u_1y - u_2x}{u_1
 남은 일은 "$u_1w_2 - u_2w_1 = 0$인 것은 정확히 두 벡터가 평행할 때"임을 보이는 것이다.
 
 - 평행하면 0이다. $\mathbf{w} = c\mathbf{u}$이면 $u_1(cu_2) - u_2(cu_1) = 0$이다($\mathbf{u} = c\mathbf{w}$일 때도 같다).
-- 0이면 평행하다. $\mathbf{u} = \mathbf{0}$이면 이미 평행하다. $\mathbf{u} \ne \mathbf{0}$이고 $u_1 \ne 0$이면 $c = w_1/u_1$로 두자. 그러면 $w_1 = cu_1$이고, $u_1w_2 = u_2w_1$을 $u_1$로 나누면 $w_2 = u_2w_1/u_1 = cu_2$이므로 $\mathbf{w} = c\mathbf{u}$다. $u_1 = 0$이면 $u_2 \ne 0$이고, $0 = u_1w_2 - u_2w_1 = -u_2w_1$이고 $-u_2 \ne 0$이므로, [곱이 0이면 한쪽은 0](why:prop.arith-first)이라는 사실에 따라 $w_1 = 0$이다. $c = w_2/u_2$로 두면 $\mathbf{w} = (0, w_2) = c\,(0, u_2) = c\mathbf{u}$다.
+- 0이면 평행하다. $\mathbf{u} = \mathbf{0}$이면 이미 평행하다. $\mathbf{u} \ne \mathbf{0}$이고 $u_1 \ne 0$이면 $c = w_1/u_1$로 두자. 그러면 $w_1 = cu_1$이고, $u_1w_2 = u_2w_1$을 $u_1$로 나누면 $w_2 = u_2w_1/u_1 = cu_2$이므로 $\mathbf{w} = c\mathbf{u}$다. $u_1 = 0$이면 $u_2 \ne 0$이고, $0 = u_1w_2 - u_2w_1 = -u_2w_1$이고 $-u_2 \ne 0$이므로, [곱이 0이면 한쪽은 0](why:prop.arith-first#zero-product)이라는 사실에 따라 $w_1 = 0$이다. $c = w_2/u_2$로 두면 $\mathbf{w} = (0, w_2) = c\,(0, u_2) = c\mathbf{u}$다.
 
 따라서 평행하지 않은 두 벡터의 스팬은 평면 전체다. 수 $u_1w_2 - u_2w_1$은 위 그림의 오른쪽 칸에도 나온다. 이 수는 4장에서 [행렬식](fwd:t.determinant)이라는 이름으로 다시 만난다.
 

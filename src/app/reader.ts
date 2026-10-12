@@ -118,6 +118,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   });
   const tail = document.createElement('div');
   tail.className = 'node-tail';
+  const proofLinks: HTMLAnchorElement[] = [];
   const refreshLocks = (scrollToNew = false) => {
     let open = true;
     let firstNew: HTMLElement | null = null;
@@ -129,6 +130,12 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
     });
     if (open && tail.hidden && scrollToNew && !firstNew) firstNew = tail;
     tail.hidden = !open;
+    // 명제 옆의 "증명 ↓": 증명은 관문을 모두 지나야 열리므로, 잠겨 있으면 몇 개가 남았는지 알린다.
+    const left = review ? 0 : gateIds.filter((g) => !progress.predict(id, g)).length;
+    for (const a of proofLinks) {
+      a.classList.toggle('locked', !open);
+      a.textContent = open ? '증명 ↓' : `증명 ↓ · 관문 ${left}개를 지나면 열린다`;
+    }
     if (firstNew) requestAnimationFrame(() => (firstNew as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'start' }));
   };
   let updateSum = () => {};
@@ -143,6 +150,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   if (pn?.proof) {
     const d = document.createElement('details');
     d.className = 'proof';
+    d.id = 'proof';
     d.open = true;
     d.innerHTML = '<summary>증명</summary>';
     d.appendChild(renderBlocks(pn.proof, ctx));
@@ -297,6 +305,39 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   foot.appendChild(nav);
   art.appendChild(foot);
 
+  // 명제와 공리 아래의 작은 줄: "증명 ↓"(그 명제의 증명으로)과 "뒤에서 쓰이는 곳"(이 이름표를 가리키는 뒤쪽 노드들).
+  // 노드마다 구조가 달라도, 명제를 읽는 자리에서 증명이 어디 있는지와 이것이 어디에 쓰이는지를 바로 알 수 있게 한다.
+  for (const lbl of body.querySelectorAll<HTMLElement>('strong.lbl')) {
+    const key = lbl.id.slice('lbl-'.length);
+    const isStmt = node.kind === 'prop' && !!pn?.proof;
+    const usedBy = V.uses.get(`${id}#${key}`) ?? [];
+    if (!isStmt && !usedBy.length) continue;
+    const meta = document.createElement('span');
+    meta.className = 'stmt-meta';
+    if (isStmt) {
+      const a = document.createElement('a');
+      a.className = 'proof-link';
+      a.href = `#/n/${id}`;
+      a.dataset.key = key;
+      proofLinks.push(a);
+      meta.appendChild(a);
+    }
+    if (usedBy.length) {
+      if (isStmt) meta.append(' · ');
+      meta.append('뒤에서 쓰이는 곳: ');
+      usedBy.slice(0, 3).forEach((u, i) => {
+        const a = document.createElement('a');
+        a.className = 'nlink';
+        a.href = `#/n/${u}`;
+        a.dataset.to = u;
+        a.textContent = `${BOOK_OF.get(u)!.num}장 ${NODE_BY_ID.get(u)!.title}`;
+        meta.append(...(i ? [', ', a] : [a]));
+      });
+      if (usedBy.length > 3) meta.append(` 외 ${usedBy.length - 3}곳`);
+    }
+    (lbl.closest('li, p') ?? lbl.parentElement!).appendChild(meta);
+  }
+
   main.innerHTML = '';
   main.appendChild(art);
 
@@ -306,9 +347,22 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
     if (a) {
       trail.push({ node: id, scroll: window.scrollY, q: a.dataset.q ?? '' });
       sessionStorage.setItem('le.arrivedByWhy', a.dataset.to ?? '');
+      // 그 노드의 명제 하나를 가리키는 왜? 칩이면 그 명제 자리로 간다
+      if (a.dataset.ref) sessionStorage.setItem('le.scrollTo', `lbl-${a.dataset.ref.split('#')[1]}`);
+    }
+    const pl = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.proof-link');
+    if (pl) {
+      e.preventDefault();
+      if (!pl.classList.contains('locked')) {
+        const t = tail.querySelector<HTMLElement>(`#proof-${CSS.escape(pl.dataset.key ?? '')}`) ?? tail.querySelector<HTMLElement>('#proof');
+        if (t) {
+          t.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          flash(t);
+        }
+      }
     }
     // 이름표 참조: 같은 노드면 그 자리로 내려가고, 앞 노드면 왜? 칩처럼 펼쳐 열고 그 자리로 간다.
-    const ref = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.ref');
+    const ref = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.ref, a.nlink[data-ref]');
     if (ref?.dataset.ref) {
       const [to, key] = ref.dataset.ref.split('#');
       if (to === id) {

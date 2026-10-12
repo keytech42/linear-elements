@@ -25,7 +25,7 @@ const node: NodeDef = {
 
 ::predict p-v3
 
-**명제.** $A$가 $m \times n$이고 $\operatorname{rank} A$개의 특이값이 0보다 크다고 하자(나머지는 0). 그러면
+[명제](label:main). $A$가 $m \times n$이고 $\operatorname{rank} A$개의 특이값이 0보다 크다고 하자(나머지는 0). 그러면
 - $\mathbf{v}_1, \dots$ 가운데 앞의 $\operatorname{rank} A$개는 **행공간**의 정규직교 기저이고, 나머지 $\mathbf{v}_i$들은 **영공간**의 정규직교 기저다.
 - $\mathbf{u}_1, \dots$ 가운데 앞의 $\operatorname{rank} A$개는 **열공간**의 정규직교 기저이고, 나머지 $\mathbf{u}_i$들은 **좌영공간**의 정규직교 기저다.
 - 행공간의 $\mathbf{v}_i$는 $A$에 의해 열공간의 $\mathbf{u}_i$로, 정확히 $\sigma_i$배 늘어나 짝지어진다.

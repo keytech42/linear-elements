@@ -43,7 +43,7 @@ const node: NodeDef = {
 
 ::predict p-same
 
-**명제.** 모든 $\mathbf{x}$, $\mathbf{y}$에 대해
+[명제](label:main). 모든 $\mathbf{x}$, $\mathbf{y}$에 대해
 
 $$(A\mathbf{x})\cdot\mathbf{y} = \mathbf{x}\cdot(A^{\mathsf{T}}\mathbf{y})$$
 

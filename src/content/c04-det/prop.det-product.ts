@@ -43,9 +43,9 @@ const node: NodeDef = {
 
 ::predict p-order
 
-**명제.** 모든 2×2 행렬 $A$, $B$에 대해 $\det(AB) = \det A\cdot\det B$이다.
+[명제](label:main). 모든 2×2 행렬 $A$, $B$에 대해 $\det(AB) = \det A\cdot\det B$이다.
 
-계산 없이 증명된다. $AB$는 "[$B$ 다음 $A$](why:def.composition)"다. $B$는 모든 넓이를 $|\det B|$배 하고, 이어서 $A$가 모든 넓이를 $|\det A|$배 한다([모든 도형에 같은 배율](why:prop.det-uniform)). 그러므로 전체는 $|\det A|\,|\det B|$배다. 향은 두 번 중 몇 번 뒤집혔는지로 정해진다. 한 번 뒤집히면 뒤집힌 채이고, 두 번 뒤집히면 제자리다. 이것은 [음수 × 음수 = 양수](why:prop.neg-times-neg)와 정확히 같은 규칙이다.
+계산 없이 증명된다. $AB$는 "[$B$ 다음 $A$](why:def.composition)"다. $B$는 모든 넓이를 $|\det B|$배 하고, 이어서 $A$가 모든 넓이를 $|\det A|$배 한다([모든 도형에 같은 배율](why:prop.det-uniform)). 그러므로 전체는 $|\det A|\,|\det B|$배다. 향은 두 번 중 몇 번 뒤집혔는지로 정해진다. 한 번 뒤집히면 뒤집힌 채이고, 두 번 뒤집히면 제자리다. 이것은 [음수 × 음수 = 양수](why:prop.neg-times-neg#neg-prod)와 정확히 같은 규칙이다.
 
 ::scene c4-product {}
 

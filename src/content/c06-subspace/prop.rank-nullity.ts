@@ -42,7 +42,7 @@ const node: NodeDef = {
 
 ::predict p-count
 
-**명제([랭크–영공간 차원 정리](def:t.rank-nullity)).** $A$가 $m \times n$ 행렬이면
+[명제](label:main)([랭크–영공간 차원 정리](def:t.rank-nullity)). $A$가 $m \times n$ 행렬이면
 
 $$n = \operatorname{rank}A + \dim N(A)$$
 

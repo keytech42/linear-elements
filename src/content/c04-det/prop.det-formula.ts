@@ -29,7 +29,7 @@ const node: NodeDef = {
 
 ::predict p-cut
 
-**명제.** 2×2 행렬 $A$의 행렬식은
+[명제](label:main). 2×2 행렬 $A$의 행렬식은
 
 $$\det A = \det\begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix} = a_{11}a_{22} - a_{12}a_{21}$$
 

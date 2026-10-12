@@ -30,7 +30,7 @@ const node: NodeDef = {
 
 ::predict p-circle
 
-**명제.** 선형 변환 $A$는 평면의 **모든** 도형의 넓이를 똑같이 $|\det A|$배 한다.
+[명제](label:main). 선형 변환 $A$는 평면의 **모든** 도형의 넓이를 똑같이 $|\det A|$배 한다.
 
 ::scene c4-area-ratio {}
 

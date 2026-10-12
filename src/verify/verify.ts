@@ -38,6 +38,8 @@ export interface VerifyResult {
   autoLinked: number;
   /** 이름표(공리 5, 명제 2 …). 키는 "노드id#이름표키". 참조의 미리보기가 이 글을 보여 준다. */
   labels: Map<string, Label>;
+  /** 이름표마다 그것을 가리키는 뒤쪽 노드들(교재 순서). 명제 아래의 "뒤에서 쓰이는 곳"이 이것을 보여 준다. */
+  uses: Map<string, string[]>;
 }
 
 export interface Label {
@@ -91,6 +93,7 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P026: { level: 'warn', text: '저자가 검토한 뒤 내용이 바뀐 노드(다시 검토 필요)' },
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
   P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 다른 노드의 명제를 노드를 밝히지 않고 가리킴)' },
+  P032: { level: 'error', text: '명제와 그 증명의 짝이 맞지 않음(증명이 있는 명제 노드에 명제 이름표가 없음, 명제가 여럿인데 ::proves가 빠짐, 없는 명제를 가리키는 ::proves)' },
   P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "0의 공리"처럼 적음([공리 5](ref:…)로 적을 것)' },
   P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
 };
@@ -138,6 +141,8 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   let autoLinked = 0;
   const parsed = new Map<string, ParsedNode>();
   const labels = new Map<string, Label>();
+  const inlinesOf = new Map<string, Inline[]>();
+  const singleStmt = new Map<string, string>(); // 명제가 하나뿐인 노드 → 그 명제의 이름표 키
 
   for (const n of nodes) {
     const here = order.get(n.id)!;
@@ -207,6 +212,25 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
       if (l && target !== n.id) addEdge(target, 'link');
     }
     for (const m of unmarkedNumbers(allBlocks, pn)) push('P031', n.id, `"${m}"`);
+    for (const x of inlines) {
+      if ((x.t !== 'why' && x.t !== 'link') || !x.key) continue;
+      if (order.has(x.to) && order.get(x.to)! < here && !labels.has(`${x.to}#${x.key}`)) push('P030', n.id, `${x.t === 'why' ? 'why' : 'n'}:${x.to}#${x.key}: 없는 이름표`);
+    }
+    inlinesOf.set(n.id, inlines);
+
+    // 명제와 그 증명의 짝 (P032). 본문의 이름표가 명제의 이름이고, 명제가 여럿이면 증명의 각 부분 앞에 ::proves 키를 둔다.
+    const stmtKeys = [...walkInlines(pn.body)].flatMap((x) => (x.t === 'label' ? [x.key] : []));
+    const proves = [...walkBlocks(pn.proof ?? [])].flatMap((b) => (b.t === 'proves' ? [b.key] : []));
+    if ([...walkBlocks([...pn.body, ...pn.checks.flatMap((c) => c.explain), ...predictBlocks])].some((b) => b.t === 'proves')) push('P032', n.id, '::proves는 증명 안에만 둔다');
+    for (const k of new Set(proves)) {
+      if (!stmtKeys.includes(k)) push('P032', n.id, `::proves ${k}: 본문에 그런 명제 이름표가 없음`);
+      if (proves.filter((x) => x === k).length > 1) push('P032', n.id, `::proves ${k}를 두 번 둠`);
+    }
+    if (n.kind === 'prop' && n.status === 'written' && pn.proof) {
+      if (!stmtKeys.length) push('P032', n.id, '명제에 이름표가 없음. 명제를 적은 자리에 [명제](label:main)를 둔다');
+      else if (stmtKeys.length > 1) for (const k of stmtKeys) if (!proves.includes(k)) push('P032', n.id, `명제 '${k}'의 증명 앞에 ::proves ${k}가 없음`);
+    }
+    if (n.kind === 'prop' && stmtKeys.length === 1) singleStmt.set(n.id, stmtKeys[0]);
 
     for (const x of inlines) {
       if (x.t === 'def') {
@@ -320,6 +344,25 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     for (const w of n.openWhys ?? [])
       if (w.answeredBy && order.has(w.answeredBy) && !answersIn.get(w.answeredBy)?.has(n.id)) push('P029', n.id, `"${w.q}" → ${w.answeredBy}에 ::answers ${n.id} 표지가 없음`);
 
+  // 3-2. 이름표마다 뒤에서 쓰이는 곳: 이름표를 가리키는 참조와 키가 달린 왜? 칩. 명제가 하나뿐인 노드는 그 노드를 가리키는 왜?·링크·선행도 그 명제가 쓰인 곳으로 센다.
+  const uses = new Map<string, string[]>();
+  const addUse = (lid: string, from: string) => {
+    if (!labels.has(lid) || lid.startsWith(`${from}#`)) return;
+    const l = uses.get(lid) ?? [];
+    if (!l.includes(from)) l.push(from);
+    uses.set(lid, l);
+  };
+  for (const [from, list] of inlinesOf)
+    for (const x of list) {
+      if (x.t === 'ref' && x.node) addUse(`${x.node}#${x.key}`, from);
+      else if ((x.t === 'why' || x.t === 'link') && x.key) addUse(`${x.to}#${x.key}`, from);
+    }
+  for (const e of edges) {
+    const k = singleStmt.get(e.to);
+    if (k && (e.kind === 'why' || e.kind === 'link' || e.kind === 'requires')) addUse(`${e.to}#${k}`, e.from);
+  }
+  for (const l of uses.values()) l.sort((a, b) => order.get(a)! - order.get(b)!);
+
   // 4. 검토 기록
   for (const n of nodes) if (reviewState(n) === 'changed') push('P026', n.id, `${stampLabel(REVIEWS[n.id])}에 검토한 뒤 바뀜. 바뀐 부분: npm run review -- diff ${n.id} · 다시 검토했으면 npm run review -- mark ${n.id}`);
   for (const id of Object.keys(REVIEWS)) if (!order.has(id)) push('P027', id, `reviews.json의 '${id}'`);
@@ -330,7 +373,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   const last = books[books.length - 1];
   for (const n of nodes) if (!incoming.has(n.id) && n.kind !== 'exp' && !last.nodes.includes(n)) push('P006', n.id, n.title);
 
-  return { issues, edges, order, termHome, parsed, autoLinked, labels };
+  return { issues, edges, order, termHome, parsed, autoLinked, labels, uses };
 }
 
 export interface LexEntry {

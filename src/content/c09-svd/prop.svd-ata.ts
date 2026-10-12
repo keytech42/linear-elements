@@ -77,13 +77,19 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 
 이 교재에서는 이 뒤로 두 이름을 줄여서 각각 **우특이벡터**, **좌특이벡터**라 적는다.
 
+### 명제
+이 노드가 보이는 것을 이 이름들로 적으면 다음 둘이다.
+
+- [명제 1](label:extreme) 길이가 1인 입력 $\mathbf{x}$ 가운데, $\|A\mathbf{x}\|$의 가장 큰 값은 $\sigma_1$이고 $\mathbf{x} = \pm\mathbf{v}_1$일 때 나온다. 가장 작은 값은 $\sigma_2$이고 $\mathbf{x} = \pm\mathbf{v}_2$일 때 나온다.
+- [명제 2](label:output-orth) $\sigma_1, \sigma_2 > 0$이면 좌특이벡터 $\mathbf{u}_1, \mathbf{u}_2$도 정규직교다. 곧 입력 쪽에서 서로 수직인 두 방향 $\mathbf{v}_1, \mathbf{v}_2$는, $A$를 거친 뒤에도 서로 수직인 두 방향으로 간다.
+
 ::scene c9-svd-ellipse {"svd": true}
 
 ### 앞 노드의 "놀라운 사실"이 풀린다
 ::answers exp.circle-to-ellipse
 
-- **입력 쪽 두 방향이 수직인 이유:** $\mathbf{v}_1, \mathbf{v}_2$는 대칭 행렬 $A^{\mathsf{T}}A$의 서로 다른 고윳값의 고유벡터다. 대칭 행렬의 그런 고유벡터는 언제나 직교한다. [왜?](why:prop.spectral)
-- **출력 쪽 두 축도 수직인 이유:** 아래 증명의 둘째 부분.
+- **입력 쪽 두 방향이 수직인 이유:** $\mathbf{v}_1, \mathbf{v}_2$는 대칭 행렬 $A^{\mathsf{T}}A$의 서로 다른 고윳값의 고유벡터다. 대칭 행렬의 그런 고유벡터는 언제나 직교한다. [왜?](why:prop.spectral#orth)
+- **출력 쪽 두 축도 수직인 이유:** 아래 [명제 2](ref:output-orth)의 증명.
 - **고유 방향과 다른 이유:** 특이벡터는 $A$의 고유벡터가 아니라 $A^{\mathsf{T}}A$의 고유벡터다. $A$가 대칭이면 $A^{\mathsf{T}}A = A^2$이 되고, 이때는 $A$의 고유벡터가 그대로 $A^2$의 고유벡터이므로 두 방향이 같아진다. 8장에서 본 그림이 바로 이 특별한 경우였다.
 
 ### 예
@@ -95,11 +101,15 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 
 ### n차원으로
 위 논증은 차원과 상관없다. $n \times n$ 대칭 행렬 $A^{\mathsf{T}}A$의 정규직교 고유벡터 $\mathbf{q}_1, \dots, \mathbf{q}_n$으로 $\mathbf{x}$를 적으면 $\|A\mathbf{x}\|^2 = \sum_i \lambda_i c_i^2$, $\sum_i c_i^2 = 1$이 되어 똑같이 가중 평균이다. 그래서 $\sigma_1 \ge \sigma_2 \ge \dots \ge \sigma_n \ge 0$이 생긴다. 다만 이 일반화는 $n$차원의 스펙트럼 정리에 기댄다. 8장에서 그 정리를 어디까지 증명했는지 확인하라.`,
-  proof: String.raw`**최대·최소.** 본문에서 보였듯 $\mathbf{x} = c_1\mathbf{q}_1 + c_2\mathbf{q}_2$, $c_1^2 + c_2^2 = 1$일 때 $\|A\mathbf{x}\|^2 = \lambda_1c_1^2 + \lambda_2c_2^2$이다. $c_2^2 = 1 - c_1^2$을 넣으면
+  proof: String.raw`::proves extreme
+
+**최대·최소.** 본문에서 보였듯 $\mathbf{x} = c_1\mathbf{q}_1 + c_2\mathbf{q}_2$, $c_1^2 + c_2^2 = 1$일 때 $\|A\mathbf{x}\|^2 = \lambda_1c_1^2 + \lambda_2c_2^2$이다. $c_2^2 = 1 - c_1^2$을 넣으면
 
 $$\|A\mathbf{x}\|^2 = \lambda_2 + (\lambda_1 - \lambda_2)\,c_1^2$$
 
 $\lambda_1 - \lambda_2 \ge 0$이고 $0 \le c_1^2 \le 1$이므로, 이 값은 $c_1^2 = 1$일 때 $\lambda_1$로 가장 크고 $c_1^2 = 0$일 때 $\lambda_2$로 가장 작다. 따라서 단위 입력이 늘어나는 길이는 $\sigma_2 = \sqrt{\lambda_2}$와 $\sigma_1 = \sqrt{\lambda_1}$ 사이에 있다. 양 끝은 $\mathbf{x} = \pm\mathbf{v}_2$와 $\mathbf{x} = \pm\mathbf{v}_1$에서 나온다.
+
+::proves output-orth
 
 **출력 쪽 직교.** $\sigma_1, \sigma_2 > 0$이라 하자. [전치의 정체](why:prop.transpose-dot)를 쓰면
 

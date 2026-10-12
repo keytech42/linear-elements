@@ -54,7 +54,7 @@ $$A\mathbf{v} = \lambda\mathbf{v} \iff A\mathbf{v} - \lambda I\mathbf{v} = \math
 
 ::predict p-why
 
-**명제.** 수 $\lambda$가 $A$의 [고윳값](t:t.eigenvalue)인 것과 $\det(A - \lambda I) = 0$인 것은 같은 말이다. 2×2 행렬에서 이 식을 풀어 쓰면
+[명제](label:main). 수 $\lambda$가 $A$의 [고윳값](t:t.eigenvalue)인 것과 $\det(A - \lambda I) = 0$인 것은 같은 말이다. 2×2 행렬에서 이 식을 풀어 쓰면
 
 $$\lambda^2 - (\operatorname{tr}A)\,\lambda + \det A = 0$$
 
@@ -77,7 +77,7 @@ $$\Big(\lambda - \tfrac{\operatorname{tr}A}{2}\Big)^2 = \frac{(\operatorname{tr}
 오른쪽 분자 $(\operatorname{tr}A)^2 - 4\det A$를 [판별식](def:t.discriminant)이라 한다.
 - 판별식 > 0: 제곱근이 두 개(±)이므로 서로 다른 실수 고윳값이 둘이다. $\lambda_{1,2} = \big(\operatorname{tr}A \pm \sqrt{(\operatorname{tr}A)^2 - 4\det A}\big)/2$.
 - 판별식 = 0: 고윳값이 하나(중근)다.
-- 판별식 < 0: 실수 고윳값이 없다. 실수의 제곱은 음수가 될 수 없기 때문이다. [왜 음수 × 음수는 양수인가?](why:prop.neg-times-neg)
+- 판별식 < 0: 실수 고윳값이 없다. 실수의 제곱은 음수가 될 수 없기 때문이다. [왜 음수 × 음수는 양수인가?](why:prop.neg-times-neg#square-nonneg)
 
 ### 고윳값의 합과 곱
 실수 고윳값이 $\lambda_1, \lambda_2$이면 특성방정식은 $(\lambda - \lambda_1)(\lambda - \lambda_2) = \lambda^2 - (\lambda_1 + \lambda_2)\lambda + \lambda_1\lambda_2$로 인수분해된다. 계수를 맞추면

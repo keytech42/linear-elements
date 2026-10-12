@@ -51,7 +51,7 @@ const node: NodeDef = {
 
 $$V = \begin{bmatrix} | & | \\ \cv{\mathbf{v}_1} & \cv{\mathbf{v}_2} \\ | & | \end{bmatrix}, \quad \Sigma = \begin{bmatrix} \sigma_1 & 0 \\ 0 & \sigma_2 \end{bmatrix}, \quad U = \begin{bmatrix} | & | \\ \cu{\mathbf{u}_1} & \cu{\mathbf{u}_2} \\ | & | \end{bmatrix}$$
 
-**명제(특이값 분해).** 모든 2×2 행렬 $A$는
+[명제](label:main)(특이값 분해). 모든 2×2 행렬 $A$는
 
 $$A = \h{s3}{U}\,\h{s2}{\Sigma}\,\h{s1}{V^{\mathsf{T}}}$$
 

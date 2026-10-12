@@ -76,7 +76,7 @@ $$\|\mathbf{v}\| = \sqrt{v_1^2 + v_2^2} \quad (\text{2차원}), \qquad \|\mathbf
       q: String.raw`$\|\mathbf{v}\| = 0$인 벡터는?`,
       choices: ['영벡터뿐이다', '모든 성분이 서로 같은 벡터', '성분의 합이 0인 벡터', '그런 벡터는 없다'],
       answer: 0,
-      explain: String.raw`제곱의 합이 0이려면, [제곱은 모두 0 이상](n:prop.neg-times-neg)이므로 각 제곱이 0이어야 한다. 곧 모든 성분이 0이다. 성분의 합이 0인 $(1, -1)$의 길이는 $\sqrt{2}$다.`,
+      explain: String.raw`제곱의 합이 0이려면, [제곱은 모두 0 이상](n:prop.neg-times-neg#square-nonneg)이므로 각 제곱이 0이어야 한다. 곧 모든 성분이 0이다. 성분의 합이 0인 $(1, -1)$의 길이는 $\sqrt{2}$다.`,
     },
   ],
   code: ['norm', 'normalize'],

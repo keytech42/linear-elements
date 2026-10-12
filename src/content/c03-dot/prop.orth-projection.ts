@@ -41,7 +41,7 @@ const node: NodeDef = {
 
 ::predict p-shadow
 
-**명제.** 영벡터가 아닌 $\mathbf{u}$ 방향의 직선 위로 $\mathbf{v}$를 수직으로 내린 벡터([정사영](def:t.orth-projection))는
+[명제](label:main). 영벡터가 아닌 $\mathbf{u}$ 방향의 직선 위로 $\mathbf{v}$를 수직으로 내린 벡터([정사영](def:t.orth-projection))는
 
 $$\frac{\mathbf{u}\cdot\mathbf{v}}{\mathbf{u}\cdot\mathbf{u}}\,\mathbf{u}$$
 

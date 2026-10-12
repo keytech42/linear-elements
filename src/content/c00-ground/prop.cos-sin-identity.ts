@@ -27,7 +27,7 @@ const node: NodeDef = {
   ],
   body: String.raw`코사인과 사인은 각마다 따로 정해지는 두 수다. 두 수 사이에는 어떤 관계가 있을까?
 
-**명제.** 모든 각 $\theta$에 대해
+[명제](label:main). 모든 각 $\theta$에 대해
 
 $$\cos^2\theta + \sin^2\theta = 1$$
 
@@ -44,7 +44,7 @@ $$\cos^2\theta + \sin^2\theta = 1$$
 - $\theta = 45°$: 점이 대각선 위에 있으므로 $\cos45° = \sin45°$이고, $2\cos^2 45° = 1$에서 $\cos45° = \sin45° = 1/\sqrt{2} \approx 0.707$.
 
 이 식은 2장에서 회전 [행렬](fwd:t.matrix)의 열이 길이 1이라는 것을 보일 때, 그리고 8장에서 회전에 실수 [고유벡터](fwd:t.eigenvector)가 없다는 것을 보일 때 다시 쓰인다.`,
-  proof: String.raw`점 $(\cos\theta, \sin\theta)$는 [정의에 따라](why:def.angle-trig) 단위원 위에 있으므로 원점에서의 거리가 1이다. [거리의 식](why:def.distance)으로 쓰면 $\sqrt{\cos^2\theta + \sin^2\theta} = 1$이고, 양쪽을 제곱하면 $\cos^2\theta + \sin^2\theta = 1$이다. 이 논증은 점이 원의 어느 쪽에 있든(좌표가 음수여도) 그대로 통한다. 거리의 식은 차이를 제곱하므로 [부호가 상관없기 때문이다](why:prop.neg-times-neg).`,
+  proof: String.raw`점 $(\cos\theta, \sin\theta)$는 [정의에 따라](why:def.angle-trig) 단위원 위에 있으므로 원점에서의 거리가 1이다. [거리의 식](why:def.distance)으로 쓰면 $\sqrt{\cos^2\theta + \sin^2\theta} = 1$이고, 양쪽을 제곱하면 $\cos^2\theta + \sin^2\theta = 1$이다. 이 논증은 점이 원의 어느 쪽에 있든(좌표가 음수여도) 그대로 통한다. 거리의 식은 차이를 제곱하므로 [부호가 상관없기 때문이다](why:prop.neg-times-neg#neg-prod).`,
 };
 
 export default node;
