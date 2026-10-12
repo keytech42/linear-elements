@@ -80,8 +80,8 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 ### 명제
 이 노드가 보이는 것을 이 이름들로 적으면 다음 둘이다.
 
-- [명제 1](label:extreme) 길이가 1인 입력 $\mathbf{x}$ 가운데, $\|A\mathbf{x}\|$의 가장 큰 값은 $\sigma_1$이고 $\mathbf{x} = \pm\mathbf{v}_1$일 때 나온다. 가장 작은 값은 $\sigma_2$이고 $\mathbf{x} = \pm\mathbf{v}_2$일 때 나온다.
-- [명제 2](label:output-orth) $\sigma_1, \sigma_2 > 0$이면 좌특이벡터 $\mathbf{u}_1, \mathbf{u}_2$도 정규직교다. 곧 입력 쪽에서 서로 수직인 두 방향 $\mathbf{v}_1, \mathbf{v}_2$는, $A$를 거친 뒤에도 서로 수직인 두 방향으로 간다.
+- [](label:extreme) 길이가 1인 입력 $\mathbf{x}$ 가운데, $\|A\mathbf{x}\|$의 가장 큰 값은 $\sigma_1$이고 $\mathbf{x} = \pm\mathbf{v}_1$일 때 나온다. 가장 작은 값은 $\sigma_2$이고 $\mathbf{x} = \pm\mathbf{v}_2$일 때 나온다.
+- [](label:output-orth) $\sigma_1, \sigma_2 > 0$이면 좌특이벡터 $\mathbf{u}_1, \mathbf{u}_2$도 정규직교다. 곧 입력 쪽에서 서로 수직인 두 방향 $\mathbf{v}_1, \mathbf{v}_2$는, $A$를 거친 뒤에도 서로 수직인 두 방향으로 간다.
 
 ::scene c9-svd-ellipse {"svd": true}
 
@@ -89,7 +89,7 @@ $$\|A\mathbf{x}\|^2 = \mathbf{x}\cdot S\mathbf{x} = \lambda_1 c_1^2 + \lambda_2 
 ::answers exp.circle-to-ellipse
 
 - **입력 쪽 두 방향이 수직인 이유:** $\mathbf{v}_1, \mathbf{v}_2$는 대칭 행렬 $A^{\mathsf{T}}A$의 서로 다른 고윳값의 고유벡터다. 대칭 행렬의 그런 고유벡터는 언제나 직교한다. [왜?](why:prop.spectral#orth)
-- **출력 쪽 두 축도 수직인 이유:** 아래 [명제 2](ref:output-orth)의 증명.
+- **출력 쪽 두 축도 수직인 이유:** 아래 [](ref:output-orth)의 증명.
 - **고유 방향과 다른 이유:** 특이벡터는 $A$의 고유벡터가 아니라 $A^{\mathsf{T}}A$의 고유벡터다. $A$가 대칭이면 $A^{\mathsf{T}}A = A^2$이 되고, 이때는 $A$의 고유벡터가 그대로 $A^2$의 고유벡터이므로 두 방향이 같아진다. 8장에서 본 그림이 바로 이 특별한 경우였다.
 
 ### 예

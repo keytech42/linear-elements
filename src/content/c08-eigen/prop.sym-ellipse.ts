@@ -41,7 +41,7 @@ const node: NodeDef = {
 ### 이름 붙이기: 타원
 원을 서로 수직인 두 방향으로 각각 다른 배율로 늘인 모양을 [타원](def:t.ellipse)이라 한다. 두 방향을 타원의 **축**, 각 방향으로 늘어난 길이를 **반지름**이라 부른다. 배율 하나가 0이면 타원은 선분으로 납작해지고, 두 배율이 같으면 원이다.
 
-[명제](label:main). 대칭 행렬 $S = Q\Lambda Q^{\mathsf{T}}$는 단위원을, 축이 $\mathbf{q}_1, \mathbf{q}_2$ 방향이고 반지름이 $|\lambda_1|, |\lambda_2|$인 타원으로 보낸다.
+[](label:main). 대칭 행렬 $S = Q\Lambda Q^{\mathsf{T}}$는 단위원을, 축이 $\mathbf{q}_1, \mathbf{q}_2$ 방향이고 반지름이 $|\lambda_1|, |\lambda_2|$인 타원으로 보낸다.
 
 ::scene c8-spectral {"probe": true}
 

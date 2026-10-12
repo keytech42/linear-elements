@@ -30,31 +30,40 @@ const node: NodeDef = {
 
 ::predict p-mid
 
-[명제](label:main). [선형 변환](t:t.linear-map)은
-1. 원점을 원점으로 보낸다.
-2. 직선을 직선으로(또는 한 점으로) 보낸다.
-3. 평행한 직선들을 평행한 직선들로 보낸다.
-4. 한 직선 위에 같은 간격으로 놓인 점들을 같은 간격으로 놓인 점들로 보낸다.
+**명제.** [선형 변환](t:t.linear-map)은 다음 넷을 지킨다.
+
+- [](label:origin) 원점을 원점으로 보낸다.
+- [](label:line) 직선을 직선으로(또는 한 점으로) 보낸다.
+- [](label:parallel) 평행한 직선들을 평행한 직선들로 보낸다.
+- [](label:spacing) 한 직선 위에 같은 간격으로 놓인 점들을 같은 간격으로 놓인 점들로 보낸다.
 
 그래서 평면의 격자는 선형 변환을 거친 뒤에도 **곧고, 평행하고, 고르게** 남는다. 정사각형 칸들은 모두 똑같은 평행사변형 칸들로 바뀐다.
 
 ::scene c2-warp {"map": "linear", "line": true}
 
-그림의 단추로 휘기와 소용돌이로 바꿔 보라. 같은 간격의 점들이 간격을 잃고, 곧은 선이 휜다. 평행 이동은 2~4번을 모두 지키지만 원점을 옮기므로(1번) 선형이 아니다.
+그림의 단추로 휘기와 소용돌이로 바꿔 보라. 같은 간격의 점들이 간격을 잃고, 곧은 선이 휜다. 평행 이동은 [](ref:line), [](ref:parallel), [](ref:spacing)를 모두 지키지만 원점을 옮기므로([](ref:origin)) 선형이 아니다.
 
 ### 이 성질이 주는 눈
 격자가 고르게 남는다는 것은 **칸 하나만 보면 전체를 안다**는 뜻이다. 원점에 붙은 칸 하나(단위 정사각형)가 어떤 평행사변형으로 가는지 보면, 나머지 칸들은 그것을 옆으로 이어 붙인 것이다. 다음 노드에서 이 관찰을 정확한 명제로 만든다.`,
-  proof: String.raw`1번은 [앞 노드](why:def.linear-map)에서 보였다.
+  proof: String.raw`::proves origin
+
+[앞 노드](why:def.linear-map)에서 보였다.
+
+::proves line
 
 점 $\mathbf{p}$를 지나고 방향이 $\mathbf{d}$인 직선 위의 점은 $\mathbf{p} + s\mathbf{d}$($s$는 아무 수) 꼴이다. 여기에 $T$를 하면
 
 $$T(\mathbf{p} + s\mathbf{d}) = T(\mathbf{p}) + sT(\mathbf{d})$$
 
-이다([두 조건을 차례로 썼다](why:def.linear-map)). 오른쪽은 점 $T(\mathbf{p})$를 지나고 방향이 $T(\mathbf{d})$인 직선 위의 점이다(2번). 만약 $T(\mathbf{d}) = \mathbf{0}$이면 모든 점이 $T(\mathbf{p})$ 하나로 모인다.
+이다([두 조건을 차례로 썼다](why:def.linear-map)). 오른쪽은 점 $T(\mathbf{p})$를 지나고 방향이 $T(\mathbf{d})$인 직선 위의 점이다. 만약 $T(\mathbf{d}) = \mathbf{0}$이면 모든 점이 $T(\mathbf{p})$ 하나로 모인다.
 
-평행한 직선들은 방향 $\mathbf{d}$가 같다. 그 상들의 방향은 모두 $T(\mathbf{d})$이므로 서로 평행하다(3번).
+::proves parallel
 
-같은 간격의 점들은 $s = 0, 1, 2, \dots$처럼 고르게 놓인 $s$에 해당한다. 상 $T(\mathbf{p}) + sT(\mathbf{d})$에서도 $s$가 한 칸 늘 때마다 같은 $T(\mathbf{d})$만큼 나아가므로 간격이 고르다(4번).`,
+평행한 직선들은 방향 $\mathbf{d}$가 같다. 그 상들의 방향은 모두 $T(\mathbf{d})$이므로 서로 평행하다. 위의 식은 [](ref:line)의 증명에 있다.
+
+::proves spacing
+
+같은 간격의 점들은 $s = 0, 1, 2, \dots$처럼 고르게 놓인 $s$에 해당한다. 상 $T(\mathbf{p}) + sT(\mathbf{d})$에서도 $s$가 한 칸 늘 때마다 같은 $T(\mathbf{d})$만큼 나아가므로 간격이 고르다. 위의 식은 [](ref:line)의 증명에 있다.`,
 };
 
 export default node;

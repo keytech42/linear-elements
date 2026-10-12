@@ -38,7 +38,7 @@ const node: NodeDef = {
       choices: ['될 수 없다', '될 수 있다. 회전처럼', String.raw`$\det S < 0$이면 음수가 된다`, String.raw`$s_{12}$가 크면 음수가 된다`],
       answer: 0,
       why: [
-        String.raw`판별식을 정리하면 $(s_{11} - s_{22})^2 + 4s_{12}^2$, 곧 제곱의 합이 된다. 증명의 1번이다.`,
+        String.raw`판별식을 정리하면 $(s_{11} - s_{22})^2 + 4s_{12}^2$, 곧 제곱의 합이 된다. 아래 [](ref:real)의 증명이 이것이다.`,
         String.raw`회전은 대칭 행렬이 아니다(각이 0°, 180°일 때만 빼고). 대칭 행렬은 무언가를 돌리는 변환이 될 수 없다.`,
         String.raw`$\det S < 0$이면 판별식 $(\operatorname{tr}S)^2 - 4\det S$는 오히려 더 커진다.`,
         String.raw`$s_{12}$는 판별식에 $4s_{12}^2$로, 곧 0 이상의 값으로만 들어간다. 클수록 판별식이 커진다.`,
@@ -59,9 +59,9 @@ const node: NodeDef = {
 ::predict p-disc
 
 **명제(스펙트럼 정리, 2×2).** 2×2 대칭 행렬 $S$에 대해
-- [명제 1](label:real) 고윳값은 모두 실수다.
-- [명제 2](label:orth) 서로 다른 고윳값의 고유벡터는 서로 [직교](t:t.orthogonal)한다.
-- [명제 3](label:diag) 그러므로 서로 수직인 단위 고유벡터 $\mathbf{q}_1, \mathbf{q}_2$가 있다. 이 둘을 열로 세운 [직교 행렬](t:t.orth-matrix) $Q$와, 고윳값을 대각에 놓은 $\Lambda$로
+- [](label:real) 고윳값은 모두 실수다.
+- [](label:orth) 서로 다른 고윳값의 고유벡터는 서로 [직교](t:t.orthogonal)한다.
+- [](label:diag) 그러므로 서로 수직인 단위 고유벡터 $\mathbf{q}_1, \mathbf{q}_2$가 있다. 이 둘을 열로 세운 [직교 행렬](t:t.orth-matrix) $Q$와, 고윳값을 대각에 놓은 $\Lambda$로
 
 $$S = Q\Lambda Q^{\mathsf{T}}, \qquad Q = \begin{bmatrix} | & | \\ \mathbf{q}_1 & \mathbf{q}_2 \\ | & | \end{bmatrix}, \quad \Lambda = \begin{bmatrix} \lambda_1 & 0 \\ 0 & \lambda_2 \end{bmatrix}$$
 
@@ -72,7 +72,7 @@ $$S = Q\Lambda Q^{\mathsf{T}}, \qquad Q = \begin{bmatrix} | & | \\ \mathbf{q}_1 
 - $S = \begin{bmatrix} 1 & 2 \\ 2 & -2 \end{bmatrix}$: 대각합 $-1$, 행렬식 $-2 - 4 = -6$이므로 $\lambda^2 + \lambda - 6 = (\lambda - 2)(\lambda + 3) = 0$, 고윳값 2와 $-3$. 고유벡터는 $(2, 1)$과 $(1, -2)$이고 내적은 $2 - 2 = 0$이다. 고윳값 $-3$의 방향은 뒤집힌다.
 
 ### n차원에 대해 정직하게
-같은 정리가 $n \times n$ 대칭 행렬에서도 성립한다. 아래 [명제 2](ref:orth)의 증명은 차원과 상관없이 그대로 통한다. 그러나 1번(고윳값이 실수)과 "서로 수직인 고유벡터가 $n$개 모두 있다"는 부분은, 이 교재가 다루지 않는 도구(복소수, 또는 수학적 귀납법과 최댓값 논증)가 있어야 증명된다. 이 교재 안에서는 $n \times n$의 경우를 증명 없이 받아들이고, 그 사실을 아래 "아직 여기서 답하지 않은 질문"에 남긴다.
+같은 정리가 $n \times n$ 대칭 행렬에서도 성립한다. 아래 [](ref:orth)의 증명은 차원과 상관없이 그대로 통한다. 그러나 [](ref:real)(고윳값이 실수)와 "서로 수직인 고유벡터가 $n$개 모두 있다"는 부분은, 이 교재가 다루지 않는 도구(복소수, 또는 수학적 귀납법과 최댓값 논증)가 있어야 증명된다. 이 교재 안에서는 $n \times n$의 경우를 증명 없이 받아들이고, 그 사실을 아래 "아직 여기서 답하지 않은 질문"에 남긴다.
 
 > [!코드] 야코비 방법은 정리를 "만들어 보인다"
 > 이 저장소의 \`symEig\`는 $n \times n$ 대칭 행렬에 대해 실제로 $Q$와 $\Lambda$를 계산한다. 대각선 밖의 성분 하나를 0으로 만드는 회전을 계속 곱해 나가는 방법(야코비 방법)이다. 회전들의 곱이 $Q$가 된다. 테스트는 무작위 2, 3, 5차원 대칭 행렬에서 $S = Q\Lambda Q^{\mathsf{T}}$와 $Q^{\mathsf{T}}Q = I$를 확인한다. 다만 이것은 정리의 증거이지 증명은 아니다. 이 방법이 언제나 끝까지 수렴한다는 사실 역시 이 교재 밖의 결과다.`,
@@ -94,7 +94,7 @@ $$\lambda_1(\mathbf{q}_1\cdot\mathbf{q}_2) = (S\mathbf{q}_1)\cdot\mathbf{q}_2 = 
 
 ::proves diag
 
-**직교 행렬로 대각화된다.** 판별식이 0인 경우는 $(s_{11} - s_{22})^2 + 4s_{12}^2 = 0$, 곧 $s_{11} = s_{22}$이고 $s_{12} = 0$인 경우뿐이다. 이때 $S = s_{11}I$이므로 모든 벡터가 고유벡터이고, $\mathbf{q}_1 = \mathbf{e}_1$, $\mathbf{q}_2 = \mathbf{e}_2$로 고르면 된다. 판별식이 양수이면 고윳값이 서로 다르므로 2번에 따라 두 고유벡터가 직교한다. 각각을 길이 1로 맞춰([단위벡터](t:t.unit-vector)) $\mathbf{q}_1, \mathbf{q}_2$라 하자. 그러면 $Q$의 열은 [정규직교](t:t.orthonormal)이므로 [$Q^{-1} = Q^{\mathsf{T}}$](why:prop.orthogonal-inverse)이고, [대각화](why:prop.diagonalization)에서 $P = Q$로 놓으면 $S = Q\Lambda Q^{-1} = Q\Lambda Q^{\mathsf{T}}$다.`,
+**직교 행렬로 대각화된다.** 판별식이 0인 경우는 $(s_{11} - s_{22})^2 + 4s_{12}^2 = 0$, 곧 $s_{11} = s_{22}$이고 $s_{12} = 0$인 경우뿐이다. 이때 $S = s_{11}I$이므로 모든 벡터가 고유벡터이고, $\mathbf{q}_1 = \mathbf{e}_1$, $\mathbf{q}_2 = \mathbf{e}_2$로 고르면 된다. 판별식이 양수이면 고윳값이 서로 다르므로 [](ref:orth)에 따라 두 고유벡터가 직교한다. 각각을 길이 1로 맞춰([단위벡터](t:t.unit-vector)) $\mathbf{q}_1, \mathbf{q}_2$라 하자. 그러면 $Q$의 열은 [정규직교](t:t.orthonormal)이므로 [$Q^{-1} = Q^{\mathsf{T}}$](why:prop.orthogonal-inverse)이고, [대각화](why:prop.diagonalization)에서 $P = Q$로 놓으면 $S = Q\Lambda Q^{-1} = Q\Lambda Q^{\mathsf{T}}$다.`,
   checks: [
     {
       q: String.raw`$Q\Lambda Q^{\mathsf{T}}$ 꼴의 행렬(Q는 직교, Λ는 대각)은 언제나 대칭인가?`,

@@ -38,9 +38,9 @@ export type Inline =
   | { t: 'why'; to: string; key?: string; q: string }
   | { t: 'link'; to: string; key?: string; c: Inline[] }
   | { t: 'sync'; key: string; c: Inline[] }
-  | { t: 'label'; key: string; c: Inline[] }
+  | { t: 'label'; key: string; c: Inline[]; auto?: boolean }
   /** node는 파서가 비워 두면(같은 노드) 검증기가 채운다 */
-  | { t: 'ref'; node?: string; key: string; c: Inline[] };
+  | { t: 'ref'; node?: string; key: string; c: Inline[]; auto?: boolean };
 
 export type NoteKind = '비유' | '주의' | '직관' | '질문' | '코드' | '참고';
 

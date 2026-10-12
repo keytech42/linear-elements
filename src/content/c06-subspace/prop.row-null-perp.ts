@@ -30,7 +30,7 @@ const node: NodeDef = {
 
 **정의.** 행렬의 행들이 스팬하는 부분공간을 [행공간](def:t.row-space)이라 한다. 행은 입력과 내적하는 벡터이므로 행공간은 **입력 공간**에 산다. 행공간은 $A^{\mathsf{T}}$의 열공간이기도 하다.
 
-[명제](label:main). 행공간의 모든 벡터와 영공간의 모든 벡터는 서로 [직교](t:t.orthogonal)한다.
+[](label:main). 행공간의 모든 벡터와 영공간의 모든 벡터는 서로 [직교](t:t.orthogonal)한다.
 
 ::scene c6-space {"mode": "row"}
 

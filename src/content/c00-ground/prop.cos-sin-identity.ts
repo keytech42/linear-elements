@@ -27,7 +27,7 @@ const node: NodeDef = {
   ],
   body: String.raw`코사인과 사인은 각마다 따로 정해지는 두 수다. 두 수 사이에는 어떤 관계가 있을까?
 
-[명제](label:main). 모든 각 $\theta$에 대해
+[](label:main). 모든 각 $\theta$에 대해
 
 $$\cos^2\theta + \sin^2\theta = 1$$
 

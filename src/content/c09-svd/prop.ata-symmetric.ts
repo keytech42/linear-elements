@@ -26,7 +26,7 @@ const node: NodeDef = {
   ],
   body: String.raw`앞 노드에서 "가장 많이 늘어나는 방향"을 눈으로 찾았다. 이것을 계산으로 찾으려면 먼저 **늘어난 길이** $\|A\mathbf{x}\|$를 $\mathbf{x}$에 대한 식으로 써야 한다. 제곱근이 붙어 있으면 다루기 불편하므로 길이의 제곱 $\|A\mathbf{x}\|^2$을 쓴다. 길이가 가장 클 때 길이의 제곱도 가장 크므로, 무엇을 최대로 만드는지는 달라지지 않는다.
 
-[명제](label:main). $A$가 $m \times n$ 행렬이면 다음 두 가지가 성립한다.
+[](label:main). $A$가 $m \times n$ 행렬이면 다음 두 가지가 성립한다.
 - $A^{\mathsf{T}}A$는 $n \times n$ [대칭 행렬](t:t.symmetric)이다.
 - 모든 입력 $\mathbf{x} \in \mathbb{R}^n$에 대해 $\|A\mathbf{x}\|^2 = \mathbf{x} \cdot (A^{\mathsf{T}}A\mathbf{x})$ 이다.
 

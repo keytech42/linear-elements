@@ -49,8 +49,15 @@ export interface Label {
   name: string;
   /** 그 이름이 붙은 항목의 글(미리보기용) */
   text: Inline[];
-  /** 공리 노드의 이름표는 책 전체에서 그 이름 하나로 통한다. 다른 노드의 이름표는 그 노드 안에서만 통하므로, 다른 노드에서 가리킬 때는 노드를 밝혀 적는다. */
+  /** 공리 노드의 이름표는 책 전체에서 그 이름 하나로 통한다. 명제는 장마다 번호를 새로 세므로, 다른 장에서 가리킬 때는 "0장 명제 13"처럼 장을 붙인다. */
   global: boolean;
+  /** 이름표가 있는 장 */
+  chapter: number;
+}
+
+/** 참조하는 자리에서 보이는 이름표의 이름. 같은 장이거나 책 전체에서 통하는 이름이면 그대로, 다른 장의 명제면 장을 붙인다. */
+export function refName(l: Label, fromChapter: number): string {
+  return l.global || l.chapter === fromChapter ? l.name : `${l.chapter}장 ${l.name}`;
 }
 
 export interface ParsedNode {
@@ -92,9 +99,9 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P024: { level: 'warn', text: '힌트가 3개를 넘음' },
   P026: { level: 'warn', text: '저자가 검토한 뒤 내용이 바뀐 노드(다시 검토 필요)' },
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
-  P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 다른 노드의 명제를 노드를 밝히지 않고 가리킴)' },
+  P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 번호를 손으로 적음, 번호 이름표를 공리·명제 노드 밖에 둠)' },
   P032: { level: 'error', text: '명제와 그 증명의 짝이 맞지 않음(증명이 있는 명제 노드에 명제 이름표가 없음, 명제가 여럿인데 ::proves가 빠짐, 없는 명제를 가리키는 ::proves)' },
-  P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "0의 공리"처럼 적음([공리 5](ref:…)로 적을 것)' },
+  P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "규칙 n", "n번", "0의 공리"처럼 적음([](ref:…)로 적을 것)' },
   P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
 };
 
@@ -110,6 +117,8 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     if (order.has(n.id)) push('P000', n.id, `노드 id 중복: ${n.id}`);
     order.set(n.id, i);
   });
+  const chapterOf = new Map<string, number>();
+  for (const b of books) for (const n of b.nodes) chapterOf.set(n.id, b.num);
 
   // 2. 용어와 기호의 집
   const termHome = new Map<string, { node: string; decl: TermDecl }>();
@@ -141,6 +150,8 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   let autoLinked = 0;
   const parsed = new Map<string, ParsedNode>();
   const labels = new Map<string, Label>();
+  let axiomCount = 0; // 공리 번호는 책 전체에서 이어진다
+  const propCount = new Map<number, number>(); // 명제 번호는 장마다 1부터 센다
   const inlinesOf = new Map<string, Inline[]>();
   const singleStmt = new Map<string, string>(); // 명제가 하나뿐인 노드 → 그 명제의 이름표 키
 
@@ -189,13 +200,25 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     };
 
     // 이름표와 참조: 이 노드의 이름표를 먼저 모은다(같은 노드 안에서는 앞뒤 상관없이 가리킬 수 있다). 그다음 참조를 확인한다.
+    // 글자 없이 쓴 이름표 [](label:키)에는 번호를 매긴다: 공리 노드는 "공리 n"(책 전체에서 이어 셈), 명제 노드는 "명제 n"(장마다 셈).
+    // 번호를 원고에 손으로 적지 않으므로, 명제를 끼워 넣어도 번호와 참조가 저절로 맞는다.
+    const ch = chapterOf.get(n.id)!;
     for (const { x, text } of labelSites(allBlocks, pn)) {
       const id = `${n.id}#${x.key}`;
-      const name = plainText(x.c).trim();
+      let name = plainText(x.c).trim();
+      if (!name) {
+        if (n.kind === 'ax') name = `공리 ${++axiomCount}`;
+        else if (n.kind === 'prop') {
+          propCount.set(ch, (propCount.get(ch) ?? 0) + 1);
+          name = `명제 ${propCount.get(ch)}`;
+        } else push('P030', n.id, `[](label:${x.key}): 번호를 매기는 이름표는 공리 노드와 명제 노드에만 둔다`);
+        x.c = [{ t: 'text', v: name }]; // 렌더러가 그대로 그리도록 채워 둔다
+        x.auto = true;
+      } else if (/^(공리|명제) ?\d+$/.test(name)) push('P030', n.id, `[${name}](label:${x.key}): 번호를 손으로 적지 않는다. [](label:${x.key})로 적으면 번호가 매겨진다`);
       if (labels.has(id)) push('P030', n.id, `이름표 '${x.key}'를 두 번 선언함`);
       const clash = n.kind === 'ax' ? [...labels.values()].find((l) => l.global && l.name === name) : undefined;
       if (clash) push('P030', n.id, `책 전체에서 쓰는 이름 '${name}'가 ${clash.node}에도 있음`);
-      labels.set(id, { node: n.id, key: x.key, name, text, global: n.kind === 'ax' });
+      labels.set(id, { node: n.id, key: x.key, name, text, global: n.kind === 'ax', chapter: ch });
     }
     for (const x of inlines) {
       if (x.t !== 'ref') continue;
@@ -207,10 +230,18 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
       if (o === undefined) push('P030', n.id, `ref:${target}#${x.key}: 없는 노드`);
       else if (o > here) push('P030', n.id, `ref:${target}#${x.key}: 뒤쪽 노드의 이름표`);
       else if (!l) push('P030', n.id, `ref:${target}#${x.key}: 없는 이름표`);
-      else if (!said.includes(l.name)) push('P030', n.id, `"${said}"가 가리키는 이름표의 이름은 '${l.name}'`);
-      else if (target !== n.id && !l.global && said === l.name) push('P030', n.id, `"${said}"는 ${target}의 이름표다. 다른 노드의 명제는 글에 노드를 밝혀 적는다(예: "앞 노드의 ${l.name}")`);
+      else {
+        // 글자 없이 쓴 참조 [](ref:…)에는 이 자리에서 보이는 이름을 채운다. 글자를 적었으면 그 이름이 들어 있어야 한다(낡은 번호를 잡는다).
+        const shown = refName(l, ch);
+        if (!said) {
+          x.c = [{ t: 'text', v: shown }];
+          x.auto = true;
+        }
+        else if (!said.includes(shown)) push('P030', n.id, `"${said}"가 가리키는 이름표는 이 자리에서 '${shown}'로 불린다`);
+      }
       if (l && target !== n.id) addEdge(target, 'link');
     }
+    fixJosaAfterNames(allBlocks, pn);
     for (const m of unmarkedNumbers(allBlocks, pn)) push('P031', n.id, `"${m}"`);
     for (const x of inlines) {
       if ((x.t !== 'why' && x.t !== 'link') || !x.key) continue;
@@ -517,10 +548,53 @@ function labelSites(blocks: Block[], pn: ParsedNode): { x: Extract<Inline, { t: 
   return out;
 }
 
+/** 숫자를 읽은 소리의 끝에 받침이 있는가, 그 받침이 ㄹ인가. 1 일, 7 칠, 8 팔은 ㄹ. 10 십, 100 백, 1000 천. */
+export function numberFinal(n: number): { batchim: boolean; rieul: boolean } {
+  const last = n % 10;
+  if (last !== 0) return { batchim: [1, 3, 6, 7, 8].includes(last), rieul: [1, 7, 8].includes(last) };
+  return { batchim: true, rieul: false }; // 영·십·백·천은 모두 받침이 있고 ㄹ이 아니다
+}
+
+/** 짝을 이루는 조사를 앞말의 받침에 맞춘다. "이다", "이므로"처럼 뒤에 말이 이어지면 조사가 아니므로 건드리지 않는다. */
+export function fitJosa(after: string, n: number): string {
+  const { batchim, rieul } = numberFinal(n);
+  const m = /^(을|를|이|가|은|는|과|와|으로|로)(?=[\s.,)·:;!?]|$)/.exec(after);
+  if (!m) return after;
+  const pick: Record<string, [string, string]> = { 을: ['을', '를'], 를: ['을', '를'], 이: ['이', '가'], 가: ['이', '가'], 은: ['은', '는'], 는: ['은', '는'], 과: ['과', '와'], 와: ['과', '와'], 으로: ['으로', '로'], 로: ['으로', '로'] };
+  const [withB, without] = pick[m[1]];
+  const right = m[1] === '으로' || m[1] === '로' ? (batchim && !rieul ? withB : without) : batchim ? withB : without;
+  return right + after.slice(m[1].length);
+}
+
+/** 번호를 자동으로 채운 이름("명제 7") 바로 뒤의 조사를 그 번호에 맞춘다. 번호가 바뀌어도 "명제 7을"/"명제 9를"이 맞게 된다. */
+function fixJosaAfterNames(blocks: Block[], pn: ParsedNode) {
+  const visit = (list: Inline[]) => {
+    for (let i = 0; i < list.length; i++) {
+      const x = list[i];
+      if ((x.t === 'ref' || x.t === 'label') && x.auto) {
+        const num = /(\d+)$/.exec(plainText(x.c));
+        const next = list[i + 1];
+        if (num && next?.t === 'text') next.v = fitJosa(next.v, +num[1]);
+      } else if ('c' in x) visit(x.c);
+    }
+  };
+  for (const b of walkBlocks(blocks)) {
+    if (b.t === 'p' || b.t === 'h') visit(b.c);
+    else if (b.t === 'ul') b.items.forEach(visit);
+    else if (b.t === 'note' && b.title) visit(b.title);
+    else if (b.t === 'chain') for (const r of b.rows) if (r.why) visit(r.why);
+  }
+  for (const c of pn.checks) {
+    visit(c.q);
+    c.choices.forEach(visit);
+  }
+}
+
 /** 참조 표시 없이 적은 "공리 5", "명제 2", "증명 1", "0의 공리" (P031). 이름표와 참조 안의 글은 보지 않는다. */
 function unmarkedNumbers(blocks: Block[], pn: ParsedNode): string[] {
   const found: string[] = [];
-  const re = /(공리|명제|증명) ?\d+|[01]의 공리/g;
+  // "n번"은 목록의 n째 항목을 가리킬 때만 잡는다("2번은", "1번(", "(1번)", "1번 식"). "12번 곱한"처럼 횟수를 말할 때는 잡지 않는다.
+  const re = /(공리|명제|증명|규칙) ?\d+|[01]의 공리|\d+번(?=[은는이가을를의에과와(),.~]|\s*식|$)/g;
   const visit = (list: Inline[]) => {
     for (const x of list) {
       if (x.t === 'ref' || x.t === 'label') continue;

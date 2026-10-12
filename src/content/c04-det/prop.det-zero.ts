@@ -41,7 +41,7 @@ const node: NodeDef = {
   ],
   body: String.raw`[행렬식](t:t.determinant)이 0이라는 것은 정확히 무슨 일이 일어났다는 뜻일까?
 
-[명제](label:main). 2×2 행렬 $A$에 대해 다음 셋은 같은 말이다.
+[](label:main). 2×2 행렬 $A$에 대해 다음 셋은 같은 말이다.
 1. $\det A = 0$.
 2. 두 열 $\mathbf{a}_1$, $\mathbf{a}_2$가 [선형 종속](t:t.lin-dep)이다(같은 직선 위에 있거나 하나가 영벡터다).
 3. $A$는 평면 전체를 직선 하나(또는 점 하나)로 납작하게 누른다.

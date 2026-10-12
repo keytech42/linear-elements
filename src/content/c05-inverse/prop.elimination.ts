@@ -51,7 +51,7 @@ const node: NodeDef = {
 
 ::predict p-E
 
-[명제](label:main). 행 연산 하나는 [기본 행렬](def:t.elementary-matrix) $E$ 하나를 왼쪽에 곱하는 일이다. $E$는 항등 행렬에 같은 행 연산을 한 것이다. 행 연산은 해를 바꾸지 않는다. 그러므로 [가우스 소거](def:t.elimination)는 기본 행렬들을 차례로 곱해 $A\mathbf{x} = \mathbf{b}$를 풀기 쉬운 꼴(계단 모양)로 바꾸는 일이다.
+[](label:main). 행 연산 하나는 [기본 행렬](def:t.elementary-matrix) $E$ 하나를 왼쪽에 곱하는 일이다. $E$는 항등 행렬에 같은 행 연산을 한 것이다. 행 연산은 해를 바꾸지 않는다. 그러므로 [가우스 소거](def:t.elimination)는 기본 행렬들을 차례로 곱해 $A\mathbf{x} = \mathbf{b}$를 풀기 쉬운 꼴(계단 모양)로 바꾸는 일이다.
 
 ### 더하기 연산은 전단이다
 더하기의 기본 행렬, 예를 들어 $\begin{bmatrix} 1 & 0 \\ -2 & 1 \end{bmatrix}$은 [전단](t:t.shear)이다. 그래서 넓이를 바꾸지 않는다($\det = 1$). 맞바꿈은 반사라 $\det = -1$, $c$배 늘림은 $\det = c$다.

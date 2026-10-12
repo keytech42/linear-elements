@@ -44,7 +44,7 @@ const node: NodeDef = {
 
 ::predict p-obtuse
 
-[명제](label:main)([코사인 법칙](def:t.law-of-cosines)). 두 변의 길이가 $a$, $b$이고 그 사이의 각이 $\theta$인 삼각형에서, 맞은편 변의 길이 $c$는
+[](label:main)([코사인 법칙](def:t.law-of-cosines)). 두 변의 길이가 $a$, $b$이고 그 사이의 각이 $\theta$인 삼각형에서, 맞은편 변의 길이 $c$는
 
 $$c^2 = a^2 + b^2 - 2ab\cos\theta$$
 

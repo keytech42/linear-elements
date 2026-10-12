@@ -24,7 +24,7 @@ const node: NodeDef = {
   ],
   body: String.raw`행렬 셋을 곱할 때 $(AB)C$로 계산하든 $A(BC)$로 계산하든 같을까? 성분을 다 전개해서 확인할 수도 있지만, 그럴 필요가 없다.
 
-[명제](label:main). $(AB)C = A(BC)$이다. 그래서 괄호 없이 $ABC$라고 써도 된다.
+[](label:main). $(AB)C = A(BC)$이다. 그래서 괄호 없이 $ABC$라고 써도 된다.
 
 ::predict p-twelve
 

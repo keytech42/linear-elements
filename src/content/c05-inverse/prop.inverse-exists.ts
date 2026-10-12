@@ -41,7 +41,7 @@ const node: NodeDef = {
   ],
   body: String.raw`어떤 행렬은 되돌릴 수 있고 어떤 행렬은 되돌릴 수 없을까? 둘을 가르는 기준은 무엇일까?
 
-[명제](label:main). 2×2 행렬 $A$가 [가역](t:t.invertible)인 것은 $\det A \ne 0$인 것과 같다. 그리고 그때
+[](label:main). 2×2 행렬 $A$가 [가역](t:t.invertible)인 것은 $\det A \ne 0$인 것과 같다. 그리고 그때
 
 $$A^{-1} = \frac{1}{\det A}\begin{bmatrix} a_{22} & -a_{12} \\ -a_{21} & a_{11} \end{bmatrix}$$
 

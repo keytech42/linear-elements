@@ -26,7 +26,7 @@ const node: NodeDef = {
 
 ::predict p-land
 
-[명제](label:main). 평면의 선형 변환 $T$는 두 도착지 $T(\mathbf{e}_1)$, $T(\mathbf{e}_2)$만으로 완전히 정해진다. 입력 $\mathbf{x} = (x_1, x_2)$의 도착지는
+[](label:main). 평면의 선형 변환 $T$는 두 도착지 $T(\mathbf{e}_1)$, $T(\mathbf{e}_2)$만으로 완전히 정해진다. 입력 $\mathbf{x} = (x_1, x_2)$의 도착지는
 
 $$T(\mathbf{x}) = x_1\,\ca{T(\mathbf{e}_1)} + x_2\,\cb{T(\mathbf{e}_2)}$$
 

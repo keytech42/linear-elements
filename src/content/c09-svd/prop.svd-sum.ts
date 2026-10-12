@@ -26,7 +26,7 @@ const node: NodeDef = {
   ],
   body: String.raw`[특이값 분해](t:t.svd) $A = U\Sigma V^{\mathsf{T}}$를 "회전, 늘이기, 회전"이 아닌 다른 방식으로 읽을 수 있을까? [바깥곱](t:t.outer-product)을 써서 읽어 보자.
 
-[명제](label:main).
+[](label:main).
 
 $$A = \sigma_1\,\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}} + \sigma_2\,\mathbf{u}_2\mathbf{v}_2^{\mathsf{T}} \quad\left(n\text{차원에서는 } A = \sum_i \sigma_i\,\mathbf{u}_i\mathbf{v}_i^{\mathsf{T}}\right)$$
 

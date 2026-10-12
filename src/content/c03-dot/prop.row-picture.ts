@@ -43,7 +43,7 @@ const node: NodeDef = {
 
 ::predict p-row
 
-[명제](label:main). $A\mathbf{x}$의 $i$번째 성분은 $A$의 $i$번째 행과 $\mathbf{x}$의 [내적](t:t.dot)이다.
+[](label:main). $A\mathbf{x}$의 $i$번째 성분은 $A$의 $i$번째 행과 $\mathbf{x}$의 [내적](t:t.dot)이다.
 
 $$(A\mathbf{x})_i = (A\text{의 } i\text{번째 행})\cdot\mathbf{x}$$
 

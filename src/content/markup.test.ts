@@ -1,6 +1,6 @@
 // 마크업 파서 고정 테스트. 검증기는 이 파서를 믿으므로, 파서가 틀리면 검증기도 틀린다.
 import { describe, it, expect, vi } from 'vitest';
-import { parseBlocks, parseInline, syncKeysInTex, expandSyncMacros } from './markup';
+import { parseBlocks, parseInline, syncKeysInTex, expandSyncMacros, plainText, type Inline } from './markup';
 
 // 이 파일의 검증기 테스트는 가짜 노드로 돈다. 실제 검토 기록(reviews.json)을 읽으면, 저자가 노드를 검토할 때마다
 // 가짜 책에 없는 id가 P027로 잡혀 테스트가 깨진다. 그래서 검토 기록을 빈 것으로 바꿔 끼운다.
@@ -138,23 +138,32 @@ describe('검증기 규칙', () => {
     expect(rules(mk([{ ...ask, openWhys: [] }, { id: 'n2', kind: 'exp', title: '', status: 'written', body: '::answers n1' }]))).toContain('P029');
   });
   it('이름표와 참조: label/ref 파싱', () => {
-    expect(parseInline('[공리 5](label:neg) 덧셈 역원')[0]).toMatchObject({ t: 'label', key: 'neg', c: [{ t: 'text', v: '공리 5' }] });
+    expect(parseInline('[](label:neg) 덧셈 역원')[0]).toMatchObject({ t: 'label', key: 'neg', c: [] });
     expect(parseInline('[공리 5](ref:ax.x#neg)')[0]).toMatchObject({ t: 'ref', node: 'ax.x', key: 'neg' });
     expect(parseInline('[명제 2](ref:two)')[0]).toMatchObject({ t: 'ref', key: 'two' });
     expect(parseInline('[명제 2](ref:two)')[0]).not.toHaveProperty('node');
   });
-  it('P030 이름표·참조 오류, P031 표시 없는 번호', () => {
-    const ax = { id: 'ax.x', kind: 'ax' as const, title: '', status: 'written' as const, body: '- [공리 1](label:one) 하나\n- [공리 2](label:two) 둘' };
-    const ok = { id: 'p.y', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [명제 1](label:m1) 가\n\n[공리 2](ref:ax.x#two)와 [명제 1](ref:m1)로.' };
-    expect(rules(mk([ax, ok])).filter((r) => r === 'P030' || r === 'P031')).toEqual([]);
-    // 글과 이름이 다름(번호가 낡음), 없는 이름표
-    expect(rules(mk([ax, { ...ok, body: '[공리 3](ref:ax.x#two), [공리 1](ref:ax.x#nope)' }])).filter((r) => r === 'P030').length).toBe(2);
-    // 다른 노드의 명제를 노드를 밝히지 않고 가리킴 / 밝히면 통과
-    const later = { id: 'p.z', kind: 'prop' as const, title: '', status: 'written' as const, body: '[명제 1](ref:p.y#m1)' };
-    expect(rules(mk([ax, ok, later]))).toContain('P030');
-    expect(rules(mk([ax, ok, { ...later, body: '[앞 노드의 명제 1](ref:p.y#m1)' }])).filter((r) => r === 'P030')).toEqual([]);
-    // 표시 없는 번호
-    expect(rules(mk([ax, { ...ok, body: '공리 2와 0의 공리로.' }])).filter((r) => r === 'P031').length).toBe(2);
+  it('P030 이름표·참조: 번호는 자동으로 매기고, 다른 장의 명제에는 장을 붙인다', () => {
+    const ax = { id: 'ax.x', kind: 'ax' as const, title: '', status: 'written' as const, body: '- [](label:one) 하나\n- [](label:two) 둘\n- [0의 공리](label:z) 영' };
+    const p1 = { id: 'p.y', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [](label:m1) 가\n- [](label:m2) 나\n\n[](ref:ax.x#two)와 [](ref:m2)를 쓴다.', proof: '::proves m1\n\n가\n\n::proves m2\n\n나' };
+    const p2 = { id: 'p.z', kind: 'prop' as const, title: '', status: 'written' as const, body: '[](label:main). [](ref:p.y#m2)을 쓴다.', proof: '증명' };
+    const two: Book[] = [{ id: 'c0', num: 0, title: '', subtitle: '', nodes: [ax, p1] }, { id: 'c1', num: 1, title: '', subtitle: '', nodes: [p2] }];
+    const r = verify(two, new Set(), new Map());
+    expect(r.issues.filter((i) => i.rule === 'P030' || i.rule === 'P031')).toEqual([]);
+    // 공리는 책 전체에서, 명제는 장마다 센다
+    expect(['ax.x#one', 'ax.x#two', 'ax.x#z', 'p.y#m1', 'p.y#m2', 'p.z#main'].map((k) => r.labels.get(k)!.name)).toEqual(['공리 1', '공리 2', '0의 공리', '명제 1', '명제 2', '명제 1']);
+    // 참조의 글: 같은 장은 그대로, 다른 장은 장을 붙이고, 뒤의 조사도 번호에 맞춘다("명제 2을" → "명제 2를")
+    const shown = (id: string) => plainText(r.parsed.get(id)!.body.at(-1)!.t === 'p' ? (r.parsed.get(id)!.body.at(-1) as { c: Inline[] }).c : []);
+    expect(shown('p.y')).toBe('공리 2와 명제 2를 쓴다.');
+    expect(shown('p.z')).toContain('0장 명제 2를 쓴다.');
+    // 번호를 손으로 적으면, 또는 글자가 이름과 다르면 P030
+    expect(rules(mk([{ ...ax, body: '- [공리 1](label:one) 하나' }]))).toContain('P030');
+    expect(rules(mk([ax, { ...p1, body: '- [](label:m1) 가\n- [](label:m2) 나\n\n[공리 3](ref:ax.x#two)' }]))).toContain('P030');
+    // 번호 이름표는 공리·명제 노드에만
+    expect(rules(mk([{ id: 'd.q', kind: 'def', title: '', status: 'written', body: '[](label:q) 뜻' }]))).toContain('P030');
+    // 표시 없는 번호. 횟수를 말하는 "12번 곱한"은 잡지 않는다
+    expect(rules(mk([ax, { ...p1, body: '- [](label:m1) 가\n- [](label:m2) 나\n\n공리 2와 0의 공리로, 1번을 쓴다.' }])).filter((x) => x === 'P031').length).toBe(3);
+    expect(rules(mk([{ id: 'e.r', kind: 'exp', title: '', status: 'written', body: '30°씩 12번 곱한다.' }]))).not.toContain('P031');
   });
   it('증명 표지와 키가 달린 왜? 칩', () => {
     expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });
@@ -162,8 +171,8 @@ describe('검증기 규칙', () => {
     expect(parseInline('[왜?](why:p.y)')[0]).not.toHaveProperty('key');
   });
   it('P032 명제와 증명의 짝, 뒤에서 쓰이는 곳', () => {
-    const one = { id: 'p.a', kind: 'prop' as const, title: '', status: 'written' as const, body: '[명제](label:main). 가', proof: '증명' };
-    const two = { id: 'p.b', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [명제 1](label:x) 가\n- [명제 2](label:y) 나', proof: '::proves x\n\n가의 증명\n\n::proves y\n\n나의 증명' };
+    const one = { id: 'p.a', kind: 'prop' as const, title: '', status: 'written' as const, body: '[](label:main). 가', proof: '증명' };
+    const two = { id: 'p.b', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [](label:x) 가\n- [](label:y) 나', proof: '::proves x\n\n가의 증명\n\n::proves y\n\n나의 증명' };
     const user = { id: 'e.c', kind: 'exp' as const, title: '', status: 'written' as const, body: '[왜?](why:p.a) [왜?](why:p.b#y)' };
     const r = verify(mk([one, two, user]), new Set(), new Map());
     expect(r.issues.filter((i) => i.rule === 'P032')).toEqual([]);

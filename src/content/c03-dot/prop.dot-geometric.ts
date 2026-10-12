@@ -41,7 +41,7 @@ const node: NodeDef = {
   ],
   body: String.raw`[내적](t:t.dot)은 "곱해서 더하기"라는 숫자 계산으로 정의했다. 그런데 앞 노드의 그림에서는 두 화살표가 이루는 각에 따라 내적의 부호가 바뀌었다. 숫자 계산과 각도는 왜 이어져 있을까?
 
-[명제](label:main). 영벡터가 아닌 두 벡터 $\mathbf{u}$, $\mathbf{v}$ 사이의 각을 $\theta$($0° \le \theta \le 180°$)라 하면
+[](label:main). 영벡터가 아닌 두 벡터 $\mathbf{u}$, $\mathbf{v}$ 사이의 각을 $\theta$($0° \le \theta \le 180°$)라 하면
 
 $$\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$$
 

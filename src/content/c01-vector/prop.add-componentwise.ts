@@ -50,7 +50,7 @@ const node: NodeDef = {
 
 답은 성분끼리 더하는 식이다.
 
-[명제](label:main). 두 벡터 $\mathbf{u}$, $\mathbf{w}$에 대해
+[](label:main). 두 벡터 $\mathbf{u}$, $\mathbf{w}$에 대해
 $$\h{sum}{\mathbf{u} + \mathbf{w}} = \begin{bmatrix} u_1 \\ u_2 \end{bmatrix} + \begin{bmatrix} w_1 \\ w_2 \end{bmatrix} = \begin{bmatrix} \h{h}{\ca{u_1 + w_1}} \\ \h{vv}{\cb{u_2 + w_2}} \end{bmatrix}$$
 이다. 곧 [벡터 덧셈](t:t.vector-add)은 **같은 자리의 [성분](t:t.component)끼리 더하는 것**과 같다.
 

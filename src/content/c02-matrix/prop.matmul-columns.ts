@@ -25,7 +25,7 @@ const node: NodeDef = {
 
 ::predict p-col2
 
-[명제](label:main). $AB$의 $j$번째 열은 $A$에 $B$의 $j$번째 열을 곱한 것이다.
+[](label:main). $AB$의 $j$번째 열은 $A$에 $B$의 $j$번째 열을 곱한 것이다.
 
 $$AB = A\begin{bmatrix} | & | \\ B\mathbf{e}_1 & B\mathbf{e}_2 \\ | & | \end{bmatrix} = \begin{bmatrix} | & | \\ A(B\mathbf{e}_1) & A(B\mathbf{e}_2) \\ | & | \end{bmatrix}$$
 

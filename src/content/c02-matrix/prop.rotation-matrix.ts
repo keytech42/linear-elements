@@ -28,7 +28,7 @@ const node: NodeDef = {
 
 ::predict p-e2
 
-[명제](label:main). 원점을 중심으로 시계 반대 방향으로 $\theta$만큼 돌리는 회전의 행렬은
+[](label:main). 원점을 중심으로 시계 반대 방향으로 $\theta$만큼 돌리는 회전의 행렬은
 
 $$R_\theta = \begin{bmatrix} \ca{\cos\theta} & \cb{-\sin\theta} \\ \ca{\sin\theta} & \cb{\cos\theta} \end{bmatrix}$$
 

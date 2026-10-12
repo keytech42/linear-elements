@@ -54,7 +54,7 @@ $$A\mathbf{v} = \lambda\mathbf{v} \iff A\mathbf{v} - \lambda I\mathbf{v} = \math
 
 ::predict p-why
 
-[명제](label:main). 수 $\lambda$가 $A$의 [고윳값](t:t.eigenvalue)인 것과 $\det(A - \lambda I) = 0$인 것은 같은 말이다. 2×2 행렬에서 이 식을 풀어 쓰면
+[](label:main). 수 $\lambda$가 $A$의 [고윳값](t:t.eigenvalue)인 것과 $\det(A - \lambda I) = 0$인 것은 같은 말이다. 2×2 행렬에서 이 식을 풀어 쓰면
 
 $$\lambda^2 - (\operatorname{tr}A)\,\lambda + \det A = 0$$
 
