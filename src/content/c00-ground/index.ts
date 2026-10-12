@@ -6,6 +6,7 @@ import prop_neg_times_neg from './prop.neg-times-neg';
 import def_numberline from './def.numberline';
 import def_plane from './def.plane';
 import ax_area from './ax.area';
+import prop_parallelogram from './prop.parallelogram';
 import prop_pythagoras from './prop.pythagoras';
 import def_distance from './def.distance';
 import def_angle_trig from './def.angle-trig';
@@ -27,6 +28,7 @@ const book: Book = {
     def_numberline,
     def_plane,
     ax_area,
+    prop_parallelogram,
     prop_pythagoras,
     def_distance,
     def_angle_trig,

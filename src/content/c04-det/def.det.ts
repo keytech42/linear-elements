@@ -18,7 +18,7 @@ const node: NodeDef = {
       id: 'p-shear',
       kind: 'choice',
       q: String.raw`전단 $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$은 단위 정사각형을 넓이 몇인 도형으로 보낼까?`,
-      hints: [String.raw`두 열 $(1, 0)$, $(1, 1)$이 만드는 평행사변형의 밑변과 높이는? [평행사변형의 넓이는 밑변 × 높이였다](n:ax.area).`],
+      hints: [String.raw`두 열 $(1, 0)$, $(1, 1)$이 만드는 평행사변형의 밑변과 높이는? [평행사변형의 넓이는 밑변 × 높이였다](n:prop.parallelogram#main).`],
       choices: ['1', '2', String.raw`$\sqrt{2}$`, '0'],
       answer: 0,
       why: [
