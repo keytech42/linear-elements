@@ -1,13 +1,13 @@
 {
   "intro.reading": {
-    "on": "2026-10-12T15:42:33+09:00",
-    "hash": "26tc1ntn7o",
-    "commit": "9f9c59f35e6e",
+    "on": "2026-10-12T16:25:35+09:00",
+    "hash": "19qahto0dea",
+    "commit": "96b28cc5e43e",
     "dirty": true
   },
   "ax.arith": {
-    "on": "2026-10-07T18:02:19+09:00",
-    "hash": "shyu1rhkab",
-    "commit": "9f9c59f35e6e"
+    "on": "2026-10-12T15:46:57+09:00",
+    "hash": "132n7mrxfl5",
+    "commit": "96b28cc5e43e"
   }
 }
