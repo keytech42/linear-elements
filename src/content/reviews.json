@@ -1,13 +1,17 @@
 {
   "intro.reading": {
-    "on": "2026-10-12T16:25:35+09:00",
+    "on": "2026-10-12T16:56:44+09:00",
     "hash": "19qahto0dea",
-    "commit": "96b28cc5e43e",
-    "dirty": true
+    "commit": "f0b37bdc77aa"
   },
   "ax.arith": {
-    "on": "2026-10-12T15:46:57+09:00",
-    "hash": "132n7mrxfl5",
-    "commit": "96b28cc5e43e"
+    "on": "2026-10-12T16:58:31+09:00",
+    "hash": "a6yixe6o1i",
+    "commit": "f0b37bdc77aa"
+  },
+  "prop.arith-first": {
+    "on": "2026-10-12T17:01:09+09:00",
+    "hash": "uhdymrltuy",
+    "commit": "f0b37bdc77aa"
   }
 }
