@@ -137,6 +137,25 @@ describe('검증기 규칙', () => {
     // 표지가 미뤄 둔 질문이 없는 노드를 가리킨다
     expect(rules(mk([{ ...ask, openWhys: [] }, { id: 'n2', kind: 'exp', title: '', status: 'written', body: '::answers n1' }]))).toContain('P029');
   });
+  it('이름표와 참조: label/ref 파싱', () => {
+    expect(parseInline('[공리 5](label:neg) 덧셈 역원')[0]).toMatchObject({ t: 'label', key: 'neg', c: [{ t: 'text', v: '공리 5' }] });
+    expect(parseInline('[공리 5](ref:ax.x#neg)')[0]).toMatchObject({ t: 'ref', node: 'ax.x', key: 'neg' });
+    expect(parseInline('[명제 2](ref:two)')[0]).toMatchObject({ t: 'ref', key: 'two' });
+    expect(parseInline('[명제 2](ref:two)')[0]).not.toHaveProperty('node');
+  });
+  it('P030 이름표·참조 오류, P031 표시 없는 번호', () => {
+    const ax = { id: 'ax.x', kind: 'ax' as const, title: '', status: 'written' as const, body: '- [공리 1](label:one) 하나\n- [공리 2](label:two) 둘' };
+    const ok = { id: 'p.y', kind: 'prop' as const, title: '', status: 'written' as const, body: '- [명제 1](label:m1) 가\n\n[공리 2](ref:ax.x#two)와 [명제 1](ref:m1)로.' };
+    expect(rules(mk([ax, ok])).filter((r) => r === 'P030' || r === 'P031')).toEqual([]);
+    // 글과 이름이 다름(번호가 낡음), 없는 이름표
+    expect(rules(mk([ax, { ...ok, body: '[공리 3](ref:ax.x#two), [공리 1](ref:ax.x#nope)' }])).filter((r) => r === 'P030').length).toBe(2);
+    // 다른 노드의 명제를 노드를 밝히지 않고 가리킴 / 밝히면 통과
+    const later = { id: 'p.z', kind: 'prop' as const, title: '', status: 'written' as const, body: '[명제 1](ref:p.y#m1)' };
+    expect(rules(mk([ax, ok, later]))).toContain('P030');
+    expect(rules(mk([ax, ok, { ...later, body: '[앞 노드의 명제 1](ref:p.y#m1)' }])).filter((r) => r === 'P030')).toEqual([]);
+    // 표시 없는 번호
+    expect(rules(mk([ax, { ...ok, body: '공리 2와 0의 공리로.' }])).filter((r) => r === 'P031').length).toBe(2);
+  });
   it('fwd: 예고는 허용', () => {
     const r = rules(mk([
       { id: 'n1', kind: 'def', title: '', status: 'written', body: '[가나다](fwd:t.a)' },

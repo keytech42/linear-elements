@@ -8,7 +8,7 @@
 import type { Book, NodeDef, TermDecl, Predict } from '../content/schema';
 import { eig2 } from '../la/eig';
 import { REVIEWS, reviewState, stampLabel } from '../content/review';
-import { parseBlocks, parseInline, walkInlines, walkInlineList, walkBlocks, type Block, type Inline } from '../content/markup';
+import { parseBlocks, parseInline, walkInlines, walkInlineList, walkBlocks, plainText, type Block, type Inline } from '../content/markup';
 
 export type Level = 'error' | 'warn' | 'info';
 
@@ -36,6 +36,19 @@ export interface VerifyResult {
   parsed: Map<string, ParsedNode>;
   /** 첫 등장 자동 링크로 바꾼 자리의 수 */
   autoLinked: number;
+  /** 이름표(공리 5, 명제 2 …). 키는 "노드id#이름표키". 참조의 미리보기가 이 글을 보여 준다. */
+  labels: Map<string, Label>;
+}
+
+export interface Label {
+  node: string;
+  key: string;
+  /** 이름표에 적힌 이름(예: "공리 5") */
+  name: string;
+  /** 그 이름이 붙은 항목의 글(미리보기용) */
+  text: Inline[];
+  /** 공리 노드의 이름표는 책 전체에서 그 이름 하나로 통한다. 다른 노드의 이름표는 그 노드 안에서만 통하므로, 다른 노드에서 가리킬 때는 노드를 밝혀 적는다. */
+  global: boolean;
 }
 
 export interface ParsedNode {
@@ -77,6 +90,8 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P024: { level: 'warn', text: '힌트가 3개를 넘음' },
   P026: { level: 'warn', text: '저자가 검토한 뒤 내용이 바뀐 노드(다시 검토 필요)' },
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
+  P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 다른 노드의 명제를 노드를 밝히지 않고 가리킴)' },
+  P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "0의 공리"처럼 적음([공리 5](ref:…)로 적을 것)' },
   P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
 };
 
@@ -122,6 +137,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   const termUse = new Map<string, number>();
   let autoLinked = 0;
   const parsed = new Map<string, ParsedNode>();
+  const labels = new Map<string, Label>();
 
   for (const n of nodes) {
     const here = order.get(n.id)!;
@@ -166,6 +182,31 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     const addEdge = (to: string, kind: Edge['kind']) => {
       if (to !== n.id && !edges.some((e) => e.from === n.id && e.to === to && e.kind === kind)) edges.push({ from: n.id, to, kind });
     };
+
+    // 이름표와 참조: 이 노드의 이름표를 먼저 모은다(같은 노드 안에서는 앞뒤 상관없이 가리킬 수 있다). 그다음 참조를 확인한다.
+    for (const { x, text } of labelSites(allBlocks, pn)) {
+      const id = `${n.id}#${x.key}`;
+      const name = plainText(x.c).trim();
+      if (labels.has(id)) push('P030', n.id, `이름표 '${x.key}'를 두 번 선언함`);
+      const clash = n.kind === 'ax' ? [...labels.values()].find((l) => l.global && l.name === name) : undefined;
+      if (clash) push('P030', n.id, `책 전체에서 쓰는 이름 '${name}'가 ${clash.node}에도 있음`);
+      labels.set(id, { node: n.id, key: x.key, name, text, global: n.kind === 'ax' });
+    }
+    for (const x of inlines) {
+      if (x.t !== 'ref') continue;
+      const target = x.node ?? n.id;
+      x.node = target; // 렌더러가 어느 노드의 이름표인지 알도록 채워 둔다
+      const o = order.get(target);
+      const l = labels.get(`${target}#${x.key}`);
+      const said = plainText(x.c).trim();
+      if (o === undefined) push('P030', n.id, `ref:${target}#${x.key}: 없는 노드`);
+      else if (o > here) push('P030', n.id, `ref:${target}#${x.key}: 뒤쪽 노드의 이름표`);
+      else if (!l) push('P030', n.id, `ref:${target}#${x.key}: 없는 이름표`);
+      else if (!said.includes(l.name)) push('P030', n.id, `"${said}"가 가리키는 이름표의 이름은 '${l.name}'`);
+      else if (target !== n.id && !l.global && said === l.name) push('P030', n.id, `"${said}"는 ${target}의 이름표다. 다른 노드의 명제는 글에 노드를 밝혀 적는다(예: "앞 노드의 ${l.name}")`);
+      if (l && target !== n.id) addEdge(target, 'link');
+    }
+    for (const m of unmarkedNumbers(allBlocks, pn)) push('P031', n.id, `"${m}"`);
 
     for (const x of inlines) {
       if (x.t === 'def') {
@@ -289,7 +330,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   const last = books[books.length - 1];
   for (const n of nodes) if (!incoming.has(n.id) && n.kind !== 'exp' && !last.nodes.includes(n)) push('P006', n.id, n.title);
 
-  return { issues, edges, order, termHome, parsed, autoLinked };
+  return { issues, edges, order, termHome, parsed, autoLinked, labels };
 }
 
 export interface LexEntry {
@@ -403,6 +444,59 @@ export function autoLinkFirstMentions(
     blk(c.explain);
   }
   return count;
+}
+
+/** 이름표가 선언된 자리와, 미리보기에 보여 줄 그 항목의 글. 이름표가 항목 맨 앞에 있으면 이름표를 뺀 나머지를, 중간에 있으면 항목 전체를 보여 준다. */
+function labelSites(blocks: Block[], pn: ParsedNode): { x: Extract<Inline, { t: 'label' }>; text: Inline[] }[] {
+  const out: { x: Extract<Inline, { t: 'label' }>; text: Inline[] }[] = [];
+  const scan = (top: Inline[], list: Inline[]) => {
+    for (const x of list) {
+      if (x.t === 'label') {
+        if (top[0] !== x) out.push({ x, text: top });
+        else {
+          const rest = top.slice(1);
+          if (rest[0]?.t === 'text') rest[0] = { t: 'text', v: rest[0].v.replace(/^\s+/, '') };
+          out.push({ x, text: rest });
+        }
+      } else if ('c' in x) scan(top, x.c);
+    }
+  };
+  for (const b of walkBlocks(blocks)) {
+    if (b.t === 'p' || b.t === 'h') scan(b.c, b.c);
+    else if (b.t === 'ul') b.items.forEach((it) => scan(it, it));
+    else if (b.t === 'note' && b.title) scan(b.title, b.title);
+    else if (b.t === 'chain') for (const r of b.rows) if (r.why) scan(r.why, r.why);
+  }
+  for (const c of pn.checks) {
+    scan(c.q, c.q);
+    c.choices.forEach((ch) => scan(ch, ch));
+  }
+  return out;
+}
+
+/** 참조 표시 없이 적은 "공리 5", "명제 2", "증명 1", "0의 공리" (P031). 이름표와 참조 안의 글은 보지 않는다. */
+function unmarkedNumbers(blocks: Block[], pn: ParsedNode): string[] {
+  const found: string[] = [];
+  const re = /(공리|명제|증명) ?\d+|[01]의 공리/g;
+  const visit = (list: Inline[]) => {
+    for (const x of list) {
+      if (x.t === 'ref' || x.t === 'label') continue;
+      if (x.t === 'text') found.push(...(x.v.match(re) ?? []));
+      else if (x.t === 'why') found.push(...(x.q.match(re) ?? []));
+      else if ('c' in x) visit(x.c);
+    }
+  };
+  for (const b of walkBlocks(blocks)) {
+    if (b.t === 'p' || b.t === 'h') visit(b.c);
+    else if (b.t === 'ul') b.items.forEach(visit);
+    else if (b.t === 'note' && b.title) visit(b.title);
+    else if (b.t === 'chain') for (const r of b.rows) if (r.why) visit(r.why);
+  }
+  for (const c of pn.checks) {
+    visit(c.q);
+    c.choices.forEach(visit);
+  }
+  return found;
 }
 
 /** 표시(def/term/fwd/링크) 밖에 있는 순수 텍스트 조각들 */

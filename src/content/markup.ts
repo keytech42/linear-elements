@@ -24,6 +24,9 @@
 //   [질문?](why:노드id)   왜? 칩. 답이 있는 앞쪽 노드를 가리킨다 (P003)
 //   [글](n:노드id)        노드 링크 (앞쪽만 허용)
 //   [글](sync:키)         동기화 고리가 걸린 글 조각
+//   [공리 5](label:키)    이름표 선언: 이 자리의 공리·명제에 이름을 붙인다(굵게, 앵커). 키는 노드 안에서 하나뿐 (P030)
+//   [공리 5](ref:키)      이름표 참조: 같은 노드는 ref:키, 앞 노드는 ref:노드id#키. 글에 이름표 이름이 들어 있어야 한다.
+//                         마우스를 올리면 그 항목의 글이 뜨고, 누르면 그 자리로 간다. 표시 없는 "공리 n" "명제 n"은 P031.
 
 export type Inline =
   | { t: 'text'; v: string }
@@ -33,7 +36,10 @@ export type Inline =
   | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
   | { t: 'why'; to: string; q: string }
   | { t: 'link'; to: string; c: Inline[] }
-  | { t: 'sync'; key: string; c: Inline[] };
+  | { t: 'sync'; key: string; c: Inline[] }
+  | { t: 'label'; key: string; c: Inline[] }
+  /** node는 파서가 비워 두면(같은 노드) 검증기가 채운다 */
+  | { t: 'ref'; node?: string; key: string; c: Inline[] };
 
 export type NoteKind = '비유' | '주의' | '직관' | '질문' | '코드' | '참고';
 
@@ -160,7 +166,7 @@ export function parseBlocks(src: string): Block[] {
   return out;
 }
 
-const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync'] as const;
+const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref'] as const;
 
 export function parseInline(src: string): Inline[] {
   const out: Inline[] = [];
@@ -215,6 +221,11 @@ export function parseInline(src: string): Inline[] {
           if (kind === 'why') out.push({ t: 'why', to: id, q: inner });
           else if (kind === 'n') out.push({ t: 'link', to: id, c: parseInline(inner) });
           else if (kind === 'sync') out.push({ t: 'sync', key: id, c: parseInline(inner) });
+          else if (kind === 'label') out.push({ t: 'label', key: id, c: parseInline(inner) });
+          else if (kind === 'ref') {
+            const k = id.indexOf('#');
+            out.push({ t: 'ref', ...(k >= 0 ? { node: id.slice(0, k) } : {}), key: k >= 0 ? id.slice(k + 1) : id, c: parseInline(inner) });
+          }
           else out.push({ t: kind === 't' ? 'term' : (kind as 'def' | 'fwd'), id, c: parseInline(inner) });
           i = pend + 1;
           continue;

@@ -1,4 +1,5 @@
-// 떠 있는 미리보기: 용어에 마우스를 올리면 정의 한 줄, 왜? 칩에 올리면 답이 있는 노드의 첫 문단.
+// 떠 있는 미리보기: 용어에 마우스를 올리면 정의 한 줄, 왜? 칩에 올리면 답이 있는 노드의 첫 문단,
+// 이름표 참조(공리 5, 명제 2 …)에 올리면 그 공리나 명제의 글.
 // 페이지를 떠나지 않고 답을 엿볼 수 있게 하는 것이 목적이다(읽던 흐름을 끊지 않기).
 import { V, NODE_BY_ID, BOOK_OF } from './data';
 import { KIND_LABEL } from '../content/schema';
@@ -17,7 +18,7 @@ export function installPopovers(root: HTMLElement) {
   pop.addEventListener('pointerleave', hide);
 
   root.addEventListener('pointerover', (e) => {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-term], a.why, a.nlink, .chip-node');
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-term], a.why, a.nlink, a.ref, .chip-node');
     if (!el || el === current) return;
     clearTimeout(timer);
     timer = window.setTimeout(() => show(el), 220);
@@ -25,7 +26,7 @@ export function installPopovers(root: HTMLElement) {
   root.addEventListener('pointerout', (e) => {
     const to = e.relatedTarget as Node | null;
     if (to && pop!.contains(to)) return;
-    const el = (e.target as HTMLElement).closest('[data-term], a.why, a.nlink, .chip-node');
+    const el = (e.target as HTMLElement).closest('[data-term], a.why, a.nlink, a.ref, .chip-node');
     if (el) {
       clearTimeout(timer);
       timer = window.setTimeout(hide, 180);
@@ -52,6 +53,22 @@ function show(el: HTMLElement) {
     const node = NODE_BY_ID.get(home.node)!;
     pop.innerHTML = `<div class="pop-kicker">용어 · ${d.en ?? ''}</div><div class="pop-title">${d.ko}</div><p>${escape(d.gloss)}</p>
       <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}장 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? ' ✓' : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
+  } else if (el.dataset.ref) {
+    const l = V.labels.get(el.dataset.ref);
+    if (!l) return;
+    const node = NODE_BY_ID.get(l.node)!;
+    const kick = document.createElement('div');
+    kick.className = 'pop-kicker';
+    kick.textContent = `${BOOK_OF.get(l.node)!.num}장 · ${KIND_LABEL[node.kind]} — ${node.title}`;
+    const title = document.createElement('div');
+    title.className = 'pop-title';
+    title.textContent = l.name;
+    const p = document.createElement('p');
+    p.appendChild(renderInlines(l.text));
+    const foot = document.createElement('div');
+    foot.className = 'pop-foot';
+    foot.textContent = el.dataset.ref.startsWith(`${location.hash.match(/^#\/n\/([^?]+)/)?.[1]}#`) ? '누르면 이 노드 안의 그 자리로 갑니다.' : '누르면 그 자리로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
+    pop.append(kick, title, p, foot);
   } else if (to) {
     const node = NODE_BY_ID.get(to);
     if (!node) return;

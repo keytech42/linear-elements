@@ -85,6 +85,8 @@ export interface TrailStep {
   node: string;
   scroll: number;
   q: string;
+  /** 'ref'면 질문이 아니라 이름표(공리 5 …)를 찾아본 것이다. 돌아가기 막대의 말이 달라진다. */
+  kind?: 'ref';
 }
 export const trail = {
   get(): TrailStep[] {

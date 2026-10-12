@@ -30,7 +30,7 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
     const from = NODE_BY_ID.get(last.node);
     const bar = document.createElement('button');
     bar.className = 'trail-bar';
-    bar.innerHTML = `<span>← 돌아가기</span> <b>${from?.title ?? last.node}</b>에서 물었던 <i>“${last.q}”</i>${t.length > 1 ? ` <span class="dim">(쌓인 질문 ${t.length}개)</span>` : ''}`;
+    bar.innerHTML = `<span>← 돌아가기</span> <b>${from?.title ?? last.node}</b>에서 ${last.kind === 'ref' ? '찾아본' : '물었던'} <i>“${last.q}”</i>${t.length > 1 ? ` <span class="dim">(쌓인 질문 ${t.length}개)</span>` : ''}`;
     bar.onclick = () => {
       const s = trail.pop()!;
       location.hash = `#/n/${s.node}`;
@@ -307,6 +307,23 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
       trail.push({ node: id, scroll: window.scrollY, q: a.dataset.q ?? '' });
       sessionStorage.setItem('le.arrivedByWhy', a.dataset.to ?? '');
     }
+    // 이름표 참조: 같은 노드면 그 자리로 내려가고, 앞 노드면 왜? 칩처럼 펼쳐 열고 그 자리로 간다.
+    const ref = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.ref');
+    if (ref?.dataset.ref) {
+      const [to, key] = ref.dataset.ref.split('#');
+      if (to === id) {
+        e.preventDefault();
+        const t = art.querySelector<HTMLElement>(`#lbl-${CSS.escape(key)}`);
+        if (t?.offsetParent) {
+          t.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          flash(t);
+        }
+      } else {
+        trail.push({ node: id, scroll: window.scrollY, q: ref.textContent ?? '', kind: 'ref' });
+        sessionStorage.setItem('le.arrivedByWhy', to);
+        sessionStorage.setItem('le.scrollTo', `lbl-${key}`);
+      }
+    }
     const s = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.shortcut');
     if (s) {
       trail.push({ node: id, scroll: window.scrollY, q: s.dataset.q ?? '' });
@@ -320,7 +337,16 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   // 답 표지 바로 앞이 소제목이면 소제목부터 보이게 한다.
   const box = byShortcut ? art.querySelector<HTMLElement>(`#answers-${CSS.escape(byShortcut)}`) : null;
   const target = box?.previousElementSibling?.tagName === 'H3' ? (box.previousElementSibling as HTMLElement) : box;
-  if (restore) {
+  const scrollToId = sessionStorage.getItem('le.scrollTo');
+  sessionStorage.removeItem('le.scrollTo');
+  const labelTarget = scrollToId ? art.querySelector<HTMLElement>(`#${CSS.escape(scrollToId)}`) : null;
+  if (labelTarget) {
+    // 앞 노드의 이름표를 참조로 찾아왔다: 그 공리나 명제가 화면 가운데 오게 하고 잠깐 빛나게 한다.
+    const go = () => labelTarget.scrollIntoView({ block: 'center' });
+    requestAnimationFrame(go);
+    setTimeout(go, 400);
+    flash(labelTarget);
+  } else if (restore) {
     sessionStorage.removeItem('le.restoreScroll');
     requestAnimationFrame(() => window.scrollTo(0, +restore));
   } else if (target) {
@@ -352,4 +378,11 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
     offDom();
     ctx.cleanups.forEach((f) => f());
   };
+}
+
+/** 찾아간 자리를 잠깐 빛나게 한다(같은 자리를 다시 찾아가도 다시 빛나도록 애니메이션을 처음부터 돌린다). */
+function flash(el: HTMLElement) {
+  el.classList.remove('flash');
+  void el.offsetWidth;
+  el.classList.add('flash');
 }

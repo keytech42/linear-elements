@@ -266,6 +266,23 @@ function renderInline(x: Inline): Node {
       if (/^왜\??$/.test(x.q.trim())) a.lastChild!.textContent = '';
       return a;
     }
+    case 'label': {
+      // 이름표 선언: 공리·명제의 이름을 굵게 적고, 참조가 찾아올 앵커를 둔다.
+      const s = document.createElement('strong');
+      s.className = 'lbl';
+      s.id = `lbl-${x.key}`;
+      s.appendChild(renderInlines(x.c));
+      return s;
+    }
+    case 'ref': {
+      // 이름표 참조: 마우스를 올리면 그 항목의 글이 뜨고(popover.ts), 누르면 그 자리로 간다(reader.ts).
+      const a = document.createElement('a');
+      a.className = 'ref';
+      a.href = `#/n/${x.node ?? ''}`;
+      a.dataset.ref = `${x.node}#${x.key}`;
+      a.appendChild(renderInlines(x.c));
+      return a;
+    }
     case 'link': {
       const a = document.createElement('a');
       a.className = 'nlink';

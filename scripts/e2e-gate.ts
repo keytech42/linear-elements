@@ -7,6 +7,10 @@
 //  6. 왜? 칩을 따라 들어가면 펼쳐 보기로 열린다
 import { createServer } from 'vite';
 import puppeteer from 'puppeteer-core';
+import { mkdirSync } from 'node:fs';
+
+// 스크린샷 폴더. /tmp는 OS가 비울 수 있으므로 돌 때마다 만든다.
+mkdirSync('/tmp/le-shots', { recursive: true });
 
 const server = await createServer({ server: { port: 0, host: '127.0.0.1', hmr: false, watch: null }, logLevel: 'error' });
 await server.listen();
