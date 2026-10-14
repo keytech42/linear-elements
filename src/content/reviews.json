@@ -5,18 +5,23 @@
     "commit": "6dc233783e83"
   },
   "ax.arith": {
-    "on": "2026-10-12T17:56:45+09:00",
-    "hash": "1wzh79l3dba",
-    "commit": "ee65023f5372"
+    "on": "2026-10-14T15:22:12+09:00",
+    "hash": "1e7kpenhfmt",
+    "commit": "63ec79712575"
   },
   "prop.arith-first": {
-    "on": "2026-10-12T17:56:45+09:00",
-    "hash": "ap2qjpkyy4",
-    "commit": "ee65023f5372"
+    "on": "2026-10-14T15:22:22+09:00",
+    "hash": "1kne9vo0hqd",
+    "commit": "63ec79712575"
   },
   "def.numberline": {
     "on": "2026-10-12T18:00:23+09:00",
     "hash": "nas77t0ht0",
     "commit": "ee65023f5372"
+  },
+  "def.plane": {
+    "on": "2026-10-14T15:08:14+09:00",
+    "hash": "2ffh2uywi40",
+    "commit": "8c4b30e96c74"
   }
 }
