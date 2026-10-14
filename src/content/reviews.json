@@ -14,6 +14,12 @@
     "hash": "1kne9vo0hqd",
     "commit": "63ec79712575"
   },
+  "prop.neg-times-neg": {
+    "on": "2026-10-14T23:08:14+09:00",
+    "hash": "24v5j52yyep",
+    "commit": "4200e08fed7a",
+    "dirty": true
+  },
   "def.numberline": {
     "on": "2026-10-12T18:00:23+09:00",
     "hash": "nas77t0ht0",
