@@ -45,8 +45,8 @@ $$A(B(\mathbf{u} + \mathbf{w})) = A(B\mathbf{u} + B\mathbf{w}) = A(B\mathbf{u}) 
 첫 등호는 $B$가, 둘째 등호는 $A$가 [덧셈을 통과시키기](why:def.linear-map) 때문이다. 스칼라 곱도 같은 방식으로 통과한다. 그러므로 $AB$는 잘 정의된 행렬이다. 그 행렬의 열을 실제로 계산하는 법은 다음 노드에서 다룬다.
 
 ### 두 개의 예
-- 위 관문: $B$(가로 2배) 다음 $A$(90° 회전). $\mathbf{e}_1 \to (2, 0) \to (0, 2)$, $\mathbf{e}_2 \to (0, 1) \to (-1, 0)$. 그러므로 $AB = \begin{bmatrix} 0 & -1 \\ 2 & 0 \end{bmatrix}$.
-- 같은 회전을 두 번: $R_{90°}R_{90°}$는 $\mathbf{e}_1 \to \mathbf{e}_2 \to -\mathbf{e}_1$, $\mathbf{e}_2 \to -\mathbf{e}_1 \to -\mathbf{e}_2$이므로 $\begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix}$, 곧 180° 회전이다.`,
+- 위 관문: $B$(가로 2배) 다음 $A$(90° 회전). $\mathbf{e}_1 \xmapsto{B} (2, 0) \xmapsto{A} (0, 2)$, $\mathbf{e}_2 \xmapsto{B} (0, 1) \xmapsto{A} (-1, 0)$. 그러므로 $AB = \begin{bmatrix} 0 & -1 \\ 2 & 0 \end{bmatrix}$.
+- 같은 회전을 두 번: $R_{90°}R_{90°}$는 $\mathbf{e}_1 \mapsto \mathbf{e}_2 \mapsto -\mathbf{e}_1$, $\mathbf{e}_2 \mapsto -\mathbf{e}_1 \mapsto -\mathbf{e}_2$이므로 $\begin{bmatrix} -1 & 0 \\ 0 & -1 \end{bmatrix}$, 곧 180° 회전이다.`,
   checks: [
     {
       q: String.raw`$AB$와 "$A$를 먼저 한 뒤 $B$를 하는 것" 가운데 같은 것은?`,

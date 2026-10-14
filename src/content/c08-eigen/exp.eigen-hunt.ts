@@ -63,7 +63,7 @@ const node: NodeDef = {
       q: String.raw`$A = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$에서 자기 직선 위에 남는 직선을 모두 고르면?`,
       choices: ['가로축과 세로축', '대각선 y = x 하나', '없다', '모든 직선'],
       answer: 0,
-      explain: String.raw`$\mathbf{e}_1 \to 3\mathbf{e}_1$, $\mathbf{e}_2 \to \mathbf{e}_2$이므로 두 축이 그 직선이다. 대각선 위의 $(1, 1)$은 $(3, 1)$로 가서 대각선을 벗어난다. 두 축의 배율이 다르면 그 사이 방향은 더 많이 늘어나는 축 쪽으로 기울어진다.`,
+      explain: String.raw`$\mathbf{e}_1 \mapsto 3\mathbf{e}_1$, $\mathbf{e}_2 \mapsto \mathbf{e}_2$이므로 두 축이 그 직선이다. 대각선 위의 $(1, 1)$은 $(3, 1)$로 가서 대각선을 벗어난다. 두 축의 배율이 다르면 그 사이 방향은 더 많이 늘어나는 축 쪽으로 기울어진다.`,
     },
   ],
 };

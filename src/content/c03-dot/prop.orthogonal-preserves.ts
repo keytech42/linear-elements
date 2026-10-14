@@ -37,7 +37,7 @@ const node: NodeDef = {
       why: [
         String.raw`둘째 열이 $(-\sin\theta, \cos\theta)$이면 회전 $R_\theta$, $(\sin\theta, -\cos\theta)$이면 반사다. 다른 가능성은 없다.`,
         String.raw`반사도 길이를 지킨다. 왼손이 오른손이 될 뿐이다.`,
-        String.raw`전단은 대각선의 길이를 바꾼다: $(0, 1) \to (1, 1)$.`,
+        String.raw`전단은 대각선의 길이를 바꾼다: $(0, 1) \mapsto (1, 1)$.`,
         String.raw`"크기가 1인 늘이기"는 아무것도 하지 않는 것, 곧 0° 회전이다. 이미 회전에 들어 있다.`,
       ],
     },

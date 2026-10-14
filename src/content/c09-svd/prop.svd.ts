@@ -112,7 +112,7 @@ $$A = A(VV^{\mathsf{T}}) = (AV)V^{\mathsf{T}} = U\Sigma V^{\mathsf{T}}$$
       q: String.raw`$A = U\Sigma V^{\mathsf{T}}$에서 $A\mathbf{v}_2$는?`,
       choices: [String.raw`$\sigma_2\mathbf{u}_2$`, String.raw`$\sigma_2\mathbf{v}_2$`, String.raw`$\mathbf{u}_2$`, String.raw`$\sigma_1\mathbf{u}_1$`],
       answer: 0,
-      explain: String.raw`세 단계로 따라가면 $V^{\mathsf{T}}\mathbf{v}_2 = \mathbf{e}_2 \to \Sigma\mathbf{e}_2 = \sigma_2\mathbf{e}_2 \to U(\sigma_2\mathbf{e}_2) = \sigma_2\mathbf{u}_2$다. $\sigma_2\mathbf{v}_2$를 고른 경우는 $\mathbf{v}_2$를 $A$의 고유벡터로 착각한 것이다. 특이벡터는 출발 방향($\mathbf{v}$)과 도착 방향($\mathbf{u}$)이 다르다.`,
+      explain: String.raw`세 단계로 따라가면 $V^{\mathsf{T}}\mathbf{v}_2 = \mathbf{e}_2 \mapsto \Sigma\mathbf{e}_2 = \sigma_2\mathbf{e}_2 \mapsto U(\sigma_2\mathbf{e}_2) = \sigma_2\mathbf{u}_2$다. $\sigma_2\mathbf{v}_2$를 고른 경우는 $\mathbf{v}_2$를 $A$의 고유벡터로 착각한 것이다. 특이벡터는 출발 방향($\mathbf{v}$)과 도착 방향($\mathbf{u}$)이 다르다.`,
     },
   ],
   code: ['svd2', 'svd'],

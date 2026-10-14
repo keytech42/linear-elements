@@ -11,11 +11,11 @@ const node: NodeDef = {
       id: 'p-swap',
       kind: 'choice',
       q: String.raw`90° 회전 $R$과 가로 2배 늘이기 $D$가 있다. "$D$ 다음 $R$"($RD$)과 "$R$ 다음 $D$"($DR$)는 $\mathbf{e}_1$을 같은 곳으로 보낼까?`,
-      hints: [String.raw`두 순서를 한 단계씩 따라가라. $RD$: $\mathbf{e}_1 \to (2, 0) \to$ ? $DR$: $\mathbf{e}_1 \to (0, 1) \to$ ?`],
+      hints: [String.raw`두 순서를 한 단계씩 따라가라. $RD$: $\mathbf{e}_1 \xmapsto{D} (2, 0) \xmapsto{R}$ ? $DR$: $\mathbf{e}_1 \xmapsto{R} (0, 1) \xmapsto{D}$ ?`],
       choices: ['다른 곳으로 보낸다', '같은 곳으로 보낸다. 같은 두 변환을 하므로', '같은 곳으로 보낸다. 넓이 배율이 같으므로'],
       answer: 0,
       why: [
-        String.raw`$RD$는 $\mathbf{e}_1 \to (2, 0) \to (0, 2)$, $DR$은 $\mathbf{e}_1 \to (0, 1) \to (0, 1)$이다. 늘이기를 **돌리기 전에** 하면 가로 방향이 늘어나고, **돌린 뒤에** 하면 (원래 세로였던) 지금의 가로 방향이 늘어난다.`,
+        String.raw`$RD$는 $\mathbf{e}_1 \xmapsto{D} (2, 0) \xmapsto{R} (0, 2)$, $DR$은 $\mathbf{e}_1 \xmapsto{R} (0, 1) \xmapsto{D} (0, 1)$이다. 늘이기를 **돌리기 전에** 하면 가로 방향이 늘어나고, **돌린 뒤에** 하면 (원래 세로였던) 지금의 가로 방향이 늘어난다.`,
         String.raw`같은 재료라도 순서가 다르면 결과가 다를 수 있다. 양말을 신고 신발을 신는 것과 신발을 신고 양말을 신는 것이 다르듯이.`,
         String.raw`넓이 배율은 실제로 같다(둘 다 2배). 그러나 넓이가 같다고 변환이 같은 것은 아니다.`,
       ],
