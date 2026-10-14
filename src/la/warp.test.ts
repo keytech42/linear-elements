@@ -47,7 +47,7 @@ describe('선형이 아닌 변환은 어긋난다 (def.linear-map 본문의 수�
     const { ofScaled, scaledOf } = homogeneityPair(twist, 2, [1, 0]);
     expect(gap(ofScaled, scaledOf)).toBeGreaterThan(0.1);
   });
-  it('휘기에서 기저의 도착지만으로 예측하면 틀린다 (prop.basis-determines)', () => {
+  it('휘기에서 기저의 상만으로 예측하면 틀린다 (prop.basis-determines)', () => {
     // T(e₁) = (1, 1/4), T(e₂) = (0, 1) 로 선형인 척 예측하면 (2, 0) ↦ (2, 0.5) 이지만 실제는 (2, 1)
     expect(bend([1, 0])).toEqual([1, 0.25]);
     expect(bend([0, 1])).toEqual([0, 1]);

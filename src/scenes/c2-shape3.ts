@@ -85,7 +85,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   function sync() {
     med.refresh();
     const [m, n] = shape(A);
-    ro.set(`<div>모양 ${m}×${n}: 입력 ℝ<sup>${n}</sup>(열 ${n}개) → 출력 ℝ<sup>${m}</sup>(행 ${m}개)</div><div class="dim">열 하나 = 입력 기저 벡터 하나의 도착지 = 출력 공간의 벡터(성분 ${m}개)</div>`);
+    ro.set(`<div>모양 ${m}×${n}: 입력 ℝ<sup>${n}</sup>(열 ${n}개) → 출력 ℝ<sup>${m}</sup>(행 ${m}개)</div><div class="dim">열 하나 = 입력 기저 벡터 하나의 상 = 출력 공간의 벡터(성분 ${m}개)</div>`);
     redraw();
   }
   sync();

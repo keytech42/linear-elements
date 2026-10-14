@@ -69,7 +69,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.text(scaledOf, `${cl}T(u)`, { color: C.y, dx: 10, dy: 12 });
     p.dot(ofScaled, { color: C.ink, r: 4, key: 'ofScaled' });
     p.text(ofScaled, `T(${cl}u)`, { color: C.ink, dx: 10, dy: -12 });
-    // 원점의 도착지
+    // 원점의 상
     const T0 = T([0, 0]);
     if (norm(T0) > 1e-9) {
       p.dot(T0, { color: C.bad, r: 4 });

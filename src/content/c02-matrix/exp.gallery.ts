@@ -19,7 +19,7 @@ const node: NodeDef = {
       id: 'p-mirror',
       kind: 'choice',
       q: String.raw`가로축($x$축)을 거울로 삼는 반사의 행렬은?`,
-      hints: [String.raw`$\mathbf{e}_1$은 거울 위에 있다. $\mathbf{e}_2$는 거울에 비치면 어디로 가는가? 두 도착지를 차례로 세로로 적어라.`],
+      hints: [String.raw`$\mathbf{e}_1$은 거울 위에 있다. $\mathbf{e}_2$는 거울에 비치면 어디로 가는가? 두 상을 차례로 세로로 적어라.`],
       choices: [String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$`],
       answer: 0,
       why: [
@@ -34,7 +34,7 @@ const node: NodeDef = {
       kind: 'point',
       q: String.raw`대각선 $y = x$ 위로 **수직으로** 눌러 내리는 사영은 $\mathbf{e}_1$을 어디로 보낼까? 분홍 점을 끌어 놓아라.`,
       hints: [
-        String.raw`$\mathbf{e}_1$의 끝 $(1, 0)$에서 대각선으로 수직인 선을 그어 보라. 그 선이 대각선과 만나는 점이 도착지다.`,
+        String.raw`$\mathbf{e}_1$의 끝 $(1, 0)$에서 대각선으로 수직인 선을 그어 보라. 그 선이 대각선과 만나는 점이 상이다.`,
         String.raw`원점, $(1, 0)$, 그리고 그 만나는 점은 직각이등변삼각형을 이룬다(대각선이 가로축과 45°를 이루므로). 만나는 점은 대각선 위에서 $(a, a)$ 꼴이다.`,
       ],
       A: [[0.5, 0.5], [0.5, 0.5]],

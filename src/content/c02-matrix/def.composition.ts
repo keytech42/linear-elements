@@ -38,7 +38,7 @@ $$(AB)\mathbf{x} = A(B\mathbf{x})$$
 ::scene c2-compose {}
 
 ### 합성도 선형이다, 그래서 행렬이 있다
-합성 변환이 행렬을 가지려면 선형이어야 한다([행렬은 선형 변환의 기저 도착지를 적은 것이므로](why:def.matrix)). 실제로 선형이다.
+합성 변환이 행렬을 가지려면 선형이어야 한다([행렬은 선형 변환이 기저를 보낸 상을 적은 것이므로](why:def.matrix)). 실제로 선형이다.
 
 $$A(B(\mathbf{u} + \mathbf{w})) = A(B\mathbf{u} + B\mathbf{w}) = A(B\mathbf{u}) + A(B\mathbf{w})$$
 

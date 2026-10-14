@@ -7,7 +7,7 @@ export const C = {
   tgrid: 'rgba(120,170,255,0.42)', // 변환된 격자
   ink: '#e7ebf3',
   dim: '#8b93a7',
-  c1: '#ff7a59', // 첫째 기저 e₁, 행렬의 1열, 그리고 그 도착지
+  c1: '#ff7a59', // 첫째 기저 e₁, 행렬의 1열, 그리고 그 상
   c2: '#35c9b4', // 둘째 기저 e₂, 행렬의 2열
   c3: '#b48cff', // 셋째 기저 e₃, 행렬의 3열 (3차원)
   x: '#f5c542', // 입력 벡터 x
@@ -23,8 +23,8 @@ export const C = {
 } as const;
 
 export const COLOR_TABLE: { color: string; name: string; meaning: string }[] = [
-  { color: C.c1, name: '주황', meaning: '첫째 표준 기저 벡터 e₁, 그리고 행렬의 1열 = e₁의 도착지' },
-  { color: C.c2, name: '청록', meaning: '둘째 표준 기저 벡터 e₂, 그리고 행렬의 2열 = e₂의 도착지' },
+  { color: C.c1, name: '주황', meaning: '첫째 표준 기저 벡터 e₁, 그리고 행렬의 1열 = e₁의 상' },
+  { color: C.c2, name: '청록', meaning: '둘째 표준 기저 벡터 e₂, 그리고 행렬의 2열 = e₂의 상' },
   { color: C.c3, name: '보라', meaning: '셋째 표준 기저 벡터 e₃, 그리고 행렬의 3열 (3차원 장면)' },
   { color: C.x, name: '노랑', meaning: '변환에 넣는 입력 벡터 x' },
   { color: C.y, name: '분홍', meaning: '변환이 내놓는 출력 벡터 Ax' },

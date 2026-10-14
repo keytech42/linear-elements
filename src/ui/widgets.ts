@@ -1,5 +1,5 @@
 // 장면에서 쓰는 작은 조작 도구들: 행렬 편집기, 벡터 편집기, 슬라이더, 단추.
-// 행렬 편집기의 DOM은 일부러 "열 우선"으로 짠다. 화면의 한 열 = DOM의 한 상자 = 기저 벡터 하나의 도착지.
+// 행렬 편집기의 DOM은 일부러 "열 우선"으로 짠다. 화면의 한 열 = DOM의 한 상자 = 기저 벡터 하나의 상.
 import type { Mat } from '../la/mat';
 import type { Vec } from '../la/vec';
 import { C } from '../render/colors';

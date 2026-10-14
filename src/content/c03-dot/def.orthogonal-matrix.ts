@@ -30,7 +30,7 @@ const node: NodeDef = {
 
 **정의.** 열들이 [정규직교](t:t.orthonormal)인 정사각 행렬을 [직교 행렬](def:t.orth-matrix)이라 하고 $Q$로 쓴다.
 
-[행렬의 열은 기저의 도착지](why:def.matrix)이므로, 직교 행렬은 "서로 수직인 길이 1짜리 자 $\mathbf{e}_1, \mathbf{e}_2$를 다시 서로 수직인 길이 1짜리 자로 보내는" 변환이다.
+[행렬의 열은 기저의 상](why:def.matrix)이므로, 직교 행렬은 "서로 수직인 길이 1짜리 자 $\mathbf{e}_1, \mathbf{e}_2$를 다시 서로 수직인 길이 1짜리 자로 보내는" 변환이다.
 
 ::predict p-check
 

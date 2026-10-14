@@ -46,7 +46,7 @@ try {
   await wait(200);
   s = await state();
   const why = await page.evaluate(() => document.querySelector('.gate .gate-why:not(.right)')?.textContent ?? '');
-  ok('2. 선택형: 판정·오해 설명이 뜨고 다음 단계가 열린다', s.resolved === 1 && s.hiddenSegs === 1 && why.includes('도착지'), JSON.stringify(s));
+  ok('2. 선택형: 판정·오해 설명이 뜨고 다음 단계가 열린다', s.resolved === 1 && s.hiddenSegs === 1 && why.includes('상(숫자 2개)'), JSON.stringify(s));
 
   // 그림형: 기본 위치 그대로 확정
   await page.evaluate(() => ([...document.querySelectorAll('.gate')[1].querySelectorAll('button')].find((b) => b.textContent === '확정') as HTMLButtonElement).click());

@@ -65,7 +65,7 @@ const DRILLS: Drill[] = [
             revealed = true;
             p.invalidate();
             const e = Math.max(norm([g1[0] - A[0][0], g1[1] - A[1][0]]), norm([g2[0] - A[0][1], g2[1] - A[1][1]]));
-            done(e < 0.3, e < 0.3 ? '정확합니다. 1열이 e₁의 도착지, 2열이 e₂의 도착지.' : `점선이 정답입니다. 1열 (${fmt(A[0][0])}, ${fmt(A[1][0])}), 2열 (${fmt(A[0][1])}, ${fmt(A[1][1])})을 세로로 읽었는지 확인하세요.`);
+            done(e < 0.3, e < 0.3 ? '정확합니다. 1열이 e₁의 상, 2열이 e₂의 상.' : `점선이 정답입니다. 1열 (${fmt(A[0][0])}, ${fmt(A[1][0])}), 2열 (${fmt(A[0][1])}, ${fmt(A[1][1])})을 세로로 읽었는지 확인하세요.`);
           },
         },
       ]);
@@ -95,7 +95,7 @@ const DRILLS: Drill[] = [
         }
       };
       const form = el('div', 'dojo-form');
-      form.innerHTML = `<span>A =</span><div class="mat"><div class="mcol" style="color:${C.c1}"><input class="num-in" data-k="00"><input class="num-in" data-k="10"></div><div class="mcol" style="color:${C.c2}"><input class="num-in" data-k="01"><input class="num-in" data-k="11"></div></div><span class="dim">주황 점 = e₁의 도착지, 청록 점 = e₂의 도착지</span>`;
+      form.innerHTML = `<span>A =</span><div class="mat"><div class="mcol" style="color:${C.c1}"><input class="num-in" data-k="00"><input class="num-in" data-k="10"></div><div class="mcol" style="color:${C.c2}"><input class="num-in" data-k="01"><input class="num-in" data-k="11"></div></div><span class="dim">주황 점 = e₁의 상, 청록 점 = e₂의 상</span>`;
       host.appendChild(form);
       buttons(host, [
         {

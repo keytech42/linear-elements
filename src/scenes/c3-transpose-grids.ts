@@ -19,7 +19,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     [0, 1],
   ];
   const { stage, panel } = layout(host);
-  const [L, R] = twin(stage, ['A: 열 = 𝐞₁, 𝐞₂의 도착지', 'Aᵀ: 열 = A의 행']);
+  const [L, R] = twin(stage, ['A: 열 = 𝐞₁, 𝐞₂의 상', 'Aᵀ: 열 = A의 행']);
   const pl = new Plane(L, { range: 3.5, bus, height: 320 });
   const pr = new Plane(R, { range: 3.5, bus, height: 320 });
 

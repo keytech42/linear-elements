@@ -27,7 +27,7 @@ const node: NodeDef = {
       why: [
         String.raw`$T(\mathbf{0}) = T(0\cdot\mathbf{v}) = 0\cdot T(\mathbf{v}) = \mathbf{0}$.`,
         String.raw`평행 이동처럼 원점을 다른 곳으로 보내는 변환은 선형이 아니다. 둘째 조건이 그것을 막는다.`,
-        String.raw`원점의 도착지는 점 하나로 정해진다. 그 점은 원점이다.`,
+        String.raw`원점의 상은 점 하나로 정해진다. 그 점은 원점이다.`,
         String.raw`두 조건만으로 알 수 있다. 영벡터를 "아무 벡터의 0배"로 보는 것이 열쇠다.`,
       ],
     },
@@ -49,7 +49,7 @@ const node: NodeDef = {
       ],
     },
   ],
-  body: String.raw`[앞 노드](n:def.transformation)에서 본 것처럼, 일반 변환은 몇 점의 도착지만으로는 다른 점을 예측할 수 없다. 어떤 변환이어야 적은 정보로 전체를 알 수 있을까?
+  body: String.raw`[앞 노드](n:def.transformation)에서 본 것처럼, 일반 변환은 몇 점의 상만으로는 다른 점을 예측할 수 없다. 어떤 변환이어야 적은 정보로 전체를 알 수 있을까?
 
 **정의.** 변환 $T$가 모든 벡터 $\mathbf{u}, \mathbf{w}, \mathbf{v}$와 모든 [스칼라](t:t.scalar) $c$에 대해
 

@@ -11,7 +11,7 @@
 //   line:   true면 x를 지나는 직선과 그 위에 같은 간격으로 놓인 점들, 그리고 그 상을 그린다 (기본 false)
 //   d:      line일 때 직선의 방향 (기본 [1, 0.5])
 //   range:  보이는 범위 (기본 4)
-// 동기화 키: x (입력), Tx (출력), origin (원점의 도착지), line (입력 직선), tline (그 상), d (방향 손잡이)
+// 동기화 키: x (입력), Tx (출력), origin (원점의 상), line (입력 직선), tline (그 상), d (방향 손잡이)
 import type { SceneFn } from './_lib/scene';
 import { layout, readout, hint } from './_lib/scene';
 import { Plane } from '../render/plane';

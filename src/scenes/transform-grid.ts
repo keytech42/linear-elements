@@ -1,4 +1,4 @@
-// 이 교재의 중심 장면: 행렬 = 기저 벡터의 도착지 (def.matrix, def.matvec, prop.linear-grid, prop.basis-determines)
+// 이 교재의 중심 장면: 행렬 = 기저 벡터의 상 (def.matrix, def.matvec, prop.linear-grid, prop.basis-determines)
 //
 // 매개변수
 //   A:        처음 행렬 (기본 [[1,1],[0,1]] 처럼 행 우선)
