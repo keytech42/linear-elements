@@ -1,21 +1,25 @@
 // 선형성 시험: T(𝐮 + 𝐰)와 T(𝐮) + T(𝐰)가 같은가? T(c𝐯)와 cT(𝐯)가 같은가? (def.linear-map)
-// 왼쪽 단추로 변환을 고른다. 선형 변환이면 두 분홍 점이 언제나 겹치고, 아니면 벌어진다(빨간 선 = 어긋난 거리).
+// 오른쪽 단추로 변환을 고른다. 선형 변환이면 분홍 점(먼저 보내고 계산)과 흰 점(먼저 계산하고 보내기)이 언제나 겹치고,
+// 아니면 벌어진다(빨간 선 = 어긋난 거리). 덧셈 시험(T(u)+T(w) vs T(u+w))과 스칼라 곱 시험(cT(u) vs T(cu))을 함께 그린다.
 //
 // 매개변수
 //   map:  'linear' | 'translate' | 'bend' | 'twist' (기본 'bend')
 //   A:    'linear'의 행렬 (기본 [[1,1],[0,1]])
 //   u, w: 두 입력 (기본 [1.5, 0.5], [0.5, 1.5]),  c: 스칼라 (기본 2)
-// 동기화 키: u, w (두 입력), sumOf (T(𝐮)+T(𝐰)), ofSum (T(𝐮+𝐰)), gap (어긋남)
+// 동기화 키: u, w (두 입력), sumOf (T(𝐮)+T(𝐰)), ofSum (T(𝐮+𝐰)), gap (덧셈 어긋남), scaledOf (cT(𝐮)), ofScaled (T(c𝐮)), gapC (스칼라 곱 어긋남)
 import type { SceneFn } from './_lib/scene';
 import { layout, readout, hint } from './_lib/scene';
 import { Plane } from '../render/plane';
 import { C } from '../render/colors';
-import { add, norm, sub, type Vec } from '../la/vec';
+import { add, norm, scale, sub, type Vec } from '../la/vec';
 import type { Mat } from '../la/mat';
 import { translateBy, bend, twist, linearMap, additivityPair, homogeneityPair, type Map2 } from '../la/warp';
 import { fmt, chip, buttons, slider } from '../ui/widgets';
 
-const NAMES: Record<string, string> = { linear: '행렬 곱', translate: '평행 이동', bend: '휘기', twist: '소용돌이' };
+const NAMES: Record<string, string> = { linear: '전단', translate: '평행 이동', bend: '휘기', twist: '소용돌이' };
+
+/** 스칼라를 곱셈 앞에 붙일 때의 표기: 음수는 괄호로 감싼다(−2T(u)가 아니라 (−2)T(u)) */
+const cName = (c: number) => (c < 0 ? `(${fmt(c)})` : fmt(c));
 
 const scene: SceneFn = (host, { bus, params }) => {
   const A: Mat = params.A ?? [[1, 1], [0, 1]];
@@ -43,6 +47,15 @@ const scene: SceneFn = (host, { bus, params }) => {
     const Tu = T(u), Tw = T(w);
     p.seg(Tu, sumOf, { color: C.y, dash: [5, 4], width: 1.2, alpha: 0.7 });
     p.seg(Tw, sumOf, { color: C.y, dash: [5, 4], width: 1.2, alpha: 0.7 });
+    // 선은 점보다 먼저 그린다: 어긋남 선분이 두 점을 덮지 않게
+    const { ofScaled, scaledOf } = homogeneityPair(T, c, u);
+    const cl = cName(c);
+    // 입력과 그 상을 옅은 점선으로 잇는다(c2-warp의 x — T(x)처럼). 흰 점이 어느 입력의 상인지 보이게 한다.
+    for (const [v, Tv] of [[u, Tu], [w, Tw], [s, ofSum], [scale(c, u), ofScaled]] as [Vec, Vec][])
+      p.seg(v, Tv, { color: C.dim, dash: [2, 3], width: 1, alpha: 0.7 });
+    p.arrow([0, 0], scale(c, u), { color: C.u, width: 1, alpha: 0.35, dash: [2, 4] });
+    if (norm(sub(ofSum, sumOf)) > 1e-6) p.seg(ofSum, sumOf, { color: C.bad, width: 2.5, key: 'gap' });
+    if (norm(sub(ofScaled, scaledOf)) > 1e-6) p.seg(ofScaled, scaledOf, { color: C.bad, width: 2.5, key: 'gapC' });
     p.dot(Tu, { color: C.u, r: 4 });
     p.dot(Tw, { color: C.w, r: 4 });
     p.text(Tu, 'T(u)', { color: C.u, dx: 8, dy: -8 });
@@ -51,7 +64,11 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.text(sumOf, 'T(u)+T(w)', { color: C.y, dx: 10, dy: 12 });
     p.dot(ofSum, { color: C.ink, r: 5, key: 'ofSum' });
     p.text(ofSum, 'T(u+w)', { color: C.ink, dx: 10, dy: -12 });
-    if (norm(sub(ofSum, sumOf)) > 1e-6) p.seg(ofSum, sumOf, { color: C.bad, width: 2.5, key: 'gap' });
+    // 스칼라 곱 시험: c𝐮(입력, 옅게)를 보낸 것 T(c𝐮)와, T(𝐮)를 c배 한 것 cT(𝐮)
+    p.dot(scaledOf, { color: C.y, r: 5, key: 'scaledOf' });
+    p.text(scaledOf, `${cl}T(u)`, { color: C.y, dx: 10, dy: 12 });
+    p.dot(ofScaled, { color: C.ink, r: 4, key: 'ofScaled' });
+    p.text(ofScaled, `T(${cl}u)`, { color: C.ink, dx: 10, dy: -12 });
     // 원점의 도착지
     const T0 = T([0, 0]);
     if (norm(T0) > 1e-9) {
@@ -61,12 +78,15 @@ const scene: SceneFn = (host, { bus, params }) => {
     p.hud([{ text: `지금 변환: ${NAMES[key]}` , color: C.ink }], 'tl');
   };
 
-  buttons(panel, Object.keys(maps).map((k) => ({ label: NAMES[k], on: () => ((key = k), sync()) })));
-  slider(panel, { label: 'c', min: -2, max: 3, step: 0.5, get: () => c, set: (v) => ((c = v), sync()) });
+  const row = buttons(panel, Object.keys(maps).map((k) => ({ label: NAMES[k], on: () => ((key = k), sync()) })));
+  const btns = [...row.querySelectorAll('button')];
+  const sl = slider(panel, { label: 'c', min: -2, max: 3, step: 0.5, get: () => c, set: (v) => ((c = v), sync()) });
   const ro = readout(panel);
-  hint(panel, '하늘·연두 점을 끌어 보세요. 노란 점(먼저 보내고 더하기)과 흰 점(먼저 더하고 보내기)이 언제나 겹치는 변환만 선형입니다. 빨간 선이 어긋난 거리입니다.');
+  hint(panel, '하늘·라일락 화살표 끝을 끌고, c 막대를 움직여 보세요. 분홍 점(먼저 보내고 계산하기)과 흰 점(먼저 계산하고 보내기)이 언제나 겹치는 변환만 선형입니다. 빨간 선이 어긋난 거리입니다.');
 
   function sync() {
+    sl.refresh();
+    btns.forEach((b, i) => b.classList.toggle('on', Object.keys(maps)[i] === key));
     const T = maps[key];
     const a = additivityPair(T, u, w);
     const h = homogeneityPair(T, c, u);
@@ -77,7 +97,7 @@ const scene: SceneFn = (host, { bus, params }) => {
       `<div>${chip('T(u+w)', C.ink, 'ofSum')} = (${fmt(a.ofSum[0])}, ${fmt(a.ofSum[1])})</div>` +
         `<div>${chip('T(u)+T(w)', C.y, 'sumOf')} = (${fmt(a.sumOf[0])}, ${fmt(a.sumOf[1])})</div>` +
         `<div>덧셈 어긋남 ${chip(fmt(gapA, 3), gapA > 1e-6 ? C.bad : C.ok, 'gap')}</div>` +
-        `<div>T(${fmt(c)}u) − ${fmt(c)}T(u)의 길이 = <b style="color:${gapH > 1e-6 ? C.bad : C.ok}">${fmt(gapH, 3)}</b></div>` +
+        `<div>${chip(`T(${cName(c)}u)`, C.ink, 'ofScaled')}와 ${chip(`${cName(c)}T(u)`, C.y, 'scaledOf')}의 어긋남 ${chip(fmt(gapH, 3), gapH > 1e-6 ? C.bad : C.ok, 'gapC')}</div>` +
         `<div class="dim">T(0) = (${fmt(T0[0])}, ${fmt(T0[1])})${norm(T0) > 1e-9 ? ' — 원점이 움직였다' : ''}</div>`,
     );
     p.invalidate();

@@ -5,8 +5,17 @@ const node: NodeDef = {
   kind: 'def',
   title: '선형 변환: 덧셈과 스칼라 곱을 지키는 변환',
   status: 'written',
-  introduces: { terms: [{ id: 't.linear-map', ko: '선형 변환', en: 'linear transformation', surfaces: ['선형 사상', '선형사상'], gloss: 'T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯)를 지키는 변환. 선형 결합을 그대로 통과시킨다.' }] },
+  introduces: {
+    terms: [
+      { id: 't.linear-map', ko: '선형 변환', en: 'linear transformation', surfaces: ['선형 사상', '선형사상'], gloss: 'T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯)를 지키는 변환. 선형 결합을 그대로 통과시킨다.' },
+      { id: 't.linearity', ko: '선형성', en: 'linearity', gloss: '덧셈과 스칼라 곱을 그대로 통과시키는 성질: T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯). 이 성질을 가진 변환이 선형 변환이다.' },
+    ],
+  },
   requires: ['def.transformation', 'def.linear-combination'],
+  significance: {
+    everywhere: String.raw`선형성은 이 교재의 끝까지 되풀이해 나온다. 이 장에서 보게 될 [행렬](fwd:t.matrix)이 나타내는 변환은 모두 선형이고, 10장의 신경망 [선형 레이어](fwd:t.linear-layer)도 그렇다. 선형이면 두 가지가 쉬워진다. 하나는 적은 정보로 전체가 정해진다는 것이다(바로 다음 노드부터 본다). 다른 하나는 큰 입력을 작은 조각으로 나누어 조각마다 보낸 뒤 더해도 같은 답이 나온다는 것이다. 첫째 조건이 바로 그 말이다.`,
+  },
+  openWhys: [{ q: '왜 하필 "선형"이라는 이름을 붙이는가? 이 두 조건과 직선은 무슨 관계인가?', answeredBy: null }],
   predicts: [
     {
       id: 'p-origin',
@@ -46,7 +55,7 @@ const node: NodeDef = {
 
 $$T(\mathbf{u} + \mathbf{w}) = T(\mathbf{u}) + T(\mathbf{w}), \qquad T(c\mathbf{v}) = cT(\mathbf{v})$$
 
-를 지키면 $T$를 [선형 변환](def:t.linear-map)이라 한다. 첫째 조건은 "더한 다음 보내나, 보낸 다음 더하나 같다", 둘째 조건은 "늘인 다음 보내나, 보낸 다음 늘이나 같다"는 뜻이다.
+를 지키면 $T$를 [선형 변환](def:t.linear-map)이라 하고, 이 두 조건을 묶어 [선형성](def:t.linearity)이라 부른다. [이 성질이 왜 중요한가](sig:everywhere) 첫째 조건은 "더한 다음 보내나, 보낸 다음 더하나 같다", 둘째 조건은 "늘인 다음 보내나, 보낸 다음 늘이나 같다"는 뜻이다.
 
 두 조건을 합치면 한 문장이 된다. **선형 변환은 [선형 결합](t:t.linear-combination)을 그대로 통과시킨다.**
 
@@ -59,7 +68,7 @@ $$T(c_1\mathbf{u} + c_2\mathbf{w}) = c_1T(\mathbf{u}) + c_2T(\mathbf{w})$$
 그러므로 **선형 변환은 원점을 움직이지 않는다.** 평행 이동은 원점을 옮기므로 선형이 아니다.
 
 ### 시험해 보기
-아래 그림에서 하늘색 $\mathbf{u}$와 라일락색 $\mathbf{w}$를 끌어 보라. 노란 점은 "먼저 보내고 더한 것" $T(\mathbf{u}) + T(\mathbf{w})$이고, 흰 점은 "먼저 더하고 보낸 것" $T(\mathbf{u} + \mathbf{w})$다. 두 점이 **어떻게 끌어도** 겹치는 변환만 선형이다. 겹치지 않으면 빨간 선이 그 어긋남을 보인다.
+아래 그림에서 하늘색 $\mathbf{u}$와 라일락색 $\mathbf{w}$를 끌어 보라. 분홍 점은 "먼저 보내고 더한 것" $T(\mathbf{u}) + T(\mathbf{w})$이고, 흰 점은 "먼저 더하고 보낸 것" $T(\mathbf{u} + \mathbf{w})$다. 둘째 조건도 같은 방식으로 그렸다. 오른쪽의 $c$ 막대를 움직이면 분홍 점 $cT(\mathbf{u})$("먼저 보내고 늘인 것")와 흰 점 $T(c\mathbf{u})$("먼저 늘이고 보낸 것")가 함께 움직인다. 두 쌍이 **어떻게 끌어도** 겹치는 변환만 선형이다. 겹치지 않으면 빨간 선이 그 어긋남을 보인다. 오른쪽 단추로 변환을 바꿔 보라.
 
 ::scene c2-additive {}
 
