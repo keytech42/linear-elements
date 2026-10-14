@@ -15,7 +15,7 @@ const node: NodeDef = {
   significance: {
     everywhere: String.raw`선형성은 이 교재의 끝까지 되풀이해 나온다. 이 장에서 보게 될 [행렬](fwd:t.matrix)이 나타내는 변환은 모두 선형이고, 10장의 신경망 [선형 레이어](fwd:t.linear-layer)도 그렇다. 선형이면 두 가지가 쉬워진다. 하나는 적은 정보로 전체가 정해진다는 것이다(바로 다음 노드부터 본다). 다른 하나는 큰 입력을 작은 조각으로 나누어 조각마다 보낸 뒤 더해도 같은 답이 나온다는 것이다. 첫째 조건이 바로 그 말이다.`,
   },
-  openWhys: [{ q: '왜 하필 "선형"이라는 이름을 붙이는가? 이 두 조건과 직선은 무슨 관계인가?', answeredBy: null }],
+  openWhys: [{ q: '왜 하필 "선형"이라는 이름을 붙이는가? 이 두 조건과 직선은 무슨 관계인가?', answeredBy: 'prop.linear-name' }],
   predicts: [
     {
       id: 'p-origin',

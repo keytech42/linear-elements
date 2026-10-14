@@ -5,6 +5,7 @@ import prop_linear_grid from './prop.linear-grid';
 import prop_basis_determines from './prop.basis-determines';
 import def_matrix from './def.matrix';
 import def_matvec from './def.matvec';
+import prop_linear_name from './prop.linear-name';
 import exp_gallery from './exp.gallery';
 import prop_rotation_matrix from './prop.rotation-matrix';
 import def_composition from './def.composition';
@@ -30,6 +31,7 @@ const book: Book = {
     prop_basis_determines,
     def_matrix,
     def_matvec,
+    prop_linear_name,
     exp_gallery,
     prop_rotation_matrix,
     def_composition,
