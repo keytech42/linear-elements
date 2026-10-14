@@ -31,7 +31,7 @@ const scene: SceneFn = (host, { bus, params }) => {
   const shift: Vec = [1, 0.5];
   const MAPS: Record<Key, { label: string; f: Map2; formula: string; note: string }> = {
     linear: {
-      label: '전단(선형)',
+      label: '전단',
       f: linearMap(A),
       formula: `T(x, y) = (${fmt(A[0][0])}x + ${fmt(A[0][1])}y, ${fmt(A[1][0])}x + ${fmt(A[1][1])}y)`,
       note: '격자선이 곧고, 평행하고, 고른 간격을 유지합니다. 원점도 제자리입니다.',
