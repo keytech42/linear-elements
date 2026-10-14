@@ -28,12 +28,16 @@
 //   [공리 5](label:키)    이름표 선언: 이 자리의 공리·명제에 이름을 붙인다(굵게, 앵커). 키는 노드 안에서 하나뿐 (P030)
 //   [공리 5](ref:키)      이름표 참조: 같은 노드는 ref:키, 앞 노드는 ref:노드id#키. 글에 이름표 이름이 들어 있어야 한다.
 //                         마우스를 올리면 그 항목의 글이 뜨고, 누르면 그 자리로 간다. 표시 없는 "공리 n" "명제 n"은 P031.
+//   [낱말](word:)         낱말을 쓰지 않고 낱말 자체를 가리킨다(다른 문서가 부르는 이름 등). 따옴표로 그려지고,
+//                         용어 자동 링크와 어휘 검사(P008)에서 빠진다.
 
 export type Inline =
   | { t: 'text'; v: string }
   | { t: 'b'; c: Inline[] }
   | { t: 'math'; tex: string }
   | { t: 'code'; v: string }
+  /** 낱말 자체를 가리키는 자리. 용어로 읽지 않는다 */
+  | { t: 'word'; v: string }
   | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
   | { t: 'why'; to: string; key?: string; q: string }
   | { t: 'link'; to: string; key?: string; c: Inline[] }
@@ -175,7 +179,7 @@ export function parseBlocks(src: string): Block[] {
   return out;
 }
 
-const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref'] as const;
+const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'word'] as const;
 
 export function parseInline(src: string): Inline[] {
   const out: Inline[] = [];
@@ -222,12 +226,13 @@ export function parseInline(src: string): Inline[] {
       if (close > 0 && src[close + 1] === '(') {
         const pend = src.indexOf(')', close + 2);
         const target = src.slice(close + 2, pend);
-        const m = /^(\w+):(.+)$/.exec(target);
-        if (pend > 0 && m && (LINK_KINDS as readonly string[]).includes(m[1])) {
+        const m = /^(\w+):(.*)$/.exec(target);
+        if (pend > 0 && m && (m[2] || m[1] === 'word') && (LINK_KINDS as readonly string[]).includes(m[1])) {
           flush();
           const inner = src.slice(i + 1, close);
           const [, kind, id] = m;
-          if (kind === 'why') {
+          if (kind === 'word') out.push({ t: 'word', v: inner });
+          else if (kind === 'why') {
             const k = id.indexOf('#');
             out.push(k >= 0 ? { t: 'why', to: id.slice(0, k), key: id.slice(k + 1), q: inner } : { t: 'why', to: id, q: inner });
           }
@@ -342,6 +347,7 @@ export function plainText(list: Inline[]): string {
       if (x.t === 'text') return x.v;
       if (x.t === 'math') return x.tex;
       if (x.t === 'why') return x.q;
+      if (x.t === 'word') return `“${x.v}”`;
       return 'c' in x ? plainText(x.c) : '';
     })
     .join('');

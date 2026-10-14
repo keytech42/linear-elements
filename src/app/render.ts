@@ -227,6 +227,12 @@ function renderInline(x: Inline): Node {
       c.textContent = x.v;
       return c;
     }
+    case 'word': {
+      const w = document.createElement('span');
+      w.className = 'word';
+      w.textContent = `“${x.v}”`;
+      return w;
+    }
     case 'math': {
       const s = document.createElement('span');
       s.className = 'math-inline';

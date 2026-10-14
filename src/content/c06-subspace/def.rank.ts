@@ -52,6 +52,9 @@ const node: NodeDef = {
 - $\begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$: 랭크 1. 평면이 직선으로 눌린다.
 - 2×2 회전: 랭크 2. 아무것도 눌리지 않는다.
 
+> [!주의] 코드 문서의 rank는 이 랭크가 아닐 수 있다
+> TensorFlow의 \`tf.rank\`나 [랭크 2 텐서](word:) 같은 말의 [rank](word:)는 [텐서](t:t.tensor)의 [차수](t:t.order), 곧 배열 축의 개수를 센다([2장의 주의 상자](n:def.shape)). 그 뜻으로는 위의 두 행렬이 모두 [랭크 2](word:)다. 이 교재의 랭크는 언제나 이 노드의 정의, 열공간의 차원이다.
+
 ::predict p-max
 
 > [!직관] 9장으로 가는 길

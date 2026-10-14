@@ -17,7 +17,7 @@ const node: NodeDef = {
       q: String.raw`$A$를 아주 조금만($t$배, $t$는 작은 수) 더한 변환 $I + tA$를 생각하자. 단위 정사각형의 넓이는 대략 몇 배가 될까?`,
       hints: [
         String.raw`[2×2 행렬식 공식](n:prop.det-formula)을 $I + tA$의 네 성분에 그대로 써 보라.`,
-        String.raw`대각선 두 칸은 $1 + ta_{11}$, $1 + ta_{22}$이고 나머지 두 칸은 $ta_{12}$, $ta_{21}$이다. 곱을 전개한 뒤 $t$의 차수별로 모아 보라.`,
+        String.raw`대각선 두 칸은 $1 + ta_{11}$, $1 + ta_{22}$이고 나머지 두 칸은 $ta_{12}$, $ta_{21}$이다. 곱을 전개한 뒤 $t$가 없는 항, $t$가 한 번 곱해진 항, $t^2$이 곱해진 항으로 나눠 모아 보라.`,
       ],
       choices: [String.raw`$1 + t\cdot\operatorname{tr}A$`, String.raw`$1 + t\cdot\det A$`, String.raw`$\det A$`, '1 (아주 조금이므로 그대로)'],
       answer: 0,

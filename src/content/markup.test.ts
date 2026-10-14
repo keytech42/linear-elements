@@ -236,6 +236,18 @@ describe('첫 등장 자동 링크', () => {
     const r = verify(mk([{ ...def, body: '가나다를 먼저 말하고 [가나다](def:t.a)를 정의한다.' }]), new Set(), new Map());
     expect(r.autoLinked).toBe(0);
   });
+  it('word: 로 가리킨 낱말은 용어로 읽지 않는다: 자동 링크도 P008도 없다', () => {
+    expect(parseInline('[가나다](word:)라 부른다')).toEqual([{ t: 'word', v: '가나다' }, { t: 'text', v: '라 부른다' }]);
+    // 다른 종류는 여전히 대상이 있어야 링크다
+    expect(parseInline('[가](n:)')).toEqual([{ t: 'text', v: '[가](n:)' }]);
+    const before = { id: 'n0', kind: 'def' as const, title: '', status: 'written' as const, body: '다른 문서는 [가나다](word:)라 부른다.' };
+    const after = { id: 'n2', kind: 'def' as const, title: '', status: 'written' as const, body: '어떤 문서는 [가나다](word:)라 부른다. 이 교재의 가나다는 앞에서 정의했다.' };
+    const r = verify(mk([before, def, after]), new Set(), new Map());
+    expect(r.issues.map((i) => i.rule)).not.toContain('P008');
+    const p = r.parsed.get('n2')!.body[0] as { c: { t: string; id?: string }[] };
+    expect(p.c[1]).toEqual({ t: 'word', v: '가나다' });
+    expect(terms(p.c)).toEqual(['t.a']);
+  });
 });
 
 describe('상자 제목', () => {
