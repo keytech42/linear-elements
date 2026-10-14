@@ -11,7 +11,8 @@
 - 요약은 영어 명령형으로, 첫 글자는 소문자, 끝에 마침표를 찍지 않는다. 예: `feat(review): show diffs by section and sentence`
 - 범위는 선택이고, 소문자로 쓴다. 원고는 장 id(`c0` … `c10`), 코드는 영역 이름(`reader`, `nav`, `verify`, `markup`, `review`, `scenes`, `e2e`).
 - 커밋 하나에는 태그 하나. 성격이 다른 변경은 커밋을 나눈다. 특히 기능(코드)과 원고, 그리고 검토 기록은 섞지 않는다.
-- 나눈 커밋도 하나하나 검사(`npm run verify`, `npm test`, `npm run typecheck`)가 통과해야 한다. 새 검증 규칙이 기존 원고를 잡으면, 그 수정은 규칙과 같은 커밋에 넣는다.
+- 커밋하기 전에 `npm run format`으로 코드 서식을 맞춘다(Prettier 기본 설정, 2026-10-15 결정).
+- 나눈 커밋도 하나하나 검사(`npm run verify`, `npm test`, `npm run typecheck`, `npm run format:check`)가 통과해야 한다. 새 검증 규칙이 기존 원고를 잡으면, 그 수정은 규칙과 같은 커밋에 넣는다.
 
 ## 태그 목록
 
@@ -27,7 +28,7 @@
 | `audit` | 감사 기록 `docs/audit/`과 그 지적을 받아 고친 기록 | `audit(c2): record findings` |
 | `docs` | 기능 하나에 딸리지 않은 문서: `docs/STYLE.md`, `docs/AUTHORING.md`, `docs/SYMBOLS.md`, README, 이 파일 | `docs: add commit message conventions` |
 | `build` | 빌드·배포 설정: `vite.config.ts`, `package.json`의 의존성, `.github/` | `build: skip .claude/ worktrees in vitest` |
-| `chore` | 그 밖의 잡일: `.gitignore`, 코드 서식만 맞추기 | |
+| `chore` | 그 밖의 잡일: `.gitignore`, 코드 서식만 맞추기(`npm run format`) | `chore: format the codebase with prettier` |
 | `revert` | 앞 커밋을 되돌린다. 요약에 되돌린 커밋을 적는다 | `revert: content(c0): …` |
 
 `style` 태그는 쓰지 않는다. 이 저장소에서 "style"은 글쓰기 규칙(`docs/STYLE.md`)을 가리키므로, 코드 서식 정리와 헷갈리지 않게 서식 정리는 `chore`로 적는다.

@@ -55,6 +55,7 @@ Vite + TypeScript, 프레임워크 없음, Canvas2D 렌더러와 수치 코어�
 ## 완료 조건 (직접 돌린다)
 - `npm run verify` → error 0. 자기 장에 P008, P007 경고가 없어야 한다. 단, 정직하게 남긴 열린 질문은 예외다.
 - `npm run typecheck` → 깨끗함
+- `npm run format` → 코드 서식을 Prettier 기본 설정으로 맞춘다(2026-10-15 결정). `npm run format:check`가 깨끗해야 한다. 원고 본문(`String.raw` 안의 글)은 Prettier가 건드리지 않는다. 문서(`*.md`)는 맞추지 않는다.
 - `npm test` → 통과
 - `npm run e2e` → 관문 흐름 검사 통과
 - `npm run sweep` → 모든 노드의 KaTeX·장면 오류 0

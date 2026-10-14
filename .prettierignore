@@ -1,0 +1,5 @@
+# 글(문서)은 Prettier로 다시 쓰지 않는다: 한글이 섞인 표를 다시 정렬하면 바뀐 곳이 읽기 어려워진다.
+*.md
+dist
+package-lock.json
+.claude
