@@ -3,6 +3,7 @@ import { NODE_BY_ID, BOOK_OF, ALL_NODES, V, prereqs, dependents, codeOf } from '
 import { KIND_LABEL, KIND_EN } from '../content/schema';
 import { renderBlocks, renderInlines, type RenderCtx } from './render';
 import { progress, trail } from './state';
+import { depart, takeArrival, skipsOrder, OPENED_BECAUSE, BACK_LABEL, type Via } from './nav';
 import { SyncBus } from '../sync/bus';
 import { highlightTs } from './highlight';
 import { renderGate } from './predict';
@@ -45,27 +46,21 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   art.appendChild(head);
 
   // 읽기 모드: 예측하며 읽기(관문이 잠겨 있음) / 펼쳐 보기(모두 열림)
-  // 왜? 칩이나 미뤄 둔 질문의 바로가기를 따라 들어왔거나, 이해했다고 표시한 노드라면 펼쳐서 연다(답을 찾으러 온 사람에게 퀴즈를 내지 않는다).
-  // 펼쳐 보기는 예측을 기록하지 않으므로, 나중에 순서대로 읽을 때 관문은 그대로 남아 있다.
+  // 다른 노드에서 건너왔거나(nav.ts: 왜? 칩, 이름표 참조, 바로가기, 앞질러 가기), 이해했다고 표시한 노드라면 펼쳐서 연다.
+  // 답이나 근거를 찾으러 온 사람에게 퀴즈를 내지 않는다. 펼쳐 보기는 예측을 기록하지 않으므로, 나중에 순서대로 읽을 때 관문은 그대로 남아 있다.
   const nPred = node.predicts?.length ?? 0;
-  const byWhy = sessionStorage.getItem('le.arrivedByWhy') === id;
-  sessionStorage.removeItem('le.arrivedByWhy');
-  const shortcut = JSON.parse(sessionStorage.getItem('le.shortcut') ?? 'null') as { to: string; from: string } | null;
-  sessionStorage.removeItem('le.shortcut');
-  const byShortcut = shortcut?.to === id ? shortcut.from : null;
-  const review = nPred > 0 && (view === 'all' || (view !== 'predict' && (byWhy || !!byShortcut || progress.isDone(id))));
+  const arrival = takeArrival(id);
+  const review = nPred > 0 && (view === 'all' || (view !== 'predict' && (!!arrival || progress.isDone(id))));
   if (nPred) {
     const mode = document.createElement('div');
     mode.className = 'mode-switch';
     mode.innerHTML =
       `<a href="#/n/${id}?view=predict" class="${review ? '' : 'on'}">예측하며 읽기</a><a href="#/n/${id}?view=all" class="${review ? 'on' : ''}">펼쳐 보기</a>` +
-      (review && byShortcut
-        ? '<span class="dim">바로가기로 와서 펼쳐 열었습니다. 관문의 예측은 기록되지 않았으니, 처음부터 순서대로 읽으려면 "예측하며 읽기"를 고르세요</span>'
-        : review && byWhy
-          ? '<span class="dim">왜? 칩을 따라와서 펼쳐 열었습니다</span>'
-          : review && view !== 'all'
-            ? '<span class="dim">이해했다고 표시한 노드라 펼쳐 열었습니다</span>'
-            : '');
+      (review && arrival
+        ? `<span class="dim">${OPENED_BECAUSE[arrival.via]}</span>`
+        : review && view !== 'all'
+          ? '<span class="dim">이해했다고 표시한 노드라 펼쳐 열었습니다</span>'
+          : '');
     head.appendChild(mode);
   }
 
@@ -341,14 +336,14 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
   main.innerHTML = '';
   main.appendChild(art);
 
-  // 왜? 칩이나 바로가기를 누르면 지금 자리를 기억한다
+  // 다른 노드로 건너가는 링크를 누르면 지금 자리를 기억하고 도착 지시를 남긴다(nav.ts)
+  const here = () => window.scrollY;
   art.addEventListener('click', (e) => {
     const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.why');
     if (a) {
-      trail.push({ node: id, scroll: window.scrollY, q: a.dataset.q ?? '' });
-      sessionStorage.setItem('le.arrivedByWhy', a.dataset.to ?? '');
       // 그 노드의 명제 하나를 가리키는 왜? 칩이면 그 명제 자리로 간다
-      if (a.dataset.ref) sessionStorage.setItem('le.scrollTo', `lbl-${a.dataset.ref.split('#')[1]}`);
+      const key = a.dataset.ref?.split('#')[1];
+      depart({ node: id, scroll: here(), q: a.dataset.q ?? '' }, { to: a.dataset.to ?? '', via: 'why', targets: key ? [`lbl-${key}`] : [] });
     }
     const pl = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.proof-link');
     if (pl) {
@@ -361,7 +356,8 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
         }
       }
     }
-    // 이름표 참조: 같은 노드면 그 자리로 내려가고, 앞 노드면 왜? 칩처럼 펼쳐 열고 그 자리로 간다.
+    // 이름표 참조: 같은 노드면 그 자리로 내려가고, 앞 노드면 펼쳐 열고 그 자리로 간다.
+    // 앞질러 가기(a.ref.ahead)는 뒤 노드의 그 명제를 증명하는 자리로 건너뛴다. 증명 머리가 없으면(공리) 이름표로 간다.
     const ref = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.ref, a.nlink[data-ref]');
     if (ref?.dataset.ref) {
       const [to, key] = ref.dataset.ref.split('#');
@@ -373,60 +369,57 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
           flash(t);
         }
       } else {
-        trail.push({ node: id, scroll: window.scrollY, q: ref.textContent ?? '', kind: 'ref' });
-        sessionStorage.setItem('le.arrivedByWhy', to);
-        sessionStorage.setItem('le.scrollTo', `lbl-${key}`);
+        const via: Via = ref.dataset.ahead ? 'ahead' : 'ref';
+        depart({ node: id, scroll: here(), q: ref.dataset.name ?? ref.textContent ?? '', kind: 'ref' }, { to, via, targets: via === 'ahead' ? [`proof-${key}`, `lbl-${key}`] : [`lbl-${key}`] });
       }
     }
     const s = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.shortcut');
-    if (s) {
-      trail.push({ node: id, scroll: window.scrollY, q: s.dataset.q ?? '' });
-      sessionStorage.setItem('le.shortcut', JSON.stringify({ to: s.dataset.to, from: id }));
-    }
+    if (s) depart({ node: id, scroll: here(), q: s.dataset.q ?? '' }, { to: s.dataset.to ?? '', via: 'shortcut', targets: [`answers-${id}`] });
   });
 
   refreshLocks();
   const offDom = bus.bindDom(art);
   const restore = sessionStorage.getItem('le.restoreScroll');
-  // 답 표지 바로 앞이 소제목이면 소제목부터 보이게 한다.
-  const box = byShortcut ? art.querySelector<HTMLElement>(`#answers-${CSS.escape(byShortcut)}`) : null;
-  const target = box?.previousElementSibling?.tagName === 'H3' ? (box.previousElementSibling as HTMLElement) : box;
-  const scrollToId = sessionStorage.getItem('le.scrollTo');
-  sessionStorage.removeItem('le.scrollTo');
-  const labelTarget = scrollToId ? art.querySelector<HTMLElement>(`#${CSS.escape(scrollToId)}`) : null;
-  if (labelTarget) {
-    // 앞 노드의 이름표를 참조로 찾아왔다: 그 공리나 명제가 화면 가운데 오게 하고 잠깐 빛나게 한다.
-    const go = () => labelTarget.scrollIntoView({ block: 'center' });
-    requestAnimationFrame(go);
-    setTimeout(go, 400);
-    flash(labelTarget);
-  } else if (restore) {
+  const landing = arrival?.targets.map((t) => art.querySelector<HTMLElement>(`#${CSS.escape(t)}`)).find((el) => !!el) ?? null;
+  if (landing) land(landing, arrival!.via);
+  else if (restore) {
     sessionStorage.removeItem('le.restoreScroll');
     requestAnimationFrame(() => window.scrollTo(0, +restore));
-  } else if (target) {
-    // 바로가기: 답이 있는 자리로 내려가고, 잠깐 빛나게 해서 어디가 답인지 보이게 한다.
-    // 머리의 안내는 화면 밖에 있으므로, 건너뛰어 왔다는 것과 두 갈래 길(처음부터 / 돌아가기)을 착지한 자리에 적는다.
-    const note = document.createElement('div');
-    note.className = 'answers-arrived';
-    const seg = segEls.findIndex((s) => s.contains(box!));
-    const skipped = seg === -1 ? gateIds.length : seg; // 답 표지보다 앞에 있는 관문 수
-    note.innerHTML =
-      `<span>↷ 바로가기로 건너뛰어 왔습니다. 이 노드의 앞부분${skipped ? `과 관문 ${skipped}개를` : '을'} 지나쳤습니다.` +
-      `${nPred ? ' 이 노드의 관문은 모두 펼쳐 열려 있고, 예측은 기록되지 않습니다.' : ''}</span> `;
-    const top = document.createElement('a');
-    top.href = `#/n/${id}?view=predict`;
-    top.textContent = '이 노드를 처음부터 읽기';
-    const back = document.createElement('button');
-    back.textContent = '← 질문으로 돌아가기';
-    back.onclick = () => art.querySelector<HTMLButtonElement>('.trail-bar')?.click();
-    note.append(top, ' · ', back);
-    box!.insertBefore(note, box!.querySelector('.answers-hint'));
+  } else window.scrollTo(0, 0);
+
+  /** 건너온 자리에 착지한다: 그 자리로 내려가 잠깐 빛나게 한다. 순서를 건너뛰어 왔으면 그 사실과 두 갈래 길을 그 자리에 적는다. */
+  function land(el: HTMLElement, via: Via) {
+    // 이름표는 글 속의 굵은 글씨이므로, 알림은 그 항목(목록 줄이나 문단) 뒤에 둔다.
+    const block = el.matches('strong.lbl') ? (el.closest<HTMLElement>('li, p') ?? el) : el;
+    let view: HTMLElement = el;
+    if (skipsOrder(via)) {
+      // 머리의 안내는 화면 밖에 있으므로, 건너뛰어 왔다는 것과 두 갈래 길(처음부터 / 돌아가기)을 착지한 자리에 적는다.
+      const seg = segEls.findIndex((s) => s.contains(el));
+      const skipped = seg === -1 ? gateIds.length : seg; // 착지한 자리보다 앞에 있는 관문 수
+      const note = document.createElement('div');
+      note.className = 'arrival-note';
+      note.innerHTML =
+        `<span>↷ 건너뛰어 왔습니다. 이 노드의 앞부분${skipped ? `과 관문 ${skipped}개를` : '을'} 지나쳤습니다.` +
+        `${nPred ? ' 이 노드의 관문은 모두 펼쳐 열려 있고, 예측은 기록되지 않습니다.' : ''}</span> `;
+      const top = document.createElement('a');
+      top.href = `#/n/${id}?view=predict`;
+      top.textContent = '이 노드를 처음부터 읽기';
+      const back = document.createElement('button');
+      back.textContent = BACK_LABEL[via];
+      back.onclick = () => art.querySelector<HTMLButtonElement>('.trail-bar')?.click();
+      note.append(top, ' · ', back);
+      const hint = block.querySelector(':scope > .answers-hint');
+      if (hint) block.insertBefore(note, hint);
+      else block.after(note);
+      // 착지한 자리 바로 앞이 소제목이면 소제목부터 보이게 한다.
+      view = block.previousElementSibling?.tagName === 'H3' ? (block.previousElementSibling as HTMLElement) : block;
+    }
     // 위쪽 장면이 그려지며 높이가 바뀔 수 있으므로 조금 뒤에 한 번 더 맞춘다.
-    const go = () => target.scrollIntoView({ block: 'start' });
+    const go = () => view.scrollIntoView({ block: skipsOrder(via) ? 'start' : 'center' });
     requestAnimationFrame(go);
     setTimeout(go, 400);
-    box!.classList.add('flash');
-  } else window.scrollTo(0, 0);
+    flash(el);
+  }
 
   return () => {
     offDom();

@@ -167,6 +167,36 @@ describe('검증기 규칙', () => {
     // 목록 번호를 잇는 "1 ⇔ 2"는 잡고, 이름을 드러낸 "(가) ⇔ (나)"와 수식 속 화살표는 잡지 않는다
     expect(rules(mk([{ id: 'e.s', kind: 'exp', title: '', status: 'written', body: '**1 ⇔ 2.** 증명' }]))).toContain('P031');
     expect(rules(mk([{ id: 'e.t', kind: 'exp', title: '', status: 'written', body: '**(가) ⇔ (나).** $x \\Rightarrow 2$' }]))).not.toContain('P031');
+    // 참조 뒤에 손으로 이어 적은 번호는 잡고, 참조 뒤의 개수·배수 같은 수는 잡지 않는다
+    const tail = (t: string) => rules(mk([ax, { ...p1, body: `- [](label:m1) 가\n- [](label:m2) 나\n\n${t}` }])).filter((x) => x === 'P031').length;
+    expect(tail('[](ref:ax.x#one), 2 그대로다.')).toBe(1);
+    expect(tail('[](ref:ax.x#one)와 2를 쓴다.')).toBe(1);
+    expect(tail('[](ref:ax.x#one), 3개의 수를 쓴다.')).toBe(0);
+  });
+  it('앞질러 가기 ahead: 뒤 노드의 이름표를 가리키고, 근거로 쓰는 자리에는 둘 수 없다', () => {
+    expect(parseInline('[](ahead:p.y#m2)')).toEqual([{ t: 'ref', node: 'p.y', key: 'm2', c: [], ahead: true }]);
+    const ax = { id: 'ax.x', kind: 'ax' as const, title: '', status: 'written' as const, body: '- [](label:one) 하나\n\n그것이 하나뿐임은 [](ahead:p.z#u)을 본다.' };
+    const p1 = { id: 'p.y', kind: 'prop' as const, title: '', status: 'written' as const, body: '[](label:m1) 가', proof: '증명' };
+    const p2 = { id: 'p.z', kind: 'prop' as const, title: '', status: 'written' as const, body: '[](label:t) 다\n\n[](label:u) 라', proof: '::proves t\n\n가\n\n::proves u\n\n나' };
+    const two: Book[] = [{ id: 'c0', num: 0, title: '', subtitle: '', nodes: [ax, p1] }, { id: 'c1', num: 1, title: '', subtitle: '', nodes: [p2] }];
+    const r = verify(two, new Set(), new Map());
+    expect(r.issues.filter((i) => i.rule === 'P030' || i.rule === 'P031')).toEqual([]);
+    // 뒤 노드의 번호는 끝에서 채워지고, 다른 장이면 장을 붙이며, 뒤의 조사도 번호에 맞춘다("명제 2을" → "명제 2를")
+    const p = r.parsed.get('ax.x')!.body.at(-1) as { c: Inline[] };
+    expect(plainText(p.c)).toBe('그것이 하나뿐임은 1장 명제 2를 본다.');
+    // 앞질러 가리킨 것은 "뒤에서 쓰이는 곳"이 아니고, 의존 간선도 만들지 않는다
+    expect(r.uses.get('p.z#u')).toBeUndefined();
+    expect(r.edges.some((e) => e.from === 'ax.x' && e.to === 'p.z')).toBe(false);
+    const p030 = (books: Book[]) => verify(books, new Set(), new Map()).issues.filter((i) => i.rule === 'P030').map((i) => i.msg);
+    const withAx = (body: string, proof?: string) => [{ ...two[0], nodes: [{ ...ax, body: `- [](label:one) 하나\n\n${body}`, ...(proof ? { kind: 'prop' as const, proof } : {}) }, p1] }, two[1]];
+    // 앞 노드는 ref:로
+    expect(p030(withAx('[](ahead:ax.x#one)')).join()).toContain('뒤 노드의 이름표만');
+    // 증명 안, 등식 줄의 근거 칸에는 둘 수 없다
+    expect(p030([{ ...two[0], nodes: [ax, { ...p1, proof: '[](ahead:p.z#u)로 끝난다.' }] }, two[1]]).join()).toContain('근거 칸');
+    expect(p030(withAx('::chain\na = b ∵ [](ahead:p.z#u)')).join()).toContain('근거 칸');
+    // 없는 이름표, 그리고 ref:로 뒤를 가리키면 ahead:를 쓰라고 알린다
+    expect(p030(withAx('[](ahead:p.z#none)')).join()).toContain('없는 이름표');
+    expect(p030(withAx('[](ref:p.z#u)')).join()).toContain('ahead:');
   });
   it('증명 표지와 키가 달린 왜? 칩', () => {
     expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });

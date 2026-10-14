@@ -252,7 +252,7 @@ a - 0 = a + (-0) ∵ 빼기의 뜻([](ref:ax.arith#neg))
       q: '다음 가운데 공리 목록에 없고, 공리에서 증명한 것은?',
       choices: [String.raw`$-(-a) = a$`, String.raw`$a + (-a) = 0$`, String.raw`$a \neq 0$이면 $a \times \tfrac{1}{a} = 1$`, String.raw`$1 \times a = a$`],
       answer: 0,
-      explain: String.raw`$-(-a) = a$는 위의 [](ref:double-neg)다. "덧셈 역원은 하나뿐"([](ref:inverse-unique))을 거쳐 증명했다. 나머지 셋은 [](ref:ax.arith#neg), 6, 4 그대로다. 어떤 것을 공리로 삼을지는 고르기 나름이지만, 될 수 있는 대로 적게 고르는 것이 유클리드 이래의 전통이다. 증명할 수 있는 것을 공리에 넣지 않아야, 공리 하나하나가 무엇을 떠받치는지 드러난다.`,
+      explain: String.raw`$-(-a) = a$는 위의 [](ref:double-neg)다. "덧셈 역원은 하나뿐"([](ref:inverse-unique))을 거쳐 증명했다. 나머지 셋은 [](ref:ax.arith#neg), [](ref:ax.arith#recip), [1의 공리](ref:ax.arith#one-mul) 그대로다. 어떤 것을 공리로 삼을지는 고르기 나름이지만, 될 수 있는 대로 적게 고르는 것이 유클리드 이래의 전통이다. 증명할 수 있는 것을 공리에 넣지 않아야, 공리 하나하나가 무엇을 떠받치는지 드러난다.`,
     },
   ],
 };

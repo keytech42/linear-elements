@@ -153,6 +153,18 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   let axiomCount = 0; // 공리 번호는 책 전체에서 이어진다
   const propCount = new Map<number, number>(); // 명제 번호는 장마다 1부터 센다
   const inlinesOf = new Map<string, Inline[]>();
+  const blocksOf = new Map<string, Block[]>();
+  // 앞질러 가기는 뒤 노드의 이름표를 가리키므로, 그 번호는 모든 노드를 읽은 뒤에야 정해진다. 이름 채우기는 끝에서 한다.
+  const aheadRefs: { x: Extract<Inline, { t: 'ref' }>; from: string; ch: number }[] = [];
+  /** 참조의 글: 글자 없이 쓴 참조에는 이 자리에서 보이는 이름을 채우고, 글자를 적었으면 그 이름이 들어 있는지 본다(낡은 번호를 잡는다). */
+  const nameRef = (x: Extract<Inline, { t: 'ref' }>, l: Label, ch: number, from: string) => {
+    const shown = refName(l, ch);
+    const said = plainText(x.c).trim();
+    if (!said) {
+      x.c = [{ t: 'text', v: shown }];
+      x.auto = true;
+    } else if (!said.includes(shown)) push('P030', from, `"${said}"가 가리키는 이름표는 이 자리에서 '${shown}'로 불린다`);
+  };
   const singleStmt = new Map<string, string>(); // 명제가 하나뿐인 노드 → 그 명제의 이름표 키
 
   for (const n of nodes) {
@@ -220,26 +232,27 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
       if (clash) push('P030', n.id, `책 전체에서 쓰는 이름 '${name}'가 ${clash.node}에도 있음`);
       labels.set(id, { node: n.id, key: x.key, name, text, global: n.kind === 'ax', chapter: ch });
     }
+    // 근거로 쓰는 자리(증명, 등식 줄의 근거 칸)의 글. 앞질러 가기는 여기에 둘 수 없다: 뒤의 명제를 근거로 쓰면 순서가 무너진다.
+    const reasoning = new Set<Inline>(walkInlines(pn.proof ?? []));
+    for (const b of walkBlocks(allBlocks)) if (b.t === 'chain') for (const r of b.rows) for (const x of walkInlineList(r.why ?? [])) reasoning.add(x);
     for (const x of inlines) {
       if (x.t !== 'ref') continue;
       const target = x.node ?? n.id;
       x.node = target; // 렌더러가 어느 노드의 이름표인지 알도록 채워 둔다
       const o = order.get(target);
-      const l = labels.get(`${target}#${x.key}`);
-      const said = plainText(x.c).trim();
-      if (o === undefined) push('P030', n.id, `ref:${target}#${x.key}: 없는 노드`);
-      else if (o > here) push('P030', n.id, `ref:${target}#${x.key}: 뒤쪽 노드의 이름표`);
-      else if (!l) push('P030', n.id, `ref:${target}#${x.key}: 없는 이름표`);
-      else {
-        // 글자 없이 쓴 참조 [](ref:…)에는 이 자리에서 보이는 이름을 채운다. 글자를 적었으면 그 이름이 들어 있어야 한다(낡은 번호를 잡는다).
-        const shown = refName(l, ch);
-        if (!said) {
-          x.c = [{ t: 'text', v: shown }];
-          x.auto = true;
-        }
-        else if (!said.includes(shown)) push('P030', n.id, `"${said}"가 가리키는 이름표는 이 자리에서 '${shown}'로 불린다`);
+      const kind = x.ahead ? 'ahead' : 'ref';
+      if (o === undefined) push('P030', n.id, `${kind}:${target}#${x.key}: 없는 노드`);
+      else if (x.ahead) {
+        if (o <= here) push('P030', n.id, `ahead:${target}#${x.key}: 앞질러 가기는 뒤 노드의 이름표만 가리킨다. 이 노드나 앞 노드는 ref:로 가리킨다`);
+        else if (reasoning.has(x)) push('P030', n.id, `ahead:${target}#${x.key}: 증명과 등식 줄의 근거 칸에는 뒤의 명제를 둘 수 없다`);
+        else aheadRefs.push({ x, from: n.id, ch });
+      } else {
+        const l = labels.get(`${target}#${x.key}`);
+        if (o > here) push('P030', n.id, `ref:${target}#${x.key}: 뒤쪽 노드의 이름표. 증명하는 자리를 가리키려면 ahead:를 쓴다`);
+        else if (!l) push('P030', n.id, `ref:${target}#${x.key}: 없는 이름표`);
+        else nameRef(x, l, ch, n.id);
+        if (l && target !== n.id) addEdge(target, 'link');
       }
-      if (l && target !== n.id) addEdge(target, 'link');
     }
     fixJosaAfterNames(allBlocks, pn);
     for (const m of unmarkedNumbers(allBlocks, pn)) push('P031', n.id, `"${m}"`);
@@ -248,6 +261,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
       if (order.has(x.to) && order.get(x.to)! < here && !labels.has(`${x.to}#${x.key}`)) push('P030', n.id, `${x.t === 'why' ? 'why' : 'n'}:${x.to}#${x.key}: 없는 이름표`);
     }
     inlinesOf.set(n.id, inlines);
+    blocksOf.set(n.id, allBlocks);
 
     // 명제와 그 증명의 짝 (P032). 본문의 이름표가 명제의 이름이고, 명제가 여럿이면 증명의 각 부분 앞에 ::proves 키를 둔다.
     const stmtKeys = [...walkInlines(pn.body)].flatMap((x) => (x.t === 'label' ? [x.key] : []));
@@ -357,6 +371,14 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     if (n.status === 'written') autoLinked += autoLinkFirstMentions(pn, lexicon, (id) => order.get(termHome.get(id)!.node)! < here, (id) => termUse.set(id, (termUse.get(id) ?? 0) + 1));
   }
 
+  // 3-0. 앞질러 가기: 이제 모든 이름표에 번호가 있으므로 이름을 채우고, 그 뒤의 조사를 다시 맞춘다.
+  for (const { x, from, ch } of aheadRefs) {
+    const l = labels.get(`${x.node}#${x.key}`);
+    if (!l) push('P030', from, `ahead:${x.node}#${x.key}: 없는 이름표`);
+    else nameRef(x, l, ch, from);
+  }
+  for (const from of new Set(aheadRefs.map((a) => a.from))) fixJosaAfterNames(blocksOf.get(from)!, parsed.get(from)!);
+
   // 3-1. 미뤄 둔 질문과 답하는 자리: "뒤에서 답함"이라고 적었으면 그 노드에 ::answers 표지가 있어야 하고, 표지는 실제로 미뤄 둔 질문을 가리켜야 한다.
   const answersIn = new Map<string, Set<string>>();
   for (const n of nodes) {
@@ -385,7 +407,7 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
   };
   for (const [from, list] of inlinesOf)
     for (const x of list) {
-      if (x.t === 'ref' && x.node) addUse(`${x.node}#${x.key}`, from);
+      if (x.t === 'ref' && x.node && !x.ahead) addUse(`${x.node}#${x.key}`, from); // 앞질러 가리킨 것은 쓴 것이 아니다
       else if ((x.t === 'why' || x.t === 'link') && x.key) addUse(`${x.to}#${x.key}`, from);
     }
   for (const e of edges) {
@@ -595,9 +617,16 @@ function unmarkedNumbers(blocks: Block[], pn: ParsedNode): string[] {
   const found: string[] = [];
   // "n번"은 목록의 n째 항목을 가리킬 때만 잡는다("2번은", "1번(", "(1번)", "1번 식"). "12번 곱한"처럼 횟수를 말할 때는 잡지 않는다.
   const re = /(공리|명제|증명|규칙) ?\d+|[01]의 공리|\d+번(?=[은는이가을를의에과와(),.~]|\s*식|$)|(?<!\d|\d\.)\d ?[⇔⇒] ?\d(?!\d|\.\d)/g;
+  // 참조 바로 뒤에 손으로 이어 적은 번호("[](ref:…), 6, 4 그대로다")도 잡는다.
+  const afterRef = /^\s*(?:,|와|과|및|또는)\s*\d+(?:\s*,\s*\d+)*(?=\s|$|[,)은는이가을를의에과와로도])/;
   const visit = (list: Inline[]) => {
-    for (const x of list) {
+    for (let i = 0; i < list.length; i++) {
+      const x = list[i];
       if (x.t === 'ref' || x.t === 'label') continue;
+      if (x.t === 'text' && list[i - 1]?.t === 'ref') {
+        const m = afterRef.exec(x.v);
+        if (m) found.push(m[0].trim());
+      }
       if (x.t === 'text') found.push(...(x.v.match(re) ?? []));
       else if (x.t === 'why') found.push(...(x.q.match(re) ?? []));
       else if ('c' in x) visit(x.c);

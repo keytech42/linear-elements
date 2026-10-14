@@ -67,7 +67,11 @@ function show(el: HTMLElement) {
     p.appendChild(renderInlines(l.text));
     const foot = document.createElement('div');
     foot.className = 'pop-foot';
-    foot.textContent = el.dataset.ref.startsWith(`${location.hash.match(/^#\/n\/([^?]+)/)?.[1]}#`) ? '누르면 이 노드 안의 그 자리로 갑니다.' : '누르면 그 자리로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
+    foot.textContent = el.dataset.ahead
+      ? '뒤에서 증명하는 자리입니다. 누르면 그 증명으로 건너뜁니다. 그 노드는 펼쳐 열리고 예측은 기록되지 않으며, "돌아가기"로 지금 자리에 돌아옵니다.'
+      : el.dataset.ref.startsWith(`${location.hash.match(/^#\/n\/([^?]+)/)?.[1]}#`)
+        ? '누르면 이 노드 안의 그 자리로 갑니다.'
+        : '누르면 그 자리로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
     pop.append(kick, title, p, foot);
   } else if (to) {
     const node = NODE_BY_ID.get(to);

@@ -300,11 +300,19 @@ function renderInline(x: Inline): Node {
     }
     case 'ref': {
       // 이름표 참조: 마우스를 올리면 그 항목의 글이 뜨고(popover.ts), 누르면 그 자리로 간다(reader.ts).
+      // 앞질러 가기(ahead)는 뒤 노드의 이름표를 가리킨다. ↷ 표시로 참조와 구별하고, 누르면 그 명제의 증명으로 건너뛴다.
       const a = document.createElement('a');
-      a.className = 'ref';
+      a.className = x.ahead ? 'ref ahead' : 'ref';
       a.href = `#/n/${x.node ?? ''}`;
       a.dataset.ref = `${x.node}#${x.key}`;
       a.appendChild(renderInlines(x.c));
+      if (x.ahead) {
+        a.dataset.ahead = '1';
+        a.dataset.name = a.textContent ?? '';
+        const sup = document.createElement('sup');
+        sup.textContent = '↷';
+        a.appendChild(sup);
+      }
       return a;
     }
     case 'link': {

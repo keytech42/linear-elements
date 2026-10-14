@@ -28,6 +28,8 @@
 //   [공리 5](label:키)    이름표 선언: 이 자리의 공리·명제에 이름을 붙인다(굵게, 앵커). 키는 노드 안에서 하나뿐 (P030)
 //   [공리 5](ref:키)      이름표 참조: 같은 노드는 ref:키, 앞 노드는 ref:노드id#키. 글에 이름표 이름이 들어 있어야 한다.
 //                         마우스를 올리면 그 항목의 글이 뜨고, 누르면 그 자리로 간다. 표시 없는 "공리 n" "명제 n"은 P031.
+//   [](ahead:노드id#키)  앞질러 가기: 뒤 노드의 이름표를 가리킨다("그것은 뒤의 명제 5에서 증명한다"). 이름은 참조처럼 채워지고 ↷가 붙는다.
+//                         누르면 그 명제의 증명으로 건너뛴다(관문을 펼쳐 열고 알린다). 근거로 쓰는 자리(증명, 등식 줄의 근거 칸)에는 둘 수 없다 (P030).
 //   [낱말](word:)         낱말을 쓰지 않고 낱말 자체를 가리킨다(다른 문서가 부르는 이름 등). 따옴표로 그려지고,
 //                         용어 자동 링크와 어휘 검사(P008)에서 빠진다.
 
@@ -44,7 +46,7 @@ export type Inline =
   | { t: 'sync'; key: string; c: Inline[] }
   | { t: 'label'; key: string; c: Inline[]; auto?: boolean }
   /** node는 파서가 비워 두면(같은 노드) 검증기가 채운다 */
-  | { t: 'ref'; node?: string; key: string; c: Inline[]; auto?: boolean };
+  | { t: 'ref'; node?: string; key: string; c: Inline[]; auto?: boolean; ahead?: boolean };
 
 export type NoteKind = '비유' | '주의' | '직관' | '질문' | '코드' | '참고';
 
@@ -179,7 +181,7 @@ export function parseBlocks(src: string): Block[] {
   return out;
 }
 
-const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'word'] as const;
+const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'ahead', 'word'] as const;
 
 export function parseInline(src: string): Inline[] {
   const out: Inline[] = [];
@@ -242,9 +244,9 @@ export function parseInline(src: string): Inline[] {
           }
           else if (kind === 'sync') out.push({ t: 'sync', key: id, c: parseInline(inner) });
           else if (kind === 'label') out.push({ t: 'label', key: id, c: parseInline(inner) });
-          else if (kind === 'ref') {
+          else if (kind === 'ref' || kind === 'ahead') {
             const k = id.indexOf('#');
-            out.push({ t: 'ref', ...(k >= 0 ? { node: id.slice(0, k) } : {}), key: k >= 0 ? id.slice(k + 1) : id, c: parseInline(inner) });
+            out.push({ t: 'ref', ...(k >= 0 ? { node: id.slice(0, k) } : {}), key: k >= 0 ? id.slice(k + 1) : id, c: parseInline(inner), ...(kind === 'ahead' ? { ahead: true } : {}) });
           }
           else out.push({ t: kind === 't' ? 'term' : (kind as 'def' | 'fwd'), id, c: parseInline(inner) });
           i = pend + 1;
