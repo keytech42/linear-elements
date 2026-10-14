@@ -1,25 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.transpose',
-  kind: 'def',
-  title: '전치',
-  status: 'written',
+  id: "def.transpose",
+  kind: "def",
+  title: "전치",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.transpose', ko: '전치', en: 'transpose', gloss: '행렬의 행과 열을 맞바꾼 행렬. m×n이 n×m이 된다.' }],
-    symbols: [{ tex: String.raw`A^{\mathsf{T}}`, meaning: '행렬 A의 전치' }],
+    terms: [
+      {
+        id: "t.transpose",
+        ko: "전치",
+        en: "transpose",
+        gloss: "행렬의 행과 열을 맞바꾼 행렬. m×n이 n×m이 된다.",
+      },
+    ],
+    symbols: [{ tex: String.raw`A^{\mathsf{T}}`, meaning: "행렬 A의 전치" }],
   },
-  requires: ['prop.row-picture'],
+  requires: ["prop.row-picture"],
   predicts: [
     {
-      id: 'p-rot',
-      kind: 'choice',
+      id: "p-rot",
+      kind: "choice",
       q: String.raw`회전 행렬 $R_\theta = \begin{bmatrix} \cos\theta & -\sin\theta \\ \sin\theta & \cos\theta \end{bmatrix}$의 전치는 어떤 변환일까?`,
       hints: [
         String.raw`행과 열을 맞바꾸면 $\begin{bmatrix} \cos\theta & \sin\theta \\ -\sin\theta & \cos\theta \end{bmatrix}$이다. 첫째 열 $(\cos\theta, -\sin\theta)$는 단위원 위 몇 도 자리의 점인가?`,
         String.raw`단위원 위 $-\theta$ 자리의 점은 $\theta$ 자리의 점을 가로축에 비친 것이므로 $(\cos\theta, -\sin\theta)$다.`,
       ],
-      choices: [String.raw`반대로 $\theta$만큼 돌리는 회전 $R_{-\theta}$`, '같은 회전 그대로', '가로축에 비치는 반사', String.raw`$\theta + 90°$ 회전`],
+      choices: [
+        String.raw`반대로 $\theta$만큼 돌리는 회전 $R_{-\theta}$`,
+        "같은 회전 그대로",
+        "가로축에 비치는 반사",
+        String.raw`$\theta + 90°$ 회전`,
+      ],
       answer: 0,
       why: [
         String.raw`첫째 열이 $-\theta$ 자리의 점, 둘째 열 $(\sin\theta, \cos\theta)$는 그것을 90° 돌린 점이다. 곧 $R_{-\theta}$다. 회전의 전치는 회전을 되돌린다. 5장에서 이것이 "[직교 행렬](fwd:t.orth-matrix)의 [역행렬](fwd:t.inverse)은 전치"가 된다.`,
@@ -48,12 +60,12 @@ $A$의 $i$번째 행이 $A^{\mathsf{T}}$의 $i$번째 열이 된다. 그래서 [
   checks: [
     {
       q: String.raw`$A$가 4×3이면 $A^{\mathsf{T}}A$와 $AA^{\mathsf{T}}$의 모양은?`,
-      choices: ['3×3과 4×4', '4×4와 3×3', '둘 다 4×3', '곱할 수 없다'],
+      choices: ["3×3과 4×4", "4×4와 3×3", "둘 다 4×3", "곱할 수 없다"],
       answer: 0,
       explain: String.raw`$A^{\mathsf{T}}$는 3×4다. $(3\times4)(4\times3) = 3\times3$, $(4\times3)(3\times4) = 4\times4$. [안쪽 차원이 맞는다](n:prop.shape-rule). 9장에서 $A^{\mathsf{T}}A$가 주인공이 된다.`,
     },
   ],
-  code: ['transpose'],
+  code: ["transpose"],
 };
 
 export default node;

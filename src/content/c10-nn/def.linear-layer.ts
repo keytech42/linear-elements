@@ -1,22 +1,36 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.linear-layer',
-  kind: 'def',
-  title: '선형 레이어: y = Wx',
-  status: 'written',
+  id: "def.linear-layer",
+  kind: "def",
+  title: "선형 레이어: y = Wx",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.linear-layer', ko: '선형 레이어', en: 'linear layer', surfaces: ['완전연결층', '완전 연결 레이어'], gloss: '신경망에서 입력 벡터에 가중치 행렬을 곱하는 레이어. 가중치의 모양은 (출력 차원, 입력 차원).' }],
-    symbols: [{ tex: 'W', meaning: '신경망 레이어의 가중치 행렬' }],
+    terms: [
+      {
+        id: "t.linear-layer",
+        ko: "선형 레이어",
+        en: "linear layer",
+        surfaces: ["완전연결층", "완전 연결 레이어"],
+        gloss:
+          "신경망에서 입력 벡터에 가중치 행렬을 곱하는 레이어. 가중치의 모양은 (출력 차원, 입력 차원).",
+      },
+    ],
+    symbols: [{ tex: "W", meaning: "신경망 레이어의 가중치 행렬" }],
   },
-  requires: ['def.shape', 'prop.row-picture'],
-  openWhys: [{ q: '선형 레이어 사이에 끼우는 비선형 함수(활성화 함수)는 무엇을 하고, 왜 그것이 표현력을 만드는가?', answeredBy: null }],
+  requires: ["def.shape", "prop.row-picture"],
+  openWhys: [
+    {
+      q: "선형 레이어 사이에 끼우는 비선형 함수(활성화 함수)는 무엇을 하고, 왜 그것이 표현력을 만드는가?",
+      answeredBy: null,
+    },
+  ],
   predicts: [
     {
-      id: 'p-shape',
-      kind: 'choice',
+      id: "p-shape",
+      kind: "choice",
       q: String.raw`PyTorch의 \`nn.Linear(in_features=512, out_features=128)\`이 가진 가중치 행렬의 모양 \`weight.shape\`는?`,
-      choices: ['(128, 512)', '(512, 128)', '(128,)', '(512, 512)'],
+      choices: ["(128, 512)", "(512, 128)", "(128,)", "(512, 512)"],
       answer: 0,
       why: [
         String.raw`가중치는 (출력, 입력) = $m \times n$이다. 행 하나가 출력 뉴런 하나다. 128개의 뉴런이 각각 512개짜리 입력과 내적한다고 읽으면 외울 필요가 없다.`,
@@ -26,14 +40,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-stack',
-      kind: 'choice',
-      q: '활성화 함수 없이 4096 → 1024 → 4096 두 선형 레이어를 이었다. 이 둘을 행렬 하나로 합칠 수 있다면, 그 행렬의 모양과 랭크의 최댓값은?',
+      id: "p-stack",
+      kind: "choice",
+      q: "활성화 함수 없이 4096 → 1024 → 4096 두 선형 레이어를 이었다. 이 둘을 행렬 하나로 합칠 수 있다면, 그 행렬의 모양과 랭크의 최댓값은?",
       hints: [
         String.raw`두 레이어는 $\mathbf{x} \mapsto W_{\text{둘째}}(W_{\text{첫째}}\mathbf{x})$이다. [행렬 곱의 결합법칙](n:prop.associative)으로 괄호를 옮겨 보라. 그리고 [곱의 모양 규칙](n:prop.shape-rule)을 쓰라.`,
         String.raw`합친 행렬의 모든 출력은 둘째 레이어의 열(1024개)의 선형 결합이다. 그 열들이 펼칠 수 있는 공간의 차원은 최대 얼마인가?`,
       ],
-      choices: ['4096×4096, 랭크는 1024 이하', '4096×4096, 랭크는 4096까지', '합칠 수 없다. 레이어가 둘이면 표현력이 늘어난다', '1024×1024, 랭크는 1024 이하'],
+      choices: [
+        "4096×4096, 랭크는 1024 이하",
+        "4096×4096, 랭크는 4096까지",
+        "합칠 수 없다. 레이어가 둘이면 표현력이 늘어난다",
+        "1024×1024, 랭크는 1024 이하",
+      ],
       answer: 0,
       why: [
         String.raw`$(4096\times1024)(1024\times4096) = 4096\times4096$이고, 모든 출력이 열 1024개의 선형 결합이므로 랭크는 1024를 넘지 못한다. 아래 문단이 이것을 일반적으로 보인다.`,
@@ -74,18 +93,23 @@ PyTorch의 \`nn.Linear(in_features=n, out_features=m)\`의 \`weight.shape\`는 $
   checks: [
     {
       q: String.raw`입력 $X$의 모양이 (32, 512)이고 레이어가 \`nn.Linear(512, 128)\`이면 $Y = XW^{\mathsf{T}}$의 모양은?`,
-      choices: ['(32, 128)', '(128, 32)', '(32, 512)', '곱할 수 없다'],
+      choices: ["(32, 128)", "(128, 32)", "(32, 512)", "곱할 수 없다"],
       answer: 0,
       explain: String.raw`$(32 \times 512)(512 \times 128) = (32 \times 128)$이다. 배치 쪽 배열 축의 길이 32는 그대로 지나가고, 마지막 배열 축의 길이만 512에서 128로 바뀐다. 가중치의 모양 (128, 512)를 전치해서 오른쪽에 곱하기 때문이다.`,
     },
     {
-      q: '4096 → 1024 → 4096 두 레이어(활성화 없음)의 가중치 숫자 개수와, 둘을 합친 4096×4096 행렬의 숫자 개수를 비교하면?',
-      choices: ['두 레이어 쪽이 절반(838만 대 1678만)', '같다', '두 레이어 쪽이 두 배', '합친 쪽이 절반'],
+      q: "4096 → 1024 → 4096 두 레이어(활성화 없음)의 가중치 숫자 개수와, 둘을 합친 4096×4096 행렬의 숫자 개수를 비교하면?",
+      choices: [
+        "두 레이어 쪽이 절반(838만 대 1678만)",
+        "같다",
+        "두 레이어 쪽이 두 배",
+        "합친 쪽이 절반",
+      ],
       answer: 0,
       explain: String.raw`두 레이어는 $4096\times1024 + 1024\times4096 = 8{,}388{,}608$개, 합친 행렬은 $4096^2 = 16{,}777{,}216$개다. 같은 변환인데 두 레이어로 나눠 적으면 숫자가 절반이다. 대가는 랭크가 1024 이하로 묶인다는 것이다. 다음 노드의 [LoRA](fwd:t.lora)가 바로 이 거래를 일부러 한다.`,
     },
   ],
-  code: ['matVec', 'matVecRows', 'transpose'],
+  code: ["matVec", "matVecRows", "transpose"],
 };
 
 export default node;

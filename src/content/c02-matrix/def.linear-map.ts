@@ -1,28 +1,53 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.linear-map',
-  kind: 'def',
-  title: '선형 변환: 덧셈과 스칼라 곱을 지키는 변환',
-  status: 'written',
+  id: "def.linear-map",
+  kind: "def",
+  title: "선형 변환: 덧셈과 스칼라 곱을 지키는 변환",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.linear-map', ko: '선형 변환', en: 'linear transformation', surfaces: ['선형 사상', '선형사상'], gloss: 'T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯)를 지키는 변환. 선형 결합을 그대로 통과시킨다.' },
-      { id: 't.linearity', ko: '선형성', en: 'linearity', gloss: '덧셈과 스칼라 곱을 그대로 통과시키는 성질: T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯). 이 성질을 가진 변환이 선형 변환이다.' },
+      {
+        id: "t.linear-map",
+        ko: "선형 변환",
+        en: "linear transformation",
+        surfaces: ["선형 사상", "선형사상"],
+        gloss:
+          "T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯)를 지키는 변환. 선형 결합을 그대로 통과시킨다.",
+      },
+      {
+        id: "t.linearity",
+        ko: "선형성",
+        en: "linearity",
+        gloss:
+          "덧셈과 스칼라 곱을 그대로 통과시키는 성질: T(𝐮 + 𝐰) = T(𝐮) + T(𝐰), T(c𝐯) = cT(𝐯). 이 성질을 가진 변환이 선형 변환이다.",
+      },
     ],
   },
-  requires: ['def.transformation', 'def.linear-combination'],
+  requires: ["def.transformation", "def.linear-combination"],
   significance: {
     everywhere: String.raw`선형성은 이 교재의 끝까지 되풀이해 나온다. 이 장에서 보게 될 [행렬](fwd:t.matrix)이 나타내는 변환은 모두 선형이고, 10장의 신경망 [선형 레이어](fwd:t.linear-layer)도 그렇다. 선형이면 두 가지가 쉬워진다. 하나는 적은 정보로 전체가 정해진다는 것이다(바로 다음 노드부터 본다). 다른 하나는 큰 입력을 작은 조각으로 나누어 조각마다 보낸 뒤 더해도 같은 답이 나온다는 것이다. 첫째 조건이 바로 그 말이다.`,
   },
-  openWhys: [{ q: '왜 하필 "선형"이라는 이름을 붙이는가? 이 두 조건과 직선은 무슨 관계인가?', answeredBy: 'prop.linear-name' }],
+  openWhys: [
+    {
+      q: '왜 하필 "선형"이라는 이름을 붙이는가? 이 두 조건과 직선은 무슨 관계인가?',
+      answeredBy: "prop.linear-name",
+    },
+  ],
   predicts: [
     {
-      id: 'p-origin',
-      kind: 'choice',
-      q: '선형 변환은 원점(영벡터)을 어디로 보낼까?',
-      hints: [String.raw`영벡터는 아무 벡터의 0배다: $\mathbf{0} = 0\cdot\mathbf{v}$. 둘째 조건 $T(c\mathbf{v}) = cT(\mathbf{v})$에 $c = 0$을 넣어 보라.`],
-      choices: ['언제나 원점으로', '변환마다 정해진 어느 점으로든', '원점을 지나는 어떤 직선 위의 점으로', '정의만으로는 알 수 없다'],
+      id: "p-origin",
+      kind: "choice",
+      q: "선형 변환은 원점(영벡터)을 어디로 보낼까?",
+      hints: [
+        String.raw`영벡터는 아무 벡터의 0배다: $\mathbf{0} = 0\cdot\mathbf{v}$. 둘째 조건 $T(c\mathbf{v}) = cT(\mathbf{v})$에 $c = 0$을 넣어 보라.`,
+      ],
+      choices: [
+        "언제나 원점으로",
+        "변환마다 정해진 어느 점으로든",
+        "원점을 지나는 어떤 직선 위의 점으로",
+        "정의만으로는 알 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`$T(\mathbf{0}) = T(0\cdot\mathbf{v}) = 0\cdot T(\mathbf{v}) = \mathbf{0}$.`,
@@ -32,14 +57,14 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-which',
-      kind: 'choice',
+      id: "p-which",
+      kind: "choice",
       q: String.raw`다음 네 변환 가운데 선형 변환을 모두 고르면? (가) $(x, y) \mapsto (2x,\ x + y)$ (나) $(x, y) \mapsto (x + 1,\ y)$ (다) $(x, y) \mapsto (x^2,\ y)$ (라) $(x, y) \mapsto (|x|,\ y)$`,
       hints: [
         String.raw`먼저 원점을 넣어 보라. 원점이 움직이면 그 변환은 바로 탈락이다.`,
         String.raw`남은 후보에 $c = -1$과 $c = 2$를 넣어 $T(c\mathbf{v}) = cT(\mathbf{v})$를 확인해 보라. 예를 들어 $\mathbf{v} = (1, 0)$.`,
       ],
-      choices: ['(가)만', '(가)와 (라)', '(가)와 (나)', '(가), (나), (라)'],
+      choices: ["(가)만", "(가)와 (라)", "(가)와 (나)", "(가), (나), (라)"],
       answer: 0,
       why: [
         String.raw`(나)는 원점을 $(1, 0)$으로 보낸다. (다)는 $T(2\mathbf{e}_1) = (4, 0) \ne 2T(\mathbf{e}_1) = (2, 0)$. (라)는 $T(-\mathbf{e}_1) = (1, 0) \ne -T(\mathbf{e}_1) = (-1, 0)$. (가)만 남는다.`,
@@ -80,7 +105,7 @@ $$T(c_1\mathbf{u} + c_2\mathbf{w}) = c_1T(\mathbf{u}) + c_2T(\mathbf{w})$$
   checks: [
     {
       q: String.raw`$T$가 선형이고 $T(\mathbf{e}_1) = (1, 2)$, $T(\mathbf{e}_2) = (3, 0)$이다. $T(2, -1)$은?`,
-      choices: ['(−1, 4)', '(5, 4)', '(2, −1)', '이것만으로는 알 수 없다'],
+      choices: ["(−1, 4)", "(5, 4)", "(2, −1)", "이것만으로는 알 수 없다"],
       answer: 0,
       explain: String.raw`$(2, -1) = 2\mathbf{e}_1 - \mathbf{e}_2$이므로 $T(2, -1) = 2(1, 2) - (3, 0) = (-1, 4)$다. 선형이라는 사실 하나로 "알 수 없다"가 "알 수 있다"로 바뀌었다. 이것이 바로 다음 두 노드의 내용이다. $(5, 4)$는 빼기를 더하기로 바꾼 것이다.`,
     },

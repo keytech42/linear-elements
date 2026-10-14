@@ -1,24 +1,44 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.elimination',
-  kind: 'prop',
-  title: '가우스 소거 = 전단 변환을 차례로 곱하기',
-  status: 'written',
+  id: "prop.elimination",
+  kind: "prop",
+  title: "가우스 소거 = 전단 변환을 차례로 곱하기",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.elimination', ko: '가우스 소거', en: 'Gaussian elimination', surfaces: ['가우스 소거법'], gloss: '한 행의 몇 배를 다른 행에서 빼는 일을 되풀이해 연립방정식을 푸는 방법. 기본 행렬을 왼쪽에 차례로 곱하는 것과 같다.' },
-      { id: 't.elementary-matrix', ko: '기본 행렬', en: 'elementary matrix', gloss: '행 연산 하나를 행렬 곱 하나로 나타낸 행렬. 더하기(전단), 맞바꿈, 늘림.' },
+      {
+        id: "t.elimination",
+        ko: "가우스 소거",
+        en: "Gaussian elimination",
+        surfaces: ["가우스 소거법"],
+        gloss:
+          "한 행의 몇 배를 다른 행에서 빼는 일을 되풀이해 연립방정식을 푸는 방법. 기본 행렬을 왼쪽에 차례로 곱하는 것과 같다.",
+      },
+      {
+        id: "t.elementary-matrix",
+        ko: "기본 행렬",
+        en: "elementary matrix",
+        gloss:
+          "행 연산 하나를 행렬 곱 하나로 나타낸 행렬. 더하기(전단), 맞바꿈, 늘림.",
+      },
     ],
   },
-  requires: ['def.linear-system', 'exp.gallery', 'prop.det-product'],
+  requires: ["def.linear-system", "exp.gallery", "prop.det-product"],
   predicts: [
     {
-      id: 'p-E',
-      kind: 'choice',
+      id: "p-E",
+      kind: "choice",
       q: String.raw`"둘째 행에서 첫째 행의 2배를 뺀다"는 행 연산을 행렬 곱으로 하려면, 왼쪽에 어떤 행렬을 곱해야 할까?`,
-      hints: [String.raw`항등 행렬 $I$에 **같은 행 연산**을 해 보라. 그 결과를 아무 행렬의 왼쪽에 곱하면 그 행렬에 같은 행 연산을 한 것이 된다([행의 관점](n:prop.row-picture)으로 확인하라).`],
-      choices: [String.raw`$\begin{bmatrix} 1 & 0 \\ -2 & 1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 1 & -2 \\ 0 & 1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 1 & 0 \\ 2 & 1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} -2 & 1 \\ 0 & 1 \end{bmatrix}$`],
+      hints: [
+        String.raw`항등 행렬 $I$에 **같은 행 연산**을 해 보라. 그 결과를 아무 행렬의 왼쪽에 곱하면 그 행렬에 같은 행 연산을 한 것이 된다([행의 관점](n:prop.row-picture)으로 확인하라).`,
+      ],
+      choices: [
+        String.raw`$\begin{bmatrix} 1 & 0 \\ -2 & 1 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 1 & -2 \\ 0 & 1 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 1 & 0 \\ 2 & 1 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} -2 & 1 \\ 0 & 1 \end{bmatrix}$`,
+      ],
       answer: 0,
       why: [
         String.raw`$I$의 둘째 행 $(0, 1)$에서 첫째 행 $(1, 0)$의 2배를 빼면 $(-2, 1)$이다. 곱한 행렬의 둘째 행은 "원래 둘째 행 − 2 × 첫째 행"이 된다.`,
@@ -28,11 +48,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-same',
-      kind: 'choice',
-      q: '행 연산을 해도 연립방정식의 해가 바뀌지 않는 이유는?',
-      hints: [String.raw`행 연산은 기본 행렬 $E$를 양쪽 왼쪽에 곱하는 일이다: $A\mathbf{x} = \mathbf{b} \Rightarrow EA\mathbf{x} = E\mathbf{b}$. 거꾸로 $EA\mathbf{x} = E\mathbf{b}$에서 $A\mathbf{x} = \mathbf{b}$로 돌아올 수 있으려면 $E$가 어때야 하는가?`],
-      choices: ['기본 행렬은 되돌릴 수 있어서, 새 식과 원래 식이 서로 오갈 수 있기 때문이다', '양쪽에 같은 일을 하면 언제나 해가 같기 때문이다', '행렬식이 바뀌지 않기 때문이다', '해가 바뀌지만 마지막에 되돌리기 때문이다'],
+      id: "p-same",
+      kind: "choice",
+      q: "행 연산을 해도 연립방정식의 해가 바뀌지 않는 이유는?",
+      hints: [
+        String.raw`행 연산은 기본 행렬 $E$를 양쪽 왼쪽에 곱하는 일이다: $A\mathbf{x} = \mathbf{b} \Rightarrow EA\mathbf{x} = E\mathbf{b}$. 거꾸로 $EA\mathbf{x} = E\mathbf{b}$에서 $A\mathbf{x} = \mathbf{b}$로 돌아올 수 있으려면 $E$가 어때야 하는가?`,
+      ],
+      choices: [
+        "기본 행렬은 되돌릴 수 있어서, 새 식과 원래 식이 서로 오갈 수 있기 때문이다",
+        "양쪽에 같은 일을 하면 언제나 해가 같기 때문이다",
+        "행렬식이 바뀌지 않기 때문이다",
+        "해가 바뀌지만 마지막에 되돌리기 때문이다",
+      ],
       answer: 0,
       why: [
         String.raw`$E$가 가역이므로 $EA\mathbf{x} = E\mathbf{b}$의 양쪽에 $E^{-1}$을 곱하면 원래 식이 나온다. 두 식은 정확히 같은 해를 가진다.`,
@@ -73,7 +100,7 @@ const node: NodeDef = {
 **해를 바꾸지 않는다.** 행 연산마다 되돌리는 행 연산이 있다(더한 것은 빼고, 맞바꾼 것은 다시 맞바꾸고, $c$배 한 것은 $1/c$배 한다). 그러므로 기본 행렬은 [가역](why:def.inverse)이다. $A\mathbf{x} = \mathbf{b}$이면 $EA\mathbf{x} = E\mathbf{b}$이고, 거꾸로 $EA\mathbf{x} = E\mathbf{b}$이면 양쪽에 $E^{-1}$을 곱해 $A\mathbf{x} = \mathbf{b}$다. 두 식은 같은 해를 가진다.
 
 **행렬식.** 더하기의 기본 행렬은 대각선이 1이고 한쪽만 0이 아닌 삼각 행렬이라 [행렬식이 1](why:prop.det-formula)이다. [곱의 행렬식](why:prop.det-product)에 따라 더하기 연산은 $\det A$를 바꾸지 않는다.`,
-  code: ['elementary', 'eliminationSteps', 'solve'],
+  code: ["elementary", "eliminationSteps", "solve"],
 };
 
 export default node;

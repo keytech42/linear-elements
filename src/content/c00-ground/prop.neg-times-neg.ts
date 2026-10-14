@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.neg-times-neg',
-  kind: 'prop',
-  title: '음수 × 음수 = 양수',
-  status: 'written',
-  requires: ['prop.arith-first'],
+  id: "prop.neg-times-neg",
+  kind: "prop",
+  title: "음수 × 음수 = 양수",
+  status: "written",
+  requires: ["prop.arith-first"],
   predicts: [
     {
-      id: 'p-why',
-      kind: 'choice',
+      id: "p-why",
+      kind: "choice",
       q: String.raw`$(-1) \times (-1)$이 1이어야 하는 이유로 가장 정확한 것은?`,
       hints: [
         String.raw`[앞 노드](n:prop.arith-first)에서 $0 \times a = 0$을 증명했다. 그렇다면 $(-1) \times 0$은?`,
         String.raw`$0 = (-1) \times 0 = (-1) \times \big(1 + (-1)\big)$이다. 여기에 분배법칙을 써 보라.`,
       ],
-      choices: ['분배법칙을 지키려면 그럴 수밖에 없다', '"아니다"의 "아니다"는 "그렇다"이므로', '그렇게 하자고 정한 공리이기 때문이다', '직선 위에서 두 번 뒤집으면 제자리이므로'],
+      choices: [
+        "분배법칙을 지키려면 그럴 수밖에 없다",
+        '"아니다"의 "아니다"는 "그렇다"이므로',
+        "그렇게 하자고 정한 공리이기 때문이다",
+        "직선 위에서 두 번 뒤집으면 제자리이므로",
+      ],
       answer: 0,
       why: [
         String.raw`$(-1)\times(-1)$이 1이 아니라면, 분배법칙이 $(-1)\times(1 + (-1))$에서 깨진다. 아래 [](ref:neg-one)과 [](ref:minus-one-sq)의 증명이 이것이다.`,
@@ -25,11 +30,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-sq',
-      kind: 'choice',
+      id: "p-sq",
+      kind: "choice",
       q: String.raw`아무 수 $a$에 대해 $a \times a$는 언제나 0 이상일까?`,
-      hints: [String.raw`$a$가 0 이상일 때와 음수일 때로 나눠 보라. 음수 $a$는 어떤 양수 $p$에 대해 $a = -p$로 쓸 수 있다. $(-p)(-p)$는?`],
-      choices: ['언제나 0 이상이다', '$a$가 음수면 음수다', '$a$가 0과 1 사이이면 음수다', '알 수 없다'],
+      hints: [
+        String.raw`$a$가 0 이상일 때와 음수일 때로 나눠 보라. 음수 $a$는 어떤 양수 $p$에 대해 $a = -p$로 쓸 수 있다. $(-p)(-p)$는?`,
+      ],
+      choices: [
+        "언제나 0 이상이다",
+        "$a$가 음수면 음수다",
+        "$a$가 0과 1 사이이면 음수다",
+        "알 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`$a \ge 0$이면 0 이상끼리의 곱이고, $a = -p$이면 $(-p)(-p) = p \times p \ge 0$이다. 이 사실은 8장에서 "[판별식](fwd:t.discriminant)이 음수면 실수 근이 없다"는 판정의 근거가 된다.`,

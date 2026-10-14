@@ -1,18 +1,20 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.det-product',
-  kind: 'prop',
-  title: 'det(AB) = det A · det B',
-  status: 'written',
-  requires: ['prop.det-uniform', 'def.composition'],
+  id: "prop.det-product",
+  kind: "prop",
+  title: "det(AB) = det A · det B",
+  status: "written",
+  requires: ["prop.det-uniform", "def.composition"],
   predicts: [
     {
-      id: 'p-order',
-      kind: 'choice',
+      id: "p-order",
+      kind: "choice",
       q: String.raw`$\det A = 2$, $\det B = -3$이다. $\det(AB)$와 $\det(BA)$는?`,
-      hints: [String.raw`$AB$는 "$B$를 먼저, 그다음 $A$"다. 넓이는 $B$에서 몇 배, 이어서 $A$에서 몇 배가 되는가? $BA$는 순서가 반대지만, 배율끼리의 곱은 순서를 바꿔도 같은가?`],
-      choices: ['둘 다 −6', '−6과 6', '−1과 1', 'AB ≠ BA이므로 알 수 없다'],
+      hints: [
+        String.raw`$AB$는 "$B$를 먼저, 그다음 $A$"다. 넓이는 $B$에서 몇 배, 이어서 $A$에서 몇 배가 되는가? $BA$는 순서가 반대지만, 배율끼리의 곱은 순서를 바꿔도 같은가?`,
+      ],
+      choices: ["둘 다 −6", "−6과 6", "−1과 1", "AB ≠ BA이므로 알 수 없다"],
       answer: 0,
       why: [
         String.raw`배율이 차례로 곱해진다: $2\times(-3) = -3\times2 = -6$. 행렬은 순서를 바꾸면 달라지지만, 행렬식(수)의 곱은 [교환법칙](n:ax.arith)을 따른다.`,
@@ -22,14 +24,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-double',
-      kind: 'choice',
+      id: "p-double",
+      kind: "choice",
       q: String.raw`2×2 행렬 $A$에 대해 $\det(2A)$는?`,
       hints: [
         String.raw`$2A = (2I)A$로 볼 수 있다. $2I$는 넓이를 몇 배 하는가?`,
         String.raw`$2I = \begin{bmatrix} 2 & 0 \\ 0 & 2 \end{bmatrix}$은 가로로 2배, 세로로 2배다.`,
       ],
-      choices: [String.raw`$4\det A$`, String.raw`$2\det A$`, String.raw`$\det A$`, String.raw`$8\det A$`],
+      choices: [
+        String.raw`$4\det A$`,
+        String.raw`$2\det A$`,
+        String.raw`$\det A$`,
+        String.raw`$8\det A$`,
+      ],
       answer: 0,
       why: [
         String.raw`$\det(2I) = 4$이므로 $\det(2A) = 4\det A$. 두 열이 모두 2배가 되므로 평행사변형의 가로세로가 모두 2배다.`,

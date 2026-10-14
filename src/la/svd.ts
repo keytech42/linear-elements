@@ -1,10 +1,10 @@
 // 특이값 분해 A = U Σ Vᵀ.
 //  svd2   — 2×2 전용. 교재의 증명(prop.svd-ata)을 그대로 따른다: AᵀA의 고유벡터가 V, 고윳값의 제곱근이 σ.
 //  svd    — m×n 일반. 한쪽 야코비(one-sided Jacobi, Hestenes) 방법. 열 두 개씩 골라 서로 수직이 되도록 돌린다.
-import type { Mat } from './mat';
-import { transpose, matMul, matVec, fromCols } from './mat';
-import { type Vec, scale, norm, dot, sub, perp2 } from './vec';
-import { symEig } from './eig';
+import type { Mat } from "./mat";
+import { transpose, matMul, matVec, fromCols } from "./mat";
+import { type Vec, scale, norm, dot, sub, perp2 } from "./vec";
+import { symEig } from "./eig";
 
 export interface SVD {
   U: Mat; // m×k, 열 = 왼쪽 특이벡터 u₁…u_k (도착 공간의 방향)
@@ -74,26 +74,33 @@ export function svd(A: Mat, tol = 1e-12, maxSweeps = 80): SVD {
       for (let q = p + 1; q < n; q++) {
         const wp = W[p];
         const wq = W[q];
-        let alpha = 0, beta = 0, gamma = 0;
+        let alpha = 0,
+          beta = 0,
+          gamma = 0;
         for (let i = 0; i < m; i++) {
           alpha += wp[i] * wp[i];
           beta += wq[i] * wq[i];
           gamma += wp[i] * wq[i];
         }
-        if (Math.abs(gamma) <= tol * Math.sqrt(alpha * beta) || gamma === 0) continue;
+        if (Math.abs(gamma) <= tol * Math.sqrt(alpha * beta) || gamma === 0)
+          continue;
         rotated = true;
         const zeta = (beta - alpha) / (2 * gamma);
-        const t = Math.sign(zeta || 1) / (Math.abs(zeta) + Math.sqrt(1 + zeta * zeta));
+        const t =
+          Math.sign(zeta || 1) / (Math.abs(zeta) + Math.sqrt(1 + zeta * zeta));
         const c = 1 / Math.sqrt(1 + t * t);
         const s = c * t;
         for (let i = 0; i < m; i++) {
-          const a = wp[i], b = wq[i];
+          const a = wp[i],
+            b = wq[i];
           wp[i] = c * a - s * b;
           wq[i] = s * a + c * b;
         }
-        const vp = Vc[p], vq = Vc[q];
+        const vp = Vc[p],
+          vq = Vc[q];
         for (let i = 0; i < n; i++) {
-          const a = vp[i], b = vq[i];
+          const a = vp[i],
+            b = vq[i];
           vp[i] = c * a - s * b;
           vq[i] = s * a + c * b;
         }
@@ -135,7 +142,13 @@ function completeOrthonormal(basis: Vec[], m: number): Vec {
  * prop.svd-sum / prop.eckart-young — 앞의 k개 층만 더한 근사: A_k = Σ_{i<k} σᵢ uᵢ vᵢᵀ
  * 결과를 평평한 배열(행 우선)로 돌려준다. 이미지 슬라이더가 프레임마다 부르므로 할당을 줄였다.
  */
-export function lowRankInto(out: Float64Array, r: SVD, k: number, m: number, n: number): void {
+export function lowRankInto(
+  out: Float64Array,
+  r: SVD,
+  k: number,
+  m: number,
+  n: number,
+): void {
   out.fill(0);
   for (let l = 0; l < k; l++) {
     const s = r.S[l];

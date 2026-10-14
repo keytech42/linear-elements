@@ -1,30 +1,38 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.eigen-hunt',
-  kind: 'exp',
-  title: '자기 방향을 지키는 벡터 찾기',
-  status: 'written',
-  requires: ['def.matvec', 'def.span'],
+  id: "exp.eigen-hunt",
+  kind: "exp",
+  title: "자기 방향을 지키는 벡터 찾기",
+  status: "written",
+  requires: ["def.matvec", "def.span"],
   predicts: [
     {
-      id: 'p-hunt',
-      kind: 'point',
+      id: "p-hunt",
+      kind: "point",
       q: String.raw`행렬 $A = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$이 나타내는 변환에서, 변환한 뒤에도 **자기가 놓인 직선 위에 그대로 남는** 방향을 하나 찾아 노란 손잡이로 맞춰라. 파란 격자는 $A$가 보낸 격자다.`,
       hints: [
         String.raw`두 열 화살표(주황, 청록)가 어떤 직선을 사이에 두고 거울처럼 놓여 있는지 보라.`,
         String.raw`$A(1, 1)$과 $A(1, -1)$을 직접 계산해 보라. 두 결과가 각각 입력과 같은 직선 위에 있는가?`,
       ],
-      A: [[2, 1], [1, 2]],
-      target: 'eig',
-      show: ['tgrid', 'cols'],
+      A: [
+        [2, 1],
+        [1, 2],
+      ],
+      target: "eig",
+      show: ["tgrid", "cols"],
       reveal: String.raw`이 행렬에는 그런 직선이 둘 있다(초록). 대각선 $(1, 1)$ 방향은 $A(1, 1) = (3, 3)$으로 같은 직선 위에서 3배가 되고, $(1, -1)$ 방향은 $A(1, -1) = (1, -1)$로 제자리에 남는다. 두 열 화살표가 대각선을 사이에 두고 거울처럼 놓인 것이 단서였다.`,
     },
     {
-      id: 'p-count',
-      kind: 'choice',
-      q: '2×2 행렬 하나에 이런 직선은 몇 개 있을까?',
-      choices: ['언제나 정확히 2개', '행렬에 따라 0개, 1개, 2개, 또는 모든 직선', '언제나 적어도 1개', '언제나 무수히 많다'],
+      id: "p-count",
+      kind: "choice",
+      q: "2×2 행렬 하나에 이런 직선은 몇 개 있을까?",
+      choices: [
+        "언제나 정확히 2개",
+        "행렬에 따라 0개, 1개, 2개, 또는 모든 직선",
+        "언제나 적어도 1개",
+        "언제나 무수히 많다",
+      ],
       answer: 1,
       why: [
         String.raw`90° 회전을 떠올려 보라. 모든 벡터가 수직인 방향으로 돌아가므로 그런 직선이 하나도 없다.`,
@@ -61,7 +69,7 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$A = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$에서 자기 직선 위에 남는 직선을 모두 고르면?`,
-      choices: ['가로축과 세로축', '대각선 y = x 하나', '없다', '모든 직선'],
+      choices: ["가로축과 세로축", "대각선 y = x 하나", "없다", "모든 직선"],
       answer: 0,
       explain: String.raw`$\mathbf{e}_1 \mapsto 3\mathbf{e}_1$, $\mathbf{e}_2 \mapsto \mathbf{e}_2$이므로 두 축이 그 직선이다. 대각선 위의 $(1, 1)$은 $(3, 1)$로 가서 대각선을 벗어난다. 두 축의 배율이 다르면 그 사이 방향은 더 많이 늘어나는 축 쪽으로 기울어진다.`,
     },

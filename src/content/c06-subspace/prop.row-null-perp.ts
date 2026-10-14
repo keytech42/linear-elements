@@ -1,22 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.row-null-perp',
-  kind: 'prop',
-  title: '행공간과 영공간은 직교한다',
-  status: 'written',
-  introduces: { terms: [{ id: 't.row-space', ko: '행공간', en: 'row space', gloss: '행렬의 행들이 스팬하는 부분공간. Aᵀ의 열공간. 입력 공간에 산다.' }] },
-  requires: ['prop.row-picture', 'def.null-space', 'def.orthogonal'],
+  id: "prop.row-null-perp",
+  kind: "prop",
+  title: "행공간과 영공간은 직교한다",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.row-space",
+        ko: "행공간",
+        en: "row space",
+        gloss:
+          "행렬의 행들이 스팬하는 부분공간. Aᵀ의 열공간. 입력 공간에 산다.",
+      },
+    ],
+  },
+  requires: ["prop.row-picture", "def.null-space", "def.orthogonal"],
   predicts: [
     {
-      id: 'p-perp',
-      kind: 'choice',
+      id: "p-perp",
+      kind: "choice",
       q: String.raw`2×3 행렬의 두 행이 $(1, 2, 2)$와 $(0, 1, -1)$이다. 영공간은?`,
       hints: [
         String.raw`$A\mathbf{x} = \mathbf{0}$을 [행의 관점](n:prop.row-picture)으로 읽으면 "두 행과의 내적이 모두 0"이다. $x_1 + 2x_2 + 2x_3 = 0$과 $x_2 - x_3 = 0$.`,
         String.raw`둘째 식에서 $x_2 = x_3 = t$로 두고 첫째 식에 넣어라.`,
       ],
-      choices: [String.raw`$(-4, 1, 1)$ 방향의 직선`, String.raw`$(1, 2, 2)$ 방향의 직선`, String.raw`$(1, 3, 1)$ 방향(두 행의 합)`, '원점 하나'],
+      choices: [
+        String.raw`$(-4, 1, 1)$ 방향의 직선`,
+        String.raw`$(1, 2, 2)$ 방향의 직선`,
+        String.raw`$(1, 3, 1)$ 방향(두 행의 합)`,
+        "원점 하나",
+      ],
       answer: 0,
       why: [
         String.raw`$x_1 = -2t - 2t = -4t$이므로 $(-4, 1, 1)$의 배수. 확인: $(1, 2, 2)\cdot(-4, 1, 1) = 0$, $(0, 1, -1)\cdot(-4, 1, 1) = 0$. 두 행 **모두와** 수직인 방향이다.`,

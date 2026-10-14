@@ -1,22 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.orthogonal-matrix',
-  kind: 'def',
-  title: '직교 행렬',
-  status: 'written',
+  id: "def.orthogonal-matrix",
+  kind: "def",
+  title: "직교 행렬",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.orth-matrix', ko: '직교 행렬', en: 'orthogonal matrix', gloss: '열들이 정규직교인 정사각 행렬. QᵀQ = I. 평면에서는 회전과 반사.' }],
-    symbols: [{ tex: 'Q', meaning: '직교 행렬' }],
+    terms: [
+      {
+        id: "t.orth-matrix",
+        ko: "직교 행렬",
+        en: "orthogonal matrix",
+        gloss:
+          "열들이 정규직교인 정사각 행렬. QᵀQ = I. 평면에서는 회전과 반사.",
+      },
+    ],
+    symbols: [{ tex: "Q", meaning: "직교 행렬" }],
   },
-  requires: ['def.orthogonal', 'def.transpose'],
+  requires: ["def.orthogonal", "def.transpose"],
   predicts: [
     {
-      id: 'p-check',
-      kind: 'choice',
+      id: "p-check",
+      kind: "choice",
       q: String.raw`열이 $(0.6, 0.8)$과 $(-0.8, 0.6)$인 행렬은 직교 행렬일까?`,
-      hints: [String.raw`두 가지를 확인하면 된다. 각 열의 길이가 1인가? 두 열의 내적이 0인가?`],
-      choices: ['그렇다. 두 열의 길이가 1이고 서로 직교한다', '아니다. 성분이 0과 1이 아니므로', '아니다. 두 열의 성분 합이 다르므로', '열의 길이만 1이면 된다'],
+      hints: [
+        String.raw`두 가지를 확인하면 된다. 각 열의 길이가 1인가? 두 열의 내적이 0인가?`,
+      ],
+      choices: [
+        "그렇다. 두 열의 길이가 1이고 서로 직교한다",
+        "아니다. 성분이 0과 1이 아니므로",
+        "아니다. 두 열의 성분 합이 다르므로",
+        "열의 길이만 1이면 된다",
+      ],
       answer: 0,
       why: [
         String.raw`$0.36 + 0.64 = 1$, $0.64 + 0.36 = 1$, 내적 $-0.48 + 0.48 = 0$. 단위원 위 약 53° 자리의 점을 첫째 열로 하는 회전이다.`,
@@ -49,7 +64,12 @@ $$\text{열이 정규직교} \iff Q^{\mathsf{T}}Q = I$$
   checks: [
     {
       q: String.raw`$\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$(전단)은 직교 행렬인가?`,
-      choices: ['아니다. 둘째 열의 길이가 √2이고 첫째 열과 직교하지 않는다', '그렇다. 넓이를 바꾸지 않으므로', '그렇다. 대각선이 모두 1이므로', '아니다. 첫째 열의 길이가 1이 아니므로'],
+      choices: [
+        "아니다. 둘째 열의 길이가 √2이고 첫째 열과 직교하지 않는다",
+        "그렇다. 넓이를 바꾸지 않으므로",
+        "그렇다. 대각선이 모두 1이므로",
+        "아니다. 첫째 열의 길이가 1이 아니므로",
+      ],
       answer: 0,
       explain: String.raw`둘째 열 $(1, 1)$은 길이 $\sqrt{2}$이고, 첫째 열 $(1, 0)$과의 내적은 1이다. 전단은 넓이는 지키지만 길이와 각도는 바꾼다. 넓이를 지키는 것과 모양을 지키는 것은 다르다.`,
     },

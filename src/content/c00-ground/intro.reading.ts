@@ -1,32 +1,68 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'intro.reading',
-  kind: 'intro',
-  title: '이 교재를 읽고 공부하는 법',
-  status: 'written',
+  id: "intro.reading",
+  kind: "intro",
+  title: "이 교재를 읽고 공부하는 법",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.axiom', ko: '공리', en: 'axiom', gloss: '증명하지 않고 받아들이기로 정한 출발점. 공리를 바꾸면 다른 수학이 된다.' },
-      { id: 't.definition', ko: '정의', en: 'definition', everyday: true, gloss: '대상에 이름을 붙이는 일. 이름 붙이기에는 참과 거짓이 없다.' },
-      { id: 't.proposition', ko: '명제', en: 'proposition', everyday: true, gloss: '참이라고 주장하는 문장. 이 교재의 명제에는 모두 증명이 붙는다.' },
-      { id: 't.proof', ko: '증명', en: 'proof', everyday: true, gloss: '앞에서 받아들인 공리, 앞에서 붙인 정의, 앞에서 증명한 명제만 써서 어떤 명제가 참임을 보이는 글.' },
+      {
+        id: "t.axiom",
+        ko: "공리",
+        en: "axiom",
+        gloss:
+          "증명하지 않고 받아들이기로 정한 출발점. 공리를 바꾸면 다른 수학이 된다.",
+      },
+      {
+        id: "t.definition",
+        ko: "정의",
+        en: "definition",
+        everyday: true,
+        gloss: "대상에 이름을 붙이는 일. 이름 붙이기에는 참과 거짓이 없다.",
+      },
+      {
+        id: "t.proposition",
+        ko: "명제",
+        en: "proposition",
+        everyday: true,
+        gloss: "참이라고 주장하는 문장. 이 교재의 명제에는 모두 증명이 붙는다.",
+      },
+      {
+        id: "t.proof",
+        ko: "증명",
+        en: "proof",
+        everyday: true,
+        gloss:
+          "앞에서 받아들인 공리, 앞에서 붙인 정의, 앞에서 증명한 명제만 써서 어떤 명제가 참임을 보이는 글.",
+      },
     ],
     symbols: [
-      { tex: String.raw`\therefore`, meaning: '그러므로. 앞에서 끌어낸 결론 문장의 첫머리에 쓴다.' },
-      { tex: String.raw`\because`, meaning: '왜냐하면. 등식 줄의 근거 칸과 짧은 근거 괄호에 쓴다.' },
+      {
+        tex: String.raw`\therefore`,
+        meaning: "그러므로. 앞에서 끌어낸 결론 문장의 첫머리에 쓴다.",
+      },
+      {
+        tex: String.raw`\because`,
+        meaning: "왜냐하면. 등식 줄의 근거 칸과 짧은 근거 괄호에 쓴다.",
+      },
     ],
   },
   predicts: [
     {
-      id: 'p-connective',
-      kind: 'choice',
+      id: "p-connective",
+      kind: "choice",
       q: String.raw`빈칸 (가)와 (나)에 들어갈 말의 짝으로, 두 문장의 관계를 가장 정확하게 나타내는 것은?`,
       hints: [
         String.raw`(가)의 뒤 문장을 읽고 새로 알게 된 것이 있는가? 앞 문장의 "나누어떨어진다"가 무슨 뜻인지 떠올려 보라.`,
         String.raw`(나)의 뒤 문장은 앞 문장에 그대로 적혀 있는가, 아니면 앞 문장의 두 사실을 이어 붙여야 나오는가?`,
       ],
-      choices: ['(가) 곧, (나) 그러므로', '(가) 그러므로, (나) 곧', '(가) 그러므로, (나) 그러므로', '(가) 또, (나) 그러므로'],
+      choices: [
+        "(가) 곧, (나) 그러므로",
+        "(가) 그러므로, (나) 곧",
+        "(가) 그러므로, (나) 그러므로",
+        "(가) 또, (나) 그러므로",
+      ],
       answer: 0,
       why: [
         String.raw`(가)의 뒤 문장은 "나누어떨어진다"의 뜻을 다른 말로 한 것이다. 읽고 나서 새로 알게 된 것이 없다. (나)의 뒤 문장은 앞 문장에 적혀 있지 않다. $12 = 6 \times 2$이고 $6 = 3 \times 2$이므로 $12 = 3 \times 2 \times 2 = 3 \times 4$다. 앞의 두 사실을 이어 붙여야 나오는 결론이다.`,

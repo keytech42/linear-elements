@@ -1,30 +1,62 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.shape',
-  kind: 'def',
-  title: '모양 m×n: 몇 차원에서 몇 차원으로',
-  status: 'written',
+  id: "def.shape",
+  kind: "def",
+  title: "모양 m×n: 몇 차원에서 몇 차원으로",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.shape', ko: '모양', en: 'shape', everyday: true, gloss: '행렬의 행 개수 × 열 개수. m×n 행렬은 ℝⁿ의 벡터를 받아 ℝᵐ의 벡터를 내놓는다.' },
-      { id: 't.tensor', ko: '텐서', en: 'tensor', gloss: '코드(PyTorch, NumPy, TensorFlow)에서 숫자를 배열 축 몇 개를 따라 늘어놓은 배열. 이 교재는 텐서를 이 뜻으로만 쓴다.' },
-      { id: 't.array-axis', ko: '배열 축', en: 'axis', gloss: '텐서의 성분을 가리키는 번호(첨자) 하나가 달리는 방향. 행렬은 배열 축이 둘(행 번호, 열 번호). 좌표축과 다른 것. 코드 문서는 그냥 축, axis, dim이라 부른다.' },
-      { id: 't.order', ko: '차수', en: 'order', gloss: '텐서의 배열 축의 개수. 벡터 1, 행렬 2. 코드에서는 ndim, dim(), TensorFlow의 rank. 이 교재의 차원·랭크와 다른 것.' },
+      {
+        id: "t.shape",
+        ko: "모양",
+        en: "shape",
+        everyday: true,
+        gloss:
+          "행렬의 행 개수 × 열 개수. m×n 행렬은 ℝⁿ의 벡터를 받아 ℝᵐ의 벡터를 내놓는다.",
+      },
+      {
+        id: "t.tensor",
+        ko: "텐서",
+        en: "tensor",
+        gloss:
+          "코드(PyTorch, NumPy, TensorFlow)에서 숫자를 배열 축 몇 개를 따라 늘어놓은 배열. 이 교재는 텐서를 이 뜻으로만 쓴다.",
+      },
+      {
+        id: "t.array-axis",
+        ko: "배열 축",
+        en: "axis",
+        gloss:
+          "텐서의 성분을 가리키는 번호(첨자) 하나가 달리는 방향. 행렬은 배열 축이 둘(행 번호, 열 번호). 좌표축과 다른 것. 코드 문서는 그냥 축, axis, dim이라 부른다.",
+      },
+      {
+        id: "t.order",
+        ko: "차수",
+        en: "order",
+        gloss:
+          "텐서의 배열 축의 개수. 벡터 1, 행렬 2. 코드에서는 ndim, dim(), TensorFlow의 rank. 이 교재의 차원·랭크와 다른 것.",
+      },
     ],
     symbols: [
-      { tex: 'm', meaning: '행렬의 행 개수 = 출력 차원' },
-      { tex: 'n', meaning: '행렬의 열 개수 = 입력 차원' },
+      { tex: "m", meaning: "행렬의 행 개수 = 출력 차원" },
+      { tex: "n", meaning: "행렬의 열 개수 = 입력 차원" },
     ],
   },
-  requires: ['def.matvec', 'def.dimension'],
+  requires: ["def.matvec", "def.dimension"],
   predicts: [
     {
-      id: 'p-io',
-      kind: 'choice',
-      q: '행이 3개, 열이 2개인 행렬은 무엇을 받아 무엇을 내놓을까?',
-      hints: [String.raw`[열 하나는 입력 기저 벡터 하나의 상이다](n:def.matrix). 열이 몇 개이면 입력 기저 벡터가 몇 개인가? 그리고 열 하나(상 하나)에는 성분이 몇 개 있는가?`],
-      choices: ['성분 2개짜리 벡터를 받아 3개짜리를 내놓는다', '성분 3개짜리를 받아 2개짜리를 내놓는다', '3개짜리를 받아 3개짜리를 내놓는다', '2개짜리를 받아 2개짜리를 내놓는다'],
+      id: "p-io",
+      kind: "choice",
+      q: "행이 3개, 열이 2개인 행렬은 무엇을 받아 무엇을 내놓을까?",
+      hints: [
+        String.raw`[열 하나는 입력 기저 벡터 하나의 상이다](n:def.matrix). 열이 몇 개이면 입력 기저 벡터가 몇 개인가? 그리고 열 하나(상 하나)에는 성분이 몇 개 있는가?`,
+      ],
+      choices: [
+        "성분 2개짜리 벡터를 받아 3개짜리를 내놓는다",
+        "성분 3개짜리를 받아 2개짜리를 내놓는다",
+        "3개짜리를 받아 3개짜리를 내놓는다",
+        "2개짜리를 받아 2개짜리를 내놓는다",
+      ],
       answer: 0,
       why: [
         String.raw`열이 2개 = 입력 기저 벡터 2개 = 입력 성분 2개. 열 하나의 길이(행의 수) 3 = 출력 성분 3개.`,
@@ -34,11 +66,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-fill',
-      kind: 'choice',
-      q: '3×2 행렬의 출력들은 3차원 공간 전체를 채울 수 있을까?',
-      hints: [String.raw`모든 출력은 두 열의 [선형 결합](n:def.linear-combination)이다. 벡터 두 개의 [스팬](n:def.span)은 가장 커 봐야 무엇인가?`],
-      choices: ['없다. 가장 커 봐야 원점을 지나는 평면 하나다', '있다. 출력이 3차원 벡터이므로', '열을 잘 고르면 있다', '없다. 언제나 직선 하나다'],
+      id: "p-fill",
+      kind: "choice",
+      q: "3×2 행렬의 출력들은 3차원 공간 전체를 채울 수 있을까?",
+      hints: [
+        String.raw`모든 출력은 두 열의 [선형 결합](n:def.linear-combination)이다. 벡터 두 개의 [스팬](n:def.span)은 가장 커 봐야 무엇인가?`,
+      ],
+      choices: [
+        "없다. 가장 커 봐야 원점을 지나는 평면 하나다",
+        "있다. 출력이 3차원 벡터이므로",
+        "열을 잘 고르면 있다",
+        "없다. 언제나 직선 하나다",
+      ],
       answer: 0,
       why: [
         String.raw`출력은 모두 두 열의 선형 결합이고, 두 벡터가 스팬하는 것은 평면(두 열이 독립일 때) 이하다.`,
@@ -48,11 +87,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-order',
-      kind: 'choice',
+      id: "p-order",
+      kind: "choice",
       q: String.raw`코드에서 벡터 $(1, 2, 3)$을 텐서로 저장했다. 이 텐서의 차수는 얼마이고, 이 벡터가 사는 공간 $\mathbb{R}^3$의 차원은 얼마일까?`,
-      hints: [String.raw`성분 하나를 가리키려면 번호가 몇 개 필요한가? "둘째 성분"이라고 말하면 충분한가?`],
-      choices: ['차수 1, 차원 3', '차수 3, 차원 3', '차수 1, 차원 1', '차수 3, 차원 1'],
+      hints: [
+        String.raw`성분 하나를 가리키려면 번호가 몇 개 필요한가? "둘째 성분"이라고 말하면 충분한가?`,
+      ],
+      choices: [
+        "차수 1, 차원 3",
+        "차수 3, 차원 3",
+        "차수 1, 차원 1",
+        "차수 3, 차원 1",
+      ],
       answer: 0,
       why: [
         String.raw`성분은 "몇 번째 성분"이라는 번호 하나로 가리키므로 배열 축이 하나, 차수는 1이다. 차원은 $\mathbb{R}^3$의 기저 벡터 개수인 3이다. 이 3은 코드에서 그 배열 축의 길이로 나타난다.`,
@@ -115,7 +161,7 @@ const node: NodeDef = {
 ### 두 개의 예
 - $\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ 0.8 & 0.5 \end{bmatrix}\begin{bmatrix} 1 \\ 2 \end{bmatrix} = 1\begin{bmatrix} 1 \\ 0 \\ 0.8 \end{bmatrix} + 2\begin{bmatrix} 0 \\ 1 \\ 0.5 \end{bmatrix} = \begin{bmatrix} 1 \\ 2 \\ 1.8 \end{bmatrix}$ (3×2: 성분 2개 → 3개)
 - $\begin{bmatrix} 1 & 0 & 2 \\ 0 & 1 & -1 \end{bmatrix}\begin{bmatrix} 1 \\ 2 \\ 3 \end{bmatrix} = 1\begin{bmatrix} 1 \\ 0 \end{bmatrix} + 2\begin{bmatrix} 0 \\ 1 \end{bmatrix} + 3\begin{bmatrix} 2 \\ -1 \end{bmatrix} = \begin{bmatrix} 7 \\ -1 \end{bmatrix}$ (2×3: 성분 3개 → 2개)`,
-  code: ['shape'],
+  code: ["shape"],
 };
 
 export default node;

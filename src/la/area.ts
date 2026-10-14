@@ -1,5 +1,5 @@
 // 넓이와 각을 재는 작은 도구들 (3장·4장 장면이 쓴다).
-import { type Vec, dot, norm } from './vec';
+import { type Vec, dot, norm } from "./vec";
 
 /**
  * prop.det-uniform — 다각형의 부호 있는 넓이(신발끈 공식).
@@ -10,7 +10,8 @@ import { type Vec, dot, norm } from './vec';
 export function polygonArea(pts: Vec[]): number {
   let s = 0;
   for (let i = 0; i < pts.length; i++) {
-    const p = pts[i], q = pts[(i + 1) % pts.length];
+    const p = pts[i],
+      q = pts[(i + 1) % pts.length];
     s += p[0] * q[1] - p[1] * q[0];
   }
   return s / 2;
@@ -20,8 +21,13 @@ export function polygonArea(pts: Vec[]): number {
 export function insidePolygon(q: Vec, pts: Vec[]): boolean {
   let inside = false;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
-    const [xi, yi] = pts[i], [xj, yj] = pts[j];
-    if (yi > q[1] !== yj > q[1] && q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi) inside = !inside;
+    const [xi, yi] = pts[i],
+      [xj, yj] = pts[j];
+    if (
+      yi > q[1] !== yj > q[1] &&
+      q[0] < ((xj - xi) * (q[1] - yi)) / (yj - yi) + xi
+    )
+      inside = !inside;
   }
   return inside;
 }

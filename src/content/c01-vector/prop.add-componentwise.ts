@@ -1,17 +1,19 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.add-componentwise',
-  kind: 'prop',
-  title: '이어 붙이기 = 성분끼리 더하기',
-  status: 'written',
-  requires: ['def.vector-add', 'ax.arith'],
+  id: "prop.add-componentwise",
+  kind: "prop",
+  title: "이어 붙이기 = 성분끼리 더하기",
+  status: "written",
+  requires: ["def.vector-add", "ax.arith"],
   predicts: [
     {
-      id: 'p-rule',
-      kind: 'choice',
+      id: "p-rule",
+      kind: "choice",
       q: String.raw`그림 없이 숫자만으로 $\mathbf{u} + \mathbf{w}$의 성분을 구하는 식은 무엇일까? 앞 노드의 관문 $(2, 1) + (-3, 1) = (-1, 2)$로 시험해 보라.`,
-      hints: [String.raw`$\mathbf{u}$만큼 움직이면 가로로 $u_1$, 세로로 $u_2$만큼 간다. 이어서 $\mathbf{w}$만큼 움직이면 가로로, 세로로 각각 얼마를 더 가는가?`],
+      hints: [
+        String.raw`$\mathbf{u}$만큼 움직이면 가로로 $u_1$, 세로로 $u_2$만큼 간다. 이어서 $\mathbf{w}$만큼 움직이면 가로로, 세로로 각각 얼마를 더 가는가?`,
+      ],
       choices: [
         String.raw`$\begin{bmatrix} u_1 + w_1 \\ u_2 + w_2 \end{bmatrix}$`,
         String.raw`$\begin{bmatrix} u_1 + u_2 \\ w_1 + w_2 \end{bmatrix}$`,
@@ -27,14 +29,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-order',
-      kind: 'choice',
+      id: "p-order",
+      kind: "choice",
       q: String.raw`$\mathbf{u}$ 다음 $\mathbf{w}$로 가는 길과, $\mathbf{w}$ 다음 $\mathbf{u}$로 가는 길은 그림에서 서로 다른 길이다. 두 길의 도착점은 어떨까?`,
       hints: [
         String.raw`위 명제의 식을 두 순서에 각각 써 보라. $\mathbf{w} + \mathbf{u}$의 첫째 성분은 $w_1 + u_1$이다.`,
         String.raw`[수의 덧셈은 순서를 바꿔도 결과가 같다](n:ax.arith). 이 규칙이 성분마다 쓰일 수 있는가?`,
       ],
-      choices: ['언제나 같은 점이다', String.raw`두 벡터가 [평행할](fwd:t.parallel) 때만 같다`, String.raw`다르다. 평행사변형의 서로 다른 두 꼭짓점이다`, '두 화살표의 길이가 같을 때만 같다'],
+      choices: [
+        "언제나 같은 점이다",
+        String.raw`두 벡터가 [평행할](fwd:t.parallel) 때만 같다`,
+        String.raw`다르다. 평행사변형의 서로 다른 두 꼭짓점이다`,
+        "두 화살표의 길이가 같을 때만 같다",
+      ],
       answer: 0,
       why: [
         String.raw`두 길은 평행사변형의 두 변을 따라가며, 같은 맞은편 꼭짓점에서 만난다. 아래에서 그림과 계산으로 확인한다.`,
@@ -87,18 +94,28 @@ $$\big((x + u_1) + w_1\big) - x = u_1 + w_1$$
   checks: [
     {
       q: String.raw`$(1, 2, 3) + (4, -2, 0)$은?`,
-      choices: [String.raw`$(5, 0, 3)$`, String.raw`$(4, -4, 0)$`, '수 8', String.raw`$(5, 0)$`],
+      choices: [
+        String.raw`$(5, 0, 3)$`,
+        String.raw`$(4, -4, 0)$`,
+        "수 8",
+        String.raw`$(5, 0)$`,
+      ],
       answer: 0,
       explain: String.raw`같은 자리끼리 더한다: $(1 + 4,\ 2 - 2,\ 3 + 0) = (5, 0, 3)$. $(4, -4, 0)$은 더하지 않고 곱했다. 수 8은 성분을 모두 더해 버린 것으로, 벡터 덧셈의 결과는 벡터여야 한다. 셋째 성분 $3 + 0 = 3$도 그대로 남긴다.`,
     },
     {
       q: String.raw`$\mathbf{u} = (3, -2)$일 때 $\mathbf{u} + \mathbf{w} = \mathbf{0}$이 되는 $\mathbf{w}$는?`,
-      choices: [String.raw`$(-3, 2)$`, String.raw`$(3, -2)$`, String.raw`$(-3, -2)$`, String.raw`$(2, 3)$`],
+      choices: [
+        String.raw`$(-3, 2)$`,
+        String.raw`$(3, -2)$`,
+        String.raw`$(-3, -2)$`,
+        String.raw`$(2, 3)$`,
+      ],
       answer: 0,
       explain: String.raw`성분마다 $3 + w_1 = 0$, $-2 + w_2 = 0$이어야 하므로 $\mathbf{w} = (-3, 2)$다. 그림으로는 $\mathbf{u}$와 크기가 같고 반대쪽을 가리키는 화살표다. $(-3, -2)$는 첫째 성분의 부호만 바꾼 것이다. $(2, 3)$은 $\mathbf{u}$를 직각으로 돌린 화살표로, 더하면 $(5, 1)$이 된다.`,
     },
   ],
-  code: ['add'],
+  code: ["add"],
 };
 
 export default node;

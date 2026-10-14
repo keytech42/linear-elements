@@ -1,39 +1,60 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.inverse',
-  kind: 'def',
-  title: '역행렬: 변환을 되돌리는 변환',
-  status: 'written',
+  id: "def.inverse",
+  kind: "def",
+  title: "역행렬: 변환을 되돌리는 변환",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.inverse', ko: '역행렬', en: 'inverse matrix', gloss: 'A가 한 일을 정확히 되돌리는 행렬. A⁻¹A = AA⁻¹ = I.' },
-      { id: 't.invertible', ko: '가역', en: 'invertible', surfaces: ['가역 행렬'], gloss: '역행렬이 있는 것.' },
+      {
+        id: "t.inverse",
+        ko: "역행렬",
+        en: "inverse matrix",
+        gloss: "A가 한 일을 정확히 되돌리는 행렬. A⁻¹A = AA⁻¹ = I.",
+      },
+      {
+        id: "t.invertible",
+        ko: "가역",
+        en: "invertible",
+        surfaces: ["가역 행렬"],
+        gloss: "역행렬이 있는 것.",
+      },
     ],
-    symbols: [{ tex: 'A^{-1}', meaning: '행렬 A의 역행렬' }],
+    symbols: [{ tex: "A^{-1}", meaning: "행렬 A의 역행렬" }],
   },
-  requires: ['def.identity', 'def.composition'],
+  requires: ["def.identity", "def.composition"],
   predicts: [
     {
-      id: 'p-undo',
-      kind: 'point',
+      id: "p-undo",
+      kind: "point",
       q: String.raw`전단 $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$(위쪽을 오른쪽으로 미는 변환)을 **되돌리는** 변환은 $\mathbf{e}_2$를 어디로 보낼까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`전단은 높이가 1인 점을 오른쪽으로 1만큼 민다. 되돌리는 변환은 높이가 1인 점을 어느 쪽으로 얼마나 밀어야 하는가?`,
         String.raw`되돌리는 변환은 높이는 건드리지 않는다. $\mathbf{e}_2 = (0, 1)$의 높이는 1이다.`,
       ],
-      A: [[1, -1], [0, 1]],
+      A: [
+        [1, -1],
+        [0, 1],
+      ],
       x: [0, 1],
-      target: 'Ax',
-      show: ['x'],
+      target: "Ax",
+      show: ["x"],
       reveal: String.raw`정답은 $(-1, 1)$이다. 되돌리는 변환은 위쪽을 **왼쪽으로** 미는 전단 $\begin{bmatrix} 1 & -1 \\ 0 & 1 \end{bmatrix}$이다. 둘을 곱하면 $I$가 된다.`,
     },
     {
-      id: 'p-rot',
-      kind: 'choice',
+      id: "p-rot",
+      kind: "choice",
       q: String.raw`30° 회전 $R_{30°}$의 역행렬은?`,
-      hints: [String.raw`30° 돌린 것을 되돌리려면 어느 쪽으로 몇 도 돌려야 하는가? 그리고 [회전의 전치는 무엇이었는가?](n:def.transpose)`],
-      choices: [String.raw`$R_{-30°}$, 곧 $R_{30°}^{\mathsf{T}}$`, String.raw`$R_{60°}$`, String.raw`$-R_{30°}$`, String.raw`$R_{30°}$ 그대로`],
+      hints: [
+        String.raw`30° 돌린 것을 되돌리려면 어느 쪽으로 몇 도 돌려야 하는가? 그리고 [회전의 전치는 무엇이었는가?](n:def.transpose)`,
+      ],
+      choices: [
+        String.raw`$R_{-30°}$, 곧 $R_{30°}^{\mathsf{T}}$`,
+        String.raw`$R_{60°}$`,
+        String.raw`$-R_{30°}$`,
+        String.raw`$R_{30°}$ 그대로`,
+      ],
       answer: 0,
       why: [
         String.raw`시계 방향으로 30° 돌리면 제자리다. 3장에서 본 대로 그것은 $R_{30°}$의 전치와 같다. 이 일치는 우연이 아니다(이 장의 넷째 노드).`,
@@ -68,7 +89,12 @@ $A$가 선형이고 되돌릴 수 있다면, 되돌리는 변환 $S$도 선형�
   checks: [
     {
       q: String.raw`$A^{-1}$이 있을 때 $(A^{-1})^{-1}$은?`,
-      choices: [String.raw`$A$`, String.raw`$A^{-1}$`, String.raw`$I$`, '정해지지 않는다'],
+      choices: [
+        String.raw`$A$`,
+        String.raw`$A^{-1}$`,
+        String.raw`$I$`,
+        "정해지지 않는다",
+      ],
       answer: 0,
       explain: String.raw`정의의 두 식 $A^{-1}A = I$, $AA^{-1} = I$를 "$A^{-1}$의 역행렬은 $A$"로 읽을 수 있다. 되돌리는 것을 되돌리면 원래 변환이다.`,
     },

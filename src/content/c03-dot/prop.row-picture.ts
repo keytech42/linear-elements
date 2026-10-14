@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.row-picture',
-  kind: 'prop',
-  title: '행의 관점: (Ax)ᵢ = (i행)·x',
-  status: 'written',
-  requires: ['def.dot', 'def.matvec'],
+  id: "prop.row-picture",
+  kind: "prop",
+  title: "행의 관점: (Ax)ᵢ = (i행)·x",
+  status: "written",
+  requires: ["def.dot", "def.matvec"],
   predicts: [
     {
-      id: 'p-row',
-      kind: 'choice',
+      id: "p-row",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 2 & 1 \\ -1 & 1 \end{bmatrix}$, $\mathbf{x} = (1, 2)$일 때 $A\mathbf{x}$의 **둘째 성분**만 구하려면 무엇이 있으면 되고, 그 값은?`,
-      hints: [String.raw`[행렬-벡터 곱의 정의](n:def.matvec) $A\mathbf{x} = x_1\mathbf{a}_1 + x_2\mathbf{a}_2$에서 둘째 성분만 떼어 보라. 각 열의 **둘째 성분**만 쓰인다. 그 둘째 성분들을 모으면 $A$의 무엇이 되는가?`],
-      choices: [String.raw`$A$의 둘째 행과 $\mathbf{x}$. 값은 1`, String.raw`$A$의 둘째 열과 $\mathbf{x}$. 값은 3`, String.raw`$A$ 전체. 값은 4`, String.raw`$A$의 둘째 행과 $\mathbf{x}$. 값은 −3`],
+      hints: [
+        String.raw`[행렬-벡터 곱의 정의](n:def.matvec) $A\mathbf{x} = x_1\mathbf{a}_1 + x_2\mathbf{a}_2$에서 둘째 성분만 떼어 보라. 각 열의 **둘째 성분**만 쓰인다. 그 둘째 성분들을 모으면 $A$의 무엇이 되는가?`,
+      ],
+      choices: [
+        String.raw`$A$의 둘째 행과 $\mathbf{x}$. 값은 1`,
+        String.raw`$A$의 둘째 열과 $\mathbf{x}$. 값은 3`,
+        String.raw`$A$ 전체. 값은 4`,
+        String.raw`$A$의 둘째 행과 $\mathbf{x}$. 값은 −3`,
+      ],
       answer: 0,
       why: [
         String.raw`$x_1a_{21} + x_2a_{22} = (-1)(1) + (1)(2) = 1$. 둘째 행 $(-1, 1)$과 $\mathbf{x}$의 내적이다.`,
@@ -22,11 +29,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-line',
-      kind: 'choice',
+      id: "p-line",
+      kind: "choice",
       q: String.raw`$A$의 첫째 행이 $(1, 2)$이다. $A\mathbf{x}$의 첫째 성분이 0이 되는 입력 $\mathbf{x}$들은 평면에서 어떤 모양을 이룰까?`,
-      hints: [String.raw`첫째 성분은 $(1, 2)\cdot\mathbf{x}$다. 내적이 0이라는 것은 무슨 뜻이었는가?`],
-      choices: [String.raw`원점을 지나고 $(1, 2)$에 수직인 직선`, String.raw`$(1, 2)$ 방향의 직선`, '원점 한 점', '평면 전체'],
+      hints: [
+        String.raw`첫째 성분은 $(1, 2)\cdot\mathbf{x}$다. 내적이 0이라는 것은 무슨 뜻이었는가?`,
+      ],
+      choices: [
+        String.raw`원점을 지나고 $(1, 2)$에 수직인 직선`,
+        String.raw`$(1, 2)$ 방향의 직선`,
+        "원점 한 점",
+        "평면 전체",
+      ],
       answer: 0,
       why: [
         String.raw`$(1, 2)\cdot\mathbf{x} = 0$은 $\mathbf{x}$가 $(1, 2)$와 [직교](n:def.orthogonal)한다는 뜻이다. 그런 $\mathbf{x}$는 $(-2, 1)$ 방향의 직선을 이룬다. 6장에서 이 생각이 "[행공간](fwd:t.row-space)과 [영공간](fwd:t.null-space)은 직교한다"가 된다.`,
@@ -68,7 +82,7 @@ $$(A\mathbf{x})_i = (A\text{의 } i\text{번째 행})\cdot\mathbf{x}$$
 $$(A\mathbf{x})_i = x_1a_{i1} + x_2a_{i2} + \cdots + x_na_{in}$$
 
 그런데 $(a_{i1}, a_{i2}, \dots, a_{in})$은 $A$의 $i$번째 행이다. 그러므로 오른쪽은 [내적의 정의](why:def.dot) 그대로 ($i$번째 행)$\cdot\mathbf{x}$다.`,
-  code: ['matVecRows', 'matVec'],
+  code: ["matVecRows", "matVec"],
 };
 
 export default node;

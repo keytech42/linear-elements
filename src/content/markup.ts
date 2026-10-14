@@ -35,45 +35,52 @@
 //                         용어 자동 링크와 어휘 검사(P008)에서 빠진다.
 
 export type Inline =
-  | { t: 'text'; v: string }
-  | { t: 'b'; c: Inline[] }
-  | { t: 'math'; tex: string }
-  | { t: 'code'; v: string }
+  | { t: "text"; v: string }
+  | { t: "b"; c: Inline[] }
+  | { t: "math"; tex: string }
+  | { t: "code"; v: string }
   /** 의의 칩. 내용은 노드의 significance[key] */
-  | { t: 'sig'; key: string; c: Inline[] }
+  | { t: "sig"; key: string; c: Inline[] }
   /** 낱말 자체를 가리키는 자리. 용어로 읽지 않는다 */
-  | { t: 'word'; v: string }
+  | { t: "word"; v: string }
   /** 문단 안의 줄바꿈. 결론(∴)으로 시작하는 줄 앞에만 생긴다 */
-  | { t: 'br' }
-  | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
-  | { t: 'why'; to: string; key?: string; q: string }
-  | { t: 'link'; to: string; key?: string; c: Inline[] }
-  | { t: 'sync'; key: string; c: Inline[] }
-  | { t: 'label'; key: string; c: Inline[]; auto?: boolean }
+  | { t: "br" }
+  | { t: "def" | "term" | "fwd"; id: string; c: Inline[] }
+  | { t: "why"; to: string; key?: string; q: string }
+  | { t: "link"; to: string; key?: string; c: Inline[] }
+  | { t: "sync"; key: string; c: Inline[] }
+  | { t: "label"; key: string; c: Inline[]; auto?: boolean }
   /** node는 파서가 비워 두면(같은 노드) 검증기가 채운다 */
-  | { t: 'ref'; node?: string; key: string; c: Inline[]; auto?: boolean; ahead?: boolean };
+  | {
+      t: "ref";
+      node?: string;
+      key: string;
+      c: Inline[];
+      auto?: boolean;
+      ahead?: boolean;
+    };
 
-export type NoteKind = '비유' | '주의' | '직관' | '질문' | '코드' | '참고';
+export type NoteKind = "비유" | "주의" | "직관" | "질문" | "코드" | "참고";
 
 export type Block =
-  | { t: 'p'; c: Inline[] }
-  | { t: 'h'; c: Inline[] }
-  | { t: 'ul'; items: Inline[][]; ordered?: boolean; start?: number }
-  | { t: 'math'; tex: string }
-  | { t: 'scene'; id: string; params: Record<string, unknown> }
-  | { t: 'predict'; id: string }
-  | { t: 'answers'; from: string }
-  | { t: 'proves'; key: string }
-  | { t: 'chain'; rows: { lhs: string; rhs: string; why?: Inline[] }[] }
-  | { t: 'note'; kind: NoteKind; title?: Inline[]; blocks: Block[] };
+  | { t: "p"; c: Inline[] }
+  | { t: "h"; c: Inline[] }
+  | { t: "ul"; items: Inline[][]; ordered?: boolean; start?: number }
+  | { t: "math"; tex: string }
+  | { t: "scene"; id: string; params: Record<string, unknown> }
+  | { t: "predict"; id: string }
+  | { t: "answers"; from: string }
+  | { t: "proves"; key: string }
+  | { t: "chain"; rows: { lhs: string; rhs: string; why?: Inline[] }[] }
+  | { t: "note"; kind: NoteKind; title?: Inline[]; blocks: Block[] };
 
-const NOTE_KINDS: NoteKind[] = ['비유', '주의', '직관', '질문', '코드', '참고'];
+const NOTE_KINDS: NoteKind[] = ["비유", "주의", "직관", "질문", "코드", "참고"];
 
 export function parseBlocks(src: string): Block[] {
-  const lines = src.replace(/\r\n/g, '\n').split('\n');
+  const lines = src.replace(/\r\n/g, "\n").split("\n");
   const out: Block[] = [];
   let i = 0;
-  const isBlank = (s: string) => s.trim() === '';
+  const isBlank = (s: string) => s.trim() === "";
   while (i < lines.length) {
     const line = lines[i];
     const tl = line.trim();
@@ -81,107 +88,132 @@ export function parseBlocks(src: string): Block[] {
       i++;
       continue;
     }
-    if (tl.startsWith('$$')) {
+    if (tl.startsWith("$$")) {
       // 같은 줄에서 닫힐 수도, 여러 줄에 걸칠 수도 있다.
       const rest = tl.slice(2);
-      if (rest.endsWith('$$') && rest.length >= 2) {
-        out.push({ t: 'math', tex: rest.slice(0, -2).trim() });
+      if (rest.endsWith("$$") && rest.length >= 2) {
+        out.push({ t: "math", tex: rest.slice(0, -2).trim() });
         i++;
         continue;
       }
       const buf = [rest];
       i++;
-      while (i < lines.length && !lines[i].trim().endsWith('$$')) buf.push(lines[i++]);
+      while (i < lines.length && !lines[i].trim().endsWith("$$"))
+        buf.push(lines[i++]);
       if (i < lines.length) buf.push(lines[i++].trim().slice(0, -2));
-      out.push({ t: 'math', tex: buf.join('\n').trim() });
+      out.push({ t: "math", tex: buf.join("\n").trim() });
       continue;
     }
-    if (tl.startsWith('::scene')) {
+    if (tl.startsWith("::scene")) {
       const m = /^::scene\s+([\w.-]+)\s*(\{.*\})?\s*$/.exec(tl);
       if (!m) throw new Error(`장면 문법 오류: ${tl}`);
-      out.push({ t: 'scene', id: m[1], params: m[2] ? JSON.parse(m[2]) : {} });
+      out.push({ t: "scene", id: m[1], params: m[2] ? JSON.parse(m[2]) : {} });
       i++;
       continue;
     }
-    if (tl.startsWith('::predict')) {
+    if (tl.startsWith("::predict")) {
       const m = /^::predict\s+([\w.-]+)\s*$/.exec(tl);
       if (!m) throw new Error(`예측 문법 오류: ${tl}`);
-      out.push({ t: 'predict', id: m[1] });
+      out.push({ t: "predict", id: m[1] });
       i++;
       continue;
     }
-    if (tl.startsWith('::answers')) {
+    if (tl.startsWith("::answers")) {
       const m = /^::answers\s+([\w.-]+)\s*$/.exec(tl);
       if (!m) throw new Error(`답 표지 문법 오류: ${tl}`);
-      out.push({ t: 'answers', from: m[1] });
+      out.push({ t: "answers", from: m[1] });
       i++;
       continue;
     }
-    if (tl.startsWith('::proves')) {
+    if (tl.startsWith("::proves")) {
       const m = /^::proves\s+([\w.-]+)\s*$/.exec(tl);
       if (!m) throw new Error(`증명 표지 문법 오류: ${tl}`);
-      out.push({ t: 'proves', key: m[1] });
+      out.push({ t: "proves", key: m[1] });
       i++;
       continue;
     }
-    if (tl === '::chain') {
+    if (tl === "::chain") {
       i++;
       const rows: { lhs: string; rhs: string; why?: Inline[] }[] = [];
       while (i < lines.length && !isBlank(lines[i])) {
         const raw = lines[i++].trim();
-        const k = raw.indexOf('∵');
+        const k = raw.indexOf("∵");
         const texPart = (k === -1 ? raw : raw.slice(0, k)).trim();
         const why = k === -1 ? undefined : parseInline(raw.slice(k + 1).trim());
         const r = splitAtRelation(texPart);
-        if (!r) throw new Error(`등식 줄에 관계 기호(=, <, >, \\le, \\ge, \\ne)가 없음: ${raw}`);
-        if (rows.length > 0 && r.lhs) throw new Error(`등식 줄의 둘째 줄부터는 관계 기호로 시작해야 함: ${raw}`);
+        if (!r)
+          throw new Error(
+            `등식 줄에 관계 기호(=, <, >, \\le, \\ge, \\ne)가 없음: ${raw}`,
+          );
+        if (rows.length > 0 && r.lhs)
+          throw new Error(
+            `등식 줄의 둘째 줄부터는 관계 기호로 시작해야 함: ${raw}`,
+          );
         rows.push({ lhs: r.lhs, rhs: r.rhs, ...(why ? { why } : {}) });
       }
-      if (!rows.length) throw new Error('빈 등식 줄(::chain)');
-      out.push({ t: 'chain', rows });
+      if (!rows.length) throw new Error("빈 등식 줄(::chain)");
+      out.push({ t: "chain", rows });
       continue;
     }
-    if (tl.startsWith('### ')) {
-      out.push({ t: 'h', c: parseInline(tl.slice(4)) });
+    if (tl.startsWith("### ")) {
+      out.push({ t: "h", c: parseInline(tl.slice(4)) });
       i++;
       continue;
     }
     const bullet = /^(- |\d+\. )/;
     if (bullet.test(tl)) {
-      const ordered = !tl.startsWith('- ');
+      const ordered = !tl.startsWith("- ");
       const start = ordered ? parseInt(tl, 10) : 1; // "4. …"로 시작하는 번호 목록은 4부터 센다
-      const same = (s: string) => (ordered ? /^\d+\. /.test(s) : s.startsWith('- '));
+      const same = (s: string) =>
+        ordered ? /^\d+\. /.test(s) : s.startsWith("- ");
       const items: Inline[][] = [];
       while (i < lines.length && same(lines[i].trim())) {
         // 다음 줄이 들여쓰기로 이어지면 같은 항목이다.
-        let text = lines[i].trim().replace(bullet, '');
+        let text = lines[i].trim().replace(bullet, "");
         i++;
-        while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !bullet.test(lines[i].trim())) text += '\n' + lines[i++].trim();
-        items.push(joinLines(text.split('\n')));
+        while (
+          i < lines.length &&
+          /^\s{2,}\S/.test(lines[i]) &&
+          !bullet.test(lines[i].trim())
+        )
+          text += "\n" + lines[i++].trim();
+        items.push(joinLines(text.split("\n")));
       }
-      out.push({ t: 'ul', items, ordered, ...(start !== 1 ? { start } : {}) });
+      out.push({ t: "ul", items, ordered, ...(start !== 1 ? { start } : {}) });
       continue;
     }
-    if (tl.startsWith('>')) {
+    if (tl.startsWith(">")) {
       const buf: string[] = [];
-      while (i < lines.length && lines[i].trim().startsWith('>')) buf.push(lines[i++].trim().replace(/^>\s?/, ''));
-      let kind: NoteKind = '참고';
+      while (i < lines.length && lines[i].trim().startsWith(">"))
+        buf.push(lines[i++].trim().replace(/^>\s?/, ""));
+      let kind: NoteKind = "참고";
       let title: Inline[] | undefined;
       const km = /^\[!(\S+?)\]\s*/.exec(buf[0]);
       if (km) {
-        if (!NOTE_KINDS.includes(km[1] as NoteKind)) throw new Error(`알 수 없는 상자 종류: ${km[1]}`);
+        if (!NOTE_KINDS.includes(km[1] as NoteKind))
+          throw new Error(`알 수 없는 상자 종류: ${km[1]}`);
         kind = km[1] as NoteKind;
         // 첫 줄에서 종류 표시 뒤에 남은 글은 상자의 제목이다(본문 첫 문장에 이어 붙이지 않는다).
         const rest = buf[0].slice(km[0].length).trim();
         if (rest) title = parseInline(rest);
         buf.shift();
       }
-      out.push({ t: 'note', kind, ...(title ? { title } : {}), blocks: parseBlocks(buf.join('\n')) });
+      out.push({
+        t: "note",
+        kind,
+        ...(title ? { title } : {}),
+        blocks: parseBlocks(buf.join("\n")),
+      });
       continue;
     }
     const buf: string[] = [];
-    while (i < lines.length && !isBlank(lines[i]) && !/^\s*(\$\$|::|### |- |\d+\. |>)/.test(lines[i])) buf.push(lines[i++].trim());
-    out.push({ t: 'p', c: joinLines(buf) });
+    while (
+      i < lines.length &&
+      !isBlank(lines[i]) &&
+      !/^\s*(\$\$|::|### |- |\d+\. |>)/.test(lines[i])
+    )
+      buf.push(lines[i++].trim());
+    out.push({ t: "p", c: joinLines(buf) });
   }
   return out;
 }
@@ -190,12 +222,12 @@ export function parseBlocks(src: string): Block[] {
 function joinLines(lines: string[]): Inline[] {
   const out: Inline[] = [];
   let cur: string[] = [];
-  const flush = () => cur.length && out.push(...parseInline(cur.join(' ')));
+  const flush = () => cur.length && out.push(...parseInline(cur.join(" ")));
   for (const l of lines) {
-    if (l.startsWith('∴') && cur.length) {
+    if (l.startsWith("∴") && cur.length) {
       flush();
       cur = [];
-      out.push({ t: 'br' });
+      out.push({ t: "br" });
     }
     cur.push(l);
   }
@@ -203,75 +235,121 @@ function joinLines(lines: string[]): Inline[] {
   return out;
 }
 
-const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'ahead', 'word', 'sig'] as const;
+const LINK_KINDS = [
+  "def",
+  "t",
+  "fwd",
+  "why",
+  "n",
+  "sync",
+  "label",
+  "ref",
+  "ahead",
+  "word",
+  "sig",
+] as const;
 
 export function parseInline(src: string): Inline[] {
   const out: Inline[] = [];
-  let text = '';
+  let text = "";
   const flush = () => {
-    if (text) out.push({ t: 'text', v: text });
-    text = '';
+    if (text) out.push({ t: "text", v: text });
+    text = "";
   };
   let i = 0;
   while (i < src.length) {
     const ch = src[i];
-    if (ch === '\\' && src[i + 1] === '`') {
+    if (ch === "\\" && src[i + 1] === "`") {
       // 인라인 코드. 본문이 String.raw 템플릿이라 백틱은 \` 로 적는다.
-      const end = src.indexOf('\\`', i + 2);
+      const end = src.indexOf("\\`", i + 2);
       if (end < 0) throw new Error(`닫히지 않은 코드: ${src.slice(i, i + 30)}`);
       flush();
-      out.push({ t: 'code', v: src.slice(i + 2, end) });
+      out.push({ t: "code", v: src.slice(i + 2, end) });
       i = end + 2;
       continue;
     }
-    if (ch === '\\' && src[i + 1] === '$') {
-      text += '$';
+    if (ch === "\\" && src[i + 1] === "$") {
+      text += "$";
       i += 2;
       continue;
     }
-    if (ch === '$') {
+    if (ch === "$") {
       const end = findMathEnd(src, i + 1);
       if (end < 0) throw new Error(`닫히지 않은 $: ${src.slice(i, i + 30)}`);
       flush();
-      out.push({ t: 'math', tex: src.slice(i + 1, end) });
+      out.push({ t: "math", tex: src.slice(i + 1, end) });
       i = end + 1;
       continue;
     }
-    if (ch === '*' && src[i + 1] === '*') {
-      const end = src.indexOf('**', i + 2);
+    if (ch === "*" && src[i + 1] === "*") {
+      const end = src.indexOf("**", i + 2);
       if (end < 0) throw new Error(`닫히지 않은 **: ${src.slice(i, i + 30)}`);
       flush();
-      out.push({ t: 'b', c: parseInline(src.slice(i + 2, end)) });
+      out.push({ t: "b", c: parseInline(src.slice(i + 2, end)) });
       i = end + 2;
       continue;
     }
-    if (ch === '[') {
+    if (ch === "[") {
       const close = matchBracket(src, i);
-      if (close > 0 && src[close + 1] === '(') {
-        const pend = src.indexOf(')', close + 2);
+      if (close > 0 && src[close + 1] === "(") {
+        const pend = src.indexOf(")", close + 2);
         const target = src.slice(close + 2, pend);
         const m = /^(\w+):(.*)$/.exec(target);
-        if (pend > 0 && m && (m[2] || m[1] === 'word') && (LINK_KINDS as readonly string[]).includes(m[1])) {
+        if (
+          pend > 0 &&
+          m &&
+          (m[2] || m[1] === "word") &&
+          (LINK_KINDS as readonly string[]).includes(m[1])
+        ) {
           flush();
           const inner = src.slice(i + 1, close);
           const [, kind, id] = m;
-          if (kind === 'word') out.push({ t: 'word', v: inner });
-          else if (kind === 'sig') out.push({ t: 'sig', key: id, c: parseInline(inner) });
-          else if (kind === 'why') {
-            const k = id.indexOf('#');
-            out.push(k >= 0 ? { t: 'why', to: id.slice(0, k), key: id.slice(k + 1), q: inner } : { t: 'why', to: id, q: inner });
-          }
-          else if (kind === 'n') {
-            const k = id.indexOf('#');
-            out.push(k >= 0 ? { t: 'link', to: id.slice(0, k), key: id.slice(k + 1), c: parseInline(inner) } : { t: 'link', to: id, c: parseInline(inner) });
-          }
-          else if (kind === 'sync') out.push({ t: 'sync', key: id, c: parseInline(inner) });
-          else if (kind === 'label') out.push({ t: 'label', key: id, c: parseInline(inner) });
-          else if (kind === 'ref' || kind === 'ahead') {
-            const k = id.indexOf('#');
-            out.push({ t: 'ref', ...(k >= 0 ? { node: id.slice(0, k) } : {}), key: k >= 0 ? id.slice(k + 1) : id, c: parseInline(inner), ...(kind === 'ahead' ? { ahead: true } : {}) });
-          }
-          else out.push({ t: kind === 't' ? 'term' : (kind as 'def' | 'fwd'), id, c: parseInline(inner) });
+          if (kind === "word") out.push({ t: "word", v: inner });
+          else if (kind === "sig")
+            out.push({ t: "sig", key: id, c: parseInline(inner) });
+          else if (kind === "why") {
+            const k = id.indexOf("#");
+            out.push(
+              k >= 0
+                ? {
+                    t: "why",
+                    to: id.slice(0, k),
+                    key: id.slice(k + 1),
+                    q: inner,
+                  }
+                : { t: "why", to: id, q: inner },
+            );
+          } else if (kind === "n") {
+            const k = id.indexOf("#");
+            out.push(
+              k >= 0
+                ? {
+                    t: "link",
+                    to: id.slice(0, k),
+                    key: id.slice(k + 1),
+                    c: parseInline(inner),
+                  }
+                : { t: "link", to: id, c: parseInline(inner) },
+            );
+          } else if (kind === "sync")
+            out.push({ t: "sync", key: id, c: parseInline(inner) });
+          else if (kind === "label")
+            out.push({ t: "label", key: id, c: parseInline(inner) });
+          else if (kind === "ref" || kind === "ahead") {
+            const k = id.indexOf("#");
+            out.push({
+              t: "ref",
+              ...(k >= 0 ? { node: id.slice(0, k) } : {}),
+              key: k >= 0 ? id.slice(k + 1) : id,
+              c: parseInline(inner),
+              ...(kind === "ahead" ? { ahead: true } : {}),
+            });
+          } else
+            out.push({
+              t: kind === "t" ? "term" : (kind as "def" | "fwd"),
+              id,
+              c: parseInline(inner),
+            });
           i = pend + 1;
           continue;
         }
@@ -286,11 +364,11 @@ export function parseInline(src: string): Inline[] {
 
 function findMathEnd(s: string, from: number): number {
   for (let k = from; k < s.length; k++) {
-    if (s[k] === '\\') {
+    if (s[k] === "\\") {
       k++;
       continue;
     }
-    if (s[k] === '$') return k;
+    if (s[k] === "$") return k;
   }
   return -1;
 }
@@ -298,14 +376,14 @@ function findMathEnd(s: string, from: number): number {
 function matchBracket(s: string, open: number): number {
   let depth = 0;
   for (let k = open; k < s.length; k++) {
-    if (s[k] === '$') {
+    if (s[k] === "$") {
       const e = findMathEnd(s, k + 1);
       if (e < 0) return -1;
       k = e;
       continue;
     }
-    if (s[k] === '[') depth++;
-    else if (s[k] === ']' && --depth === 0) return k;
+    if (s[k] === "[") depth++;
+    else if (s[k] === "]" && --depth === 0) return k;
   }
   return -1;
 }
@@ -316,13 +394,21 @@ export function expandSyncMacros(tex: string): string {
 }
 
 /** TeX 한 줄을 중괄호 밖의 첫 관계 기호 앞뒤로 가른다. 관계 기호는 오른쪽에 붙는다: "a = b" → ["a", "= b"]. */
-export function splitAtRelation(tex: string): { lhs: string; rhs: string } | null {
+export function splitAtRelation(
+  tex: string,
+): { lhs: string; rhs: string } | null {
   let depth = 0;
   for (let i = 0; i < tex.length; i++) {
     const c = tex[i];
-    if (c === '{') depth++;
-    else if (c === '}') depth--;
-    else if (depth === 0 && (c === '=' || c === '<' || c === '>' || /^\\(le|ge|ne|leq|geq|neq)(?![a-zA-Z])/.test(tex.slice(i))))
+    if (c === "{") depth++;
+    else if (c === "}") depth--;
+    else if (
+      depth === 0 &&
+      (c === "=" ||
+        c === "<" ||
+        c === ">" ||
+        /^\\(le|ge|ne|leq|geq|neq)(?![a-zA-Z])/.test(tex.slice(i)))
+    )
       return { lhs: tex.slice(0, i).trim(), rhs: tex.slice(i).trim() };
   }
   return null;
@@ -336,16 +422,15 @@ export function syncKeysInTex(tex: string): string[] {
 // ── 트리 걷기 도우미 ────────────────────────────────────────────────
 export function* walkInlines(blocks: Block[]): Generator<Inline> {
   for (const b of blocks) {
-    if (b.t === 'p' || b.t === 'h') yield* walkInlineList(b.c);
-    else if (b.t === 'ul') for (const it of b.items) yield* walkInlineList(it);
-    else if (b.t === 'note') {
+    if (b.t === "p" || b.t === "h") yield* walkInlineList(b.c);
+    else if (b.t === "ul") for (const it of b.items) yield* walkInlineList(it);
+    else if (b.t === "note") {
       if (b.title) yield* walkInlineList(b.title);
       yield* walkInlines(b.blocks);
-    }
-    else if (b.t === 'math') yield { t: 'math', tex: b.tex };
-    else if (b.t === 'chain')
+    } else if (b.t === "math") yield { t: "math", tex: b.tex };
+    else if (b.t === "chain")
       for (const r of b.rows) {
-        yield { t: 'math', tex: `${r.lhs} ${r.rhs}` };
+        yield { t: "math", tex: `${r.lhs} ${r.rhs}` };
         if (r.why) yield* walkInlineList(r.why);
       }
   }
@@ -354,14 +439,14 @@ export function* walkInlines(blocks: Block[]): Generator<Inline> {
 export function* walkInlineList(list: Inline[]): Generator<Inline> {
   for (const x of list) {
     yield x;
-    if ('c' in x) yield* walkInlineList(x.c);
+    if ("c" in x) yield* walkInlineList(x.c);
   }
 }
 
 export function* walkBlocks(blocks: Block[]): Generator<Block> {
   for (const b of blocks) {
     yield b;
-    if (b.t === 'note') yield* walkBlocks(b.blocks);
+    if (b.t === "note") yield* walkBlocks(b.blocks);
   }
 }
 
@@ -369,12 +454,12 @@ export function* walkBlocks(blocks: Block[]): Generator<Block> {
 export function plainText(list: Inline[]): string {
   return list
     .map((x) => {
-      if (x.t === 'text') return x.v;
-      if (x.t === 'math') return x.tex;
-      if (x.t === 'why') return x.q;
-      if (x.t === 'word') return `“${x.v}”`;
-      if (x.t === 'br') return '\n';
-      return 'c' in x ? plainText(x.c) : '';
+      if (x.t === "text") return x.v;
+      if (x.t === "math") return x.tex;
+      if (x.t === "why") return x.q;
+      if (x.t === "word") return `“${x.v}”`;
+      if (x.t === "br") return "\n";
+      return "c" in x ? plainText(x.c) : "";
     })
-    .join('');
+    .join("");
 }

@@ -1,25 +1,41 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.det',
-  kind: 'def',
-  title: '행렬식: 부호 있는 넓이 배율',
-  status: 'written',
+  id: "def.det",
+  kind: "def",
+  title: "행렬식: 부호 있는 넓이 배율",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.determinant', ko: '행렬식', en: 'determinant', gloss: '변환이 넓이(3차원에서는 부피)를 몇 배로 만드는지, 그리고 방향을 뒤집는지를 부호까지 담은 수.' },
-      { id: 't.orientation', ko: '향', en: 'orientation', boundary: true, everyMention: true, gloss: 'e₁에서 e₂로 짧게 도는 쪽이 시계 반대 방향인지 시계 방향인지. 거울에 비추면 바뀐다.' },
+      {
+        id: "t.determinant",
+        ko: "행렬식",
+        en: "determinant",
+        gloss:
+          "변환이 넓이(3차원에서는 부피)를 몇 배로 만드는지, 그리고 방향을 뒤집는지를 부호까지 담은 수.",
+      },
+      {
+        id: "t.orientation",
+        ko: "향",
+        en: "orientation",
+        boundary: true,
+        everyMention: true,
+        gloss:
+          "e₁에서 e₂로 짧게 도는 쪽이 시계 반대 방향인지 시계 방향인지. 거울에 비추면 바뀐다.",
+      },
     ],
-    symbols: [{ tex: String.raw`\det A`, meaning: '행렬 A의 행렬식' }],
+    symbols: [{ tex: String.raw`\det A`, meaning: "행렬 A의 행렬식" }],
   },
-  requires: ['ax.area', 'def.matrix'],
+  requires: ["ax.area", "def.matrix"],
   predicts: [
     {
-      id: 'p-shear',
-      kind: 'choice',
+      id: "p-shear",
+      kind: "choice",
       q: String.raw`전단 $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$은 단위 정사각형을 넓이 몇인 도형으로 보낼까?`,
-      hints: [String.raw`두 열 $(1, 0)$, $(1, 1)$이 만드는 평행사변형의 밑변과 높이는? [평행사변형의 넓이는 밑변 × 높이였다](n:prop.parallelogram#main).`],
-      choices: ['1', '2', String.raw`$\sqrt{2}$`, '0'],
+      hints: [
+        String.raw`두 열 $(1, 0)$, $(1, 1)$이 만드는 평행사변형의 밑변과 높이는? [평행사변형의 넓이는 밑변 × 높이였다](n:prop.parallelogram#main).`,
+      ],
+      choices: ["1", "2", String.raw`$\sqrt{2}$`, "0"],
       answer: 0,
       why: [
         String.raw`밑변 1(가로축 위), 높이 1. 전단은 모양을 비스듬히 만들 뿐 넓이를 바꾸지 않는다.`,
@@ -29,14 +45,14 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-mirror',
-      kind: 'choice',
+      id: "p-mirror",
+      kind: "choice",
       q: String.raw`대각선 $y = x$에 비치는 반사 $\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$의 행렬식은?`,
       hints: [
         String.raw`단위 정사각형은 자기 자신으로 간다(넓이 1). 그런데 주황 $\mathbf{e}_1$과 청록 $\mathbf{e}_2$는 각각 어디로 가는가?`,
         String.raw`변환 전에는 주황에서 청록으로 시계 반대 방향으로 90° 돌면 된다. 변환 뒤에는 어느 쪽으로 돌아야 하는가?`,
       ],
-      choices: ['−1', '1', '0', '2'],
+      choices: ["−1", "1", "0", "2"],
       answer: 0,
       why: [
         String.raw`넓이는 그대로(1)지만 주황과 청록이 자리를 바꿔 도는 방향이 뒤집혔다. 그래서 $-1$이다.`,
@@ -74,7 +90,7 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`90° 회전 $\begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$의 행렬식은?`,
-      choices: ['1', '−1', '0', '90'],
+      choices: ["1", "−1", "0", "90"],
       answer: 0,
       explain: String.raw`정사각형이 돌아갈 뿐 넓이는 1이고, 돌리기는 향을 바꾸지 않는다(주황에서 청록으로 여전히 시계 반대 방향). 반사와 회전은 넓이를 모두 지키지만, 행렬식의 부호가 둘을 구별한다.`,
     },

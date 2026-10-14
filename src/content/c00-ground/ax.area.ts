@@ -1,22 +1,38 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'ax.area',
-  kind: 'ax',
-  title: '넓이의 규칙',
-  status: 'written',
-  introduces: { terms: [{ id: 't.area', ko: '넓이', en: 'area', everyday: true, gloss: '평면 도형이 차지하는 양. 직사각형은 가로 × 세로. 잘라 옮겨도, 조각으로 나눠 더해도 그대로.' }] },
-  requires: ['ax.arith'],
+  id: "ax.area",
+  kind: "ax",
+  title: "넓이의 규칙",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.area",
+        ko: "넓이",
+        en: "area",
+        everyday: true,
+        gloss:
+          "평면 도형이 차지하는 양. 직사각형은 가로 × 세로. 잘라 옮겨도, 조각으로 나눠 더해도 그대로.",
+      },
+    ],
+  },
+  requires: ["ax.arith"],
   predicts: [
     {
-      id: 'p-curry',
-      kind: 'choice',
-      q: '8×8 정사각형(넓이 64)을 네 조각으로 잘라 다시 놓으면 5×13 직사각형(넓이 65)이 되는 것처럼 보이는 그림이 있다(아래 장면). 무엇이 틀렸을까?',
+      id: "p-curry",
+      kind: "choice",
+      q: "8×8 정사각형(넓이 64)을 네 조각으로 잘라 다시 놓으면 5×13 직사각형(넓이 65)이 되는 것처럼 보이는 그림이 있다(아래 장면). 무엇이 틀렸을까?",
       hints: [
         String.raw`조각들의 비스듬한 변의 기울기를 계산해 보라. 삼각형 조각은 가로 8에 세로 3이고, 사다리꼴 조각의 비스듬한 변은 가로 5에 세로 2만큼 움직인다.`,
         String.raw`$3/8 = 0.375$이고 $2/5 = 0.4$다. 기울기가 다른 두 선분을 이어 놓은 "대각선"은 곧은 선일까?`,
       ],
-      choices: ['조각들이 정확히 맞물리지 않는다. 가운데에 넓이 1짜리 가느다란 틈이 숨어 있다', '이 경우에는 "옮겨도 넓이가 그대로"라는 규칙이 깨진다', '64와 65는 그림의 오차 안에서 같은 수다', '자르는 순간 넓이 1이 새로 생긴다'],
+      choices: [
+        "조각들이 정확히 맞물리지 않는다. 가운데에 넓이 1짜리 가느다란 틈이 숨어 있다",
+        '이 경우에는 "옮겨도 넓이가 그대로"라는 규칙이 깨진다',
+        "64와 65는 그림의 오차 안에서 같은 수다",
+        "자르는 순간 넓이 1이 새로 생긴다",
+      ],
       answer: 0,
       why: [
         String.raw`기울기 $3/8$과 $2/5$가 아주 조금 달라서, 직사각형의 "대각선"은 사실 꺾인 선 두 개다. 그 사이에 눈에 거의 보이지 않는 평행사변형 모양의 틈(넓이 1)이 있다. 규칙은 깨지지 않았고, 그림이 우리를 속였다.`,
@@ -26,7 +42,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '휘어진 도형(원 등)의 넓이도 이 세 규칙만으로 정해지는가?', answeredBy: null }],
+  openWhys: [
+    {
+      q: "휘어진 도형(원 등)의 넓이도 이 세 규칙만으로 정해지는가?",
+      answeredBy: null,
+    },
+  ],
   body: String.raw`[넓이](def:t.area)는 이 교재에서 두 번 중요한 역할을 한다. 이 장 뒤쪽의 [피타고라스 정리](fwd:t.pythagoras), 그리고 4장의 [행렬식](fwd:t.determinant)이다. 그래서 넓이에 대해 무엇을 받아들이는지도 처음에 적어 둔다.
 
 ### 공리: 넓이의 규칙

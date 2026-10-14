@@ -1,29 +1,48 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.lora',
-  kind: 'exp',
-  title: 'LoRA: 변화량을 랭크 r로 제한하기',
-  status: 'written',
+  id: "exp.lora",
+  kind: "exp",
+  title: "LoRA: 변화량을 랭크 r로 제한하기",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.lora', ko: 'LoRA', en: 'Low-Rank Adaptation', gloss: '미리 학습된 W₀는 얼려 두고, 변화량 ΔW를 두 얇은 행렬의 곱 BA(랭크 ≤ r)로만 학습하는 방법.' }],
+    terms: [
+      {
+        id: "t.lora",
+        ko: "LoRA",
+        en: "Low-Rank Adaptation",
+        gloss:
+          "미리 학습된 W₀는 얼려 두고, 변화량 ΔW를 두 얇은 행렬의 곱 BA(랭크 ≤ r)로만 학습하는 방법.",
+      },
+    ],
     symbols: [
-      { tex: 'r', meaning: 'LoRA의 랭크' },
-      { tex: String.raw`\Delta W`, meaning: '가중치의 변화량' },
-      { tex: 'W_0', meaning: '미리 학습된(얼려 둔) 가중치' },
+      { tex: "r", meaning: "LoRA의 랭크" },
+      { tex: String.raw`\Delta W`, meaning: "가중치의 변화량" },
+      { tex: "W_0", meaning: "미리 학습된(얼려 둔) 가중치" },
     ],
   },
-  requires: ['def.linear-layer', 'prop.eckart-young', 'prop.shape-rule'],
+  requires: ["def.linear-layer", "prop.eckart-young", "prop.shape-rule"],
   openWhys: [
-    { q: '미세조정에 필요한 변화량 ΔW가 실제로 저랭크라는 가정은 왜 맞는가?', answeredBy: null },
-    { q: '이 장면의 경사 하강은 왜 언제나 바닥에 닿는가(나쁜 극소점이 없는가)?', answeredBy: null },
+    {
+      q: "미세조정에 필요한 변화량 ΔW가 실제로 저랭크라는 가정은 왜 맞는가?",
+      answeredBy: null,
+    },
+    {
+      q: "이 장면의 경사 하강은 왜 언제나 바닥에 닿는가(나쁜 극소점이 없는가)?",
+      answeredBy: null,
+    },
   ],
   predicts: [
     {
-      id: 'p-rank',
-      kind: 'choice',
+      id: "p-rank",
+      kind: "choice",
       q: String.raw`$B$가 $m \times r$, $A$가 $r \times n$일 때 곱 $BA$의 랭크는 최대 얼마일까?`,
-      choices: [String.raw`$r$`, String.raw`$\min(m, n)$`, String.raw`$r(m + n)$`, String.raw`$r^2$`],
+      choices: [
+        String.raw`$r$`,
+        String.raw`$\min(m, n)$`,
+        String.raw`$r(m + n)$`,
+        String.raw`$r^2$`,
+      ],
       answer: 0,
       why: [
         String.raw`모든 출력이 $B$의 열 $r$개의 선형 결합이다. 그래서 출력이 놓이는 공간의 차원은 $r$을 넘지 못한다.`,
@@ -33,8 +52,8 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-which-rank',
-      kind: 'choice',
+      id: "p-which-rank",
+      kind: "choice",
       q: String.raw`4096×4096 가중치 $W_0$에 $r = 8$인 LoRA를 붙여 $W = W_0 + BA$로 쓴다. 다음 가운데 옳은 것은?`,
       hints: [
         String.raw`[2장의 주의 상자](n:def.shape)를 떠올리라. 코드 문서의 rank(차수)는 배열 축의 개수를 세고, 이 교재의 랭크는 출력이 펼치는 독립 방향의 수를 센다. $W_0$, $B$, $A$는 각각 배열 축이 몇 개인가?`,
@@ -55,13 +74,17 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-floor',
-      kind: 'choice',
+      id: "p-floor",
+      kind: "choice",
       q: String.raw`이상적인 변화량 $\Delta W^*$를 미리 안다고 하자. LoRA로 학습한 $BA$와 $\Delta W^*$ 사이의 거리를, $\Delta W^*$의 SVD에서 앞의 $r$개 '층'만 남긴 것과 $\Delta W^*$ 사이의 거리와 비교하면?`,
       hints: [
         String.raw`$BA$는 어떤 방법으로 찾든 랭크가 $r$ 이하인 행렬이다. [에카르트–영 정리](n:prop.eckart-young)는 그런 행렬 **모두** 가운데 무엇이 가장 가까운지 말한다.`,
       ],
-      choices: [String.raw`$BA$ 쪽 거리는 SVD를 자른 쪽보다 작을 수 없다`, 'LoRA는 학습 중에 SVD를 계산하므로 둘은 같다', String.raw`$BA$ 쪽이 더 가까울 수 있다. 데이터로 학습하기 때문이다`],
+      choices: [
+        String.raw`$BA$ 쪽 거리는 SVD를 자른 쪽보다 작을 수 없다`,
+        "LoRA는 학습 중에 SVD를 계산하므로 둘은 같다",
+        String.raw`$BA$ 쪽이 더 가까울 수 있다. 데이터로 학습하기 때문이다`,
+      ],
       answer: 0,
       why: [
         String.raw`$BA$도 랭크 $r$ 이하의 행렬이고, 그런 행렬 가운데 가장 가까운 것이 SVD를 자른 것이다(에카르트–영). 아래 장면에서 직접 확인한다.`,
@@ -134,14 +157,24 @@ $BA$의 구조는 [특이값 분해의 '층'](why:prop.svd-sum) $\sum_i \sigma_i
 > 행렬은 기저의 상이다(2장). 그 상들이 만드는 모양은 회전, 축 방향 늘이기, 회전으로 나뉜다(9장). 늘이기의 배율인 특이값이 빠르게 작아진다면, 앞의 '층' 몇 개만으로 행렬의 거의 전부를 담을 수 있다. LoRA는 미세조정의 변화량이 그런 행렬이라는 가설에 기대어, 처음부터 '층' 몇 개짜리 행렬만 배우기로 한 설계다.`,
   checks: [
     {
-      q: 'm = n = 4096, r = 8일 때 LoRA가 학습하는 숫자의 개수와 전체 대비 비율은?',
-      choices: ['65,536개, 약 0.39%', '32,768개, 약 0.2%', '16,777,216개, 100%', '8,192개, 약 0.05%'],
+      q: "m = n = 4096, r = 8일 때 LoRA가 학습하는 숫자의 개수와 전체 대비 비율은?",
+      choices: [
+        "65,536개, 약 0.39%",
+        "32,768개, 약 0.2%",
+        "16,777,216개, 100%",
+        "8,192개, 약 0.05%",
+      ],
       answer: 0,
       explain: String.raw`$r(m + n) = 8 \times 8192 = 65{,}536$이고, $mn = 16{,}777{,}216$이므로 약 0.39%다. 32,768은 $B$나 $A$ 한쪽만 센 것이다.`,
     },
     {
-      q: 'LoRA에서 B와 A를 둘 다 0으로 초기화하면?',
-      choices: ['두 기울기가 모두 0이라 학습이 시작되지 않는다', '정상적으로 학습된다', 'ΔW가 처음부터 0이 아니게 된다', 'A만 학습된다'],
+      q: "LoRA에서 B와 A를 둘 다 0으로 초기화하면?",
+      choices: [
+        "두 기울기가 모두 0이라 학습이 시작되지 않는다",
+        "정상적으로 학습된다",
+        "ΔW가 처음부터 0이 아니게 된다",
+        "A만 학습된다",
+      ],
       answer: 0,
       explain: String.raw`$\partial L/\partial B = 2(BA - T)A^{\mathsf{T}}$에는 $A$가, $\partial L/\partial A = 2B^{\mathsf{T}}(BA - T)$에는 $B$가 곱해져 있다. 둘 다 0이면 두 기울기가 모두 0이다. 그래서 한쪽(B)만 0으로 두어 $\Delta W = 0$에서 출발하면서도, 다른 쪽(A)을 무작위로 두어 학습이 움직이게 한다.`,
     },

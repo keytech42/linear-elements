@@ -1,33 +1,49 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.matrix',
-  kind: 'def',
-  title: '행렬: 기저의 상을 열로 나란히',
-  status: 'written',
+  id: "def.matrix",
+  kind: "def",
+  title: "행렬: 기저의 상을 열로 나란히",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.matrix', ko: '행렬', en: 'matrix', gloss: '선형 변환이 각 표준 기저 벡터를 보내는 자리를 열로 나란히 적은 표.' },
-      { id: 't.column', ko: '열', en: 'column', gloss: '행렬의 세로 줄. j번째 열 = 𝐞ⱼ의 상.' },
-      { id: 't.row', ko: '행', en: 'row', gloss: '행렬의 가로 줄.' },
+      {
+        id: "t.matrix",
+        ko: "행렬",
+        en: "matrix",
+        gloss:
+          "선형 변환이 각 표준 기저 벡터를 보내는 자리를 열로 나란히 적은 표.",
+      },
+      {
+        id: "t.column",
+        ko: "열",
+        en: "column",
+        gloss: "행렬의 세로 줄. j번째 열 = 𝐞ⱼ의 상.",
+      },
+      { id: "t.row", ko: "행", en: "row", gloss: "행렬의 가로 줄." },
     ],
     symbols: [
-      { tex: 'A', meaning: '이름 없는 행렬' },
-      { tex: 'B', meaning: '이름 없는 둘째 행렬' },
-      { tex: 'a_{ij}', meaning: '행렬 A의 i행 j열 성분' },
-      { tex: String.raw`\mathbf{a}_j`, meaning: '행렬 A의 j번째 열' },
+      { tex: "A", meaning: "이름 없는 행렬" },
+      { tex: "B", meaning: "이름 없는 둘째 행렬" },
+      { tex: "a_{ij}", meaning: "행렬 A의 i행 j열 성분" },
+      { tex: String.raw`\mathbf{a}_j`, meaning: "행렬 A의 j번째 열" },
     ],
   },
-  requires: ['prop.basis-determines'],
+  requires: ["prop.basis-determines"],
   predicts: [
     {
-      id: 'p-count',
-      kind: 'choice',
+      id: "p-count",
+      kind: "choice",
       q: String.raw`평면의 [선형 변환](t:t.linear-map) 하나를 빠짐없이 전하려면 숫자가 최소 몇 개 필요할까?`,
       hints: [
         String.raw`[기저의 상만 알면 모든 벡터의 상이 정해진다](n:prop.basis-determines). 평면의 표준 기저는 몇 개이고, 상 하나는 숫자 몇 개인가?`,
       ],
-      choices: ['2개', '4개', '평면의 점마다 2개씩, 끝없이 많이', '변환마다 다르다'],
+      choices: [
+        "2개",
+        "4개",
+        "평면의 점마다 2개씩, 끝없이 많이",
+        "변환마다 다르다",
+      ],
       answer: 1,
       why: [
         String.raw`$\mathbf{e}_1$의 상(숫자 2개)만 보내면 $\mathbf{e}_2$가 어디로 가는지 알 수 없다. 예를 들어 아무것도 하지 않는 변환과 위쪽을 옆으로 미는 변환은 둘 다 $\mathbf{e}_1$을 제자리에 둔다.`,
@@ -37,12 +53,15 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-read',
-      kind: 'point',
+      id: "p-read",
+      kind: "point",
       q: String.raw`행렬 $\begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$이 나타내는 변환은 $\mathbf{e}_1$을 어디로 보낼까? 분홍 점을 그 자리에 끌어 놓아라.`,
-      A: [[0, -1], [1, 0]],
+      A: [
+        [0, -1],
+        [1, 0],
+      ],
       x: [1, 0],
-      target: 'Ax',
+      target: "Ax",
       reveal: String.raw`정답은 첫째 **열** $(0, 1)$이다. 열은 위에서 아래로 읽는다. $(0, -1)$에 놓았다면 첫째 **행**을 읽은 것이다. 행과 열을 헷갈리는 것이 가장 흔한 실수이므로, 아래의 읽는 법을 천천히 따라가 보라.`,
     },
   ],
@@ -81,7 +100,12 @@ $$A = \begin{bmatrix} \h{a11}{\ca{a_{11}}} & \h{a12}{\cb{a_{12}}} \\ \h{a21}{\ca
   checks: [
     {
       q: String.raw`행렬 $\begin{bmatrix} 2 & -1 \\ 1 & 0 \end{bmatrix}$이 나타내는 변환은 $\mathbf{e}_1$을 어디로 보내는가?`,
-      choices: [String.raw`$(2, 1)$`, String.raw`$(2, -1)$`, String.raw`$(-1, 0)$`, String.raw`$(1, 0)$`],
+      choices: [
+        String.raw`$(2, 1)$`,
+        String.raw`$(2, -1)$`,
+        String.raw`$(-1, 0)$`,
+        String.raw`$(1, 0)$`,
+      ],
       answer: 0,
       explain: String.raw`$\mathbf{e}_1$의 상은 **첫째 열**이다. 위에서 아래로 읽으면 $(2, 1)$이다. $(2, -1)$은 첫째 **행**을 읽은 것이다. 행과 열을 헷갈리는 것이 가장 흔한 실수다.`,
     },
@@ -96,7 +120,7 @@ $$A = \begin{bmatrix} \h{a11}{\ca{a_{11}}} & \h{a12}{\cb{a_{12}}} \\ \h{a21}{\ca
       explain: String.raw`상을 **세로로** 세워 1열, 2열에 차례로 놓는다. 둘째 선택지는 상을 가로로 적은 것(행과 열이 뒤바뀐 것)이고, 셋째 선택지는 열의 순서가 바뀐 것이다. 열의 순서가 바뀌면 $\mathbf{e}_1$과 $\mathbf{e}_2$의 역할이 바뀌므로 다른 변환이 된다.`,
     },
   ],
-  code: ['col', 'fromCols'],
+  code: ["col", "fromCols"],
 };
 
 export default node;

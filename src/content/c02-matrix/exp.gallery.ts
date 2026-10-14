@@ -1,26 +1,55 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.gallery',
-  kind: 'exp',
-  title: '변환 도감: 회전, 늘이기, 전단, 반사, 사영',
-  status: 'written',
+  id: "exp.gallery",
+  kind: "exp",
+  title: "변환 도감: 회전, 늘이기, 전단, 반사, 사영",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.rotation', ko: '회전', en: 'rotation', everyday: true, gloss: '원점을 중심으로 모든 벡터를 같은 각만큼 돌리는 변환.' },
-      { id: 't.shear', ko: '전단', en: 'shear', gloss: '한 축은 그대로 두고 다른 축을 옆으로 미는 변환. 카드 더미를 비스듬히 미는 모양.' },
-      { id: 't.reflection', ko: '반사', en: 'reflection', gloss: '원점을 지나는 직선을 거울로 삼아 뒤집는 변환.' },
-      { id: 't.projection', ko: '사영', en: 'projection', gloss: '공간을 더 낮은 차원(예: 직선) 위로 납작하게 누르는 변환.' },
+      {
+        id: "t.rotation",
+        ko: "회전",
+        en: "rotation",
+        everyday: true,
+        gloss: "원점을 중심으로 모든 벡터를 같은 각만큼 돌리는 변환.",
+      },
+      {
+        id: "t.shear",
+        ko: "전단",
+        en: "shear",
+        gloss:
+          "한 축은 그대로 두고 다른 축을 옆으로 미는 변환. 카드 더미를 비스듬히 미는 모양.",
+      },
+      {
+        id: "t.reflection",
+        ko: "반사",
+        en: "reflection",
+        gloss: "원점을 지나는 직선을 거울로 삼아 뒤집는 변환.",
+      },
+      {
+        id: "t.projection",
+        ko: "사영",
+        en: "projection",
+        gloss: "공간을 더 낮은 차원(예: 직선) 위로 납작하게 누르는 변환.",
+      },
     ],
   },
-  requires: ['def.matvec', 'def.angle-trig'],
+  requires: ["def.matvec", "def.angle-trig"],
   predicts: [
     {
-      id: 'p-mirror',
-      kind: 'choice',
+      id: "p-mirror",
+      kind: "choice",
       q: String.raw`가로축($x$축)을 거울로 삼는 반사의 행렬은?`,
-      hints: [String.raw`$\mathbf{e}_1$은 거울 위에 있다. $\mathbf{e}_2$는 거울에 비치면 어디로 가는가? 두 상을 차례로 세로로 적어라.`],
-      choices: [String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$`],
+      hints: [
+        String.raw`$\mathbf{e}_1$은 거울 위에 있다. $\mathbf{e}_2$는 거울에 비치면 어디로 가는가? 두 상을 차례로 세로로 적어라.`,
+      ],
+      choices: [
+        String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & -1 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} -1 & 0 \\ 0 & 1 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 0 & 1 \\ 1 & 0 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 1 & 0 \\ 0 & 0 \end{bmatrix}$`,
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{e}_1$은 제자리 $(1, 0)$, $\mathbf{e}_2$는 아래로 뒤집혀 $(0, -1)$이다.`,
@@ -30,17 +59,20 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-proj',
-      kind: 'point',
+      id: "p-proj",
+      kind: "point",
       q: String.raw`대각선 $y = x$ 위로 **수직으로** 눌러 내리는 사영은 $\mathbf{e}_1$을 어디로 보낼까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`$\mathbf{e}_1$의 끝 $(1, 0)$에서 대각선으로 수직인 선을 그어 보라. 그 선이 대각선과 만나는 점이 상이다.`,
         String.raw`원점, $(1, 0)$, 그리고 그 만나는 점은 직각이등변삼각형을 이룬다(대각선이 가로축과 45°를 이루므로). 만나는 점은 대각선 위에서 $(a, a)$ 꼴이다.`,
       ],
-      A: [[0.5, 0.5], [0.5, 0.5]],
+      A: [
+        [0.5, 0.5],
+        [0.5, 0.5],
+      ],
       x: [1, 0],
-      target: 'Ax',
-      show: ['x'],
+      target: "Ax",
+      show: ["x"],
       reveal: String.raw`정답은 $(0.5, 0.5)$다. 같은 이유로 $\mathbf{e}_2$도 $(0.5, 0.5)$로 간다. 그래서 이 사영의 행렬은 $\begin{bmatrix} 0.5 & 0.5 \\ 0.5 & 0.5 \end{bmatrix}$이고, 두 열이 같다. 두 기저 벡터가 같은 곳으로 가므로 평면 전체가 대각선 하나로 납작해진다.`,
     },
   ],

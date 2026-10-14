@@ -1,31 +1,108 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'ax.arith',
-  kind: 'ax',
-  title: '수의 규칙',
-  status: 'written',
+  id: "ax.arith",
+  kind: "ax",
+  title: "수의 규칙",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.eq-reflexive', ko: '반사율', en: 'reflexive property', gloss: '등호의 규칙. 어떤 수든 자기 자신과 같다: a = a.' },
-      { id: 't.eq-symmetric', ko: '대칭률', en: 'symmetric property', gloss: '등호의 규칙. a = b이면 b = a다. 등식의 양쪽을 바꿔 적어도 된다.' },
-      { id: 't.eq-transitive', ko: '추이율', en: 'transitive property', gloss: '등호의 규칙. a = b이고 b = c이면 a = c다. 등식 줄의 처음과 끝이 같은 이유.' },
-      { id: 't.substitution', ko: '대입', en: 'substitution', gloss: '등호의 규칙. a = b라는 것을 알면, 이미 참이라고 아는 문장에 적힌 a를 b로 고쳐 써도(그 가운데 몇 개만이든 모두든) 고쳐 쓴 문장 역시 참이다. 등식의 양쪽에 같은 수를 더하거나 곱해도 되는 근거.' },
-      { id: 't.commutative', ko: '교환법칙', en: 'commutative law', gloss: '순서를 바꿔도 결과가 같다: a + b = b + a, ab = ba.' },
-      { id: 't.associative', ko: '결합법칙', en: 'associative law', gloss: '묶는 방법을 바꿔도 결과가 같다: (a + b) + c = a + (b + c), (ab)c = a(bc).' },
-      { id: 't.distributive', ko: '분배법칙', en: 'distributive law', gloss: '곱셈이 덧셈 위로 나뉘어 들어간다: a(b + c) = ab + ac. 곱하는 수가 오른쪽에 있는 꼴 (b + c)a = ba + ca는 곱셈의 교환법칙과 함께 쓰면 나온다.' },
-      { id: 't.additive-inverse', ko: '덧셈 역원', en: 'additive inverse', gloss: '더해서 0이 되는 수. a의 덧셈 역원을 −a로 적는다. 공리는 있다고만 말하고, 수마다 하나뿐이라는 것은 0장에서 증명한다.' },
-      { id: 't.reciprocal', ko: '역수', en: 'reciprocal', gloss: '곱해서 1이 되는 수(곱셈 역원). 0이 아닌 a의 역수를 1/a로 적는다. 0에는 역수가 없다.' },
-      { id: 't.positive', ko: '양수', en: 'positive number', everyday: true, gloss: '0보다 큰 수. 모든 수는 양수, 0, 음수 가운데 꼭 하나다. 양수끼리 더하거나 곱해도 양수다.' },
-      { id: 't.negative', ko: '음수', en: 'negative number', everyday: true, gloss: '덧셈 역원이 양수인 수. 곧 0보다 작은 수.' },
-      { id: 't.sqrt', ko: '제곱근', en: 'square root', gloss: '0 이상인 수 a에 대해, 제곱하면 a가 되는 0 이상의 수. √a로 적는다.' },
-      { id: 't.convention', ko: '규약', en: 'convention', gloss: '여러 가지로 적을 수 있는 것 가운데 하나를 골라 정한 표기 방법. 규약을 바꿔도 수학의 내용은 같다.' },
+      {
+        id: "t.eq-reflexive",
+        ko: "반사율",
+        en: "reflexive property",
+        gloss: "등호의 규칙. 어떤 수든 자기 자신과 같다: a = a.",
+      },
+      {
+        id: "t.eq-symmetric",
+        ko: "대칭률",
+        en: "symmetric property",
+        gloss:
+          "등호의 규칙. a = b이면 b = a다. 등식의 양쪽을 바꿔 적어도 된다.",
+      },
+      {
+        id: "t.eq-transitive",
+        ko: "추이율",
+        en: "transitive property",
+        gloss:
+          "등호의 규칙. a = b이고 b = c이면 a = c다. 등식 줄의 처음과 끝이 같은 이유.",
+      },
+      {
+        id: "t.substitution",
+        ko: "대입",
+        en: "substitution",
+        gloss:
+          "등호의 규칙. a = b라는 것을 알면, 이미 참이라고 아는 문장에 적힌 a를 b로 고쳐 써도(그 가운데 몇 개만이든 모두든) 고쳐 쓴 문장 역시 참이다. 등식의 양쪽에 같은 수를 더하거나 곱해도 되는 근거.",
+      },
+      {
+        id: "t.commutative",
+        ko: "교환법칙",
+        en: "commutative law",
+        gloss: "순서를 바꿔도 결과가 같다: a + b = b + a, ab = ba.",
+      },
+      {
+        id: "t.associative",
+        ko: "결합법칙",
+        en: "associative law",
+        gloss:
+          "묶는 방법을 바꿔도 결과가 같다: (a + b) + c = a + (b + c), (ab)c = a(bc).",
+      },
+      {
+        id: "t.distributive",
+        ko: "분배법칙",
+        en: "distributive law",
+        gloss:
+          "곱셈이 덧셈 위로 나뉘어 들어간다: a(b + c) = ab + ac. 곱하는 수가 오른쪽에 있는 꼴 (b + c)a = ba + ca는 곱셈의 교환법칙과 함께 쓰면 나온다.",
+      },
+      {
+        id: "t.additive-inverse",
+        ko: "덧셈 역원",
+        en: "additive inverse",
+        gloss:
+          "더해서 0이 되는 수. a의 덧셈 역원을 −a로 적는다. 공리는 있다고만 말하고, 수마다 하나뿐이라는 것은 0장에서 증명한다.",
+      },
+      {
+        id: "t.reciprocal",
+        ko: "역수",
+        en: "reciprocal",
+        gloss:
+          "곱해서 1이 되는 수(곱셈 역원). 0이 아닌 a의 역수를 1/a로 적는다. 0에는 역수가 없다.",
+      },
+      {
+        id: "t.positive",
+        ko: "양수",
+        en: "positive number",
+        everyday: true,
+        gloss:
+          "0보다 큰 수. 모든 수는 양수, 0, 음수 가운데 꼭 하나다. 양수끼리 더하거나 곱해도 양수다.",
+      },
+      {
+        id: "t.negative",
+        ko: "음수",
+        en: "negative number",
+        everyday: true,
+        gloss: "덧셈 역원이 양수인 수. 곧 0보다 작은 수.",
+      },
+      {
+        id: "t.sqrt",
+        ko: "제곱근",
+        en: "square root",
+        gloss:
+          "0 이상인 수 a에 대해, 제곱하면 a가 되는 0 이상의 수. √a로 적는다.",
+      },
+      {
+        id: "t.convention",
+        ko: "규약",
+        en: "convention",
+        gloss:
+          "여러 가지로 적을 수 있는 것 가운데 하나를 골라 정한 표기 방법. 규약을 바꿔도 수학의 내용은 같다.",
+      },
     ],
   },
   predicts: [
     {
-      id: 'p-rule',
-      kind: 'choice',
+      id: "p-rule",
+      kind: "choice",
       q: String.raw`다음 넷 가운데 셋은 수를 **적는 방법**만 바꾸고, 하나는 **수학 자체**를 바꾼다. 수학 자체를 바꾸는 것은?`,
       hints: [
         String.raw`적는 방법만 바뀌었는지 가려내려면, 바꾸기 전에 참이던 식을 바꾼 뒤의 방식으로 언제나 옮겨 적을 수 있는지 보라. 옮겨 적을 수 있으면 같은 수학이다.`,
@@ -46,7 +123,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: 'a − 0 = a일까? 곧 "a > 0"과 "a는 양수다"는 같은 뜻인가?', answeredBy: 'prop.arith-first' }],
+  openWhys: [
+    {
+      q: 'a − 0 = a일까? 곧 "a > 0"과 "a는 양수다"는 같은 뜻인가?',
+      answeredBy: "prop.arith-first",
+    },
+  ],
   body: String.raw`$3 \times 4 = 4 \times 3$은 왜 맞을까? 이 교재는 이런 질문을 "당연하다"며 넘기지 않는다. 그 대신 **무엇을 받아들이고 출발하는지**를 처음에 분명히 적어 둔다.
 
 이 노드는 이 교재의 첫 [공리](t:t.axiom) 노드다. 수의 규칙 아홉 줄과, 등호를 쓰는 규칙 네 가지를 적는다.
@@ -129,9 +211,9 @@ $a$와 $b$는 아무 수이므로, 식으로 적힌 수에도 이 규칙을 쓴�
       q: String.raw`$a > b$이고 $b > c$이면 $a > c$일까? 그렇다면 무엇으로 보일 수 있는가?`,
       choices: [
         String.raw`그렇다. $a - c = (a - b) + (b - c)$이고, 양수와 양수를 더하면 양수다([](ref:pos-closed))`,
-        '그렇다. 크기 비교의 이 성질은 공리 목록에 적혀 있다',
-        '알 수 없다. 공리에는 크기의 차례에 관한 규칙이 없다',
-        '그렇다. 수를 직선 위에 늘어놓고 보면 당연하다',
+        "그렇다. 크기 비교의 이 성질은 공리 목록에 적혀 있다",
+        "알 수 없다. 공리에는 크기의 차례에 관한 규칙이 없다",
+        "그렇다. 수를 직선 위에 늘어놓고 보면 당연하다",
       ],
       answer: 0,
       explain: String.raw`$a > b$는 $a - b$가 양수라는 뜻이고, $b > c$는 $b - c$가 양수라는 뜻이다. 두 양수를 더하면 $a - c$가 된다.

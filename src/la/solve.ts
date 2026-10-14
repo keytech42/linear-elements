@@ -1,23 +1,23 @@
 // 연립방정식과 부분공간 (5장, 6장, 7장).
 // 핵심은 가우스 소거 하나다. 행 연산 하나 = 기본 행렬 하나를 왼쪽에 곱하는 일(prop.elimination).
 // 랭크, 영공간의 기저, 열공간의 기저, 해의 분류가 모두 이 소거의 결과(피벗)에서 나온다(prop.rank-nullity).
-import type { Vec } from './vec';
-import { dot, scale, sub, norm } from './vec';
-import { shape, col, identity, matVec, type Mat } from './mat';
+import type { Vec } from "./vec";
+import { dot, scale, sub, norm } from "./vec";
+import { shape, col, identity, matVec, type Mat } from "./mat";
 
 const TOL = 1e-10;
 
 /** 행 연산 하나. 기본 행렬 E를 왼쪽에 곱하면 같은 일이 일어난다. (번호는 0부터) */
 export type RowOp =
-  | { kind: 'add'; target: number; source: number; c: number } // target행 += c × source행 (전단)
-  | { kind: 'swap'; i: number; j: number } // 두 행 맞바꾸기
-  | { kind: 'scale'; i: number; c: number }; // i행 × c (c ≠ 0)
+  | { kind: "add"; target: number; source: number; c: number } // target행 += c × source행 (전단)
+  | { kind: "swap"; i: number; j: number } // 두 행 맞바꾸기
+  | { kind: "scale"; i: number; c: number }; // i행 × c (c ≠ 0)
 
 /** prop.elimination — 행 연산 하나를 행렬 하나로: 항등 행렬에 같은 행 연산을 한 것. */
 export function elementary(m: number, op: RowOp): Mat {
   const E = identity(m);
-  if (op.kind === 'add') E[op.target][op.source] = op.c;
-  else if (op.kind === 'swap') {
+  if (op.kind === "add") E[op.target][op.source] = op.c;
+  else if (op.kind === "swap") {
     E[op.i][op.i] = 0;
     E[op.j][op.j] = 0;
     E[op.i][op.j] = 1;
@@ -29,8 +29,9 @@ export function elementary(m: number, op: RowOp): Mat {
 /** 행 연산을 행렬(과 오른쪽 벡터)에 직접 한다. 결과는 elementary(m, op)를 왼쪽에 곱한 것과 같다(테스트가 확인). */
 export function applyRowOp(A: Mat, op: RowOp): Mat {
   const R = A.map((r) => r.slice());
-  if (op.kind === 'add') R[op.target] = R[op.target].map((v, k) => v + op.c * A[op.source][k]);
-  else if (op.kind === 'swap') [R[op.i], R[op.j]] = [R[op.j], R[op.i]];
+  if (op.kind === "add")
+    R[op.target] = R[op.target].map((v, k) => v + op.c * A[op.source][k]);
+  else if (op.kind === "swap") [R[op.i], R[op.j]] = [R[op.j], R[op.i]];
   else R[op.i] = R[op.i].map((v) => op.c * v);
   return R;
 }
@@ -75,23 +76,31 @@ export function eliminationSteps(A0: Mat, b0?: Vec, tol = TOL): ElimStep[] {
         break;
       }
     if (p < 0) continue; // 이 열에는 피벗이 없다(자유 열)
-    if (p !== r) doOp({ kind: 'swap', i: r, j: p });
-    for (let i = r + 1; i < m; i++) if (Math.abs(A[i][j]) > tol) doOp({ kind: 'add', target: i, source: r, c: -A[i][j] / A[r][j] });
+    if (p !== r) doOp({ kind: "swap", i: r, j: p });
+    for (let i = r + 1; i < m; i++)
+      if (Math.abs(A[i][j]) > tol)
+        doOp({ kind: "add", target: i, source: r, c: -A[i][j] / A[r][j] });
     pivots.push([r, j]);
     r++;
   }
   for (let k = pivots.length - 1; k >= 0; k--) {
     const [pr, pc] = pivots[k];
-    for (let i = 0; i < pr; i++) if (Math.abs(A[i][pc]) > tol) doOp({ kind: 'add', target: i, source: pr, c: -A[i][pc] / A[pr][pc] });
+    for (let i = 0; i < pr; i++)
+      if (Math.abs(A[i][pc]) > tol)
+        doOp({ kind: "add", target: i, source: pr, c: -A[i][pc] / A[pr][pc] });
   }
-  for (const [pr, pc] of pivots) if (Math.abs(A[pr][pc] - 1) > tol) doOp({ kind: 'scale', i: pr, c: 1 / A[pr][pc] });
+  for (const [pr, pc] of pivots)
+    if (Math.abs(A[pr][pc] - 1) > tol)
+      doOp({ kind: "scale", i: pr, c: 1 / A[pr][pc] });
   return steps;
 }
 
 /** prop.elimination — 기약 계단꼴 R과 피벗 열의 번호들. */
 export function rref(A: Mat, tol = TOL): { R: Mat; pivots: number[] } {
   const steps = eliminationSteps(A, undefined, tol);
-  const R = steps.length ? steps[steps.length - 1].A : A.map((r) => r.map((v) => (Math.abs(v) < tol ? 0 : v)));
+  const R = steps.length
+    ? steps[steps.length - 1].A
+    : A.map((r) => r.map((v) => (Math.abs(v) < tol ? 0 : v)));
   const pivots: number[] = [];
   for (const row of R) {
     const j = row.findIndex((v) => Math.abs(v) > tol);
@@ -133,21 +142,21 @@ export function rowBasis(A: Mat, tol = TOL): Vec[] {
 }
 
 export type Solution =
-  | { kind: 'unique'; x: Vec }
-  | { kind: 'none' }
+  | { kind: "unique"; x: Vec }
+  | { kind: "none" }
   /** 해가 무수히 많다: x + (dirs의 선형 결합) 전부 */
-  | { kind: 'infinite'; x: Vec; dirs: Vec[] };
+  | { kind: "infinite"; x: Vec; dirs: Vec[] };
 
 /** def.linear-system — Ax = b를 소거로 풀고, 해가 하나 / 없음 / 무수히 많음으로 나눈다. */
 export function solve(A: Mat, b: Vec, tol = 1e-9): Solution {
   const [, n] = shape(A);
   const aug = A.map((r, i) => [...r, b[i]]);
   const { R, pivots } = rref(aug, tol);
-  if (pivots.includes(n)) return { kind: 'none' }; // 0 = (0이 아닌 수) 꼴의 행이 생겼다
+  if (pivots.includes(n)) return { kind: "none" }; // 0 = (0이 아닌 수) 꼴의 행이 생겼다
   const x: Vec = new Array(n).fill(0);
   pivots.forEach((pc, i) => (x[pc] = R[i][n]));
   const dirs = nullBasis(A, tol);
-  return dirs.length ? { kind: 'infinite', x, dirs } : { kind: 'unique', x };
+  return dirs.length ? { kind: "infinite", x, dirs } : { kind: "unique", x };
 }
 
 /** n×n 역행렬을 가우스–조르당 소거로 구한다: [A | I] → [I | A⁻¹]. 가역이 아니면 null. */
@@ -163,7 +172,7 @@ export function inverse(A: Mat, tol = 1e-10): Mat | null {
 /** def.change-of-basis — 표준 좌표 v를 새 기저(P의 열)에 대한 좌표 c로: Pc = v 를 푼다. 곧 c = P⁻¹v. */
 export function coords(P: Mat, v: Vec): Vec {
   const s = solve(P, v);
-  if (s.kind !== 'unique') throw new Error('P의 열이 기저가 아니다');
+  if (s.kind !== "unique") throw new Error("P의 열이 기저가 아니다");
   return s.x;
 }
 

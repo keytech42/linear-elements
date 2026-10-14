@@ -1,21 +1,21 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.coords-unique',
-  kind: 'prop',
-  title: '기저에 대한 좌표는 하나뿐이다',
-  status: 'written',
-  requires: ['def.basis'],
+  id: "prop.coords-unique",
+  kind: "prop",
+  title: "기저에 대한 좌표는 하나뿐이다",
+  status: "written",
+  requires: ["def.basis"],
   predicts: [
     {
-      id: 'p-many',
-      kind: 'choice',
+      id: "p-many",
+      kind: "choice",
       q: String.raw`기저가 아닌 평행한 두 벡터 $(1, 1)$, $(2, 2)$로 점 $(3, 3)$에 "좌표"를 붙이려 한다. $c_1(1, 1) + c_2(2, 2) = (3, 3)$이 되는 $(c_1, c_2)$는 몇 개일까?`,
       hints: [
         String.raw`$c_1(1, 1) + c_2(2, 2) = (c_1 + 2c_2)(1, 1)$이다. 그러므로 조건은 $c_1 + 2c_2 = 3$ 하나뿐이다.`,
         String.raw`$c_2 = 0$일 때와 $c_2 = 1$일 때 $c_1$을 각각 구해 보라.`,
       ],
-      choices: ['끝없이 많다', '하나뿐이다', '두 개', '하나도 없다'],
+      choices: ["끝없이 많다", "하나뿐이다", "두 개", "하나도 없다"],
       answer: 0,
       why: [
         String.raw`$c_1 + 2c_2 = 3$을 만족하는 쌍은 $(3, 0)$, $(1, 1)$, $(-1, 2)$, $(0, 1.5)$ … 끝없이 많다.`,
@@ -59,13 +59,23 @@ $$(c_1 - c_1')\,\mathbf{u} + (c_2 - c_2')\,\mathbf{w} = \mathbf{0}$$
   checks: [
     {
       q: String.raw`$\mathbf{u}$, $\mathbf{w}$가 기저이고 $3\mathbf{u} - \mathbf{w} = c_1\mathbf{u} + c_2\mathbf{w}$이다. $(c_1, c_2)$는?`,
-      choices: [String.raw`$(3, -1)$`, String.raw`정할 수 없다. $\mathbf{u}$, $\mathbf{w}$의 성분을 알아야 한다`, String.raw`$(3, 1)$`, '여러 가지가 가능하다'],
+      choices: [
+        String.raw`$(3, -1)$`,
+        String.raw`정할 수 없다. $\mathbf{u}$, $\mathbf{w}$의 성분을 알아야 한다`,
+        String.raw`$(3, 1)$`,
+        "여러 가지가 가능하다",
+      ],
       answer: 0,
       explain: String.raw`좌표가 하나뿐이므로, 같은 벡터를 $3\mathbf{u} + (-1)\mathbf{w}$로 이미 적었다면 그것이 유일한 좌표다. 성분을 몰라도 된다. 이 명제가 쓸모 있는 이유가 바로 이것이다. 기저에 대한 계수를 **비교**하는 것만으로 두 벡터가 같은지 가려낼 수 있다.`,
     },
     {
-      q: '좌표가 하나뿐임을 보장하는 기저의 성질은?',
-      choices: ['선형 독립', '공간 전체를 스팬함', '기저 벡터끼리 직각을 이룸', '기저 벡터마다 길이가 1임'],
+      q: "좌표가 하나뿐임을 보장하는 기저의 성질은?",
+      choices: [
+        "선형 독립",
+        "공간 전체를 스팬함",
+        "기저 벡터끼리 직각을 이룸",
+        "기저 벡터마다 길이가 1임",
+      ],
       answer: 0,
       explain: String.raw`스팬은 좌표가 **있다**는 것(존재)을 보장하고, 선형 독립은 좌표가 **하나뿐**이라는 것(유일성)을 보장한다. 둘을 헷갈리기 쉽다. 직각이나 길이 1은 필요 없다. 위 그림의 비스듬한 기저 $(2, 1)$, $(-1, 1)$에서도 좌표는 하나뿐이었다.`,
     },

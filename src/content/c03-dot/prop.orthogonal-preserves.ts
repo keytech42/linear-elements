@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.orthogonal-preserves',
-  kind: 'prop',
-  title: '직교 행렬은 길이와 각도를 지킨다',
-  status: 'written',
-  requires: ['def.orthogonal-matrix', 'prop.transpose-dot'],
+  id: "prop.orthogonal-preserves",
+  kind: "prop",
+  title: "직교 행렬은 길이와 각도를 지킨다",
+  status: "written",
+  requires: ["def.orthogonal-matrix", "prop.transpose-dot"],
   predicts: [
     {
-      id: 'p-angle',
-      kind: 'choice',
-      q: '모든 벡터의 길이를 지키는 선형 변환은, 두 벡터 사이의 각도도 반드시 지킬까?',
+      id: "p-angle",
+      kind: "choice",
+      q: "모든 벡터의 길이를 지키는 선형 변환은, 두 벡터 사이의 각도도 반드시 지킬까?",
       hints: [
         String.raw`[내적 노드](n:def.dot)의 식 $\|\mathbf{u} + \mathbf{w}\|^2 = \|\mathbf{u}\|^2 + 2\,\mathbf{u}\cdot\mathbf{w} + \|\mathbf{w}\|^2$을 $\mathbf{u}\cdot\mathbf{w}$에 대해 풀어 보라. 내적이 길이들만으로 적힌다.`,
         String.raw`변환이 $\mathbf{u}$, $\mathbf{w}$, $\mathbf{u} + \mathbf{w}$의 길이를 모두 지킨다면, 그 식의 오른쪽도 그대로다.`,
       ],
-      choices: ['그렇다. 내적을 길이만으로 쓸 수 있으므로', '아니다. 길이는 그대로이고 각만 바꾸는 변환이 있다', '길이와 각도는 서로 관계가 없다', '회전일 때만 그렇다'],
+      choices: [
+        "그렇다. 내적을 길이만으로 쓸 수 있으므로",
+        "아니다. 길이는 그대로이고 각만 바꾸는 변환이 있다",
+        "길이와 각도는 서로 관계가 없다",
+        "회전일 때만 그렇다",
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{u}\cdot\mathbf{w} = \tfrac{1}{2}(\|\mathbf{u} + \mathbf{w}\|^2 - \|\mathbf{u}\|^2 - \|\mathbf{w}\|^2)$. 길이가 모두 그대로이면 내적도 그대로이고, 그래서 각도도 그대로다. 그리고 선형이므로 $T(\mathbf{u} + \mathbf{w}) = T(\mathbf{u}) + T(\mathbf{w})$의 길이도 지켜진다.`,
@@ -25,14 +30,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-all',
-      kind: 'choice',
-      q: '평면에서 길이를 지키는 선형 변환을 모두 고르면?',
+      id: "p-all",
+      kind: "choice",
+      q: "평면에서 길이를 지키는 선형 변환을 모두 고르면?",
       hints: [
         String.raw`첫째 열(e₁의 상)은 길이가 1이므로 단위원 위의 점 $(\cos\theta, \sin\theta)$다.`,
         String.raw`둘째 열은 길이가 1이고 첫째 열과 직교해야 한다. [그런 벡터는 두 개뿐이다](n:def.orthogonal): $(-\sin\theta, \cos\theta)$와 $(\sin\theta, -\cos\theta)$.`,
       ],
-      choices: ['회전과 반사뿐', '회전뿐', '회전, 반사, 전단', '회전, 반사, 그리고 크기가 1인 늘이기'],
+      choices: [
+        "회전과 반사뿐",
+        "회전뿐",
+        "회전, 반사, 전단",
+        "회전, 반사, 그리고 크기가 1인 늘이기",
+      ],
       answer: 0,
       why: [
         String.raw`둘째 열이 $(-\sin\theta, \cos\theta)$이면 회전 $R_\theta$, $(\sin\theta, -\cos\theta)$이면 반사다. 다른 가능성은 없다.`,

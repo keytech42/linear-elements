@@ -1,27 +1,38 @@
-import { describe, it, expect } from 'vitest';
-import { distance, circlePoint, angleOf, spanDim, cross2, reachCoeffs, mix2, displacement, chain, hypotenuse } from './ground';
+import { describe, it, expect } from "vitest";
+import {
+  distance,
+  circlePoint,
+  angleOf,
+  spanDim,
+  cross2,
+  reachCoeffs,
+  mix2,
+  displacement,
+  chain,
+  hypotenuse,
+} from "./ground";
 
-describe('0장·1장 도구', () => {
-  it('수직선: 변위는 출발점과 무관하고, 이어 붙이기는 순서와 무관하다', () => {
+describe("0장·1장 도구", () => {
+  it("수직선: 변위는 출발점과 무관하고, 이어 붙이기는 순서와 무관하다", () => {
     expect(displacement(3, -1)).toBe(-4);
     expect(chain(-6, [displacement(3, -1)])).toBe(-10);
     expect(chain(-2, [5, -7])).toBe(-4);
     expect(chain(1, [5, -8])).toBe(chain(1, [-8, 5]));
   });
-  it('빗변', () => {
+  it("빗변", () => {
     expect(hypotenuse(3, 4)).toBe(5);
     expect(hypotenuse(5, 12)).toBe(13);
     expect(hypotenuse(1, 1)).toBeCloseTo(Math.SQRT2);
     expect(hypotenuse(-3, 0)).toBe(3);
   });
-  it('거리: 3-4-5 삼각형', () => {
+  it("거리: 3-4-5 삼각형", () => {
     expect(distance([1, 1], [4, 5])).toBeCloseTo(5);
     expect(distance([-2, 3], [1, -1])).toBeCloseTo(5);
     expect(distance([0, 0], [1, 1])).toBeCloseTo(Math.SQRT2);
     expect(distance([-1, 2], [2, -2])).toBe(5);
     expect(distance([2, 5], [2, -1])).toBe(6);
   });
-  it('단위원 위의 점과 각', () => {
+  it("단위원 위의 점과 각", () => {
     const p = circlePoint(Math.PI / 2);
     expect(p[0]).toBeCloseTo(0);
     expect(p[1]).toBeCloseTo(1);
@@ -34,16 +45,39 @@ describe('0장·1장 도구', () => {
     expect(q[1]).toBeCloseTo(0.9093, 4);
     expect(circlePoint(Math.PI / 4)[0]).toBeCloseTo(Math.sqrt(0.5));
     // 단위원 위의 점은 원점에서 거리 1 (prop.cos-sin-identity)
-    for (const t of [0.3, 1, 2.5, 4, 5.9]) expect(distance([0, 0], circlePoint(t))).toBeCloseTo(1);
+    for (const t of [0.3, 1, 2.5, 4, 5.9])
+      expect(distance([0, 0], circlePoint(t))).toBeCloseTo(1);
   });
-  it('스팬의 차원', () => {
+  it("스팬의 차원", () => {
     expect(spanDim([[0, 0]])).toBe(0);
-    expect(spanDim([[1, 2], [2, 4]])).toBe(1);
-    expect(spanDim([[2, 1], [-1, 1]])).toBe(2);
-    expect(spanDim([[1, 0, 0], [0, 1, 0], [1, 1, 0]])).toBe(2);
-    expect(spanDim([[1, 0, 0], [0, 1, 0], [0, 0, 1]])).toBe(3);
+    expect(
+      spanDim([
+        [1, 2],
+        [2, 4],
+      ]),
+    ).toBe(1);
+    expect(
+      spanDim([
+        [2, 1],
+        [-1, 1],
+      ]),
+    ).toBe(2);
+    expect(
+      spanDim([
+        [1, 0, 0],
+        [0, 1, 0],
+        [1, 1, 0],
+      ]),
+    ).toBe(2);
+    expect(
+      spanDim([
+        [1, 0, 0],
+        [0, 1, 0],
+        [0, 0, 1],
+      ]),
+    ).toBe(3);
   });
-  it('평행함 판정과 계수 공식', () => {
+  it("평행함 판정과 계수 공식", () => {
     expect(cross2([1, 2], [2, 4])).toBe(0);
     expect(cross2([2, 1], [-1, 1])).toBe(3);
     expect(reachCoeffs([2, 1], [-1, 1], [1, 2])).toEqual([1, 1]);

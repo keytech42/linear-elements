@@ -1,33 +1,37 @@
 // 떠 있는 미리보기: 용어에 마우스를 올리면 정의 한 줄, 왜? 칩에 올리면 답이 있는 노드의 첫 문단,
 // 이름표 참조(공리 5, 명제 2 …)에 올리면 그 공리나 명제의 글.
 // 페이지를 떠나지 않고 답을 엿볼 수 있게 하는 것이 목적이다(읽던 흐름을 끊지 않기).
-import { V, NODE_BY_ID, BOOK_OF } from './data';
-import { KIND_LABEL } from '../content/schema';
-import { renderInlines, renderBlocks, firstParagraph } from './render';
-import { SyncBus } from '../sync/bus';
-import { progress } from './state';
+import { V, NODE_BY_ID, BOOK_OF } from "./data";
+import { KIND_LABEL } from "../content/schema";
+import { renderInlines, renderBlocks, firstParagraph } from "./render";
+import { SyncBus } from "../sync/bus";
+import { progress } from "./state";
 
 let pop: HTMLDivElement | null = null;
 let timer = 0;
 let current: HTMLElement | null = null;
 
 export function installPopovers(root: HTMLElement) {
-  pop = document.createElement('div');
-  pop.className = 'popover';
+  pop = document.createElement("div");
+  pop.className = "popover";
   document.body.appendChild(pop);
-  pop.addEventListener('pointerenter', () => clearTimeout(timer));
-  pop.addEventListener('pointerleave', hide);
+  pop.addEventListener("pointerenter", () => clearTimeout(timer));
+  pop.addEventListener("pointerleave", hide);
 
-  root.addEventListener('pointerover', (e) => {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node');
+  root.addEventListener("pointerover", (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>(
+      "[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node",
+    );
     if (!el || el === current) return;
     clearTimeout(timer);
     timer = window.setTimeout(() => show(el), 220);
   });
-  root.addEventListener('pointerout', (e) => {
+  root.addEventListener("pointerout", (e) => {
     const to = e.relatedTarget as Node | null;
     if (to && pop!.contains(to)) return;
-    const el = (e.target as HTMLElement).closest('[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node');
+    const el = (e.target as HTMLElement).closest(
+      "[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node",
+    );
     if (el) {
       clearTimeout(timer);
       timer = window.setTimeout(hide, 180);
@@ -37,14 +41,14 @@ export function installPopovers(root: HTMLElement) {
 
 function hide() {
   if (!pop) return;
-  pop.classList.remove('open');
+  pop.classList.remove("open");
   current = null;
 }
 
 function show(el: HTMLElement) {
   if (!pop) return;
   current = el;
-  pop.innerHTML = '';
+  pop.innerHTML = "";
   const termId = el.dataset.term;
   const to = el.dataset.to ?? el.dataset.node;
   if (termId) {
@@ -52,66 +56,80 @@ function show(el: HTMLElement) {
     if (!home) return;
     const d = home.decl;
     const node = NODE_BY_ID.get(home.node)!;
-    pop.innerHTML = `<div class="pop-kicker">용어 · ${d.en ?? ''}</div><div class="pop-title">${d.ko}</div><p>${escape(d.gloss)}</p>
-      <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}장 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? ' ✓' : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
+    pop.innerHTML = `<div class="pop-kicker">용어 · ${d.en ?? ""}</div><div class="pop-title">${d.ko}</div><p>${escape(d.gloss)}</p>
+      <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}장 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? " ✓" : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
   } else if (el.dataset.sig) {
     // 의의 칩: 지금 읽는 노드의 significance[키]
-    const node = location.hash.match(/^#\/n\/([^?]+)/)?.[1] ?? '';
+    const node = location.hash.match(/^#\/n\/([^?]+)/)?.[1] ?? "";
     const blocks = V.parsed.get(node)?.sig.get(el.dataset.sig);
     if (!blocks) return;
-    const kick = document.createElement('div');
-    kick.className = 'pop-kicker';
-    kick.textContent = '의의 · 왜 알아야 하나';
-    const body = document.createElement('div');
-    body.appendChild(renderBlocks(blocks, { bus: new SyncBus(), cleanups: [], noScenes: true, node }));
-    const foot = document.createElement('div');
-    foot.className = 'pop-foot';
-    foot.textContent = '누르면 이 문단 아래에 펼쳐 둡니다. 한 번 더 누르면 접습니다.';
+    const kick = document.createElement("div");
+    kick.className = "pop-kicker";
+    kick.textContent = "의의 · 왜 알아야 하나";
+    const body = document.createElement("div");
+    body.appendChild(
+      renderBlocks(blocks, {
+        bus: new SyncBus(),
+        cleanups: [],
+        noScenes: true,
+        node,
+      }),
+    );
+    const foot = document.createElement("div");
+    foot.className = "pop-foot";
+    foot.textContent =
+      "누르면 이 문단 아래에 펼쳐 둡니다. 한 번 더 누르면 접습니다.";
     pop.append(kick, body, foot);
   } else if (el.dataset.ref) {
     const l = V.labels.get(el.dataset.ref);
     if (!l) return;
     const node = NODE_BY_ID.get(l.node)!;
-    const kick = document.createElement('div');
-    kick.className = 'pop-kicker';
+    const kick = document.createElement("div");
+    kick.className = "pop-kicker";
     kick.textContent = `${BOOK_OF.get(l.node)!.num}장 · ${KIND_LABEL[node.kind]} — ${node.title}`;
-    const title = document.createElement('div');
-    title.className = 'pop-title';
+    const title = document.createElement("div");
+    title.className = "pop-title";
     title.textContent = l.name;
-    const p = document.createElement('p');
+    const p = document.createElement("p");
     p.appendChild(renderInlines(l.text));
-    const foot = document.createElement('div');
-    foot.className = 'pop-foot';
+    const foot = document.createElement("div");
+    foot.className = "pop-foot";
     foot.textContent = el.dataset.ahead
       ? '뒤에서 증명하는 자리입니다. 누르면 그 증명으로 건너뜁니다. 그 노드는 펼쳐 열리고 예측은 기록되지 않으며, "돌아가기"로 지금 자리에 돌아옵니다.'
-      : el.dataset.ref.startsWith(`${location.hash.match(/^#\/n\/([^?]+)/)?.[1]}#`)
-        ? '누르면 이 노드 안의 그 자리로 갑니다.'
+      : el.dataset.ref.startsWith(
+            `${location.hash.match(/^#\/n\/([^?]+)/)?.[1]}#`,
+          )
+        ? "누르면 이 노드 안의 그 자리로 갑니다."
         : '누르면 그 자리로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
     pop.append(kick, title, p, foot);
   } else if (to) {
     const node = NODE_BY_ID.get(to);
     if (!node) return;
-    const kick = document.createElement('div');
-    kick.className = 'pop-kicker';
-    kick.textContent = `${BOOK_OF.get(to)!.num}장 · ${KIND_LABEL[node.kind]}${node.status === 'stub' ? ' · 집필 예정' : ''}`;
-    const title = document.createElement('div');
-    title.className = 'pop-title';
+    const kick = document.createElement("div");
+    kick.className = "pop-kicker";
+    kick.textContent = `${BOOK_OF.get(to)!.num}장 · ${KIND_LABEL[node.kind]}${node.status === "stub" ? " · 집필 예정" : ""}`;
+    const title = document.createElement("div");
+    title.className = "pop-title";
     title.textContent = node.title;
-    const p = document.createElement('p');
+    const p = document.createElement("p");
     p.appendChild(renderInlines(firstParagraph(to)));
     pop.append(kick, title, p);
-    if (el.classList.contains('why')) {
-      const foot = document.createElement('div');
-      foot.className = 'pop-foot';
-      foot.textContent = '누르면 이 노드로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
+    if (el.classList.contains("why")) {
+      const foot = document.createElement("div");
+      foot.className = "pop-foot";
+      foot.textContent =
+        '누르면 이 노드로 갑니다. 다 읽은 뒤 "돌아가기"로 지금 자리에 돌아옵니다.';
       pop.appendChild(foot);
     }
   } else return;
   const r = el.getBoundingClientRect();
-  pop.classList.add('open');
+  pop.classList.add("open");
   const pw = Math.min(380, window.innerWidth - 24);
   pop.style.width = `${pw}px`;
-  const left = Math.min(window.innerWidth - pw - 12, Math.max(12, r.left + r.width / 2 - pw / 2));
+  const left = Math.min(
+    window.innerWidth - pw - 12,
+    Math.max(12, r.left + r.width / 2 - pw / 2),
+  );
   pop.style.left = `${left}px`;
   const below = r.bottom + 8;
   const ph = pop.offsetHeight;
@@ -119,5 +137,8 @@ function show(el: HTMLElement) {
 }
 
 function escape(s: string) {
-  return s.replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]!);
+  return s.replace(
+    /[&<>]/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]!,
+  );
 }

@@ -1,17 +1,22 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.image-lowrank',
-  kind: 'exp',
-  title: '그림 한 장을 랭크로 압축하기',
-  status: 'written',
-  requires: ['prop.eckart-young'],
+  id: "exp.image-lowrank",
+  kind: "exp",
+  title: "그림 한 장을 랭크로 압축하기",
+  status: "written",
+  requires: ["prop.eckart-young"],
   predicts: [
     {
-      id: 'p-plaid',
-      kind: 'choice',
-      q: '가로 줄무늬 그림 하나와 세로 줄무늬 그림 하나를 더해 만든 체크무늬(112×112)를 완벽하게 되살리려면 \'층\'이 몇 개 필요할까?',
-      choices: ['2개 이하', '줄무늬의 줄 수만큼', '112개 (그림의 한 변)', '근사만 할 수 있고 완벽하게 되살릴 수는 없다'],
+      id: "p-plaid",
+      kind: "choice",
+      q: "가로 줄무늬 그림 하나와 세로 줄무늬 그림 하나를 더해 만든 체크무늬(112×112)를 완벽하게 되살리려면 '층'이 몇 개 필요할까?",
+      choices: [
+        "2개 이하",
+        "줄무늬의 줄 수만큼",
+        "112개 (그림의 한 변)",
+        "근사만 할 수 있고 완벽하게 되살릴 수는 없다",
+      ],
       answer: 0,
       why: [
         String.raw`가로 줄무늬는 "세로로 변하는 패턴 × 가로로 모두 1"인 바깥곱이고, 세로 줄무늬는 그 반대다. 바깥곱 두 개의 합이므로 랭크가 2 이하다.`,

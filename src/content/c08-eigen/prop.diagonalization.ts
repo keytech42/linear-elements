@@ -1,27 +1,46 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.diagonalization',
-  kind: 'prop',
-  title: '고유기저에서는 늘이기뿐: A = PDP⁻¹',
-  status: 'written',
+  id: "prop.diagonalization",
+  kind: "prop",
+  title: "고유기저에서는 늘이기뿐: A = PDP⁻¹",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.diagonal', ko: '대각 행렬', en: 'diagonal matrix', gloss: '대각선 밖의 성분이 모두 0인 행렬. 축 방향으로 따로따로 늘이기만 한다.' },
-      { id: 't.diagonalize', ko: '대각화', en: 'diagonalization', gloss: '고유벡터들을 기저로 삼아 변환을 대각 행렬로 다시 적는 일: A = PDP⁻¹.' },
+      {
+        id: "t.diagonal",
+        ko: "대각 행렬",
+        en: "diagonal matrix",
+        gloss:
+          "대각선 밖의 성분이 모두 0인 행렬. 축 방향으로 따로따로 늘이기만 한다.",
+      },
+      {
+        id: "t.diagonalize",
+        ko: "대각화",
+        en: "diagonalization",
+        gloss:
+          "고유벡터들을 기저로 삼아 변환을 대각 행렬로 다시 적는 일: A = PDP⁻¹.",
+      },
     ],
-    symbols: [{ tex: 'D', meaning: '대각 행렬(대각화에서 고윳값을 대각에 놓은 것)' }],
+    symbols: [
+      { tex: "D", meaning: "대각 행렬(대각화에서 고윳값을 대각에 놓은 것)" },
+    ],
   },
-  requires: ['prop.char-poly', 'prop.similarity'],
+  requires: ["prop.char-poly", "prop.similarity"],
   predicts: [
     {
-      id: 'p-diag',
-      kind: 'choice',
+      id: "p-diag",
+      kind: "choice",
       q: String.raw`서로 다른 직선 위의 두 고유벡터 $\mathbf{v}_1, \mathbf{v}_2$(고윳값 $\lambda_1, \lambda_2$)를 새 기저로 삼아, 같은 변환을 그 기저의 좌표로 다시 적으면 어떤 행렬이 될까?`,
       hints: [
         String.raw`새 좌표 $(c_1, c_2)$는 벡터 $c_1\mathbf{v}_1 + c_2\mathbf{v}_2$를 뜻한다. 여기에 $A$를 곱하면 무엇이 되는지, 그리고 그 결과를 다시 새 좌표로 적으면 무엇인지 써 보라.`,
       ],
-      choices: [String.raw`대각선에 $\lambda_1, \lambda_2$가 놓이고 나머지는 0인 행렬`, String.raw`$A$와 똑같은 행렬`, '항등 행렬', '회전 행렬'],
+      choices: [
+        String.raw`대각선에 $\lambda_1, \lambda_2$가 놓이고 나머지는 0인 행렬`,
+        String.raw`$A$와 똑같은 행렬`,
+        "항등 행렬",
+        "회전 행렬",
+      ],
       answer: 0,
       why: [
         String.raw`새 좌표 $(c_1, c_2)$로 적힌 벡터 $c_1\mathbf{v}_1 + c_2\mathbf{v}_2$는 $c_1\lambda_1\mathbf{v}_1 + c_2\lambda_2\mathbf{v}_2$로 간다. 새 좌표로는 $(\lambda_1c_1, \lambda_2c_2)$, 곧 좌표마다 따로 늘이기만 한다.`,
@@ -31,10 +50,15 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-shear',
-      kind: 'choice',
+      id: "p-shear",
+      kind: "choice",
       q: String.raw`[전단](t:t.shear) $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$은 대각화될까?`,
-      choices: ['안 된다. 고유 방향이 하나뿐이다', '된다. 고윳값 1이 실수이므로', '된다. 모든 행렬은 대각화된다', '된다. 고윳값이 두 개이므로'],
+      choices: [
+        "안 된다. 고유 방향이 하나뿐이다",
+        "된다. 고윳값 1이 실수이므로",
+        "된다. 모든 행렬은 대각화된다",
+        "된다. 고윳값이 두 개이므로",
+      ],
       answer: 0,
       why: [
         String.raw`$A - I = \begin{bmatrix} 0 & 1 \\ 0 & 0 \end{bmatrix}$이 0으로 보내는 방향은 가로축 하나뿐이다. 기저를 이루려면 서로 다른 직선 위의 고유벡터가 둘 필요하다.`,
@@ -85,7 +109,7 @@ $A^2 = (PDP^{-1})(PDP^{-1}) = PD(P^{-1}P)DP^{-1} = PD^2P^{-1}$이다([결합법�
   checks: [
     {
       q: String.raw`$A = PDP^{-1}$이고 $D = \begin{bmatrix} 2 & 0 \\ 0 & 0.5 \end{bmatrix}$이다. $\det A$는?`,
-      choices: ['1', '2.5', 'P를 모르면 알 수 없다', '0'],
+      choices: ["1", "2.5", "P를 모르면 알 수 없다", "0"],
       answer: 0,
       explain: String.raw`[행렬식은 곱을 곱으로 보낸다](n:prop.det-product). $\det A = \det P\cdot\det D\cdot\det P^{-1} = \det D = 2\times0.5 = 1$이다($\det P\cdot\det P^{-1} = \det I = 1$). 같은 변환을 어느 언어로 적든 넓이 배율은 같다. 그리고 그것은 고윳값의 곱이다.`,
     },

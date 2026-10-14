@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.det-sign',
-  kind: 'prop',
-  title: '음수 행렬식 = 뒤집힘',
-  status: 'written',
-  requires: ['prop.det-formula'],
+  id: "prop.det-sign",
+  kind: "prop",
+  title: "음수 행렬식 = 뒤집힘",
+  status: "written",
+  requires: ["prop.det-formula"],
   predicts: [
     {
-      id: 'p-swap',
-      kind: 'choice',
+      id: "p-swap",
+      kind: "choice",
       q: String.raw`행렬 $A$의 두 열을 맞바꾼 행렬의 행렬식은 $\det A$와 어떤 관계일까?`,
-      hints: [String.raw`두 열이 만드는 평행사변형은 같다(넓이가 같다). 그런데 "$\mathbf{a}_1$에서 $\mathbf{a}_2$로 도는 쪽"과 "$\mathbf{a}_2$에서 $\mathbf{a}_1$로 도는 쪽"은?`],
-      choices: [String.raw`$-\det A$`, String.raw`$\det A$`, '0', String.raw`$1/\det A$`],
+      hints: [
+        String.raw`두 열이 만드는 평행사변형은 같다(넓이가 같다). 그런데 "$\mathbf{a}_1$에서 $\mathbf{a}_2$로 도는 쪽"과 "$\mathbf{a}_2$에서 $\mathbf{a}_1$로 도는 쪽"은?`,
+      ],
+      choices: [
+        String.raw`$-\det A$`,
+        String.raw`$\det A$`,
+        "0",
+        String.raw`$1/\det A$`,
+      ],
       answer: 0,
       why: [
         String.raw`넓이는 같고 도는 방향만 반대가 된다. 공식으로도 $a_{12}a_{21} - a_{11}a_{22} = -(a_{11}a_{22} - a_{12}a_{21})$.`,

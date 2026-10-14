@@ -1,6 +1,6 @@
 // 행렬은 "행의 목록"으로 저장한다(row-major): A[i][j] = i번째 행, j번째 열.
 // 그러나 계산은 일부러 "열의 관점"으로 쓴다. 이 교재에서 행렬의 정의가 열(기저의 상)이기 때문이다.
-import { type Vec, linComb, dot } from './vec';
+import { type Vec, linComb, dot } from "./vec";
 
 export type Mat = number[][];
 
@@ -33,7 +33,8 @@ export function fromCols(cols: Vec[]): Mat {
  */
 export function matVec(A: Mat, x: Vec): Vec {
   const [, n] = shape(A);
-  if (x.length !== n) throw new Error(`모양 불일치: A는 ${n}개 성분을 받는데 x는 ${x.length}개`);
+  if (x.length !== n)
+    throw new Error(`모양 불일치: A는 ${n}개 성분을 받는데 x는 ${x.length}개`);
   const cols: Vec[] = [];
   for (let j = 0; j < n; j++) cols.push(col(A, j));
   return linComb(x, cols);
@@ -54,7 +55,10 @@ export function matVecRows(A: Mat, x: Vec): Vec {
 export function matMul(A: Mat, B: Mat): Mat {
   const [, nA] = shape(A);
   const [mB, nB] = shape(B);
-  if (nA !== mB) throw new Error(`모양 불일치: A는 ${nA}개 성분을 받는데 B는 ${mB}개 성분을 내놓는다`);
+  if (nA !== mB)
+    throw new Error(
+      `모양 불일치: A는 ${nA}개 성분을 받는데 B는 ${mB}개 성분을 내놓는다`,
+    );
   const cols: Vec[] = [];
   for (let j = 0; j < nB; j++) cols.push(matVec(A, col(B, j)));
   return fromCols(cols);
@@ -62,7 +66,9 @@ export function matMul(A: Mat, B: Mat): Mat {
 
 /** def.identity — 항등 행렬: 모든 벡터를 제자리에 둔다. 열 = 표준 기저 그대로. */
 export function identity(n: number): Mat {
-  return Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)));
+  return Array.from({ length: n }, (_, i) =>
+    Array.from({ length: n }, (_, j) => (i === j ? 1 : 0)),
+  );
 }
 
 /** def.transpose — 전치: 행과 열을 맞바꾼다. (Aᵀ)ᵢⱼ = Aⱼᵢ */
@@ -101,7 +107,8 @@ export function det3(A: Mat): number {
 /** prop.inverse-exists — 2×2 역행렬. det = 0 이면 납작해져서 되돌릴 수 없다. */
 export function inverse2(A: Mat): Mat {
   const d = det2(A);
-  if (Math.abs(d) < 1e-12) throw new Error('행렬식이 0이다: 평면이 납작해져서 되돌릴 수 없다');
+  if (Math.abs(d) < 1e-12)
+    throw new Error("행렬식이 0이다: 평면이 납작해져서 되돌릴 수 없다");
   const [[a, b], [c, e]] = A;
   return [
     [e / d, -b / d],

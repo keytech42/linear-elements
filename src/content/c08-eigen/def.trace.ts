@@ -1,25 +1,40 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.trace',
-  kind: 'def',
-  title: '대각합',
-  status: 'written',
+  id: "def.trace",
+  kind: "def",
+  title: "대각합",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.trace', ko: '대각합', en: 'trace', gloss: '정사각 행렬의 대각선 성분을 모두 더한 수. 아주 조금 변환할 때 넓이가 늘어나는 빠르기이자, 고윳값들의 합.' }],
-    symbols: [{ tex: String.raw`\operatorname{tr} A`, meaning: '행렬 A의 대각합' }],
+    terms: [
+      {
+        id: "t.trace",
+        ko: "대각합",
+        en: "trace",
+        gloss:
+          "정사각 행렬의 대각선 성분을 모두 더한 수. 아주 조금 변환할 때 넓이가 늘어나는 빠르기이자, 고윳값들의 합.",
+      },
+    ],
+    symbols: [
+      { tex: String.raw`\operatorname{tr} A`, meaning: "행렬 A의 대각합" },
+    ],
   },
-  requires: ['def.matrix', 'prop.det-formula'],
+  requires: ["def.matrix", "prop.det-formula"],
   predicts: [
     {
-      id: 'p-nudge',
-      kind: 'choice',
+      id: "p-nudge",
+      kind: "choice",
       q: String.raw`$A$를 아주 조금만($t$배, $t$는 작은 수) 더한 변환 $I + tA$를 생각하자. 단위 정사각형의 넓이는 대략 몇 배가 될까?`,
       hints: [
         String.raw`[2×2 행렬식 공식](n:prop.det-formula)을 $I + tA$의 네 성분에 그대로 써 보라.`,
         String.raw`대각선 두 칸은 $1 + ta_{11}$, $1 + ta_{22}$이고 나머지 두 칸은 $ta_{12}$, $ta_{21}$이다. 곱을 전개한 뒤 $t$가 없는 항, $t$가 한 번 곱해진 항, $t^2$이 곱해진 항으로 나눠 모아 보라.`,
       ],
-      choices: [String.raw`$1 + t\cdot\operatorname{tr}A$`, String.raw`$1 + t\cdot\det A$`, String.raw`$\det A$`, '1 (아주 조금이므로 그대로)'],
+      choices: [
+        String.raw`$1 + t\cdot\operatorname{tr}A$`,
+        String.raw`$1 + t\cdot\det A$`,
+        String.raw`$\det A$`,
+        "1 (아주 조금이므로 그대로)",
+      ],
       answer: 0,
       why: [
         String.raw`아래에서 정확히 계산한다. $t$에 비례하는 항의 계수가 대각합이다.`,
@@ -58,12 +73,17 @@ $$\det(I + tA) = (1 + ta_{11})(1 + ta_{22}) - t^2a_{12}a_{21} = 1 + t\,\operator
   checks: [
     {
       q: String.raw`회전 행렬 $R_\theta$의 대각합은?`,
-      choices: [String.raw`$2\cos\theta$`, '0', '1', String.raw`$\cos\theta + \sin\theta$`],
+      choices: [
+        String.raw`$2\cos\theta$`,
+        "0",
+        "1",
+        String.raw`$\cos\theta + \sin\theta$`,
+      ],
       answer: 0,
       explain: String.raw`$R_\theta$의 대각선은 $\cos\theta$와 $\cos\theta$다. 각 기저 벡터가 $\theta$만큼 돌아가면 자기 축 방향의 몫이 $\cos\theta$로 줄어든다. $\theta = 90°$일 때만 0이다.`,
     },
   ],
-  code: ['trace'],
+  code: ["trace"],
 };
 
 export default node;

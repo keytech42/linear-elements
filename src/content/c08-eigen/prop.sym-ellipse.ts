@@ -1,36 +1,52 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.sym-ellipse',
-  kind: 'prop',
-  title: '대칭 행렬은 단위원을 고유벡터 축의 타원으로 보낸다',
-  status: 'written',
-  introduces: { terms: [{ id: 't.ellipse', ko: '타원', en: 'ellipse', gloss: '원을 서로 수직인 두 방향으로 각각 다른 배율로 늘인 모양. 배율 하나가 0이면 선분으로 납작해진다.' }] },
-  requires: ['prop.spectral', 'prop.orthogonal-preserves'],
+  id: "prop.sym-ellipse",
+  kind: "prop",
+  title: "대칭 행렬은 단위원을 고유벡터 축의 타원으로 보낸다",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.ellipse",
+        ko: "타원",
+        en: "ellipse",
+        gloss:
+          "원을 서로 수직인 두 방향으로 각각 다른 배율로 늘인 모양. 배율 하나가 0이면 선분으로 납작해진다.",
+      },
+    ],
+  },
+  requires: ["prop.spectral", "prop.orthogonal-preserves"],
   predicts: [
     {
-      id: 'p-axis',
-      kind: 'point',
+      id: "p-axis",
+      kind: "point",
       q: String.raw`$S = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$이 단위원을 보낸 곡선에서 **가장 길게 늘어난 쪽**을 만드는 입력 방향을 노란 손잡이로 맞춰라.`,
       hints: [
         String.raw`[스펙트럼 정리](n:prop.spectral): 대칭 행렬은 서로 수직인 두 고유 방향을 따로 늘인다. 가장 많이 늘어나는 것은 어느 고윳값의 방향일까?`,
       ],
-      A: [[2, 1], [1, 2]],
-      target: 'v1',
-      show: ['circle', 'tgrid'],
+      A: [
+        [2, 1],
+        [1, 2],
+      ],
+      target: "v1",
+      show: ["circle", "tgrid"],
       reveal: String.raw`정답은 대각선 $(1, 1)$ 방향, 곧 가장 큰 고윳값 3의 고유벡터다. 가장 짧게 늘어나는 방향은 그와 수직인 $(1, -1)$, 고윳값 1의 고유벡터다. 흰 곡선(단위원의 상)의 두 축이 정확히 두 고유 방향 위에 놓인다.`,
     },
     {
-      id: 'p-nonsym',
-      kind: 'point',
+      id: "p-nonsym",
+      kind: "point",
       q: String.raw`이번에는 대칭이 **아닌** $\begin{bmatrix} 1 & 2 \\ 0 & 3 \end{bmatrix}$이다. 고유 방향은 가로축 $(1, 0)$과 대각선 $(1, 1)$이다. 단위원 위에서 가장 많이 늘어나는 입력 방향을 노란 손잡이로 맞춰라.`,
       hints: [
         String.raw`대칭 행렬에서는 답이 고유 방향이었다. 이 행렬에서도 그런지 의심해 보라. 두 열 $(1, 0)$, $(2, 3)$ 가운데 어느 쪽이 더 긴가?`,
         String.raw`$\mathbf{e}_2$ 방향 입력은 길이 $\sqrt{13} \approx 3.6$인 둘째 열로 간다. 대각선 $(1, 1)/\sqrt{2}$은 $3/\sqrt{2}\cdot(1, 1)$, 길이 3으로 간다. 그 사이 어딘가를 찾아라.`,
       ],
-      A: [[1, 2], [0, 3]],
-      target: 'v1',
-      show: ['cols', 'circle'],
+      A: [
+        [1, 2],
+        [0, 3],
+      ],
+      target: "v1",
+      show: ["cols", "circle"],
       reveal: String.raw`정답은 약 80.8°, 곧 $(0.160, 0.987)$ 방향이다. 고유 방향 0°, 45° 어느 쪽과도 다르다. 그러므로 대칭이 아닌 행렬에서는 "가장 많이 늘어나는 방향"과 "자기 직선에 남는 방향"이 다른 것이다. 이 방향의 정체가 9장의 첫 주제다.`,
     },
   ],
@@ -62,7 +78,12 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$S = \begin{bmatrix} 3 & 0 \\ 0 & -1 \end{bmatrix}$은 단위원을 어떤 타원으로 보내는가?`,
-      choices: ['가로 반지름 3, 세로 반지름 1인 타원', '가로 반지름 3, 세로로는 뒤집혀서 타원이 아니다', '가로 반지름 3인 선분', '반지름 3인 원'],
+      choices: [
+        "가로 반지름 3, 세로 반지름 1인 타원",
+        "가로 반지름 3, 세로로는 뒤집혀서 타원이 아니다",
+        "가로 반지름 3인 선분",
+        "반지름 3인 원",
+      ],
       answer: 0,
       explain: String.raw`세로 방향의 배율 $-1$은 뒤집기다. 그러나 원은 위아래가 대칭이므로 뒤집어도 모양이 같고, 반지름은 $|-1| = 1$이다. 뒤집힘은 모양이 아니라 "원 위의 어느 점이 어디로 가는지"에만 흔적을 남긴다. 9장에서 이 차이가 [특이값](fwd:t.singular-value)(언제나 0 이상)과 고윳값(음수일 수 있음)의 차이가 된다.`,
     },

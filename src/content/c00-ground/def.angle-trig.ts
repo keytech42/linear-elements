@@ -1,28 +1,62 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.angle-trig',
-  kind: 'def',
-  title: '단위원, 각, 코사인과 사인',
-  status: 'written',
+  id: "def.angle-trig",
+  kind: "def",
+  title: "단위원, 각, 코사인과 사인",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.unit-circle', ko: '단위원', en: 'unit circle', gloss: '원점을 중심으로 하고 반지름이 1인 원.' },
-      { id: 't.angle', ko: '각', en: 'angle', everyday: true, gloss: '원점을 중심으로 돌아간 양. 단위원 위에서 (1, 0)부터 시계 반대 방향으로 잰 호의 길이.' },
-      { id: 't.cos', ko: '코사인', en: 'cosine', gloss: '단위원 위에서 각 θ만큼 돈 점의 가로 좌표.' },
-      { id: 't.sin', ko: '사인', en: 'sine', gloss: '단위원 위에서 각 θ만큼 돈 점의 세로 좌표.' },
-      { id: 't.radian', ko: '라디안', en: 'radian', gloss: '각을 단위원의 호의 길이로 재는 단위. 한 바퀴 = 2π, 180° = π.' },
+      {
+        id: "t.unit-circle",
+        ko: "단위원",
+        en: "unit circle",
+        gloss: "원점을 중심으로 하고 반지름이 1인 원.",
+      },
+      {
+        id: "t.angle",
+        ko: "각",
+        en: "angle",
+        everyday: true,
+        gloss:
+          "원점을 중심으로 돌아간 양. 단위원 위에서 (1, 0)부터 시계 반대 방향으로 잰 호의 길이.",
+      },
+      {
+        id: "t.cos",
+        ko: "코사인",
+        en: "cosine",
+        gloss: "단위원 위에서 각 θ만큼 돈 점의 가로 좌표.",
+      },
+      {
+        id: "t.sin",
+        ko: "사인",
+        en: "sine",
+        gloss: "단위원 위에서 각 θ만큼 돈 점의 세로 좌표.",
+      },
+      {
+        id: "t.radian",
+        ko: "라디안",
+        en: "radian",
+        gloss: "각을 단위원의 호의 길이로 재는 단위. 한 바퀴 = 2π, 180° = π.",
+      },
     ],
-    symbols: [{ tex: String.raw`\theta`, meaning: '각' }],
+    symbols: [{ tex: String.raw`\theta`, meaning: "각" }],
   },
-  requires: ['def.distance'],
+  requires: ["def.distance"],
   predicts: [
     {
-      id: 'p-sign',
-      kind: 'choice',
+      id: "p-sign",
+      kind: "choice",
       q: String.raw`$\theta = 150°$일 때 $\cos\theta$와 $\sin\theta$의 부호는?`,
-      hints: [String.raw`150°는 90°(위쪽)와 180°(왼쪽) 사이다. 단위원 위에서 그 점은 원점의 어느 쪽에 있는가? 코사인은 가로 좌표, 사인은 세로 좌표다.`],
-      choices: ['cos는 음수, sin은 양수', '둘 다 양수', 'cos는 양수, sin은 음수', '둘 다 음수'],
+      hints: [
+        String.raw`150°는 90°(위쪽)와 180°(왼쪽) 사이다. 단위원 위에서 그 점은 원점의 어느 쪽에 있는가? 코사인은 가로 좌표, 사인은 세로 좌표다.`,
+      ],
+      choices: [
+        "cos는 음수, sin은 양수",
+        "둘 다 양수",
+        "cos는 양수, sin은 음수",
+        "둘 다 음수",
+      ],
       answer: 0,
       why: [
         String.raw`150° 자리는 왼쪽 위다. 가로 좌표는 음수, 세로 좌표는 양수다.`,
@@ -32,11 +66,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-level',
-      kind: 'choice',
+      id: "p-level",
+      kind: "choice",
       q: String.raw`$0° \le \theta < 360°$에서 $\sin\theta = 0.5$가 되는 $\theta$는 몇 개일까?`,
-      hints: [String.raw`$\sin\theta$는 단위원 위 점의 세로 좌표다. 높이가 0.5인 가로선을 그으면, 그 선이 단위원과 몇 번 만나는가?`],
-      choices: ['2개', '1개', '4개', '무한히 많다'],
+      hints: [
+        String.raw`$\sin\theta$는 단위원 위 점의 세로 좌표다. 높이가 0.5인 가로선을 그으면, 그 선이 단위원과 몇 번 만나는가?`,
+      ],
+      choices: ["2개", "1개", "4개", "무한히 많다"],
       answer: 0,
       why: [
         String.raw`높이 0.5인 가로선은 단위원과 두 번 만난다. 오른쪽 위(30°)와 왼쪽 위(150°)다.`,
@@ -76,12 +112,12 @@ $$\text{각 } \theta \text{ 자리의 점} = (\cos\theta,\ \sin\theta)$$
   checks: [
     {
       q: String.raw`$\theta = -90°$(시계 방향으로 90°)일 때 $(\cos\theta, \sin\theta)$는?`,
-      choices: ['(0, −1)', '(0, 1)', '(−1, 0)', '(1, 0)'],
+      choices: ["(0, −1)", "(0, 1)", "(−1, 0)", "(1, 0)"],
       answer: 0,
       explain: String.raw`$(1, 0)$에서 시계 방향으로 4분의 1바퀴 돌면 원의 맨 아래 $(0, -1)$에 닿는다. 음수 각은 시계 방향이다.`,
     },
   ],
-  code: ['circlePoint', 'angleOf'],
+  code: ["circlePoint", "angleOf"],
 };
 
 export default node;

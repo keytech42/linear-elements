@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.inverse-product',
-  kind: 'prop',
-  title: '(AB)⁻¹ = B⁻¹A⁻¹ — 양말과 신발',
-  status: 'written',
-  requires: ['def.inverse', 'prop.associative'],
+  id: "prop.inverse-product",
+  kind: "prop",
+  title: "(AB)⁻¹ = B⁻¹A⁻¹ — 양말과 신발",
+  status: "written",
+  requires: ["def.inverse", "prop.associative"],
   predicts: [
     {
-      id: 'p-order',
-      kind: 'choice',
+      id: "p-order",
+      kind: "choice",
       q: String.raw`$A$, $B$가 가역일 때 $(AB)^{-1}$은?`,
       hints: [
         String.raw`$AB$는 "$B$를 먼저, 그다음 $A$"다. 이 둘을 되돌리려면 무엇을 먼저 되돌려야 하는가? 마지막에 한 일부터다.`,
         String.raw`후보를 $AB$에 곱해서 $I$가 되는지 확인하라. 괄호는 [결합법칙](n:prop.associative)으로 옮길 수 있다.`,
       ],
-      choices: [String.raw`$B^{-1}A^{-1}$`, String.raw`$A^{-1}B^{-1}$`, String.raw`$(BA)^{-1}$과 같고, 따라서 $AB$와 상관없다`, String.raw`$AB$의 각 성분의 역수`],
+      choices: [
+        String.raw`$B^{-1}A^{-1}$`,
+        String.raw`$A^{-1}B^{-1}$`,
+        String.raw`$(BA)^{-1}$과 같고, 따라서 $AB$와 상관없다`,
+        String.raw`$AB$의 각 성분의 역수`,
+      ],
       answer: 0,
       why: [
         String.raw`$(B^{-1}A^{-1})(AB) = B^{-1}(A^{-1}A)B = B^{-1}B = I$. 마지막에 한 $A$를 먼저 되돌리고, 처음에 한 $B$를 나중에 되돌린다.`,

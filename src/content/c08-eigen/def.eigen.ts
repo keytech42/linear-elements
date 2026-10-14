@@ -1,24 +1,43 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.eigen',
-  kind: 'def',
-  title: '고유벡터와 고윳값',
-  status: 'written',
+  id: "def.eigen",
+  kind: "def",
+  title: "고유벡터와 고윳값",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.eigenvector', ko: '고유벡터', en: 'eigenvector', surfaces: ['고유 벡터'], gloss: '변환 뒤에도 자기가 놓인 직선(스팬) 위에 그대로 있는, 영벡터가 아닌 벡터. A𝐯 = λ𝐯.' },
-      { id: 't.eigenvalue', ko: '고윳값', en: 'eigenvalue', surfaces: ['고유값'], gloss: '고유벡터가 늘어나는 배율. 음수면 뒤집히며 늘어나고, 0이면 원점으로 사라진다.' },
+      {
+        id: "t.eigenvector",
+        ko: "고유벡터",
+        en: "eigenvector",
+        surfaces: ["고유 벡터"],
+        gloss:
+          "변환 뒤에도 자기가 놓인 직선(스팬) 위에 그대로 있는, 영벡터가 아닌 벡터. A𝐯 = λ𝐯.",
+      },
+      {
+        id: "t.eigenvalue",
+        ko: "고윳값",
+        en: "eigenvalue",
+        surfaces: ["고유값"],
+        gloss:
+          "고유벡터가 늘어나는 배율. 음수면 뒤집히며 늘어나고, 0이면 원점으로 사라진다.",
+      },
     ],
-    symbols: [{ tex: String.raw`\lambda`, meaning: '고윳값' }],
+    symbols: [{ tex: String.raw`\lambda`, meaning: "고윳값" }],
   },
-  requires: ['exp.eigen-hunt', 'def.scalar-mul'],
+  requires: ["exp.eigen-hunt", "def.scalar-mul"],
   predicts: [
     {
-      id: 'p-zero',
-      kind: 'choice',
+      id: "p-zero",
+      kind: "choice",
       q: String.raw`정의에서 "영벡터가 아닌"이라는 조건을 빼면 무슨 문제가 생길까?`,
-      choices: ['모든 수가 고윳값이 되어 버린다', '아무 문제도 없다', '영벡터는 그림으로 그릴 수 없을 뿐이다', '고윳값 0이 생기지 않게 된다'],
+      choices: [
+        "모든 수가 고윳값이 되어 버린다",
+        "아무 문제도 없다",
+        "영벡터는 그림으로 그릴 수 없을 뿐이다",
+        "고윳값 0이 생기지 않게 된다",
+      ],
       answer: 0,
       why: [
         String.raw`$A\mathbf{0} = \mathbf{0} = \lambda\mathbf{0}$이 $\lambda$가 무엇이든 성립하기 때문이다.`,
@@ -28,14 +47,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-sum',
-      kind: 'choice',
+      id: "p-sum",
+      kind: "choice",
       q: String.raw`$A\mathbf{v} = 2\mathbf{v}$이고 $A\mathbf{w} = -\mathbf{w}$이다($\mathbf{v}$, $\mathbf{w}$는 서로 다른 직선 위에 있다). 두 고유벡터의 합 $\mathbf{v} + \mathbf{w}$도 $A$의 고유벡터일까?`,
       hints: [
         String.raw`[선형 변환은 덧셈을 그대로 통과시킨다](n:def.linear-map): $A(\mathbf{v} + \mathbf{w}) = A\mathbf{v} + A\mathbf{w}$.`,
         String.raw`$A(\mathbf{v} + \mathbf{w}) = 2\mathbf{v} - \mathbf{w}$이다. 이것이 어떤 수 $c$에 대해 $c(\mathbf{v} + \mathbf{w})$와 같을 수 있는가? $\mathbf{v}$와 $\mathbf{w}$의 계수를 따로 비교해 보라.`,
       ],
-      choices: ['아니다. 고윳값이 다르면 합은 직선을 벗어난다', '그렇다. 고유벡터끼리 더하면 고유벡터다', '그렇다. 고윳값은 2 + (−1) = 1이다', '그렇다. 고윳값은 두 고윳값의 평균인 0.5다'],
+      choices: [
+        "아니다. 고윳값이 다르면 합은 직선을 벗어난다",
+        "그렇다. 고유벡터끼리 더하면 고유벡터다",
+        "그렇다. 고윳값은 2 + (−1) = 1이다",
+        "그렇다. 고윳값은 두 고윳값의 평균인 0.5다",
+      ],
       answer: 0,
       why: [
         String.raw`$A(\mathbf{v} + \mathbf{w}) = 2\mathbf{v} - \mathbf{w}$가 $c\mathbf{v} + c\mathbf{w}$와 같으려면 $c = 2$이면서 $c = -1$이어야 한다(서로 다른 직선 위의 두 벡터는 [계수가 하나로 정해지므로](n:prop.coords-unique)). 불가능하다.`,
@@ -80,12 +104,17 @@ $A\mathbf{v} = \lambda\mathbf{v}$이면 $A(c\mathbf{v}) = cA\mathbf{v} = c\lambd
   checks: [
     {
       q: String.raw`$A = \begin{bmatrix} 0 & 0 \\ 0 & 1 \end{bmatrix}$의 고윳값과 그 고유 방향은?`,
-      choices: ['고윳값 0(가로축)과 1(세로축)', '고윳값 1(세로축)만', '고윳값 0만', '고유벡터가 없다'],
+      choices: [
+        "고윳값 0(가로축)과 1(세로축)",
+        "고윳값 1(세로축)만",
+        "고윳값 0만",
+        "고유벡터가 없다",
+      ],
       answer: 0,
       explain: String.raw`$A\mathbf{e}_1 = \mathbf{0} = 0\cdot\mathbf{e}_1$이므로 가로축은 고윳값 0의 방향(영공간)이다. $A\mathbf{e}_2 = \mathbf{e}_2$이므로 세로축은 고윳값 1의 방향이다. 고윳값 0을 빠뜨리는 것이 흔한 실수다. 0이 될 수 없는 것은 고유**벡터**이지 고윳값이 아니다.`,
     },
   ],
-  code: ['eig2'],
+  code: ["eig2"],
 };
 
 export default node;

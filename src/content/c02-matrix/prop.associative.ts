@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.associative',
-  kind: 'prop',
-  title: '(AB)C = A(BC): 결합법칙은 공짜다',
-  status: 'written',
-  requires: ['def.composition'],
+  id: "prop.associative",
+  kind: "prop",
+  title: "(AB)C = A(BC): 결합법칙은 공짜다",
+  status: "written",
+  requires: ["def.composition"],
   predicts: [
     {
-      id: 'p-twelve',
-      kind: 'choice',
+      id: "p-twelve",
+      kind: "choice",
       q: String.raw`30° 회전 $R_{30°}$를 12번 곱한 $R_{30°}R_{30°}\cdots R_{30°}$ (12개)는?`,
-      hints: [String.raw`곱 하나하나를 계산하지 말고 기하로 생각하라. 30°씩 12번 돌리면 모두 몇 도를 돈 것인가? 그리고 괄호를 어디에 치든 결과가 같은가?`],
-      choices: [String.raw`항등 행렬 $I$`, String.raw`$12R_{30°}$`, String.raw`$R_{30°}$`, '괄호를 어떻게 치느냐에 따라 다르다'],
+      hints: [
+        String.raw`곱 하나하나를 계산하지 말고 기하로 생각하라. 30°씩 12번 돌리면 모두 몇 도를 돈 것인가? 그리고 괄호를 어디에 치든 결과가 같은가?`,
+      ],
+      choices: [
+        String.raw`항등 행렬 $I$`,
+        String.raw`$12R_{30°}$`,
+        String.raw`$R_{30°}$`,
+        "괄호를 어떻게 치느냐에 따라 다르다",
+      ],
       answer: 0,
       why: [
         String.raw`30° × 12 = 360°, 한 바퀴를 돌아 제자리다. 어떤 순서로 묶어 계산해도 "차례로 12번 돌린다"는 같은 변환이다.`,

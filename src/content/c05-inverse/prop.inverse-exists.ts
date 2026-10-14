@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.inverse-exists',
-  kind: 'prop',
-  title: '역행렬이 있을 조건: det A ≠ 0',
-  status: 'written',
-  requires: ['def.inverse', 'prop.det-zero', 'prop.det-product'],
+  id: "prop.inverse-exists",
+  kind: "prop",
+  title: "역행렬이 있을 조건: det A ≠ 0",
+  status: "written",
+  requires: ["def.inverse", "prop.det-zero", "prop.det-product"],
   predicts: [
     {
-      id: 'p-formula',
-      kind: 'choice',
+      id: "p-formula",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix}$의 역행렬은?`,
       hints: [
         String.raw`아래 공식: 대각선 두 성분은 자리를 맞바꾸고, 나머지 두 성분은 부호만 바꾼 뒤, 전체를 $\det A$로 나눈다.`,
         String.raw`$\det A = 2 - 1 = 1$이다. 답이 맞는지는 $A$와 곱해서 $I$가 나오는지로 확인하라.`,
       ],
-      choices: [String.raw`$\begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 0.5 & 1 \\ 1 & 1 \end{bmatrix}$ (성분마다 역수)`, String.raw`$\begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}$`, String.raw`$\begin{bmatrix} -1 & 1 \\ 1 & -2 \end{bmatrix}$`],
+      choices: [
+        String.raw`$\begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 0.5 & 1 \\ 1 & 1 \end{bmatrix}$ (성분마다 역수)`,
+        String.raw`$\begin{bmatrix} 1 & 1 \\ 1 & 2 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} -1 & 1 \\ 1 & -2 \end{bmatrix}$`,
+      ],
       answer: 0,
       why: [
         String.raw`$\begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix}\begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix} = \begin{bmatrix} 1 & 0 \\ 0 & 1 \end{bmatrix}$.`,
@@ -25,11 +30,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-det',
-      kind: 'choice',
+      id: "p-det",
+      kind: "choice",
       q: String.raw`$\det A = 4$이면 $\det(A^{-1})$은?`,
-      hints: [String.raw`$A^{-1}A = I$의 양쪽에 행렬식을 취해 보라. [곱의 행렬식은 행렬식의 곱](n:prop.det-product)이다.`],
-      choices: [String.raw`$\tfrac{1}{4}$`, '4', '−4', '1'],
+      hints: [
+        String.raw`$A^{-1}A = I$의 양쪽에 행렬식을 취해 보라. [곱의 행렬식은 행렬식의 곱](n:prop.det-product)이다.`,
+      ],
+      choices: [String.raw`$\tfrac{1}{4}$`, "4", "−4", "1"],
       answer: 0,
       why: [
         String.raw`$\det(A^{-1})\det A = \det I = 1$이므로 $\det(A^{-1}) = 1/4$. 넓이를 4배 한 것을 되돌리면 넓이가 4분의 1이 된다.`,
@@ -65,7 +72,7 @@ $$A^{-1} = \frac{1}{\det A}\begin{bmatrix} a_{22} & -a_{12} \\ -a_{21} & a_{11} 
 $$\begin{bmatrix} a_{22} & -a_{12} \\ -a_{21} & a_{11} \end{bmatrix}\begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix} = \begin{bmatrix} a_{11}a_{22} - a_{12}a_{21} & 0 \\ 0 & a_{11}a_{22} - a_{12}a_{21} \end{bmatrix} = (\det A)\,I$$
 
 이다(대각선 밖은 $a_{22}a_{12} - a_{12}a_{22} = 0$ 같은 꼴로 지워진다). 양쪽을 $\det A$로 나누면 $A^{-1}A = I$다. 반대 순서의 곱도 같은 계산으로 $I$가 된다.`,
-  code: ['inverse2'],
+  code: ["inverse2"],
 };
 
 export default node;

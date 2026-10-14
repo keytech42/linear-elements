@@ -1,4 +1,4 @@
-import type { C } from '../render/colors';
+import type { C } from "../render/colors";
 
 /** 색 이름(색도 기호다) */
 export type ColorKey = keyof typeof C;
@@ -15,23 +15,23 @@ export type ColorKey = keyof typeof C;
  *  exp  탐구: 손으로 만지며 다음 정의/명제를 예감하게 하는 장면.
  *  intro 들어가며: 수학 내용이 아니라 이 교재를 읽고 공부하는 법. 위 넷 가운데 어디에도 속하지 않는다(0장 맨 앞에 하나).
  */
-export type Kind = 'ax' | 'def' | 'prop' | 'exp' | 'intro';
+export type Kind = "ax" | "def" | "prop" | "exp" | "intro";
 
 export const KIND_LABEL: Record<Kind, string> = {
-  ax: '공리',
-  def: '정의',
-  prop: '명제',
-  exp: '탐구',
-  intro: '들어가며',
+  ax: "공리",
+  def: "정의",
+  prop: "명제",
+  exp: "탐구",
+  intro: "들어가며",
 };
 
 /** 노드 종류의 영어 표준 용어. 노드 머리의 배지에만 위첨자로 붙인다. */
 export const KIND_EN: Record<Kind, string> = {
-  ax: 'axiom',
-  def: 'definition',
-  prop: 'proposition',
-  exp: 'exploration',
-  intro: 'introduction',
+  ax: "axiom",
+  def: "definition",
+  prop: "proposition",
+  exp: "exploration",
+  intro: "introduction",
 };
 
 export interface TermDecl {
@@ -79,16 +79,25 @@ export interface Check {
  * hints: 어려운 관문에 붙이는 단계별 힌트(최대 3개). 학습자가 하나씩 열어 본다. 답을 직접 말하면 안 된다.
  */
 export type Predict =
-  | { id: string; kind: 'choice'; q: string; choices: string[]; answer: number; why?: (string | null)[]; reveal?: string; hints?: string[] }
   | {
       id: string;
-      kind: 'point';
+      kind: "choice";
+      q: string;
+      choices: string[];
+      answer: number;
+      why?: (string | null)[];
+      reveal?: string;
+      hints?: string[];
+    }
+  | {
+      id: string;
+      kind: "point";
       q: string;
       A: number[][];
       x?: number[];
-      target: 'Ax' | 'eig' | 'v1';
+      target: "Ax" | "eig" | "v1";
       /** 무엇을 미리 그려 줄지: cols(A의 두 열), x(입력), tgrid(변환된 격자), circle(단위원) */
-      show?: ('cols' | 'x' | 'tgrid' | 'circle')[];
+      show?: ("cols" | "x" | "tgrid" | "circle")[];
       /** cols를 보일 때 두 열의 이름표 (기본 ['Ae₁', 'Ae₂']). 행렬을 배우기 전의 노드에서는 ['u', 'w'] 등으로 바꾼다 */
       colLabels?: [string, string];
       /** cols를 보일 때 두 열의 색(src/render/colors.ts의 C 이름, 기본 ['c1', 'c2']). 열이 u, w를 뜻하면 ['u', 'w'] */
@@ -104,7 +113,7 @@ export interface NodeDef {
   kind: Kind;
   title: string;
   /** written: 본문 완성 / stub: 계획만 있음(본문 = 이 노드가 답할 질문 목록) */
-  status: 'written' | 'stub';
+  status: "written" | "stub";
   introduces?: { terms?: TermDecl[]; symbols?: SymbolDecl[] };
   /** 명시적 선행 노드. 본문 안의 링크/용어 참조에서 나오는 의존은 자동으로 더해진다. */
   requires?: string[];

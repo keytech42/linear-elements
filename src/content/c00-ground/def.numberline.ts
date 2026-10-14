@@ -1,25 +1,43 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.numberline',
-  kind: 'def',
-  title: '수직선: 수는 위치이자 이동이다',
-  status: 'written',
+  id: "def.numberline",
+  kind: "def",
+  title: "수직선: 수는 위치이자 이동이다",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.numberline', ko: '수직선', en: 'number line', gloss: '수를 직선 위의 위치로 나타낸 것.' },
-      { id: 't.origin', ko: '원점', en: 'origin', gloss: '0이 놓인 기준점.' },
-      { id: 't.displacement', ko: '변위', en: 'displacement', gloss: '어디서 어디로 얼마나 움직였는가. 출발점과 무관한 "이동 그 자체". 도착점 − 출발점.' },
+      {
+        id: "t.numberline",
+        ko: "수직선",
+        en: "number line",
+        gloss: "수를 직선 위의 위치로 나타낸 것.",
+      },
+      { id: "t.origin", ko: "원점", en: "origin", gloss: "0이 놓인 기준점." },
+      {
+        id: "t.displacement",
+        ko: "변위",
+        en: "displacement",
+        gloss:
+          '어디서 어디로 얼마나 움직였는가. 출발점과 무관한 "이동 그 자체". 도착점 − 출발점.',
+      },
     ],
   },
-  requires: ['ax.arith'],
+  requires: ["ax.arith"],
   predicts: [
     {
-      id: 'p-chain',
-      kind: 'choice',
+      id: "p-chain",
+      kind: "choice",
       q: String.raw`위치 $-2$에서 출발해 $+5$만큼 움직인 뒤, 이어서 $-3$만큼 움직인다. 도착하는 위치와, 출발점에서 도착점까지의 변위(전체 이동)는?`,
-      hints: [String.raw`전체 이동은 "도착점 − 출발점"이다. 도착점부터 구한 뒤 출발점을 빼 보라.`],
-      choices: ['도착점 0, 전체 이동 +2', '도착점 0, 전체 이동 0', '도착점 +2, 전체 이동 +2', '도착점 0, 전체 이동 −2'],
+      hints: [
+        String.raw`전체 이동은 "도착점 − 출발점"이다. 도착점부터 구한 뒤 출발점을 빼 보라.`,
+      ],
+      choices: [
+        "도착점 0, 전체 이동 +2",
+        "도착점 0, 전체 이동 0",
+        "도착점 +2, 전체 이동 +2",
+        "도착점 0, 전체 이동 −2",
+      ],
       answer: 0,
       why: [
         String.raw`$-2 + 5 + (-3) = 0$이고, 전체 이동은 $0 - (-2) = +2$다. 두 이동을 더한 $5 + (-3) = 2$와 같다.`,
@@ -29,11 +47,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-two',
-      kind: 'choice',
+      id: "p-two",
+      kind: "choice",
       q: String.raw`"위치 4"와 "이동 +4"는 같은 것일까?`,
-      hints: [String.raw`원점에서 출발해 이동 $+4$를 하면 어디에 도착하는가? 출발점이 $1$이라면? 위치는 점 **하나**이고, 이동은 출발점이 정해져야 도착점이 정해진다.`],
-      choices: ['다르다. 다만 원점에서 출발한 이동 +4는 위치 4에 도착하므로, 둘을 하나씩 짝지을 수 있다', '같다. 둘 다 수 4다', '다르다. 그리고 둘을 짝지을 방법도 없다', '같다. 수직선에서는 위치와 이동을 구별할 수 없다'],
+      hints: [
+        String.raw`원점에서 출발해 이동 $+4$를 하면 어디에 도착하는가? 출발점이 $1$이라면? 위치는 점 **하나**이고, 이동은 출발점이 정해져야 도착점이 정해진다.`,
+      ],
+      choices: [
+        "다르다. 다만 원점에서 출발한 이동 +4는 위치 4에 도착하므로, 둘을 하나씩 짝지을 수 있다",
+        "같다. 둘 다 수 4다",
+        "다르다. 그리고 둘을 짝지을 방법도 없다",
+        "같다. 수직선에서는 위치와 이동을 구별할 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`위치는 점이고 이동은 화살표다. 그런데 "원점에서 출발한다"고 정해 두면 이동마다 도착점이 하나 정해지고, 거꾸로 위치마다 "원점에서 그곳으로 가는 이동"이 하나 정해진다. 이 짝짓기가 1장의 [벡터](fwd:t.vector)를 원점에서 그리는 이유다.`,
@@ -70,12 +95,12 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`위치 7에서 위치 $-2$로 갔다. 변위는?`,
-      choices: ['−9', '9', '5', '−5'],
+      choices: ["−9", "9", "5", "−5"],
       answer: 0,
       explain: String.raw`도착점 − 출발점 $= -2 - 7 = -9$. 왼쪽으로 9칸 움직였다. 빼는 순서를 바꾸면 방향이 뒤집힌 $+9$가 된다.`,
     },
   ],
-  code: ['displacement', 'chain'],
+  code: ["displacement", "chain"],
 };
 
 export default node;

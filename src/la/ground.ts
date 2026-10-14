@@ -1,7 +1,7 @@
 // 0장·1장(출발점, 벡터)의 작은 도구들. 각 함수 위 주석의 노드 id가 그 수학적 근거가 있는 자리다.
-import { type Vec, linComb } from './vec';
-import { fromCols } from './mat';
-import { rank } from './solve';
+import { type Vec, linComb } from "./vec";
+import { fromCols } from "./mat";
+import { rank } from "./solve";
 
 /** def.numberline — 수직선 위에서 p에서 q로 가는 변위(이동): 도착점 − 출발점. */
 export function displacement(p: number, q: number): number {
@@ -60,7 +60,12 @@ export function cross2(u: Vec, w: Vec): number {
  * def.span — 평행하지 않은 𝐮, 𝐰로 목표 𝐭에 닿는 계수 (c₁, c₂).
  * c₁𝐮 + c₂𝐰 = 𝐭 의 두 식에서 한 미지수를 지워 얻은 공식이다. 평행하면 null.
  */
-export function reachCoeffs(u: Vec, w: Vec, t: Vec, tol = 1e-12): [number, number] | null {
+export function reachCoeffs(
+  u: Vec,
+  w: Vec,
+  t: Vec,
+  tol = 1e-12,
+): [number, number] | null {
   const D = cross2(u, w);
   if (Math.abs(D) < tol) return null;
   return [cross2(t, w) / D, cross2(u, t) / D];

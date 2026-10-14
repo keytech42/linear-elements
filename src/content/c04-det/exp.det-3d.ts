@@ -1,18 +1,20 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.det-3d',
-  kind: 'exp',
-  title: '3차원: 부피 배율',
-  status: 'written',
-  requires: ['prop.det-zero', 'exp.space3'],
+  id: "exp.det-3d",
+  kind: "exp",
+  title: "3차원: 부피 배율",
+  status: "written",
+  requires: ["prop.det-zero", "exp.space3"],
   predicts: [
     {
-      id: 'p-vol',
-      kind: 'choice',
+      id: "p-vol",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 2 & 0 & 0 \\ 0 & 3 & 0 \\ 0 & 0 & 0.5 \end{bmatrix}$은 단위 정육면체를 부피 몇인 상자로 보낼까?`,
-      hints: [String.raw`세 축이 각각 몇 배가 되는가? 직육면체의 부피는 가로 × 세로 × 높이다.`],
-      choices: ['3', '5.5', '6', '1'],
+      hints: [
+        String.raw`세 축이 각각 몇 배가 되는가? 직육면체의 부피는 가로 × 세로 × 높이다.`,
+      ],
+      choices: ["3", "5.5", "6", "1"],
       answer: 0,
       why: [
         String.raw`$2 \times 3 \times 0.5 = 3$. 높이가 절반이 되어 부피가 줄었다.`,
@@ -22,11 +24,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-flat',
-      kind: 'choice',
-      q: '3×3 행렬의 세 열이 원점을 지나는 한 평면 위에 있다(셋 다 영벡터는 아니다). 이 행렬의 행렬식과, 공간이 눌리는 모양은?',
-      hints: [String.raw`세 열이 만드는 평행육면체는 평면 안에 납작하게 누운 도형이다. 그 부피는? 그리고 모든 출력 $x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + x_3\mathbf{a}_3$은 어디에 놓이는가?`],
-      choices: ['행렬식 0, 공간 전체가 그 평면(또는 그 안의 직선)으로 눌린다', '행렬식 0, 공간이 한 점으로 눌린다', '행렬식은 0이 아니다. 열 셋이 모두 영벡터가 아니므로', '행렬식 1, 공간은 그대로다'],
+      id: "p-flat",
+      kind: "choice",
+      q: "3×3 행렬의 세 열이 원점을 지나는 한 평면 위에 있다(셋 다 영벡터는 아니다). 이 행렬의 행렬식과, 공간이 눌리는 모양은?",
+      hints: [
+        String.raw`세 열이 만드는 평행육면체는 평면 안에 납작하게 누운 도형이다. 그 부피는? 그리고 모든 출력 $x_1\mathbf{a}_1 + x_2\mathbf{a}_2 + x_3\mathbf{a}_3$은 어디에 놓이는가?`,
+      ],
+      choices: [
+        "행렬식 0, 공간 전체가 그 평면(또는 그 안의 직선)으로 눌린다",
+        "행렬식 0, 공간이 한 점으로 눌린다",
+        "행렬식은 0이 아니다. 열 셋이 모두 영벡터가 아니므로",
+        "행렬식 1, 공간은 그대로다",
+      ],
       answer: 0,
       why: [
         String.raw`평행육면체가 납작하므로 부피(행렬식)가 0이다. 모든 출력은 세 열의 선형 결합이라 그 평면 안에 있다. 세 열이 한 직선 위에까지 모이면 공간은 직선으로 눌린다.`,
@@ -36,7 +45,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: 'n×n 행렬의 행렬식은 어떻게 정의하고, 2×2·3×3의 성질(곱의 행렬식, 0이면 종속)이 그대로 성립하는가?', answeredBy: null }],
+  openWhys: [
+    {
+      q: "n×n 행렬의 행렬식은 어떻게 정의하고, 2×2·3×3의 성질(곱의 행렬식, 0이면 종속)이 그대로 성립하는가?",
+      answeredBy: null,
+    },
+  ],
   body: String.raw`3차원에서 행렬은 단위 정육면체를 세 열 $\mathbf{a}_1, \mathbf{a}_2, \mathbf{a}_3$이 만드는 비스듬한 상자(평행육면체)로 보낸다. [행렬식](t:t.determinant)은 이제 **부피** 배율이다.
 
 ::scene c4-det3d {}
@@ -61,7 +75,7 @@ $$\det A = a_{11}(a_{22}a_{33} - a_{23}a_{32}) - a_{12}(a_{21}a_{33} - a_{23}a_{
 - 음수는 "오른손이 왼손이 된다"는 뜻이다. 3차원에서는 엄지(𝐞₁)·검지(𝐞₂)·중지(𝐞₃)가 이루는 손 모양으로 향을 정한다.
 
 이 성질들을 $n \times n$ 행렬로 넓히는 일반 이론은 이 교재의 범위 밖이다. 아래 열린 질문에 남겨 둔다.`,
-  code: ['det3'],
+  code: ["det3"],
 };
 
 export default node;

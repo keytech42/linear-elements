@@ -1,20 +1,24 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.svd-assemble',
-  kind: 'exp',
-  title: '세 다이얼로 행렬 조립하기',
-  status: 'written',
-  requires: ['prop.svd'],
+  id: "exp.svd-assemble",
+  kind: "exp",
+  title: "세 다이얼로 행렬 조립하기",
+  status: "written",
+  requires: ["prop.svd"],
   predicts: [
     {
-      id: 'p-thv',
-      kind: 'choice',
+      id: "p-thv",
+      kind: "choice",
       q: String.raw`다른 다이얼은 그대로 두고 $\theta_V$(입력 쪽 회전)만 돌리면, 실선 타원은 어떻게 될까?`,
       hints: [
         String.raw`$V^{\mathsf{T}}$는 [길이를 바꾸지 않는다](n:prop.orthogonal-preserves). 그렇다면 단위원을 $V^{\mathsf{T}}$에 넣으면 무엇이 나오는가? 그 결과에 $\Sigma$와 $U$가 하는 일은 $\theta_V$와 상관이 있는가?`,
       ],
-      choices: ['꿈쩍하지 않는다. 화살표 끝만 타원 위를 미끄러진다', '타원이 함께 돈다', '타원이 납작해졌다가 다시 펴진다'],
+      choices: [
+        "꿈쩍하지 않는다. 화살표 끝만 타원 위를 미끄러진다",
+        "타원이 함께 돈다",
+        "타원이 납작해졌다가 다시 펴진다",
+      ],
       answer: 0,
       why: [
         String.raw`$V^{\mathsf{T}}$는 단위원을 단위원 자신으로 보낸다. 그래서 그 뒤의 $\Sigma$와 $U$가 받는 "모양"은 늘 같은 원이다. 바뀌는 것은 원 위의 어느 점이 어디로 가는지뿐이다.`,

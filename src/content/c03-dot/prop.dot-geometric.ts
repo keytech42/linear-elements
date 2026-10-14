@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.dot-geometric',
-  kind: 'prop',
-  title: '내적의 기하: u·v = ‖u‖‖v‖cos θ',
-  status: 'written',
-  requires: ['prop.law-of-cosines', 'def.dot'],
+  id: "prop.dot-geometric",
+  kind: "prop",
+  title: "내적의 기하: u·v = ‖u‖‖v‖cos θ",
+  status: "written",
+  requires: ["prop.law-of-cosines", "def.dot"],
   predicts: [
     {
-      id: 'p-max',
-      kind: 'choice',
+      id: "p-max",
+      kind: "choice",
       q: String.raw`$\mathbf{u} = (3, 1)$로 고정하고, 길이가 2인 벡터 $\mathbf{v}$를 아무 방향으로나 돌린다. $\mathbf{u}\cdot\mathbf{v}$가 가장 커지는 것은 언제이고, 그 값은?`,
       hints: [
         String.raw`아래 식 $\mathbf{u}\cdot\mathbf{v} = \|\mathbf{u}\|\,\|\mathbf{v}\|\cos\theta$에서 $\|\mathbf{u}\|$와 $\|\mathbf{v}\|$는 정해져 있다. $\cos\theta$가 가장 큰 $\theta$는?`,
         String.raw`$\|\mathbf{u}\| = \sqrt{9 + 1} = \sqrt{10}$이다.`,
       ],
-      choices: [String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\sqrt{10} \approx 6.32$`, String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\times(3 + 1) = 8$`, String.raw`$\mathbf{v}$가 $\mathbf{u}$에 수직일 때, 0`, '방향과 상관없이 같다'],
+      choices: [
+        String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\sqrt{10} \approx 6.32$`,
+        String.raw`$\mathbf{v}$가 $\mathbf{u}$와 같은 방향일 때, $2\times(3 + 1) = 8$`,
+        String.raw`$\mathbf{v}$가 $\mathbf{u}$에 수직일 때, 0`,
+        "방향과 상관없이 같다",
+      ],
       answer: 0,
       why: [
         String.raw`$\cos\theta$는 $\theta = 0$일 때 가장 크다(1). 그때 값은 $\sqrt{10}\times2$다. 9장에서 "가장 많이 늘어나는 방향"을 찾을 때 같은 생각을 쓴다.`,
@@ -25,11 +30,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-eq',
-      kind: 'choice',
+      id: "p-eq",
+      kind: "choice",
       q: String.raw`언제나 $|\mathbf{u}\cdot\mathbf{v}| \le \|\mathbf{u}\|\,\|\mathbf{v}\|$이다. 등호가 성립하는 것은 언제일까?`,
-      hints: [String.raw`$|\cos\theta| \le 1$이고, 등호는 $\cos\theta = \pm1$일 때다. 그 각은 몇 도인가?`],
-      choices: ['두 벡터가 같은 직선 위에 있을 때 (같은 방향이든 반대 방향이든)', '두 벡터가 수직일 때', '두 벡터의 길이가 같을 때', '같은 방향일 때만'],
+      hints: [
+        String.raw`$|\cos\theta| \le 1$이고, 등호는 $\cos\theta = \pm1$일 때다. 그 각은 몇 도인가?`,
+      ],
+      choices: [
+        "두 벡터가 같은 직선 위에 있을 때 (같은 방향이든 반대 방향이든)",
+        "두 벡터가 수직일 때",
+        "두 벡터의 길이가 같을 때",
+        "같은 방향일 때만",
+      ],
       answer: 0,
       why: [
         String.raw`$\theta = 0°$ 또는 $180°$일 때 $|\cos\theta| = 1$이다. 둘 중 하나가 영벡터일 때도 양쪽이 0이 되어 등호가 성립한다.`,

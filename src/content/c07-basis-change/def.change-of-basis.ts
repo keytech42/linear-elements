@@ -1,22 +1,42 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.change-of-basis',
-  kind: 'def',
-  title: '기저 변환: 같은 벡터, 다른 이름표',
-  status: 'written',
+  id: "def.change-of-basis",
+  kind: "def",
+  title: "기저 변환: 같은 벡터, 다른 이름표",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.change-of-basis', ko: '기저 변환', en: 'change of basis', gloss: '한 기저로 적은 좌표를 다른 기저로 적은 좌표로 바꾸는 일. 행렬 P의 열 = 새 기저 벡터(표준 좌표로 적은 것). 표준 좌표 = P × 새 좌표.' }],
-    symbols: [{ tex: 'P', meaning: '기저 변환 행렬(열 = 새 기저 벡터를 표준 좌표로 적은 것)' }],
+    terms: [
+      {
+        id: "t.change-of-basis",
+        ko: "기저 변환",
+        en: "change of basis",
+        gloss:
+          "한 기저로 적은 좌표를 다른 기저로 적은 좌표로 바꾸는 일. 행렬 P의 열 = 새 기저 벡터(표준 좌표로 적은 것). 표준 좌표 = P × 새 좌표.",
+      },
+    ],
+    symbols: [
+      {
+        tex: "P",
+        meaning: "기저 변환 행렬(열 = 새 기저 벡터를 표준 좌표로 적은 것)",
+      },
+    ],
   },
-  requires: ['def.basis', 'def.inverse'],
+  requires: ["def.basis", "def.inverse"],
   predicts: [
     {
-      id: 'p-way',
-      kind: 'choice',
+      id: "p-way",
+      kind: "choice",
       q: String.raw`새 기저 벡터 $\mathbf{p}_1, \mathbf{p}_2$를 (표준 좌표로 적어) 열로 세운 행렬 $P$가 있다. $P$에 어떤 좌표를 곱하면, 무엇이 무엇으로 바뀔까? ($\mathbf{p}_1, \mathbf{p}_2$는 이 노드에서만 쓰는 이름이다.)`,
-      hints: [String.raw`[행렬-벡터 곱은 열들의 선형 결합](n:def.matvec)이다. $P\begin{bmatrix} c_1 \\ c_2 \end{bmatrix} = c_1\mathbf{p}_1 + c_2\mathbf{p}_2$. 여기서 $c_1, c_2$는 어느 기저로 잰 좌표이고, 결과는 어느 기저로 적힌 벡터인가?`],
-      choices: ['새 좌표 → 표준 좌표', '표준 좌표 → 새 좌표', '어느 쪽으로도 쓸 수 있다', '좌표가 아니라 벡터를 다른 벡터로 바꾼다'],
+      hints: [
+        String.raw`[행렬-벡터 곱은 열들의 선형 결합](n:def.matvec)이다. $P\begin{bmatrix} c_1 \\ c_2 \end{bmatrix} = c_1\mathbf{p}_1 + c_2\mathbf{p}_2$. 여기서 $c_1, c_2$는 어느 기저로 잰 좌표이고, 결과는 어느 기저로 적힌 벡터인가?`,
+      ],
+      choices: [
+        "새 좌표 → 표준 좌표",
+        "표준 좌표 → 새 좌표",
+        "어느 쪽으로도 쓸 수 있다",
+        "좌표가 아니라 벡터를 다른 벡터로 바꾼다",
+      ],
       answer: 0,
       why: [
         String.raw`$c_1, c_2$가 새 기저로 잰 좌표이면, $c_1\mathbf{p}_1 + c_2\mathbf{p}_2$는 바로 그 점을 표준 좌표로 적은 것이다. 반대 방향(표준 → 새)은 $P^{-1}$이다.`,
@@ -26,14 +46,14 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-name',
-      kind: 'choice',
+      id: "p-name",
+      kind: "choice",
       q: String.raw`새 기저 $(2, 1)$, $(1, 1)$로 재면, 표준 좌표로 $(3, 2)$인 점의 새 좌표는?`,
       hints: [
         String.raw`새 좌표를 $(c_1, c_2)$라 하면 $c_1(2, 1) + c_2(1, 1) = (3, 2)$다. 또는 $P^{-1}$을 곱한다.`,
         String.raw`$P = \begin{bmatrix} 2 & 1 \\ 1 & 1 \end{bmatrix}$이고 $\det P = 1$이므로 $P^{-1} = \begin{bmatrix} 1 & -1 \\ -1 & 2 \end{bmatrix}$이다.`,
       ],
-      choices: ['(1, 1)', '(8, 5)', '(3, 2) 그대로', '(1, 0)'],
+      choices: ["(1, 1)", "(8, 5)", "(3, 2) 그대로", "(1, 0)"],
       answer: 0,
       why: [
         String.raw`$1\cdot(2, 1) + 1\cdot(1, 1) = (3, 2)$. 새 격자에서는 대각선으로 한 칸 간 자리다.`,
@@ -72,7 +92,12 @@ $$\mathbf{v} = P\,\mathbf{c} \quad(\text{새 좌표} \to \text{표준 좌표}), 
   checks: [
     {
       q: String.raw`새 기저가 표준 기저를 30° 돌린 것($P = R_{30°}$)이다. 표준 좌표에서 새 좌표로 번역하는 행렬은?`,
-      choices: [String.raw`$R_{-30°} = R_{30°}^{\mathsf{T}}$`, String.raw`$R_{30°}$`, String.raw`$R_{60°}$`, '번역할 수 없다'],
+      choices: [
+        String.raw`$R_{-30°} = R_{30°}^{\mathsf{T}}$`,
+        String.raw`$R_{30°}$`,
+        String.raw`$R_{60°}$`,
+        "번역할 수 없다",
+      ],
       answer: 0,
       explain: String.raw`표준 → 새는 $P^{-1}$이고, [직교 행렬의 역행렬은 전치](n:prop.orthogonal-inverse)이므로 $R_{30°}^{\mathsf{T}} = R_{-30°}$다. 자를 30° 돌려 대면, 점의 좌표는 반대로 30° 돌린 것처럼 바뀐다. 9장에서 $V^{\mathsf{T}}$가 하는 일이 정확히 이것이다.`,
     },

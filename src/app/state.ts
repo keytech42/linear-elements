@@ -1,7 +1,7 @@
 // 학습자 상태: 이해했다고 표시한 노드, 점검 문제 결과, "왜?"를 따라간 길(돌아가기 스택).
 // 모두 이 브라우저의 localStorage/sessionStorage 에만 저장된다.
 
-const KEY = 'le.v1';
+const KEY = "le.v1";
 
 export interface PredictRecord {
   /** 고른 보기 번호, 또는 끌어 놓은 점 */
@@ -22,8 +22,13 @@ interface Saved {
 
 function load(): Saved {
   try {
-    const s = JSON.parse(localStorage.getItem(KEY) ?? '');
-    return { done: s.done ?? [], checks: s.checks ?? {}, dojo: s.dojo ?? {}, predicts: s.predicts ?? {} };
+    const s = JSON.parse(localStorage.getItem(KEY) ?? "");
+    return {
+      done: s.done ?? [],
+      checks: s.checks ?? {},
+      dojo: s.dojo ?? {},
+      predicts: s.predicts ?? {},
+    };
   } catch {
     return { done: [], checks: {}, dojo: {}, predicts: {} };
   }
@@ -33,7 +38,15 @@ const saved = load();
 const done = new Set(saved.done);
 const subs = new Set<() => void>();
 const persist = () => {
-  localStorage.setItem(KEY, JSON.stringify({ done: [...done], checks: saved.checks, dojo: saved.dojo, predicts: saved.predicts }));
+  localStorage.setItem(
+    KEY,
+    JSON.stringify({
+      done: [...done],
+      checks: saved.checks,
+      dojo: saved.dojo,
+      predicts: saved.predicts,
+    }),
+  );
   subs.forEach((f) => f());
 };
 
@@ -49,8 +62,10 @@ export const progress = {
     (saved.checks[node] ??= [])[i] = ok;
     persist();
   },
-  checkResult: (node: string, i: number): boolean | undefined => saved.checks[node]?.[i],
-  predict: (node: string, id: string): PredictRecord | undefined => saved.predicts[node]?.[id],
+  checkResult: (node: string, i: number): boolean | undefined =>
+    saved.checks[node]?.[i],
+  predict: (node: string, id: string): PredictRecord | undefined =>
+    saved.predicts[node]?.[id],
   setPredict(node: string, id: string, r: PredictRecord) {
     (saved.predicts[node] ??= {})[id] = r;
     persist();
@@ -80,18 +95,18 @@ export const progress = {
 
 // ── "왜?"를 따라간 길 ─────────────────────────────────────────
 // 왜? 칩을 누르면 지금 노드와 스크롤 위치를 쌓아 두고, "돌아가기"로 정확히 그 자리로 돌아온다.
-const TRAIL = 'le.trail';
+const TRAIL = "le.trail";
 export interface TrailStep {
   node: string;
   scroll: number;
   q: string;
   /** 'ref'면 질문이 아니라 이름표(공리 5 …)를 찾아본 것이다. 돌아가기 막대의 말이 달라진다. */
-  kind?: 'ref';
+  kind?: "ref";
 }
 export const trail = {
   get(): TrailStep[] {
     try {
-      return JSON.parse(sessionStorage.getItem(TRAIL) ?? '[]');
+      return JSON.parse(sessionStorage.getItem(TRAIL) ?? "[]");
     } catch {
       return [];
     }

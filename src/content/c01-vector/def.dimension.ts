@@ -1,31 +1,42 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.dimension',
-  kind: 'def',
-  title: '차원: 기저 벡터의 개수',
-  status: 'written',
+  id: "def.dimension",
+  kind: "def",
+  title: "차원: 기저 벡터의 개수",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.dimension', ko: '차원', en: 'dimension', everyday: true, gloss: '기저를 이루는 벡터의 개수. 독립적으로 움직일 수 있는 방향의 수.' }],
-    symbols: [{ tex: String.raw`\mathbb{R}^n`, meaning: '숫자 n개짜리 벡터 전체' }],
+    terms: [
+      {
+        id: "t.dimension",
+        ko: "차원",
+        en: "dimension",
+        everyday: true,
+        gloss:
+          "기저를 이루는 벡터의 개수. 독립적으로 움직일 수 있는 방향의 수.",
+      },
+    ],
+    symbols: [
+      { tex: String.raw`\mathbb{R}^n`, meaning: "숫자 n개짜리 벡터 전체" },
+    ],
   },
-  requires: ['prop.coords-unique'],
+  requires: ["prop.coords-unique"],
   openWhys: [
     {
-      q: '평면이 아닌 공간(예: 숫자 3개, 100개짜리 벡터 전체)에서도 모든 기저는 같은 개수의 벡터로 이루어지는가? (일반적인 증명: 슈타이니츠 교환 정리)',
+      q: "평면이 아닌 공간(예: 숫자 3개, 100개짜리 벡터 전체)에서도 모든 기저는 같은 개수의 벡터로 이루어지는가? (일반적인 증명: 슈타이니츠 교환 정리)",
       answeredBy: null,
     },
   ],
   predicts: [
     {
-      id: 'p-count',
-      kind: 'choice',
+      id: "p-count",
+      kind: "choice",
       q: String.raw`원점을 지나는 직선 하나, 예를 들어 $(1, 2)$의 스칼라 배 전체를 생각하자. 이 직선도 [벡터 공간](t:t.vector-space)이다. 이 직선의 [기저](t:t.basis)는 벡터 몇 개로 이루어질까?`,
       hints: [
         String.raw`기저는 그 공간 **전체**를 스팬하면서 [선형 독립](n:def.independence)이어야 한다. 기저 벡터도 그 직선 위에 있어야 한다.`,
         String.raw`직선 위의 벡터 두 개는 언제나 평행하다. 그렇다면 직선 위에서 선형 독립인 벡터는 최대 몇 개인가?`,
       ],
-      choices: ['1개', '2개', '끝없이 많다', '0개'],
+      choices: ["1개", "2개", "끝없이 많다", "0개"],
       answer: 0,
       why: [
         String.raw`$(1, 2)$ 하나면 직선 전체를 스팬하고, 영벡터가 아닌 벡터 하나는 선형 독립이다. 직선 위에서 두 개를 고르면 평행하므로 종속이 된다.`,
@@ -35,14 +46,14 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-poly',
-      kind: 'choice',
+      id: "p-poly",
+      kind: "choice",
       q: String.raw`수를 받아 "(수) + (수) × 입력 + (수) × 입력²"을 내놓는 함수 전체(예: 입력 $s$에 $1 - 4s + 2s^2$을 내놓는 함수)는 벡터 공간이다. 이 공간의 차원은?`,
       hints: [
         String.raw`어떤 함수 몇 개의 [선형 결합](n:def.linear-combination)으로 이 모임의 함수를 모두 만들 수 있는가? 예의 함수에서 세 수 $1$, $-4$, $2$가 각각 무엇에 곱해져 있는지 보라.`,
         String.raw`이 모임의 함수 하나를 정하려면 수를 몇 개 골라야 하는가? 그리고 그만큼의 함수로 모두를 만들 수 있다면, 그 함수들이 선형 독립인지도 확인해야 한다.`,
       ],
-      choices: ['3', '2', '끝없이 많다', '1'],
+      choices: ["3", "2", "끝없이 많다", "1"],
       answer: 0,
       why: [
         String.raw`"1", "입력", "입력²"을 내놓는 세 함수가 기저다. 아래에서 이 셋이 선형 독립임을 확인한다.`,
@@ -85,13 +96,18 @@ $\mathbb{R}^n$에는 [표준 기저](t:t.std-basis) $\mathbf{e}_1, \dots, \mathb
   checks: [
     {
       q: String.raw`$\mathbb{R}^4$의 표준 기저 벡터는 몇 개이고, 셋째 것은 무엇인가?`,
-      choices: [String.raw`4개, $(0, 0, 1, 0)$`, String.raw`4개, $(0, 0, 1)$`, String.raw`3개, $(0, 0, 1)$`, String.raw`4개, $(1, 1, 1, 0)$`],
+      choices: [
+        String.raw`4개, $(0, 0, 1, 0)$`,
+        String.raw`4개, $(0, 0, 1)$`,
+        String.raw`3개, $(0, 0, 1)$`,
+        String.raw`4개, $(1, 1, 1, 0)$`,
+      ],
       answer: 0,
       explain: String.raw`$\mathbb{R}^4$의 벡터는 성분이 4개이므로 표준 기저 벡터도 성분이 4개이고, 셋째 성분만 1이다. 표준 기저 벡터는 $\mathbf{e}_1$부터 $\mathbf{e}_4$까지 4개다. $(0, 0, 1)$은 $\mathbb{R}^3$의 벡터다.`,
     },
     {
       q: String.raw`$\mathbb{R}^3$ 안에서 원점을 지나는 평면의 차원은?`,
-      choices: ['2', '3', '1', '평면의 기울기에 따라 다르다'],
+      choices: ["2", "3", "1", "평면의 기울기에 따라 다르다"],
       answer: 0,
       explain: String.raw`그 평면 안에서 평행하지 않은 두 벡터가 평면 전체를 스팬하고 선형 독립이므로 기저 벡터는 2개다. 평면이 3차원 공간 안에 있다고 해서 3차원이 되지 않는다. 차원은 둘러싼 공간이 아니라 그 공간 안에서 움직일 수 있는 방향의 수다.`,
     },

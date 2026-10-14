@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.det-uniform',
-  kind: 'prop',
-  title: '모든 도형의 넓이가 같은 배율로 변한다',
-  status: 'written',
-  requires: ['def.det', 'prop.linear-grid'],
+  id: "prop.det-uniform",
+  kind: "prop",
+  title: "모든 도형의 넓이가 같은 배율로 변한다",
+  status: "written",
+  requires: ["def.det", "prop.linear-grid"],
   predicts: [
     {
-      id: 'p-circle',
-      kind: 'choice',
+      id: "p-circle",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$이 반지름 1인 원(넓이 $\pi$)을 보낸 도형의 넓이는?`,
       hints: [
         String.raw`단위 정사각형의 넓이는 몇 배가 되는가? 그것이 행렬식이다.`,
         String.raw`원을 아주 작은 정사각형들로 빈틈없이 채웠다고 상상하라. 작은 정사각형 하나하나는 모두 똑같은 배율로 바뀐다.`,
       ],
-      choices: [String.raw`$6\pi$`, String.raw`$5\pi$`, String.raw`$\pi$ (원은 회전해도 원이므로)`, String.raw`$36\pi$`],
+      choices: [
+        String.raw`$6\pi$`,
+        String.raw`$5\pi$`,
+        String.raw`$\pi$ (원은 회전해도 원이므로)`,
+        String.raw`$36\pi$`,
+      ],
       answer: 0,
       why: [
         String.raw`$\det A = 6$이므로 모든 도형의 넓이가 6배가 된다. 원은 가로 반지름 2, 세로 반지름 3인 [타원](fwd:t.ellipse) 모양이 된다.`,
@@ -25,7 +30,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '휘어진 경계를 가진 도형의 넓이를 작은 정사각형으로 "끝없이 가깝게" 맞춘다는 것을 엄밀하게 하려면?', answeredBy: null }],
+  openWhys: [
+    {
+      q: '휘어진 경계를 가진 도형의 넓이를 작은 정사각형으로 "끝없이 가깝게" 맞춘다는 것을 엄밀하게 하려면?',
+      answeredBy: null,
+    },
+  ],
   body: String.raw`[행렬식](t:t.determinant)은 단위 정사각형 하나의 넓이 배율로 정의했다. 원, 삼각형, 아무렇게나 그린 얼룩의 넓이도 같은 배율로 바뀔까?
 
 ::predict p-circle

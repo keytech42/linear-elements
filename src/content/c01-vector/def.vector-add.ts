@@ -1,41 +1,62 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.vector-add',
-  kind: 'def',
-  title: '벡터 덧셈: 이어 붙이기',
-  status: 'written',
+  id: "def.vector-add",
+  kind: "def",
+  title: "벡터 덧셈: 이어 붙이기",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.vector-add', ko: '벡터 덧셈', en: 'vector addition', gloss: '두 이동을 차례로 하는 것과 같은 이동 하나.' }],
+    terms: [
+      {
+        id: "t.vector-add",
+        ko: "벡터 덧셈",
+        en: "vector addition",
+        gloss: "두 이동을 차례로 하는 것과 같은 이동 하나.",
+      },
+    ],
     symbols: [
-      { tex: String.raw`\mathbf{u}`, meaning: '이름 없는 벡터(둘째)', note: '굵은+첨자 𝐮ᵢ는 왼쪽 특이벡터(9장)' },
-      { tex: String.raw`\mathbf{w}`, meaning: '이름 없는 벡터(셋째)' },
+      {
+        tex: String.raw`\mathbf{u}`,
+        meaning: "이름 없는 벡터(둘째)",
+        note: "굵은+첨자 𝐮ᵢ는 왼쪽 특이벡터(9장)",
+      },
+      { tex: String.raw`\mathbf{w}`, meaning: "이름 없는 벡터(셋째)" },
     ],
   },
-  requires: ['def.vector'],
+  requires: ["def.vector"],
   predicts: [
     {
-      id: 'p-sum',
-      kind: 'point',
+      id: "p-sum",
+      kind: "point",
       q: String.raw`주황 화살표가 $\mathbf{u} = (2, 1)$, 청록 화살표가 $\mathbf{w} = (-3, 1)$이다. 원점에서 $\mathbf{u}$만큼 간 뒤 이어서 $\mathbf{w}$만큼 가면 어디에 도착할까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`$\mathbf{u}$만큼 간 도착점에서 **다시 출발**한다. [벡터는 출발점과 상관없는 이동](n:def.vector)이므로, 청록 화살표를 그 도착점으로 평행하게 옮겨 붙이면 된다.`,
         String.raw`첫 도착점은 $(2, 1)$이다. 거기서 왼쪽으로 3칸, 위로 1칸 움직여라.`,
       ],
-      A: [[2, -3], [1, 1]],
+      A: [
+        [2, -3],
+        [1, 1],
+      ],
       x: [1, 1],
-      target: 'Ax',
-      show: ['cols'],
-      colLabels: ['u', 'w'],
-      colColors: ['u', 'w'],
+      target: "Ax",
+      show: ["cols"],
+      colLabels: ["u", "w"],
+      colColors: ["u", "w"],
       reveal: String.raw`정답은 $(-1, 2)$다(초록 화살표). $(2, 1)$에서 왼쪽으로 3, 위로 1을 가면 $(-1, 2)$다. $(-3, 1)$ 근처에 놓았다면 둘째 이동을 원점에서 다시 시작한 것이다. 둘째 이동은 **첫째 이동이 끝난 자리에서** 시작한다.`,
     },
     {
-      id: 'p-loop',
-      kind: 'choice',
+      id: "p-loop",
+      kind: "choice",
       q: String.raw`세 벡터 $(2, 1)$, $(-3, 1)$, $(1, -2)$를 차례로 이어 붙이면, 원점에서 출발해 어디에 도착할까?`,
-      hints: [String.raw`앞 관문에서 처음 두 벡터를 이어 붙인 도착점을 이미 구했다. 거기서 셋째 이동을 하라.`],
-      choices: [String.raw`원점으로 돌아온다`, String.raw`$(6, 4)$`, String.raw`$(1, -2)$`, String.raw`세 벡터는 차례로 이어 붙일 수 없다`],
+      hints: [
+        String.raw`앞 관문에서 처음 두 벡터를 이어 붙인 도착점을 이미 구했다. 거기서 셋째 이동을 하라.`,
+      ],
+      choices: [
+        String.raw`원점으로 돌아온다`,
+        String.raw`$(6, 4)$`,
+        String.raw`$(1, -2)$`,
+        String.raw`세 벡터는 차례로 이어 붙일 수 없다`,
+      ],
       answer: 0,
       why: [
         String.raw`$(-1, 2)$에서 $(1, -2)$만큼 움직이면 $(0, 0)$이다. 세 화살표가 삼각형을 이루며 닫힌다.`,
@@ -78,13 +99,23 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$\mathbf{w}$를 $\mathbf{u}$의 머리에 이어 붙인 그림에서, $\mathbf{u} + \mathbf{w}$의 화살표는 어디에서 어디까지인가?`,
-      choices: [String.raw`$\mathbf{u}$의 꼬리에서 $\mathbf{w}$의 머리까지`, String.raw`$\mathbf{u}$의 머리에서 $\mathbf{w}$의 머리까지`, String.raw`$\mathbf{w}$의 꼬리에서 $\mathbf{u}$의 꼬리까지`, String.raw`$\mathbf{u}$의 머리에서 $\mathbf{w}$의 꼬리까지`],
+      choices: [
+        String.raw`$\mathbf{u}$의 꼬리에서 $\mathbf{w}$의 머리까지`,
+        String.raw`$\mathbf{u}$의 머리에서 $\mathbf{w}$의 머리까지`,
+        String.raw`$\mathbf{w}$의 꼬리에서 $\mathbf{u}$의 꼬리까지`,
+        String.raw`$\mathbf{u}$의 머리에서 $\mathbf{w}$의 꼬리까지`,
+      ],
       answer: 0,
       explain: String.raw`$\mathbf{u} + \mathbf{w}$는 "처음 출발한 곳에서 마지막에 도착한 곳까지"의 이동이다. 처음 출발한 곳은 $\mathbf{u}$의 꼬리, 마지막 도착점은 $\mathbf{w}$의 머리다. 둘째 보기는 $\mathbf{w}$ 하나만의 이동이다. 이어 붙인 그림에서는 $\mathbf{u}$의 머리와 $\mathbf{w}$의 꼬리가 같은 점이므로, 넷째 보기는 길이가 없는 영벡터다.`,
     },
     {
       q: String.raw`$\mathbf{u} + \mathbf{w} = \mathbf{u}$이다. $\mathbf{w}$는 무엇인가?`,
-      choices: [String.raw`$\mathbf{0}$`, String.raw`$\mathbf{u}$`, String.raw`$\mathbf{u}$와 반대쪽을 가리키는 벡터`, String.raw`정할 수 없다`],
+      choices: [
+        String.raw`$\mathbf{0}$`,
+        String.raw`$\mathbf{u}$`,
+        String.raw`$\mathbf{u}$와 반대쪽을 가리키는 벡터`,
+        String.raw`정할 수 없다`,
+      ],
       answer: 0,
       explain: String.raw`$\mathbf{u}$만큼 간 도착점에서 $\mathbf{w}$만큼 더 움직였는데도 도착점이 $\mathbf{u}$만 했을 때와 같다. 그러므로 $\mathbf{w}$는 움직이지 않는 이동, 곧 영벡터다. 반대쪽을 가리키는 같은 크기의 벡터를 더하면 결과는 $\mathbf{u}$가 아니라 $\mathbf{0}$이다.`,
     },

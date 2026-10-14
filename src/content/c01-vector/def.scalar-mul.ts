@@ -1,39 +1,66 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.scalar-mul',
-  kind: 'def',
-  title: '스칼라 곱: 늘이고, 줄이고, 뒤집기',
-  status: 'written',
+  id: "def.scalar-mul",
+  kind: "def",
+  title: "스칼라 곱: 늘이고, 줄이고, 뒤집기",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.scalar', ko: '스칼라', en: 'scalar', gloss: '벡터의 길이를 몇 배로 바꿀지 정하는 보통의 수.' },
-      { id: 't.scalar-mul', ko: '스칼라 곱', en: 'scalar multiplication', gloss: '벡터의 모든 성분에 같은 수를 곱하는 것. 같은 직선 위에서 늘이고 줄이고 뒤집는다.' },
-      { id: 't.line-origin', ko: '원점을 지나는 직선', en: 'line through the origin', gloss: '영벡터가 아닌 벡터 v의 스칼라 배 cv를 모두 모은 것. 이 교재는 좌표로 쓰는 직선을 이렇게 정의한다.' },
+      {
+        id: "t.scalar",
+        ko: "스칼라",
+        en: "scalar",
+        gloss: "벡터의 길이를 몇 배로 바꿀지 정하는 보통의 수.",
+      },
+      {
+        id: "t.scalar-mul",
+        ko: "스칼라 곱",
+        en: "scalar multiplication",
+        gloss:
+          "벡터의 모든 성분에 같은 수를 곱하는 것. 같은 직선 위에서 늘이고 줄이고 뒤집는다.",
+      },
+      {
+        id: "t.line-origin",
+        ko: "원점을 지나는 직선",
+        en: "line through the origin",
+        gloss:
+          "영벡터가 아닌 벡터 v의 스칼라 배 cv를 모두 모은 것. 이 교재는 좌표로 쓰는 직선을 이렇게 정의한다.",
+      },
     ],
-    symbols: [{ tex: 'c', meaning: '스칼라(보통의 수)' }],
+    symbols: [{ tex: "c", meaning: "스칼라(보통의 수)" }],
   },
-  requires: ['def.vector', 'prop.neg-times-neg'],
+  requires: ["def.vector", "prop.neg-times-neg"],
   predicts: [
     {
-      id: 'p-neg',
-      kind: 'point',
+      id: "p-neg",
+      kind: "point",
       q: String.raw`$\mathbf{v} = (2, -1)$이다. $-1.5\,\mathbf{v}$는 원점에서 출발해 어디에서 끝날까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`정의대로 성분마다 $-1.5$를 곱한다. 둘째 성분은 음수 × 음수다. [그 결과의 부호는 앞에서 정했다](n:prop.neg-times-neg#neg-prod).`,
         String.raw`첫째 성분은 $-1.5 \times 2 = -3$이다. 둘째 성분 $-1.5 \times (-1)$을 구하라.`,
       ],
-      A: [[-1.5, 0], [0, -1.5]],
+      A: [
+        [-1.5, 0],
+        [0, -1.5],
+      ],
       x: [2, -1],
-      target: 'Ax',
+      target: "Ax",
       reveal: String.raw`정답은 $(-3, 1.5)$다(초록 화살표 끝. 이름표 "Ax"는 2장의 표기다). $\mathbf{v}$는 오른쪽 아래를 가리키는데, $-1.5\,\mathbf{v}$는 왼쪽 위를 가리킨다. 같은 직선 위에서 **뒤집히면서** 1.5배 길어졌다. $(-3, -1.5)$에 놓았다면 둘째 성분에서 음수 × 음수 = 양수를 빠뜨린 것이다. 그 점은 $\mathbf{v}$의 직선 위에 있지 않다.`,
     },
     {
-      id: 'p-line',
-      kind: 'choice',
+      id: "p-line",
+      kind: "choice",
       q: String.raw`$\mathbf{v} \ne \mathbf{0}$을 고정하고, $c$를 **모든 수**로 바꿔 가며 $c\mathbf{v}$의 끝점을 모두 찍으면 무엇이 그려질까?`,
-      hints: [String.raw`$c$가 양수일 때, 0일 때, 음수일 때를 따로 생각하라. 각각 끝점은 원점에서 어느 쪽에 있는가?`],
-      choices: [String.raw`원점을 지나는 직선 하나 전체`, String.raw`원점에서 $\mathbf{v}$ 쪽으로만 뻗은 반직선`, String.raw`원점을 중심으로 하는 원`, String.raw`$\mathbf{v}$의 끝점 하나`],
+      hints: [
+        String.raw`$c$가 양수일 때, 0일 때, 음수일 때를 따로 생각하라. 각각 끝점은 원점에서 어느 쪽에 있는가?`,
+      ],
+      choices: [
+        String.raw`원점을 지나는 직선 하나 전체`,
+        String.raw`원점에서 $\mathbf{v}$ 쪽으로만 뻗은 반직선`,
+        String.raw`원점을 중심으로 하는 원`,
+        String.raw`$\mathbf{v}$의 끝점 하나`,
+      ],
       answer: 0,
       why: [
         String.raw`$c > 0$이면 $\mathbf{v}$ 쪽 절반, $c < 0$이면 반대쪽 절반, $c = 0$이면 원점이 찍힌다. 셋을 합치면 직선 전체다.`,
@@ -95,18 +122,23 @@ $\mathbf{w} - \mathbf{u}$는 $\mathbf{w} + (-\mathbf{u})$로 정한다. 성분�
   checks: [
     {
       q: String.raw`$-2\cdot(-1, 3)$은?`,
-      choices: [String.raw`$(2, -6)$`, String.raw`$(-2, -6)$`, String.raw`$(-3, 1)$`, String.raw`$(2, 6)$`],
+      choices: [
+        String.raw`$(2, -6)$`,
+        String.raw`$(-2, -6)$`,
+        String.raw`$(-3, 1)$`,
+        String.raw`$(2, 6)$`,
+      ],
       answer: 0,
       explain: String.raw`성분마다 $-2$를 곱한다: $(-2)\cdot(-1) = 2$, $(-2)\cdot 3 = -6$. $(-2, -6)$은 첫째 성분에서 음수 × 음수를 음수로 계산한 것이다. $(-3, 1)$은 곱하지 않고 더했다. $(2, 6)$은 둘째 성분의 부호를 놓쳤다. 정답 $(2, -6)$은 $(-1, 3)$과 반대쪽을 가리키고 두 배 길다.`,
     },
     {
       q: String.raw`$\mathbf{v} \ne \mathbf{0}$인데 $c\mathbf{v} = \mathbf{0}$이다. $c$는?`,
-      choices: ['0', '1', '−1', '어떤 수든 될 수 있다'],
+      choices: ["0", "1", "−1", "어떤 수든 될 수 있다"],
       answer: 0,
       explain: String.raw`$\mathbf{v}$의 성분 가운데 0이 아닌 것이 있다. 그 성분에 $c$를 곱한 것이 0이 되려면, [곱이 0이면 한쪽은 0](why:prop.arith-first#zero-product)이고 그 성분은 0이 아니므로 $c = 0$이어야 한다. $c = -1$이면 $-\mathbf{v}$가 되어 반대쪽을 가리킬 뿐 영벡터가 되지 않는다.`,
     },
   ],
-  code: ['scale'],
+  code: ["scale"],
 };
 
 export default node;

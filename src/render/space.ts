@@ -4,10 +4,10 @@
 //   1) z축을 중심으로 yaw만큼 돌리고  2) x축을 중심으로 pitch만큼 기울인 다음  3) 깊이 성분을 버린다.
 // P의 계수(rank)는 2다: 시선 방향의 직선 하나가 통째로 한 점으로 납작해진다(그 직선이 P의 영공간).
 // 장면 아래의 "투영 행렬 보기"가 지금 이 순간의 P를 그대로 보여 준다.
-import type { Vec } from '../la/vec';
-import type { Mat } from '../la/mat';
-import { C } from './colors';
-import type { SyncBus } from '../sync/bus';
+import type { Vec } from "../la/vec";
+import type { Mat } from "../la/mat";
+import { C } from "./colors";
+import type { SyncBus } from "../sync/bus";
 
 type Item = { depth: number; draw: (ctx: CanvasRenderingContext2D) => void };
 
@@ -38,34 +38,43 @@ export class Space {
   private ro: ResizeObserver;
   private offBus?: () => void;
 
-  constructor(host: HTMLElement, opts: { range?: number; height?: number; bus?: SyncBus } = {}) {
+  constructor(
+    host: HTMLElement,
+    opts: { range?: number; height?: number; bus?: SyncBus } = {},
+  ) {
     this.range = opts.range ?? 3;
     this.bus = opts.bus;
-    this.wrap = document.createElement('div');
-    this.wrap.className = 'plane space';
-    this.canvas = document.createElement('canvas');
+    this.wrap = document.createElement("div");
+    this.wrap.className = "plane space";
+    this.canvas = document.createElement("canvas");
     this.canvas.style.height = `${opts.height ?? 380}px`;
-    this.canvas.title = '끌어서 돌려 보기';
+    this.canvas.title = "끌어서 돌려 보기";
     this.wrap.appendChild(this.canvas);
     host.appendChild(this.wrap);
-    this.ctx = this.canvas.getContext('2d')!;
+    this.ctx = this.canvas.getContext("2d")!;
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(this.canvas);
     this.resize();
-    this.canvas.addEventListener('pointerdown', (e) => {
+    this.canvas.addEventListener("pointerdown", (e) => {
       this.dragging = { x: e.clientX, y: e.clientY };
       this.canvas.setPointerCapture(e.pointerId);
     });
-    this.canvas.addEventListener('pointermove', (e) => {
+    this.canvas.addEventListener("pointermove", (e) => {
       if (!this.dragging) return;
       this.yaw -= (e.clientX - this.dragging.x) * 0.008;
-      this.pitch = Math.max(0.05, Math.min(Math.PI - 0.05, this.pitch - (e.clientY - this.dragging.y) * 0.008));
+      this.pitch = Math.max(
+        0.05,
+        Math.min(
+          Math.PI - 0.05,
+          this.pitch - (e.clientY - this.dragging.y) * 0.008,
+        ),
+      );
       this.dragging = { x: e.clientX, y: e.clientY };
       this.invalidate();
     });
     const up = () => (this.dragging = null);
-    this.canvas.addEventListener('pointerup', up);
-    this.canvas.addEventListener('pointercancel', up);
+    this.canvas.addEventListener("pointerup", up);
+    this.canvas.addEventListener("pointercancel", up);
     if (this.bus) this.offBus = this.bus.on(() => this.invalidate());
   }
 
@@ -96,8 +105,10 @@ export class Space {
 
   /** 지금 시점의 투영 행렬 P (2×3). 화면 가로 = 1행, 화면 세로 = 2행. */
   projection(): Mat {
-    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw);
-    const cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const cy = Math.cos(this.yaw),
+      sy = Math.sin(this.yaw);
+    const cp = Math.cos(this.pitch),
+      sp = Math.sin(this.pitch);
     // z축 회전 Rz(yaw) 다음 x축 회전 Rx(pitch)를 하고, 1행(가로)과 3행(세로)만 남긴 것
     return [
       [cy, -sy, 0],
@@ -106,8 +117,10 @@ export class Space {
   }
   /** 시선 방향(깊이) 성분: 화면에서 버려지는 축. 클수록 멀다. */
   private depthRow(): Vec {
-    const cy = Math.cos(this.yaw), sy = Math.sin(this.yaw);
-    const cp = Math.cos(this.pitch), sp = Math.sin(this.pitch);
+    const cy = Math.cos(this.yaw),
+      sy = Math.sin(this.yaw);
+    const cp = Math.cos(this.pitch),
+      sp = Math.sin(this.pitch);
     return [cp * sy, cp * cy, -sp];
   }
 
@@ -138,7 +151,8 @@ export class Space {
   }
 
   seg(a: Vec, b: Vec, st: Style3 = {}) {
-    const pa = this.P(a), pb = this.P(b);
+    const pa = this.P(a),
+      pb = this.P(b);
     const hot = this.hot(st.key);
     this.items.push({
       depth: (pa[2] + pb[2]) / 2,
@@ -158,7 +172,8 @@ export class Space {
   }
 
   arrow(from: Vec, to: Vec, st: Style3 & { label?: string } = {}) {
-    const pa = this.P(from), pb = this.P(to);
+    const pa = this.P(from),
+      pb = this.P(to);
     const hot = this.hot(st.key);
     const color = st.color ?? C.ink;
     this.items.push({
@@ -176,13 +191,22 @@ export class Space {
         }
         ctx.beginPath();
         ctx.moveTo(pa[0], pa[1]);
-        ctx.lineTo(pb[0] - Math.cos(ang) * hl * 0.8, pb[1] - Math.sin(ang) * hl * 0.8);
+        ctx.lineTo(
+          pb[0] - Math.cos(ang) * hl * 0.8,
+          pb[1] - Math.sin(ang) * hl * 0.8,
+        );
         ctx.stroke();
         if (len > 0.5) {
           ctx.beginPath();
           ctx.moveTo(pb[0], pb[1]);
-          ctx.lineTo(pb[0] - hl * Math.cos(ang - 0.42), pb[1] - hl * Math.sin(ang - 0.42));
-          ctx.lineTo(pb[0] - hl * Math.cos(ang + 0.42), pb[1] - hl * Math.sin(ang + 0.42));
+          ctx.lineTo(
+            pb[0] - hl * Math.cos(ang - 0.42),
+            pb[1] - hl * Math.sin(ang - 0.42),
+          );
+          ctx.lineTo(
+            pb[0] - hl * Math.cos(ang + 0.42),
+            pb[1] - hl * Math.sin(ang + 0.42),
+          );
           ctx.closePath();
           ctx.fill();
         }
@@ -199,7 +223,9 @@ export class Space {
       depth: ps.reduce((s, p) => s + p[2], 0) / ps.length,
       draw: (ctx) => {
         ctx.beginPath();
-        ps.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
+        ps.forEach((p, i) =>
+          i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]),
+        );
         ctx.closePath();
         if (st.fill) {
           ctx.fillStyle = st.fill;
@@ -233,7 +259,10 @@ export class Space {
 
   text(p: Vec, s: string, color: string = C.ink) {
     const q = this.P(p);
-    this.items.push({ depth: q[2] - 1, draw: (ctx) => label(ctx, q[0], q[1], s, color) });
+    this.items.push({
+      depth: q[2] - 1,
+      draw: (ctx) => label(ctx, q[0], q[1], s, color),
+    });
   }
 
   /** 축 세 개와 바닥(z = 0) 격자 */
@@ -245,9 +274,9 @@ export class Space {
     this.seg([-n, 0, 0], [n, 0, 0], { color: C.axis, width: 1 });
     this.seg([0, -n, 0], [0, n, 0], { color: C.axis, width: 1 });
     this.seg([0, 0, -n], [0, 0, n], { color: C.axis, width: 1 });
-    this.text([n + 0.3, 0, 0], 'x', C.dim);
-    this.text([0, n + 0.3, 0], 'y', C.dim);
-    this.text([0, 0, n + 0.3], 'z', C.dim);
+    this.text([n + 0.3, 0, 0], "x", C.dim);
+    this.text([0, n + 0.3, 0], "y", C.dim);
+    this.text([0, 0, n + 0.3], "z", C.dim);
   }
 
   hud(lines: { text: string; color?: string }[]) {
@@ -255,18 +284,27 @@ export class Space {
       depth: -1e9,
       draw: (ctx) => {
         ctx.font = '13px "Pretendard", system-ui, sans-serif';
-        ctx.textAlign = 'left';
-        lines.forEach((ln, i) => label(ctx, 12, 16 + i * 19, ln.text, ln.color ?? C.dim, false));
+        ctx.textAlign = "left";
+        lines.forEach((ln, i) =>
+          label(ctx, 12, 16 + i * 19, ln.text, ln.color ?? C.dim, false),
+        );
       },
     });
   }
 }
 
-function label(ctx: CanvasRenderingContext2D, x: number, y: number, s: string, color: string, setFont = true) {
+function label(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  s: string,
+  color: string,
+  setFont = true,
+) {
   if (setFont) ctx.font = '14px "Pretendard", system-ui, sans-serif';
-  ctx.textBaseline = 'middle';
+  ctx.textBaseline = "middle";
   ctx.lineWidth = 3;
-  ctx.strokeStyle = 'rgba(14,17,22,0.85)';
+  ctx.strokeStyle = "rgba(14,17,22,0.85)";
   ctx.strokeText(s, x, y);
   ctx.fillStyle = color;
   ctx.fillText(s, x, y);

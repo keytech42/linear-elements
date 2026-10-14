@@ -1,29 +1,51 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.matvec',
-  kind: 'def',
-  title: '행렬 × 벡터 = 열들의 선형 결합',
-  status: 'written',
+  id: "def.matvec",
+  kind: "def",
+  title: "행렬 × 벡터 = 열들의 선형 결합",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.matvec', ko: '행렬-벡터 곱', en: 'matrix–vector product', gloss: 'A𝐱 = x₁𝐚₁ + x₂𝐚₂ + … : 𝐱의 성분을 계수로 삼아 A의 열들을 선형 결합한 것.' }],
-    symbols: [{ tex: String.raw`\mathbf{x}`, meaning: '변환에 넣는 입력 벡터', note: '성분은 x₁, x₂' }],
+    terms: [
+      {
+        id: "t.matvec",
+        ko: "행렬-벡터 곱",
+        en: "matrix–vector product",
+        gloss:
+          "A𝐱 = x₁𝐚₁ + x₂𝐚₂ + … : 𝐱의 성분을 계수로 삼아 A의 열들을 선형 결합한 것.",
+      },
+    ],
+    symbols: [
+      {
+        tex: String.raw`\mathbf{x}`,
+        meaning: "변환에 넣는 입력 벡터",
+        note: "성분은 x₁, x₂",
+      },
+    ],
   },
-  requires: ['def.matrix'],
-  openWhys: [{ q: '학교에서 배운 "행 × 열" 계산법은 이 정의와 어떻게 같은가?', answeredBy: 'prop.row-picture' }],
+  requires: ["def.matrix"],
+  openWhys: [
+    {
+      q: '학교에서 배운 "행 × 열" 계산법은 이 정의와 어떻게 같은가?',
+      answeredBy: "prop.row-picture",
+    },
+  ],
   predicts: [
     {
-      id: 'p-ax',
-      kind: 'point',
+      id: "p-ax",
+      kind: "point",
       q: String.raw`어떤 변환이 $\mathbf{e}_1$을 $(1, 0)$으로, $\mathbf{e}_2$를 $(1, 1)$로 보낸다(주황, 청록 화살표). 그렇다면 $\mathbf{x} = (2, 1)$(노랑)은 어디로 갈까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`$\mathbf{x} = (2, 1)$을 표준 기저로 적으면 $2\mathbf{e}_1 + 1\mathbf{e}_2$다. [선형 변환은 이 결합을 그대로 유지한다](n:prop.basis-determines).`,
         String.raw`그러므로 상은 \"$\mathbf{e}_1$의 상 2개\" + \"$\mathbf{e}_2$의 상 1개\"다. 주황 화살표를 두 번 이어 붙인 끝에서 청록 화살표를 하나 더 이어 붙여 보라.`,
       ],
-      A: [[1, 1], [0, 1]],
+      A: [
+        [1, 1],
+        [0, 1],
+      ],
       x: [2, 1],
-      target: 'Ax',
-      show: ['cols', 'x'],
+      target: "Ax",
+      show: ["cols", "x"],
       reveal: String.raw`정답은 $(3, 1)$이다. $\mathbf{x} = 2\mathbf{e}_1 + 1\mathbf{e}_2$이므로 상도 $2\cdot(1, 0) + 1\cdot(1, 1)$이다. $(2, 1)$ 근처에 놓았다면 변환이 $\mathbf{x}$를 움직이지 않는다고 본 것이다. 아래에서 이 계산이 왜 **언제나** 맞는지 정리한다.`,
     },
   ],
@@ -69,18 +91,27 @@ $$A(\mathbf{u} + \mathbf{w}) = (u_1 + w_1)\mathbf{a}_1 + (u_2 + w_2)\mathbf{a}_2
   checks: [
     {
       q: String.raw`$A = \begin{bmatrix} 1 & 2 \\ 3 & 4 \end{bmatrix}$, $\mathbf{x} = (1, 0)$일 때 $A\mathbf{x}$는?`,
-      choices: [String.raw`$(1, 3)$`, String.raw`$(1, 2)$`, String.raw`$(3, 7)$`, String.raw`$(4, 6)$`],
+      choices: [
+        String.raw`$(1, 3)$`,
+        String.raw`$(1, 2)$`,
+        String.raw`$(3, 7)$`,
+        String.raw`$(4, 6)$`,
+      ],
       answer: 0,
       explain: String.raw`$A\mathbf{x} = 1\cdot\mathbf{a}_1 + 0\cdot\mathbf{a}_2 = \mathbf{a}_1 = (1, 3)$. 일반적으로 $A\mathbf{e}_j$는 $A$의 $j$번째 열이다. 이것이 [행렬의 정의](n:def.matrix) 그 자체다. $(1, 2)$는 첫째 행을 읽은 것이다.`,
     },
     {
       q: String.raw`$A\mathbf{x}$를 "$\mathbf{x}$의 성분으로 $A$의 열을 섞은 것"으로 정의할 수 있는 근거는?`,
-      choices: ['선형 변환은 선형 결합을 그대로 유지하고, 열은 기저의 상이기 때문', '이렇게 계산하는 편이 빠르기 때문', '수학자들이 그렇게 정했기 때문(근거 없음)'],
+      choices: [
+        "선형 변환은 선형 결합을 그대로 유지하고, 열은 기저의 상이기 때문",
+        "이렇게 계산하는 편이 빠르기 때문",
+        "수학자들이 그렇게 정했기 때문(근거 없음)",
+      ],
       answer: 0,
       explain: String.raw`$\mathbf{x} = x_1\mathbf{e}_1 + x_2\mathbf{e}_2$이고, 선형 변환은 이 결합을 유지하므로 $T(\mathbf{x}) = x_1T(\mathbf{e}_1) + x_2T(\mathbf{e}_2)$다. 열이 $T(\mathbf{e}_j)$이므로 식이 정해진다. 계산 속도와는 관계가 없다. 그리고 "정했기 때문"은 반만 맞는다. 행렬을 세로로 적는 것은 규약이지만, 규약을 정한 뒤 곱셈의 모양은 선형성에서 저절로 나온다.`,
     },
   ],
-  code: ['matVec', 'col', 'linComb'],
+  code: ["matVec", "col", "linComb"],
 };
 
 export default node;

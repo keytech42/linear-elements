@@ -1,24 +1,43 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.char-poly',
-  kind: 'prop',
-  title: '특성방정식: det(A − λI) = 0',
-  status: 'written',
+  id: "prop.char-poly",
+  kind: "prop",
+  title: "특성방정식: det(A − λI) = 0",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.char-eq', ko: '특성방정식', en: 'characteristic equation', gloss: 'det(A − λI) = 0. 2×2에서는 λ² − (tr A)λ + det A = 0. 근이 고윳값이다.' },
-      { id: 't.discriminant', ko: '판별식', en: 'discriminant', gloss: '2×2 특성방정식에서 (tr A)² − 4 det A. 양수면 서로 다른 실수 고윳값 둘, 0이면 하나, 음수면 실수 고윳값이 없다.' },
+      {
+        id: "t.char-eq",
+        ko: "특성방정식",
+        en: "characteristic equation",
+        gloss:
+          "det(A − λI) = 0. 2×2에서는 λ² − (tr A)λ + det A = 0. 근이 고윳값이다.",
+      },
+      {
+        id: "t.discriminant",
+        ko: "판별식",
+        en: "discriminant",
+        gloss:
+          "2×2 특성방정식에서 (tr A)² − 4 det A. 양수면 서로 다른 실수 고윳값 둘, 0이면 하나, 음수면 실수 고윳값이 없다.",
+      },
     ],
-    symbols: [{ tex: String.raw`\lambda_i`, meaning: 'i번째 고윳값 (큰 것부터)' }],
+    symbols: [
+      { tex: String.raw`\lambda_i`, meaning: "i번째 고윳값 (큰 것부터)" },
+    ],
   },
-  requires: ['def.eigen', 'def.trace', 'prop.det-zero', 'def.identity'],
+  requires: ["def.eigen", "def.trace", "prop.det-zero", "def.identity"],
   predicts: [
     {
-      id: 'p-why',
-      kind: 'choice',
+      id: "p-why",
+      kind: "choice",
       q: String.raw`$(A - \lambda I)\mathbf{v} = \mathbf{0}$이고 $\mathbf{v} \ne \mathbf{0}$이라면, 행렬 $A - \lambda I$에 대해 무엇을 알 수 있을까?`,
-      choices: ['평면을 직선이나 점으로 납작하게 누른다. 그래서 행렬식이 0이다', String.raw`$A - \lambda I$는 영행렬이다`, String.raw`$A - \lambda I$는 역행렬을 가진다`, '아무것도 알 수 없다'],
+      choices: [
+        "평면을 직선이나 점으로 납작하게 누른다. 그래서 행렬식이 0이다",
+        String.raw`$A - \lambda I$는 영행렬이다`,
+        String.raw`$A - \lambda I$는 역행렬을 가진다`,
+        "아무것도 알 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`영벡터가 아닌 입력이 원점으로 간다는 것은 영공간이 원점보다 크다는 뜻이고, [그것은 행렬식이 0이라는 것과 같다](n:prop.det-zero).`,
@@ -28,14 +47,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-shift',
-      kind: 'choice',
+      id: "p-shift",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 2 & 1 \\ 1 & 2 \end{bmatrix}$의 고윳값은 3과 1이다(아래에서 계산한다). 그렇다면 $A + 2I$의 고윳값은?`,
       hints: [
         String.raw`$A$의 고유벡터 $\mathbf{v}$에 $A + 2I$를 곱하면 어떻게 되는가? 행렬 곱은 덧셈 위로 나뉜다: $(A + 2I)\mathbf{v} = A\mathbf{v} + 2I\mathbf{v}$.`,
         String.raw`$A\mathbf{v} = \lambda\mathbf{v}$이고 $I\mathbf{v} = \mathbf{v}$다. 두 항을 합쳐 $(\ \cdot\ )\mathbf{v}$ 꼴로 써 보라.`,
       ],
-      choices: ['5와 3', '3과 1 그대로', '6과 2 (두 배)', '특성방정식을 새로 풀기 전에는 알 수 없다'],
+      choices: [
+        "5와 3",
+        "3과 1 그대로",
+        "6과 2 (두 배)",
+        "특성방정식을 새로 풀기 전에는 알 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`$(A + 2I)\mathbf{v} = \lambda\mathbf{v} + 2\mathbf{v} = (\lambda + 2)\mathbf{v}$. 고유벡터는 그대로이고 고윳값만 2씩 옮겨진다.`,
@@ -45,7 +69,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?', answeredBy: null }],
+  openWhys: [
+    {
+      q: "판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?",
+      answeredBy: null,
+    },
+  ],
   body: String.raw`[앞의 탐구](n:exp.eigen-hunt)처럼 그림에서 고유벡터를 찾을 수는 있다. 그러나 정확한 값을 얻으려면 계산이 필요하다. $A\mathbf{v} = \lambda\mathbf{v}$를 만족하는 $\lambda$는 어떻게 구할까? 미지수가 $\lambda$와 $\mathbf{v}$ 둘이라 막막해 보인다. 먼저 식을 옮겨 써 보자.
 
 $$A\mathbf{v} = \lambda\mathbf{v} \iff A\mathbf{v} - \lambda I\mathbf{v} = \mathbf{0} \iff (A - \lambda I)\mathbf{v} = \mathbf{0}$$
@@ -102,18 +131,23 @@ $$\det\begin{bmatrix} a_{11} - \lambda & a_{12} \\ a_{21} & a_{22} - \lambda \en
   checks: [
     {
       q: String.raw`$A = \begin{bmatrix} 1 & 2 \\ 0 & 3 \end{bmatrix}$의 고윳값은?`,
-      choices: ['1과 3', '1과 2', '3과 2', '4와 3'],
+      choices: ["1과 3", "1과 2", "3과 2", "4와 3"],
       answer: 0,
       explain: String.raw`특성방정식은 $\lambda^2 - 4\lambda + 3 = 0$이고 근은 1과 3이다. 대각선 아래가 0인 행렬(삼각 행렬)에서는 $\det(A - \lambda I) = (1 - \lambda)(3 - \lambda)$이므로 대각 성분이 그대로 고윳값이다. 대각선 밖의 2는 고윳값이 아니라 고유벡터의 방향에 영향을 준다(고윳값 3의 방향은 $(1, 1)$).`,
     },
     {
-      q: '2×2 행렬의 고윳값이 2와 −3이다. 대각합과 행렬식은?',
-      choices: ['대각합 −1, 행렬식 −6', '대각합 −6, 행렬식 −1', '대각합 5, 행렬식 6', '행렬을 모르면 알 수 없다'],
+      q: "2×2 행렬의 고윳값이 2와 −3이다. 대각합과 행렬식은?",
+      choices: [
+        "대각합 −1, 행렬식 −6",
+        "대각합 −6, 행렬식 −1",
+        "대각합 5, 행렬식 6",
+        "행렬을 모르면 알 수 없다",
+      ],
       answer: 0,
       explain: String.raw`합 $2 + (-3) = -1$이 대각합, 곱 $2\times(-3) = -6$이 행렬식이다. 행렬식이 음수이므로 이 변환은 넓이를 6배 하면서 뒤집는다. 고윳값 $-3$의 방향이 뒤집히는 방향이다.`,
     },
   ],
-  code: ['eig2'],
+  code: ["eig2"],
 };
 
 export default node;

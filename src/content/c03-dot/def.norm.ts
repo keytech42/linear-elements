@@ -1,28 +1,42 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.norm',
-  kind: 'def',
-  title: '벡터의 길이(노름)',
-  status: 'written',
+  id: "def.norm",
+  kind: "def",
+  title: "벡터의 길이(노름)",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.norm', ko: '노름', en: 'norm', surfaces: ['벡터의 길이'], gloss: '벡터의 길이. 성분을 제곱해서 더한 값의 제곱근.' },
-      { id: 't.unit-vector', ko: '단위벡터', en: 'unit vector', surfaces: ['단위 벡터'], gloss: '길이가 1인 벡터. 방향만 담는다.' },
+      {
+        id: "t.norm",
+        ko: "노름",
+        en: "norm",
+        surfaces: ["벡터의 길이"],
+        gloss: "벡터의 길이. 성분을 제곱해서 더한 값의 제곱근.",
+      },
+      {
+        id: "t.unit-vector",
+        ko: "단위벡터",
+        en: "unit vector",
+        surfaces: ["단위 벡터"],
+        gloss: "길이가 1인 벡터. 방향만 담는다.",
+      },
     ],
-    symbols: [{ tex: String.raw`\|\mathbf{v}\|`, meaning: '벡터 v의 길이(노름)' }],
+    symbols: [
+      { tex: String.raw`\|\mathbf{v}\|`, meaning: "벡터 v의 길이(노름)" },
+    ],
   },
-  requires: ['def.distance', 'def.vector'],
+  requires: ["def.distance", "def.vector"],
   predicts: [
     {
-      id: 'p-3d',
-      kind: 'choice',
+      id: "p-3d",
+      kind: "choice",
       q: String.raw`3차원 벡터 $\mathbf{v} = (1, 2, 2)$의 길이는?`,
       hints: [
         String.raw`먼저 바닥(가로·세로 평면)에서 $(1, 2)$만큼 가는 대각선의 길이를 구하라. 그다음 그 대각선과 높이 2가 직각삼각형의 두 직각변이 된다.`,
         String.raw`바닥 대각선은 $\sqrt{1 + 4} = \sqrt{5}$. 이제 $\sqrt{(\sqrt5)^2 + 2^2}$.`,
       ],
-      choices: ['3', '5', String.raw`$\sqrt{5}$`, '9'],
+      choices: ["3", "5", String.raw`$\sqrt{5}$`, "9"],
       answer: 0,
       why: [
         String.raw`$\sqrt{1 + 4 + 4} = 3$. 피타고라스 정리를 두 번 쓴 결과가 "세 성분의 제곱의 합의 제곱근"이다.`,
@@ -32,11 +46,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-scale',
-      kind: 'choice',
+      id: "p-scale",
+      kind: "choice",
       q: String.raw`벡터 $\mathbf{v}$를 $c$배 한 $c\mathbf{v}$의 길이는 $\|\mathbf{v}\|$와 어떤 관계일까?`,
-      hints: [String.raw`성분이 모두 $c$배가 된다. 제곱하면 $c^2$배, 그 합도 $c^2$배다. 그 제곱근은? $c$가 음수일 수 있다는 것을 잊지 마라.`],
-      choices: [String.raw`$|c|\,\|\mathbf{v}\|$`, String.raw`$c\,\|\mathbf{v}\|$`, String.raw`$c^2\,\|\mathbf{v}\|$`, String.raw`$\|\mathbf{v}\|$ (변하지 않는다)`],
+      hints: [
+        String.raw`성분이 모두 $c$배가 된다. 제곱하면 $c^2$배, 그 합도 $c^2$배다. 그 제곱근은? $c$가 음수일 수 있다는 것을 잊지 마라.`,
+      ],
+      choices: [
+        String.raw`$|c|\,\|\mathbf{v}\|$`,
+        String.raw`$c\,\|\mathbf{v}\|$`,
+        String.raw`$c^2\,\|\mathbf{v}\|$`,
+        String.raw`$\|\mathbf{v}\|$ (변하지 않는다)`,
+      ],
       answer: 0,
       why: [
         String.raw`$\sqrt{c^2v_1^2 + c^2v_2^2} = \sqrt{c^2}\sqrt{v_1^2 + v_2^2} = |c|\,\|\mathbf{v}\|$. 뒤집어도($c < 0$) 길이는 음수가 되지 않는다.`,
@@ -74,12 +95,17 @@ $$\|\mathbf{v}\| = \sqrt{v_1^2 + v_2^2} \quad (\text{2차원}), \qquad \|\mathbf
   checks: [
     {
       q: String.raw`$\|\mathbf{v}\| = 0$인 벡터는?`,
-      choices: ['영벡터뿐이다', '모든 성분이 서로 같은 벡터', '성분의 합이 0인 벡터', '그런 벡터는 없다'],
+      choices: [
+        "영벡터뿐이다",
+        "모든 성분이 서로 같은 벡터",
+        "성분의 합이 0인 벡터",
+        "그런 벡터는 없다",
+      ],
       answer: 0,
       explain: String.raw`제곱의 합이 0이려면, [제곱은 모두 0 이상](n:prop.neg-times-neg#square-nonneg)이므로 각 제곱이 0이어야 한다. 곧 모든 성분이 0이다. 성분의 합이 0인 $(1, -1)$의 길이는 $\sqrt{2}$다.`,
     },
   ],
-  code: ['norm', 'normalize'],
+  code: ["norm", "normalize"],
 };
 
 export default node;

@@ -1,18 +1,20 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.det-zero',
-  kind: 'prop',
-  title: 'det = 0 ⇔ 평면이 납작해진다 ⇔ 열이 종속',
-  status: 'written',
-  requires: ['prop.det-formula', 'def.independence'],
+  id: "prop.det-zero",
+  kind: "prop",
+  title: "det = 0 ⇔ 평면이 납작해진다 ⇔ 열이 종속",
+  status: "written",
+  requires: ["prop.det-formula", "def.independence"],
   predicts: [
     {
-      id: 'p-t',
-      kind: 'choice',
+      id: "p-t",
+      kind: "choice",
       q: String.raw`두 열이 $(2, 1)$과 $(t, 3)$인 행렬의 행렬식이 0이 되는 $t$는?`,
-      hints: [String.raw`$\det = 2\cdot3 - t\cdot1$. 기하로는 $(t, 3)$이 $(2, 1)$과 같은 직선 위에 오는 $t$다. $(2, 1)$을 몇 배 하면 둘째 성분이 3이 되는가?`],
-      choices: ['6', '1.5', '−6', String.raw`$\tfrac{2}{3}$`],
+      hints: [
+        String.raw`$\det = 2\cdot3 - t\cdot1$. 기하로는 $(t, 3)$이 $(2, 1)$과 같은 직선 위에 오는 $t$다. $(2, 1)$을 몇 배 하면 둘째 성분이 3이 되는가?`,
+      ],
+      choices: ["6", "1.5", "−6", String.raw`$\tfrac{2}{3}$`],
       answer: 0,
       why: [
         String.raw`$6 - t = 0$. 그때 $(6, 3) = 3\cdot(2, 1)$로 두 열이 같은 직선 위에 있다.`,
@@ -22,14 +24,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-lost',
-      kind: 'choice',
+      id: "p-lost",
+      kind: "choice",
       q: String.raw`$\det A = 0$인 2×2 행렬 $A$에서, 서로 다른 두 입력이 같은 출력으로 갈 수 있을까?`,
       hints: [
         String.raw`$\det A = 0$이면 두 열이 종속이다. 그러면 $c_1\mathbf{a}_1 + c_2\mathbf{a}_2 = \mathbf{0}$인, 0이 아닌 계수가 있다. 그 계수를 입력으로 넣으면?`,
         String.raw`$A\mathbf{z} = \mathbf{0}$인 영벡터가 아닌 $\mathbf{z}$가 있다면, $A(\mathbf{x} + \mathbf{z})$와 $A\mathbf{x}$를 비교해 보라.`,
       ],
-      choices: ['있다. 그런 쌍이 끝없이 많다', '없다. 선형 변환은 서로 다른 입력을 서로 다른 출력으로 보낸다', '출력이 0일 때만 있다', '열이 같은 행렬일 때만 있다'],
+      choices: [
+        "있다. 그런 쌍이 끝없이 많다",
+        "없다. 선형 변환은 서로 다른 입력을 서로 다른 출력으로 보낸다",
+        "출력이 0일 때만 있다",
+        "열이 같은 행렬일 때만 있다",
+      ],
       answer: 0,
       why: [
         String.raw`$A\mathbf{z} = \mathbf{0}$이면 $A(\mathbf{x} + \mathbf{z}) = A\mathbf{x} + \mathbf{0} = A\mathbf{x}$. 모든 $\mathbf{x}$에 대해 $\mathbf{x}$와 $\mathbf{x} + \mathbf{z}$가 같은 곳으로 간다. 그래서 5장에서 이런 변환은 "되돌릴 수 없다"가 된다.`,

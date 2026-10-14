@@ -1,31 +1,58 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.vector',
-  kind: 'def',
-  title: '벡터: 이동을 숫자로 적기',
-  status: 'written',
+  id: "def.vector",
+  kind: "def",
+  title: "벡터: 이동을 숫자로 적기",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.vector', ko: '벡터', en: 'vector', gloss: '벡터 공간의 원소. 평면과 공간에서는 출발점과 상관없는 이동(화살표)이고, 좌표로는 세로로 적은 숫자 묶음이다. 숫자 목록, 이미지, 함수도 벡터가 될 수 있다.' },
-      { id: 't.component', ko: '성분', en: 'component', gloss: '벡터(또는 행렬)를 이루는 숫자 하나하나.' },
-      { id: 't.zero-vector', ko: '영벡터', en: 'zero vector', gloss: '모든 성분이 0인 벡터. 움직이지 않는 이동.' },
+      {
+        id: "t.vector",
+        ko: "벡터",
+        en: "vector",
+        gloss:
+          "벡터 공간의 원소. 평면과 공간에서는 출발점과 상관없는 이동(화살표)이고, 좌표로는 세로로 적은 숫자 묶음이다. 숫자 목록, 이미지, 함수도 벡터가 될 수 있다.",
+      },
+      {
+        id: "t.component",
+        ko: "성분",
+        en: "component",
+        gloss: "벡터(또는 행렬)를 이루는 숫자 하나하나.",
+      },
+      {
+        id: "t.zero-vector",
+        ko: "영벡터",
+        en: "zero vector",
+        gloss: "모든 성분이 0인 벡터. 움직이지 않는 이동.",
+      },
     ],
     symbols: [
-      { tex: String.raw`\mathbf{v}`, meaning: '이름 없는 벡터', note: '굵은+첨자 𝐯ᵢ는 오른쪽 특이벡터(9장)' },
-      { tex: 'v_1', meaning: '벡터 𝐯의 첫째 성분' },
-      { tex: 'v_2', meaning: '벡터 𝐯의 둘째 성분' },
-      { tex: String.raw`\mathbf{0}`, meaning: '영벡터' },
+      {
+        tex: String.raw`\mathbf{v}`,
+        meaning: "이름 없는 벡터",
+        note: "굵은+첨자 𝐯ᵢ는 오른쪽 특이벡터(9장)",
+      },
+      { tex: "v_1", meaning: "벡터 𝐯의 첫째 성분" },
+      { tex: "v_2", meaning: "벡터 𝐯의 둘째 성분" },
+      { tex: String.raw`\mathbf{0}`, meaning: "영벡터" },
     ],
   },
-  requires: ['def.plane', 'def.numberline'],
+  requires: ["def.plane", "def.numberline"],
   predicts: [
     {
-      id: 'p-same',
-      kind: 'choice',
+      id: "p-same",
+      kind: "choice",
       q: String.raw`점 $(1, 2)$에서 점 $(4, 3)$으로 가는 화살표가 있다. 아래 화살표 가운데 이 화살표와 **같은 이동**을 하는 것은?`,
-      hints: [String.raw`[수직선에서 3에서 5로 가는 것과 −1에서 1로 가는 것은 같은 이동이었다](n:def.numberline). 출발점이 아니라 "얼마나 움직였는가"를 비교하라. 가로로 몇 칸, 세로로 몇 칸 움직였는가?`],
-      choices: [String.raw`원점에서 $(3, 1)$로 가는 화살표`, String.raw`원점에서 $(4, 3)$으로 가는 화살표`, String.raw`$(4, 3)$에서 $(1, 2)$로 가는 화살표`, String.raw`원점에서 $(5, 5)$로 가는 화살표`],
+      hints: [
+        String.raw`[수직선에서 3에서 5로 가는 것과 −1에서 1로 가는 것은 같은 이동이었다](n:def.numberline). 출발점이 아니라 "얼마나 움직였는가"를 비교하라. 가로로 몇 칸, 세로로 몇 칸 움직였는가?`,
+      ],
+      choices: [
+        String.raw`원점에서 $(3, 1)$로 가는 화살표`,
+        String.raw`원점에서 $(4, 3)$으로 가는 화살표`,
+        String.raw`$(4, 3)$에서 $(1, 2)$로 가는 화살표`,
+        String.raw`원점에서 $(5, 5)$로 가는 화살표`,
+      ],
       answer: 0,
       why: [
         String.raw`처음 화살표는 오른쪽으로 $4 - 1 = 3$칸, 위로 $3 - 2 = 1$칸 움직인다. 원점에서 $(3, 1)$로 가는 화살표도 오른쪽 3칸, 위로 1칸이다. 출발점은 다르지만 움직인 양이 같다.`,
@@ -35,16 +62,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-move',
-      kind: 'point',
+      id: "p-move",
+      kind: "point",
       q: String.raw`어떤 벡터 $\mathbf{v}$만큼 움직였더니 점 $(1, -1)$에서 점 $(3, 0)$에 도착했다. 같은 $\mathbf{v}$만큼 점 $(-2, 1)$에서 출발하면 어디에 도착할까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`먼저 $\mathbf{v}$의 성분을 구하라. 성분은 도착점의 좌표에서 출발점의 좌표를 뺀 것이다.`,
         String.raw`$\mathbf{v} = (3 - 1,\ 0 - (-1))$이다. 이제 $(-2, 1)$에서 그만큼 움직여라.`,
       ],
-      A: [[1, 0], [0, 1]],
+      A: [
+        [1, 0],
+        [0, 1],
+      ],
       x: [0, 2],
-      target: 'Ax',
+      target: "Ax",
       reveal: String.raw`정답은 점 $(0, 2)$다(그림의 초록 화살표 끝. 이름표 "Ax"는 2장에서 쓸 표기이므로 여기서는 무시한다). $\mathbf{v} = (2, 1)$이므로 $(-2 + 2,\ 1 + 1) = (0, 2)$다. $(3, 0)$ 근처에 놓았다면 출발점이 바뀌어도 도착점이 같다고 본 것이다. 바뀌지 않는 것은 도착점이 아니라 **이동**이다.`,
     },
   ],
@@ -91,13 +121,23 @@ $$\mathbf{v} = \begin{bmatrix} \h{v1}{\ca{v_1}} \\ \h{v2}{\cb{v_2}} \end{bmatrix
   checks: [
     {
       q: String.raw`어떤 점에서 출발해 벡터 $(-2, 3)$만큼 움직였더니 점 $(1, 1)$에 도착했다. 출발점은?`,
-      choices: [String.raw`$(3, -2)$`, String.raw`$(-1, 4)$`, String.raw`$(-3, 2)$`, String.raw`$(-2, 3)$`],
+      choices: [
+        String.raw`$(3, -2)$`,
+        String.raw`$(-1, 4)$`,
+        String.raw`$(-3, 2)$`,
+        String.raw`$(-2, 3)$`,
+      ],
       answer: 0,
       explain: String.raw`도착점 = 출발점 + 이동이므로 출발점 = 도착점 − 이동 $= (1 - (-2),\ 1 - 3) = (3, -2)$다. 확인: $(3, -2)$에서 $(-2, 3)$만큼 움직이면 $(1, 1)$이다. $(-1, 4)$는 빼야 할 것을 더한 것이다. $(-2, 3)$은 이동(벡터)과 출발점(위치)을 같은 것으로 본 것이다.`,
     },
     {
       q: String.raw`점 $(2, 5)$에서 출발해 점 $(2, 5)$에 도착하는 이동은 어떤 벡터인가?`,
-      choices: ['영벡터', String.raw`$(2, 5)$`, String.raw`$(4, 10)$`, '움직이지 않았으므로 벡터가 아니다'],
+      choices: [
+        "영벡터",
+        String.raw`$(2, 5)$`,
+        String.raw`$(4, 10)$`,
+        "움직이지 않았으므로 벡터가 아니다",
+      ],
       answer: 0,
       explain: String.raw`도착점 − 출발점 $= (2 - 2, 5 - 5) = (0, 0)$, 곧 [영벡터](t:t.zero-vector)다. 움직이지 않는 것도 이동의 한 경우로 센다. 이렇게 정하면 "이동 + 움직이지 않음 = 그 이동"처럼 수의 0과 같은 역할을 하는 벡터가 생긴다. $(2, 5)$는 점의 위치를 이동으로 읽은 것이다.`,
     },

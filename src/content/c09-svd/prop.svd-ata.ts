@@ -1,45 +1,77 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.svd-ata',
-  kind: 'prop',
-  title: '가장 많이 늘어나는 방향 = AᵀA의 고유벡터',
-  status: 'written',
+  id: "prop.svd-ata",
+  kind: "prop",
+  title: "가장 많이 늘어나는 방향 = AᵀA의 고유벡터",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.singular-value', ko: '특이값', en: 'singular value', gloss: '행렬이 단위원을 보낸 타원의 반지름들. σ₁ ≥ σ₂ ≥ … ≥ 0. AᵀA의 고윳값의 제곱근.' },
-      { id: 't.right-singular', ko: '오른쪽 특이벡터', en: 'right singular vector', surfaces: ['우특이벡터'], gloss: '줄여서 우특이벡터. 입력 공간에서, 변환 뒤에도 서로 수직으로 남는 단위 방향들(𝐯ᵢ). AᵀA의 고유벡터.' },
-      { id: 't.left-singular', ko: '왼쪽 특이벡터', en: 'left singular vector', surfaces: ['좌특이벡터'], gloss: '줄여서 좌특이벡터. 출력 공간에서, 타원의 축 방향을 가리키는 단위 방향들(𝐮ᵢ = A𝐯ᵢ/σᵢ).' },
+      {
+        id: "t.singular-value",
+        ko: "특이값",
+        en: "singular value",
+        gloss:
+          "행렬이 단위원을 보낸 타원의 반지름들. σ₁ ≥ σ₂ ≥ … ≥ 0. AᵀA의 고윳값의 제곱근.",
+      },
+      {
+        id: "t.right-singular",
+        ko: "오른쪽 특이벡터",
+        en: "right singular vector",
+        surfaces: ["우특이벡터"],
+        gloss:
+          "줄여서 우특이벡터. 입력 공간에서, 변환 뒤에도 서로 수직으로 남는 단위 방향들(𝐯ᵢ). AᵀA의 고유벡터.",
+      },
+      {
+        id: "t.left-singular",
+        ko: "왼쪽 특이벡터",
+        en: "left singular vector",
+        surfaces: ["좌특이벡터"],
+        gloss:
+          "줄여서 좌특이벡터. 출력 공간에서, 타원의 축 방향을 가리키는 단위 방향들(𝐮ᵢ = A𝐯ᵢ/σᵢ).",
+      },
     ],
     symbols: [
-      { tex: String.raw`\sigma_i`, meaning: 'i번째 특이값' },
-      { tex: String.raw`\mathbf{v}_i`, meaning: 'i번째 오른쪽 특이벡터', note: '첨자 없는 𝐯(이름 없는 벡터), 가는 v₁(성분)과 구별' },
-      { tex: String.raw`\mathbf{u}_i`, meaning: 'i번째 왼쪽 특이벡터' },
+      { tex: String.raw`\sigma_i`, meaning: "i번째 특이값" },
+      {
+        tex: String.raw`\mathbf{v}_i`,
+        meaning: "i번째 오른쪽 특이벡터",
+        note: "첨자 없는 𝐯(이름 없는 벡터), 가는 v₁(성분)과 구별",
+      },
+      { tex: String.raw`\mathbf{u}_i`, meaning: "i번째 왼쪽 특이벡터" },
     ],
   },
-  requires: ['prop.ata-symmetric', 'prop.spectral', 'exp.circle-to-ellipse'],
+  requires: ["prop.ata-symmetric", "prop.spectral", "exp.circle-to-ellipse"],
   predicts: [
     {
-      id: 'p-dir',
-      kind: 'point',
+      id: "p-dir",
+      kind: "point",
       q: String.raw`계산하기 전에 손으로 찾아보자. $A = \begin{bmatrix} 1.2 & 0.9 \\ 0.3 & 1.1 \end{bmatrix}$에서 가장 많이 늘어나는 입력 방향을 노란 손잡이로 맞춰라. 두 열(주황, 청록)을 참고하라.`,
       hints: [
         String.raw`두 열 $\mathbf{a}_1 = (1.2, 0.3)$, $\mathbf{a}_2 = (0.9, 1.1)$은 대체로 같은 쪽(오른쪽 위)을 향한다. 입력 $(\cos\theta, \sin\theta)$의 출력은 $\cos\theta\,\mathbf{a}_1 + \sin\theta\,\mathbf{a}_2$다.`,
         String.raw`두 열을 **같은 부호로** 섞으면 서로 보태고, 반대 부호로 섞으면 서로 깎는다. 그리고 $\mathbf{a}_2$가 $\mathbf{a}_1$보다 길다($\sqrt{2.02}$ 대 $\sqrt{1.53}$).`,
       ],
-      A: [[1.2, 0.9], [0.3, 1.1]],
-      target: 'v1',
-      show: ['cols', 'circle'],
+      A: [
+        [1.2, 0.9],
+        [0.3, 1.1],
+      ],
+      target: "v1",
+      show: ["cols", "circle"],
       reveal: String.raw`정답 방향은 약 49.9°, 곧 $(0.644, 0.765)$ 쪽이다. 두 열이 대체로 같은 쪽을 향하므로, 두 열을 같은 부호로 섞는 방향이 많이 늘어난다. 흰 곡선이 단위원의 상이고, 초록 직선이 그 타원의 긴 축을 만드는 입력 방향이다. 아래에서 이 방향을 계산으로 정확히 찾는다.`,
     },
     {
-      id: 'p-max',
-      kind: 'choice',
+      id: "p-max",
+      kind: "choice",
       q: String.raw`$c_1^2 + c_2^2 = 1$이라는 조건 아래에서 $\lambda_1 c_1^2 + \lambda_2 c_2^2$이 가질 수 있는 가장 큰 값은? ($\lambda_1 \ge \lambda_2 \ge 0$)`,
       hints: [
         String.raw`$\lambda_1 c_1^2 + \lambda_2 c_2^2$에서 $c_2^2 = 1 - c_1^2$를 넣어 $c_1^2$ 하나에 대한 식으로 바꿔 보라.`,
       ],
-      choices: [String.raw`$\lambda_1$`, String.raw`$\lambda_1 + \lambda_2$`, String.raw`$\sqrt{\lambda_1}$`, String.raw`$(\lambda_1 + \lambda_2)/2$`],
+      choices: [
+        String.raw`$\lambda_1$`,
+        String.raw`$\lambda_1 + \lambda_2$`,
+        String.raw`$\sqrt{\lambda_1}$`,
+        String.raw`$(\lambda_1 + \lambda_2)/2$`,
+      ],
       answer: 0,
       why: [
         String.raw`조건 $c_1^2 + c_2^2 = 1$을 전부 $c_1^2$에 몰아주면($c_1^2 = 1$, $c_2 = 0$) 된다. 아래 문단이 이것을 "가중 평균"으로 설명한다.`,
@@ -119,18 +151,18 @@ $$(A\mathbf{v}_1)\cdot(A\mathbf{v}_2) = \mathbf{v}_1\cdot(A^{\mathsf{T}}A\mathbf
   checks: [
     {
       q: String.raw`$A^{\mathsf{T}}A$의 고윳값이 9와 4이다. $A$의 특이값은?`,
-      choices: ['3과 2', '9와 4', '81과 16', 'A를 모르면 알 수 없다'],
+      choices: ["3과 2", "9와 4", "81과 16", "A를 모르면 알 수 없다"],
       answer: 0,
       explain: String.raw`$\sigma_i = \sqrt{\lambda_i}$다. $\lambda_i = \|A\mathbf{v}_i\|^2$은 **길이의 제곱**이기 때문이다. $A$ 자체를 몰라도 특이값은 정해진다. 다만 $A$의 특이벡터(특히 $\mathbf{u}_i$)는 $A$를 알아야 구할 수 있다.`,
     },
     {
       q: String.raw`대칭 행렬 $S = \begin{bmatrix} 2 & 0 \\ 0 & -3 \end{bmatrix}$의 특이값은?`,
-      choices: ['3과 2', '2와 −3', '−3과 2', '4와 9'],
+      choices: ["3과 2", "2와 −3", "−3과 2", "4와 9"],
       answer: 0,
       explain: String.raw`특이값은 늘어난 **길이**이므로 음수가 될 수 없다. $S^{\mathsf{T}}S = \begin{bmatrix} 4 & 0 \\ 0 & 9 \end{bmatrix}$이므로 $\sigma_1 = 3$, $\sigma_2 = 2$다(큰 것부터). 고윳값 $-3$의 부호(뒤집힘)는 특이값이 아니라 특이벡터 쪽에 담긴다. 실제로 $\mathbf{v}_1 = \mathbf{e}_2$일 때 $\mathbf{u}_1 = S\mathbf{e}_2/3 = -\mathbf{e}_2$로 방향이 뒤집힌다. 대칭 행렬의 특이값은 고윳값의 **절댓값**이다.`,
     },
   ],
-  code: ['svd2', 'symEig'],
+  code: ["svd2", "symEig"],
 };
 
 export default node;

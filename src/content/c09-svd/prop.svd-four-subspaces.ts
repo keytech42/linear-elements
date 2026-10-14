@@ -1,17 +1,17 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.svd-four-subspaces',
-  kind: 'prop',
-  title: 'SVD는 네 기본 부분공간에 좌표를 준다',
-  status: 'written',
-  requires: ['prop.svd', 'exp.four-subspaces'],
+  id: "prop.svd-four-subspaces",
+  kind: "prop",
+  title: "SVD는 네 기본 부분공간에 좌표를 준다",
+  status: "written",
+  requires: ["prop.svd", "exp.four-subspaces"],
   predicts: [
     {
-      id: 'p-v3',
-      kind: 'choice',
+      id: "p-v3",
+      kind: "choice",
       q: String.raw`랭크가 2인 3×3 행렬에서, 특이값이 0인 우특이벡터 $\mathbf{v}_3$는 네 부분공간 가운데 어디에 속할까?`,
-      choices: ['영공간', '행공간', '열공간', '좌영공간'],
+      choices: ["영공간", "행공간", "열공간", "좌영공간"],
       answer: 0,
       why: [
         String.raw`$\|A\mathbf{v}_3\| = \sigma_3 = 0$이므로 $A\mathbf{v}_3 = \mathbf{0}$이다. 0으로 사라지는 입력, 곧 영공간이다.`,
@@ -51,13 +51,13 @@ const node: NodeDef = {
 **좌영공간.** 나머지 $\mathbf{u}_i$는 앞의 $\mathbf{u}$들, 곧 열공간의 기저와 모두 직교한다. 그러므로 열공간 전체와 직교하고, 그것이 좌영공간이다. 다른 식으로 보면, $A^{\mathsf{T}} = V\Sigma^{\mathsf{T}}U^{\mathsf{T}}$에서 $A^{\mathsf{T}}\mathbf{u}_i = \sigma_i\mathbf{v}_i = \mathbf{0}$이다.`,
   checks: [
     {
-      q: '5×3 행렬의 특이값이 4, 2, 0이다. 네 부분공간의 차원은 (행공간, 영공간, 열공간, 좌영공간) 순서로?',
-      choices: ['(2, 1, 2, 3)', '(3, 0, 3, 2)', '(2, 1, 2, 1)', '(2, 3, 2, 1)'],
+      q: "5×3 행렬의 특이값이 4, 2, 0이다. 네 부분공간의 차원은 (행공간, 영공간, 열공간, 좌영공간) 순서로?",
+      choices: ["(2, 1, 2, 3)", "(3, 0, 3, 2)", "(2, 1, 2, 1)", "(2, 3, 2, 1)"],
       answer: 0,
       explain: String.raw`0보다 큰 특이값이 2개이므로 랭크는 2다. 입력은 $\mathbb{R}^3$이므로 영공간은 $3 - 2 = 1$차원이다. 출력은 $\mathbb{R}^5$이므로 좌영공간은 $5 - 2 = 3$차원이다. 입력 쪽 두 공간의 차원을 더하면 열의 수 3, 출력 쪽 두 공간의 차원을 더하면 행의 수 5다.`,
     },
   ],
-  code: ['svd'],
+  code: ["svd"],
 };
 
 export default node;

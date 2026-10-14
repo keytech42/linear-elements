@@ -1,29 +1,57 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.plane',
-  kind: 'def',
-  title: '좌표평면: 수 두 개로 위치 하나',
-  status: 'written',
+  id: "def.plane",
+  kind: "def",
+  title: "좌표평면: 수 두 개로 위치 하나",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.coord-plane', ko: '좌표평면', en: 'coordinate plane', gloss: '서로 수직인 수직선 두 개(가로축, 세로축)로 평면의 모든 점에 이름을 붙인 것.' },
-      { id: 't.ordered-pair', ko: '순서쌍', en: 'ordered pair', gloss: '순서가 의미를 갖는 수 두 개의 묶음. (2, 3)과 (3, 2)는 다르다.' },
-      { id: 't.coordinate', ko: '좌표', en: 'coordinate', gloss: '점의 위치를 나타내는 수(들). 평면에서는 가로 좌표와 세로 좌표. 1장부터는 가로·세로 격자 대신 다른 기저로도 재며, 그때의 좌표를 세로로 모은 것이 좌표벡터다.' },
+      {
+        id: "t.coord-plane",
+        ko: "좌표평면",
+        en: "coordinate plane",
+        gloss:
+          "서로 수직인 수직선 두 개(가로축, 세로축)로 평면의 모든 점에 이름을 붙인 것.",
+      },
+      {
+        id: "t.ordered-pair",
+        ko: "순서쌍",
+        en: "ordered pair",
+        gloss: "순서가 의미를 갖는 수 두 개의 묶음. (2, 3)과 (3, 2)는 다르다.",
+      },
+      {
+        id: "t.coordinate",
+        ko: "좌표",
+        en: "coordinate",
+        gloss:
+          "점의 위치를 나타내는 수(들). 평면에서는 가로 좌표와 세로 좌표. 1장부터는 가로·세로 격자 대신 다른 기저로도 재며, 그때의 좌표를 세로로 모은 것이 좌표벡터다.",
+      },
     ],
     symbols: [
-      { tex: 'x', meaning: '좌표평면 위 점의 가로 좌표', note: '굵은 𝐱(입력 벡터), 첨자 붙은 x₁(성분)과 구별' },
-      { tex: 'y', meaning: '좌표평면 위 점의 세로 좌표' },
+      {
+        tex: "x",
+        meaning: "좌표평면 위 점의 가로 좌표",
+        note: "굵은 𝐱(입력 벡터), 첨자 붙은 x₁(성분)과 구별",
+      },
+      { tex: "y", meaning: "좌표평면 위 점의 세로 좌표" },
     ],
   },
-  requires: ['def.numberline'],
+  requires: ["def.numberline"],
   predicts: [
     {
-      id: 'p-swap',
-      kind: 'choice',
+      id: "p-swap",
+      kind: "choice",
       q: String.raw`점 $(a, b)$와 점 $(b, a)$가 **같은 점**이 되는 것은 언제일까?`,
-      hints: [String.raw`두 순서쌍이 같으려면 첫째 수끼리, 둘째 수끼리 각각 같아야 한다. $(a, b) = (b, a)$이면 첫째 수끼리 비교한 식은?`],
-      choices: ['a = b일 때뿐이다 (대각선 y = x 위의 점)', '언제나 같은 점이다', 'a = −b일 때', 'a와 b가 모두 0일 때뿐이다'],
+      hints: [
+        String.raw`두 순서쌍이 같으려면 첫째 수끼리, 둘째 수끼리 각각 같아야 한다. $(a, b) = (b, a)$이면 첫째 수끼리 비교한 식은?`,
+      ],
+      choices: [
+        "a = b일 때뿐이다 (대각선 y = x 위의 점)",
+        "언제나 같은 점이다",
+        "a = −b일 때",
+        "a와 b가 모두 0일 때뿐이다",
+      ],
       answer: 0,
       why: [
         String.raw`첫째 수끼리 $a = b$, 둘째 수끼리 $b = a$. 둘 다 $a = b$라는 같은 조건이다. 그런 점들은 가로 좌표와 세로 좌표가 같은 점들, 곧 대각선 $y = x$ 위에 있다.`,
@@ -33,11 +61,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-move',
-      kind: 'choice',
+      id: "p-move",
+      kind: "choice",
       q: String.raw`점 $(-1, 2)$에서 가로로 $+3$, 세로로 $-4$만큼 움직이면 어디에 도착할까?`,
-      hints: [String.raw`가로 좌표와 세로 좌표를 **따로** 움직인다. 가로: $-1 + 3$, 세로: $2 + (-4)$.`],
-      choices: ['(2, −2)', '(−4, 5)', '(2, 6)', '(3, −4)'],
+      hints: [
+        String.raw`가로 좌표와 세로 좌표를 **따로** 움직인다. 가로: $-1 + 3$, 세로: $2 + (-4)$.`,
+      ],
+      choices: ["(2, −2)", "(−4, 5)", "(2, 6)", "(3, −4)"],
       answer: 0,
       why: [
         String.raw`가로 $-1 + 3 = 2$, 세로 $2 - 4 = -2$.`,
@@ -73,7 +103,7 @@ $(x, y)$는 [순서쌍](def:t.ordered-pair)이다. 첫째 자리는 언제나 �
   checks: [
     {
       q: String.raw`가로 좌표가 음수이고 세로 좌표가 양수인 점은 평면의 어느 쪽에 있는가?`,
-      choices: ['왼쪽 위', '오른쪽 위', '왼쪽 아래', '오른쪽 아래'],
+      choices: ["왼쪽 위", "오른쪽 위", "왼쪽 아래", "오른쪽 아래"],
       answer: 0,
       explain: String.raw`가로 좌표가 음수이면 원점의 왼쪽, 세로 좌표가 양수이면 위쪽이다. 예: $(-1, 2)$.`,
     },

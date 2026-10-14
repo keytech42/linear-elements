@@ -1,28 +1,54 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.span',
-  kind: 'def',
-  title: '스팬: 닿을 수 있는 모든 곳',
-  status: 'written',
+  id: "def.span",
+  kind: "def",
+  title: "스팬: 닿을 수 있는 모든 곳",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.span', ko: '스팬', en: 'span', everyMention: true, gloss: '주어진 벡터들의 선형 결합으로 만들 수 있는 모든 벡터의 모임.' },
-      { id: 't.parallel', ko: '평행하다', en: 'parallel', surfaces: ['평행하다', '평행하지', '평행하면', '평행하므로', '평행하거나', '평행한', '평행할'], gloss: '두 벡터 가운데 하나가 다른 하나의 스칼라 배이다. 영벡터는 모든 벡터와 평행하다. (평행 이동의 "평행"과는 다른 말이다.)' },
+      {
+        id: "t.span",
+        ko: "스팬",
+        en: "span",
+        everyMention: true,
+        gloss: "주어진 벡터들의 선형 결합으로 만들 수 있는 모든 벡터의 모임.",
+      },
+      {
+        id: "t.parallel",
+        ko: "평행하다",
+        en: "parallel",
+        surfaces: [
+          "평행하다",
+          "평행하지",
+          "평행하면",
+          "평행하므로",
+          "평행하거나",
+          "평행한",
+          "평행할",
+        ],
+        gloss:
+          '두 벡터 가운데 하나가 다른 하나의 스칼라 배이다. 영벡터는 모든 벡터와 평행하다. (평행 이동의 "평행"과는 다른 말이다.)',
+      },
     ],
-    symbols: [{ tex: String.raw`\operatorname{span}`, meaning: '스팬(span)' }],
+    symbols: [{ tex: String.raw`\operatorname{span}`, meaning: "스팬(span)" }],
   },
-  requires: ['def.linear-combination'],
+  requires: ["def.linear-combination"],
   predicts: [
     {
-      id: 'p-parallel',
-      kind: 'choice',
+      id: "p-parallel",
+      kind: "choice",
       q: String.raw`$\mathbf{u} = (1, 2)$로 고정하고 $\mathbf{w} = (2, t)$의 둘째 성분 $t$만 바꾼다. 두 벡터의 스팬이 평면 전체가 **아닌** $t$는?`,
       hints: [
         String.raw`스팬이 평면보다 작아지는 것은 두 벡터가 [같은 직선 위에 놓일 때](n:def.scalar-mul)다. 곧 $\mathbf{w}$가 $\mathbf{u}$의 스칼라 배일 때다.`,
         String.raw`$\mathbf{w}$의 첫째 성분은 $\mathbf{u}$의 첫째 성분의 2배다. 그렇다면 둘째 성분도 몇 배여야 하는가?`,
       ],
-      choices: [String.raw`$t = 4$일 때뿐`, String.raw`$t = 1$일 때뿐`, String.raw`$t = 0$일 때뿐`, String.raw`그런 $t$는 없다. 벡터가 두 개이면 언제나 평면 전체다`],
+      choices: [
+        String.raw`$t = 4$일 때뿐`,
+        String.raw`$t = 1$일 때뿐`,
+        String.raw`$t = 0$일 때뿐`,
+        String.raw`그런 $t$는 없다. 벡터가 두 개이면 언제나 평면 전체다`,
+      ],
       answer: 0,
       why: [
         String.raw`$t = 4$이면 $\mathbf{w} = (2, 4) = 2\mathbf{u}$로 같은 직선 위에 있다. 그때 스팬은 그 직선 하나다. 그 밖의 $t$에서는 평면 전체다.`,
@@ -32,14 +58,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-shift',
-      kind: 'choice',
+      id: "p-shift",
+      kind: "choice",
       q: String.raw`$\mathbf{u}$, $\mathbf{w}$가 같은 직선 위에 있지 않다. 그렇다면 $\operatorname{span}(\mathbf{u},\ \mathbf{u} + \mathbf{w})$는 무엇일까?`,
       hints: [
         String.raw`$\mathbf{u}$와 $\mathbf{u} + \mathbf{w}$로 $\mathbf{w}$를 만들 수 있는가? 두 벡터를 [빼 보라](n:def.scalar-mul).`,
         String.raw`$\mathbf{w}$를 만들 수 있다면, $\mathbf{u}$와 $\mathbf{w}$로 만들 수 있던 모든 것을 만들 수 있다. $c_1\mathbf{u} + c_2\mathbf{w}$에서 $\mathbf{w}$ 자리에 $(\mathbf{u} + \mathbf{w}) - \mathbf{u}$를 넣어 보라.`,
       ],
-      choices: ['평면 전체', String.raw`$\mathbf{u}$가 놓인 직선`, String.raw`$\mathbf{u} + \mathbf{w}$가 놓인 직선`, String.raw`$\mathbf{u}$, $\mathbf{w}$에 따라 다르다`],
+      choices: [
+        "평면 전체",
+        String.raw`$\mathbf{u}$가 놓인 직선`,
+        String.raw`$\mathbf{u} + \mathbf{w}$가 놓인 직선`,
+        String.raw`$\mathbf{u}$, $\mathbf{w}$에 따라 다르다`,
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{w} = (\mathbf{u} + \mathbf{w}) - \mathbf{u}$이므로 $c_1\mathbf{u} + c_2\mathbf{w} = (c_1 - c_2)\mathbf{u} + c_2(\mathbf{u} + \mathbf{w})$다. $\mathbf{u}$, $\mathbf{w}$로 닿던 곳(평면 전체)에 모두 닿는다.`,
@@ -105,18 +136,28 @@ $$c_1 = \frac{xw_2 - yw_1}{u_1w_2 - u_2w_1}, \qquad c_2 = \frac{u_1y - u_2x}{u_1
   checks: [
     {
       q: String.raw`$\operatorname{span}\big((0, 0),\ (3, 1)\big)$은?`,
-      choices: ['원점을 지나는 직선', '평면 전체', '원점 한 점', String.raw`직선 두 개`],
+      choices: [
+        "원점을 지나는 직선",
+        "평면 전체",
+        "원점 한 점",
+        String.raw`직선 두 개`,
+      ],
       answer: 0,
       explain: String.raw`영벡터는 $0\cdot(3, 1)$이므로 $(3, 1)$과 평행하다. 영벡터는 새로운 곳을 하나도 보태지 못한다. 그러므로 스팬은 $(3, 1)$의 직선이다. 벡터가 두 개라는 이유로 평면 전체를 고르기 쉽다.`,
     },
     {
-      q: '다음 가운데 스팬이 평면 전체인 쌍은?',
-      choices: [String.raw`$(1, 1)$과 $(1, -1)$`, String.raw`$(1, 2)$과 $(-1, -2)$`, String.raw`$(0, 0)$과 $(1, 0)$`, String.raw`$(2, 4)$와 $(1, 2)$`],
+      q: "다음 가운데 스팬이 평면 전체인 쌍은?",
+      choices: [
+        String.raw`$(1, 1)$과 $(1, -1)$`,
+        String.raw`$(1, 2)$과 $(-1, -2)$`,
+        String.raw`$(0, 0)$과 $(1, 0)$`,
+        String.raw`$(2, 4)$와 $(1, 2)$`,
+      ],
       answer: 0,
       explain: String.raw`$u_1w_2 - u_2w_1$을 계산하면 차례로 $-1 - 1 = -2$, $-2 + 2 = 0$, $0$, $4 - 4 = 0$이다. 0이 아닌 것은 첫째 쌍뿐이다. 둘째 쌍은 서로 반대쪽을 가리키지만 같은 직선 위에 있다. 반대쪽을 가리키는 것은 "다른 방향"이 아니다.`,
     },
   ],
-  code: ['cross2', 'reachCoeffs'],
+  code: ["cross2", "reachCoeffs"],
 };
 
 export default node;

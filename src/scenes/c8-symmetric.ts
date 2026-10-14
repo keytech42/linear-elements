@@ -9,40 +9,49 @@
 // 동기화 키
 //   x  𝐱 (노랑) · Ax  S𝐱 (분홍) · y  𝐲 (흰색) · Sy  S𝐲 (흰 점선) · a12, a21  비대각 성분
 //   lhs  (S𝐱)·𝐲 · rhs  𝐱·(S𝐲)
-import type { SceneFn } from './_lib/scene';
-import { layout, readout, hint } from './_lib/scene';
-import { Plane } from '../render/plane';
-import { C } from '../render/colors';
-import { matVec, transpose, type Mat } from '../la/mat';
-import { dot, type Vec } from '../la/vec';
-import { matrixEditor, vectorEditor, fmt, chip, toggle } from '../ui/widgets';
-import { clone } from './_lib/c8-util';
+import type { SceneFn } from "./_lib/scene";
+import { layout, readout, hint } from "./_lib/scene";
+import { Plane } from "../render/plane";
+import { C } from "../render/colors";
+import { matVec, transpose, type Mat } from "../la/mat";
+import { dot, type Vec } from "../la/vec";
+import { matrixEditor, vectorEditor, fmt, chip, toggle } from "../ui/widgets";
+import { clone } from "./_lib/c8-util";
 
 const scene: SceneFn = (host, { bus, params }) => {
-  let S: Mat = clone(params.S ?? [[2, 1], [1, 0]]);
+  let S: Mat = clone(
+    params.S ?? [
+      [2, 1],
+      [1, 0],
+    ],
+  );
   let x: Vec = params.x ?? [1, 1];
   let y: Vec = params.y ?? [-1, 1];
   let mirror = params.mirror !== false;
 
   const { stage, panel } = layout(host);
   const p = new Plane(stage, { range: 3.4, bus, height: 380 });
-  p.handles.push({ key: 'x', get: () => x, set: (v) => ((x = v), sync()) }, { key: 'y', get: () => y, set: (v) => ((y = v), sync()) });
+  p.handles.push(
+    { key: "x", get: () => x, set: (v) => ((x = v), sync()) },
+    { key: "y", get: () => y, set: (v) => ((y = v), sync()) },
+  );
 
   p.draw = (p) => {
     p.grid();
     p.tgrid(S);
-    const Sx = matVec(S, x), Sy = matVec(S, y);
-    p.arrow([0, 0], x, { color: C.x, label: 'x', key: 'x' });
-    p.arrow([0, 0], Sx, { color: C.y, label: 'Sx', key: 'Ax' });
-    p.arrow([0, 0], y, { color: C.ink, label: 'y', key: 'y' });
-    p.arrow([0, 0], Sy, { color: C.ink, dash: [6, 4], label: 'Sy', key: 'Sy' });
-    p.hud([{ text: '노란 화살표와 흰 화살표의 끝을 끌어 보세요' }], 'bl');
+    const Sx = matVec(S, x),
+      Sy = matVec(S, y);
+    p.arrow([0, 0], x, { color: C.x, label: "x", key: "x" });
+    p.arrow([0, 0], Sx, { color: C.y, label: "Sx", key: "Ax" });
+    p.arrow([0, 0], y, { color: C.ink, label: "y", key: "y" });
+    p.arrow([0, 0], Sy, { color: C.ink, dash: [6, 4], label: "Sy", key: "Sy" });
+    p.hud([{ text: "노란 화살표와 흰 화살표의 끝을 끌어 보세요" }], "bl");
   };
 
-  const eds = panel.appendChild(document.createElement('div'));
-  eds.className = 'eds';
+  const eds = panel.appendChild(document.createElement("div"));
+  eds.className = "eds";
   const med = matrixEditor(eds, {
-    name: 'S',
+    name: "S",
     get: () => S,
     set: (B) => {
       if (mirror) {
@@ -54,15 +63,36 @@ const scene: SceneFn = (host, { bus, params }) => {
       sync();
     },
   });
-  const vx = vectorEditor(eds, { name: 'x', key: 'x', color: C.x, get: () => x, set: (v) => ((x = v), sync()) });
-  const vy = vectorEditor(eds, { name: 'y', key: 'y', color: C.ink, get: () => y, set: (v) => ((y = v), sync()) });
-  toggle(panel, '대칭 고정 (s₁₂ = s₂₁)', () => mirror, (v) => {
-    mirror = v;
-    if (v) S = [[S[0][0], S[0][1]], [S[0][1], S[1][1]]];
-    sync();
+  const vx = vectorEditor(eds, {
+    name: "x",
+    key: "x",
+    color: C.x,
+    get: () => x,
+    set: (v) => ((x = v), sync()),
   });
+  const vy = vectorEditor(eds, {
+    name: "y",
+    key: "y",
+    color: C.ink,
+    get: () => y,
+    set: (v) => ((y = v), sync()),
+  });
+  toggle(
+    panel,
+    "대칭 고정 (s₁₂ = s₂₁)",
+    () => mirror,
+    (v) => {
+      mirror = v;
+      if (v)
+        S = [
+          [S[0][0], S[0][1]],
+          [S[0][1], S[1][1]],
+        ];
+      sync();
+    },
+  );
   const ro = readout(panel);
-  hint(panel, '대칭 고정을 끄고 s₂₁만 바꿔 보세요. 두 값이 갈라집니다.');
+  hint(panel, "대칭 고정을 끄고 s₂₁만 바꿔 보세요. 두 값이 갈라집니다.");
 
   function sync() {
     med.refresh();
@@ -74,10 +104,10 @@ const scene: SceneFn = (host, { bus, params }) => {
     const sym = St[0][1] === S[0][1];
     const same = Math.abs(l - r) < 1e-9;
     ro.set(
-      `<div>${chip('(Sx)·y', C.y, 'lhs')} = ${fmt(l)}</div>` +
-        `<div>${chip('x·(Sy)', C.ink, 'rhs')} = ${fmt(r)}</div>` +
-        `<div style="color:${same ? C.ok : C.bad}">${same ? '같다' : `다르다 (차이 ${fmt(l - r)})`}</div>` +
-        `<div class="dim">${sym ? 'Sᵀ = S: 대칭' : `대칭 아님: ${chip(`s₁₂ = ${fmt(S[0][1])}`, C.c2, 'a12')}, ${chip(`s₂₁ = ${fmt(S[1][0])}`, C.c1, 'a21')}`}</div>`,
+      `<div>${chip("(Sx)·y", C.y, "lhs")} = ${fmt(l)}</div>` +
+        `<div>${chip("x·(Sy)", C.ink, "rhs")} = ${fmt(r)}</div>` +
+        `<div style="color:${same ? C.ok : C.bad}">${same ? "같다" : `다르다 (차이 ${fmt(l - r)})`}</div>` +
+        `<div class="dim">${sym ? "Sᵀ = S: 대칭" : `대칭 아님: ${chip(`s₁₂ = ${fmt(S[0][1])}`, C.c2, "a12")}, ${chip(`s₂₁ = ${fmt(S[1][0])}`, C.c1, "a21")}`}</div>`,
     );
     p.invalidate();
   }

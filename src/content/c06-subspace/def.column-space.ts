@@ -1,25 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.column-space',
-  kind: 'def',
-  title: '열공간: 출력이 닿을 수 있는 곳 전부',
-  status: 'written',
+  id: "def.column-space",
+  kind: "def",
+  title: "열공간: 출력이 닿을 수 있는 곳 전부",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.column-space', ko: '열공간', en: 'column space', gloss: '행렬의 열들이 스팬하는 부분공간. 곧 A𝐱가 될 수 있는 모든 벡터.' }],
-    symbols: [{ tex: 'C(A)', meaning: '행렬 A의 열공간' }],
+    terms: [
+      {
+        id: "t.column-space",
+        ko: "열공간",
+        en: "column space",
+        gloss: "행렬의 열들이 스팬하는 부분공간. 곧 A𝐱가 될 수 있는 모든 벡터.",
+      },
+    ],
+    symbols: [{ tex: "C(A)", meaning: "행렬 A의 열공간" }],
   },
-  requires: ['def.subspace', 'def.matvec'],
+  requires: ["def.subspace", "def.matvec"],
   predicts: [
     {
-      id: 'p-reach',
-      kind: 'choice',
+      id: "p-reach",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 1 & 2 \\ 2 & 4 \end{bmatrix}$일 때 $A\mathbf{x} = (3, 5)$를 만족하는 $\mathbf{x}$는?`,
       hints: [
         String.raw`출력 $A\mathbf{x}$는 언제나 두 열 $(1, 2)$, $(2, 4)$의 선형 결합이다. 두 열은 같은 직선 위에 있다. 그 직선은 무엇인가?`,
         String.raw`$(1, 2)$의 몇 배를 해도 둘째 성분은 첫째 성분의 2배다. $(3, 5)$는 그런가?`,
       ],
-      choices: ['없다. (3, 5)는 출력이 닿을 수 있는 직선 밖에 있다', '하나 있다', '무수히 많다', '(1, 1)'],
+      choices: [
+        "없다. (3, 5)는 출력이 닿을 수 있는 직선 밖에 있다",
+        "하나 있다",
+        "무수히 많다",
+        "(1, 1)",
+      ],
       answer: 0,
       why: [
         String.raw`모든 출력은 $(1, 2)$ 방향의 직선 $y = 2x$ 위에 있다. $(3, 5)$는 $5 \ne 6$이라 그 위에 없다. 열공간 밖의 목표에는 닿을 수 없다.`,
@@ -49,7 +61,12 @@ $$C(A) = \{A\mathbf{x} : \mathbf{x}\text{는 아무 입력}\}$$
   checks: [
     {
       q: String.raw`2×2 행렬 $A$의 $\det A \ne 0$이다. 열공간은?`,
-      choices: ['평면 전체', '원점을 지나는 직선', '원점 하나', '행렬마다 다르다'],
+      choices: [
+        "평면 전체",
+        "원점을 지나는 직선",
+        "원점 하나",
+        "행렬마다 다르다",
+      ],
       answer: 0,
       explain: String.raw`[행렬식이 0이 아니면 두 열은 독립](n:prop.det-zero)이고, 독립인 두 벡터는 평면 전체를 스팬한다. 그래서 모든 $\mathbf{b}$에 해가 있다.`,
     },

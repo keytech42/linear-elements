@@ -1,19 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.similarity',
-  kind: 'prop',
-  title: '같은 변환을 새 언어로: P⁻¹AP',
-  status: 'written',
-  introduces: { terms: [{ id: 't.similar', ko: '닮음', en: 'similar', surfaces: ['닮은 행렬'], gloss: 'B = P⁻¹AP 꼴로 쓸 수 있는 두 행렬. 같은 변환을 다른 기저로 적은 것.' }] },
-  requires: ['def.change-of-basis', 'prop.associative'],
+  id: "prop.similarity",
+  kind: "prop",
+  title: "같은 변환을 새 언어로: P⁻¹AP",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.similar",
+        ko: "닮음",
+        en: "similar",
+        surfaces: ["닮은 행렬"],
+        gloss:
+          "B = P⁻¹AP 꼴로 쓸 수 있는 두 행렬. 같은 변환을 다른 기저로 적은 것.",
+      },
+    ],
+  },
+  requires: ["def.change-of-basis", "prop.associative"],
   predicts: [
     {
-      id: 'p-read',
-      kind: 'choice',
+      id: "p-read",
+      kind: "choice",
       q: String.raw`새 좌표로 적은 입력 $\mathbf{c}$에 $P^{-1}AP$를 하면, 오른쪽부터 무슨 일이 차례로 일어날까?`,
-      hints: [String.raw`오른쪽부터 읽는다. $P$는 [새 좌표 → 표준 좌표](n:def.change-of-basis), $A$는 표준 좌표로 적힌 변환, $P^{-1}$은 표준 좌표 → 새 좌표.`],
-      choices: ['새 좌표를 표준 좌표로 번역 → 변환 → 다시 새 좌표로 번역', '변환 → 번역 → 번역', '새 좌표로 번역 → 변환 → 표준 좌표로 번역', '세 번 변환한다'],
+      hints: [
+        String.raw`오른쪽부터 읽는다. $P$는 [새 좌표 → 표준 좌표](n:def.change-of-basis), $A$는 표준 좌표로 적힌 변환, $P^{-1}$은 표준 좌표 → 새 좌표.`,
+      ],
+      choices: [
+        "새 좌표를 표준 좌표로 번역 → 변환 → 다시 새 좌표로 번역",
+        "변환 → 번역 → 번역",
+        "새 좌표로 번역 → 변환 → 표준 좌표로 번역",
+        "세 번 변환한다",
+      ],
       answer: 0,
       why: [
         String.raw`$P\mathbf{c}$는 같은 점의 표준 좌표, $AP\mathbf{c}$는 그 점의 상의 표준 좌표, $P^{-1}AP\mathbf{c}$는 그 상의 새 좌표다. 그러므로 $P^{-1}AP$는 "새 언어로 적은 $A$"다.`,
@@ -23,11 +41,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-det',
-      kind: 'choice',
+      id: "p-det",
+      kind: "choice",
       q: String.raw`닮은 두 행렬 $A$와 $P^{-1}AP$의 행렬식은?`,
-      hints: [String.raw`[곱의 행렬식](n:prop.det-product)과 [역행렬의 행렬식](n:prop.inverse-exists)을 써라. 또는 기하로: 넓이 배율은 어느 언어로 재든 같아야 하는가?`],
-      choices: ['언제나 같다', 'P에 따라 다르다', String.raw`$\det(P^{-1}AP) = (\det P)^2\det A$`, '부호만 같다'],
+      hints: [
+        String.raw`[곱의 행렬식](n:prop.det-product)과 [역행렬의 행렬식](n:prop.inverse-exists)을 써라. 또는 기하로: 넓이 배율은 어느 언어로 재든 같아야 하는가?`,
+      ],
+      choices: [
+        "언제나 같다",
+        "P에 따라 다르다",
+        String.raw`$\det(P^{-1}AP) = (\det P)^2\det A$`,
+        "부호만 같다",
+      ],
       answer: 0,
       why: [
         String.raw`$\det(P^{-1})\det A\det P = \frac{1}{\det P}\det A\det P = \det A$. 같은 변환이므로 넓이 배율이 같다.`,

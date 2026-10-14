@@ -1,21 +1,21 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.linear-grid',
-  kind: 'prop',
-  title: '선형 변환은 격자를 곧고 평행하고 고르게 둔다',
-  status: 'written',
-  requires: ['def.linear-map'],
+  id: "prop.linear-grid",
+  kind: "prop",
+  title: "선형 변환은 격자를 곧고 평행하고 고르게 둔다",
+  status: "written",
+  requires: ["def.linear-map"],
   predicts: [
     {
-      id: 'p-mid',
-      kind: 'choice',
+      id: "p-mid",
+      kind: "choice",
       q: String.raw`한 직선 위에 같은 간격으로 놓인 세 점 $P, Q, R$이 있다($Q$가 가운데). 선형 변환 $T$가 $P$를 $(1, 1)$로, $R$을 $(5, 3)$으로 보낸다. $Q$는 어디로 갈까?`,
       hints: [
         String.raw`가운데 점은 양 끝의 평균이다: $Q = \tfrac{1}{2}P + \tfrac{1}{2}R$. 이것은 $P$와 $R$의 선형 결합이다.`,
         String.raw`[선형 변환은 선형 결합을 그대로 통과시킨다](n:def.linear-map).`,
       ],
-      choices: ['(3, 2)', '이것만으로는 알 수 없다', '(6, 4)', '(4, 2)'],
+      choices: ["(3, 2)", "이것만으로는 알 수 없다", "(6, 4)", "(4, 2)"],
       answer: 0,
       why: [
         String.raw`$T(Q) = \tfrac{1}{2}T(P) + \tfrac{1}{2}T(R) = \tfrac{1}{2}(1, 1) + \tfrac{1}{2}(5, 3) = (3, 2)$. 가운데 점은 가운데 점으로 간다.`,
@@ -25,7 +25,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '거꾸로, 원점을 고정하고 직선을 직선으로·고른 간격을 고르게 보내는 변환은 언제나 선형인가?', answeredBy: null }],
+  openWhys: [
+    {
+      q: "거꾸로, 원점을 고정하고 직선을 직선으로·고른 간격을 고르게 보내는 변환은 언제나 선형인가?",
+      answeredBy: null,
+    },
+  ],
   body: String.raw`선형 변환의 두 조건은 식이다. 이 식들이 **그림에서는** 어떻게 보일까?
 
 ::predict p-mid

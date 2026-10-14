@@ -10,14 +10,14 @@
 //   cells: 작은 정사각형을 처음부터 보일지 (기본 false)
 //   h:     작은 정사각형의 한 변 (기본 0.25)
 // 동기화 키: col1, col2 (열), shape (입력 도형), image (상), cells (작은 정사각형), det
-import type { SceneFn } from './_lib/scene';
-import { layout, readout, hint } from './_lib/scene';
-import { Plane } from '../render/plane';
-import { C } from '../render/colors';
-import { col, det2, matVec, type Mat } from '../la/mat';
-import { type Vec } from '../la/vec';
-import { polygonArea, insidePolygon } from '../la/area';
-import { matrixEditor, fmt, chip, buttons, toggle } from '../ui/widgets';
+import type { SceneFn } from "./_lib/scene";
+import { layout, readout, hint } from "./_lib/scene";
+import { Plane } from "../render/plane";
+import { C } from "../render/colors";
+import { col, det2, matVec, type Mat } from "../la/mat";
+import { type Vec } from "../la/vec";
+import { polygonArea, insidePolygon } from "../la/area";
+import { matrixEditor, fmt, chip, buttons, toggle } from "../ui/widgets";
 
 const SHAPES: Record<string, Vec[]> = {
   circle: Array.from({ length: 120 }, (_, i) => {
@@ -30,7 +30,16 @@ const SHAPES: Record<string, Vec[]> = {
     return [0.3 + r * Math.cos(t), 0.4 + r * Math.sin(t)];
   }),
   F: [
-    [-0.6, -1], [-0.1, -1], [-0.1, 0.1], [0.8, 0.1], [0.8, 0.5], [-0.1, 0.5], [-0.1, 1.1], [1.1, 1.1], [1.1, 1.5], [-0.6, 1.5],
+    [-0.6, -1],
+    [-0.1, -1],
+    [-0.1, 0.1],
+    [0.8, 0.1],
+    [0.8, 0.5],
+    [-0.1, 0.5],
+    [-0.1, 1.1],
+    [1.1, 1.1],
+    [1.1, 1.5],
+    [-0.6, 1.5],
   ],
 };
 
@@ -39,7 +48,7 @@ const scene: SceneFn = (host, { bus, params }) => {
     [1.5, 0.5],
     [-0.3, 1],
   ];
-  let shapeName: string = params.shape ?? 'blob';
+  let shapeName: string = params.shape ?? "blob";
   let showCells = !!params.cells;
   const h: number = params.h ?? 0.25;
   const { stage, panel } = layout(host);
@@ -48,7 +57,10 @@ const scene: SceneFn = (host, { bus, params }) => {
     A = A.map((r, i) => r.map((a, k) => (k === j ? v[i] : a)));
     sync();
   };
-  p.handles.push({ key: 'col1', get: () => col(A, 0), set: (v) => setCol(0, v) }, { key: 'col2', get: () => col(A, 1), set: (v) => setCol(1, v) });
+  p.handles.push(
+    { key: "col1", get: () => col(A, 0), set: (v) => setCol(0, v) },
+    { key: "col2", get: () => col(A, 1), set: (v) => setCol(1, v) },
+  );
 
   // 도형 안에 완전히 들어가는 작은 정사각형들(왼쪽 아래 꼭짓점 목록)
   let cells: Vec[] = [];
@@ -57,40 +69,81 @@ const scene: SceneFn = (host, { bus, params }) => {
     cells = [];
     for (let i = -16; i < 16; i++)
       for (let j = -16; j < 16; j++) {
-        const q: Vec[] = [[i * h, j * h], [(i + 1) * h, j * h], [(i + 1) * h, (j + 1) * h], [i * h, (j + 1) * h]];
+        const q: Vec[] = [
+          [i * h, j * h],
+          [(i + 1) * h, j * h],
+          [(i + 1) * h, (j + 1) * h],
+          [i * h, (j + 1) * h],
+        ];
         // 네 꼭짓점과 가운데가 모두 안에 있으면 안에 든 것으로 센다
-        if (q.every((c) => insidePolygon(c, S)) && insidePolygon([(i + 0.5) * h, (j + 0.5) * h], S)) cells.push(q[0]);
+        if (
+          q.every((c) => insidePolygon(c, S)) &&
+          insidePolygon([(i + 0.5) * h, (j + 0.5) * h], S)
+        )
+          cells.push(q[0]);
       }
   };
-  const sq = (c: Vec): Vec[] => [c, [c[0] + h, c[1]], [c[0] + h, c[1] + h], [c[0], c[1] + h]];
+  const sq = (c: Vec): Vec[] => [
+    c,
+    [c[0] + h, c[1]],
+    [c[0] + h, c[1] + h],
+    [c[0], c[1] + h],
+  ];
 
   p.draw = (p) => {
     p.grid();
-    p.tgrid(A, { color: 'rgba(120,170,255,0.2)' });
+    p.tgrid(A, { color: "rgba(120,170,255,0.2)" });
     const S = SHAPES[shapeName];
-    p.poly(S, { fill: 'rgba(245,197,66,0.12)', color: C.x, width: 1.5, key: 'shape' });
-    p.poly(S.map((q) => matVec(A, q)), { fill: 'rgba(255,107,213,0.14)', color: C.y, width: 2, key: 'image' });
+    p.poly(S, {
+      fill: "rgba(245,197,66,0.12)",
+      color: C.x,
+      width: 1.5,
+      key: "shape",
+    });
+    p.poly(
+      S.map((q) => matVec(A, q)),
+      { fill: "rgba(255,107,213,0.14)", color: C.y, width: 2, key: "image" },
+    );
     if (showCells) {
       for (const c of cells) {
-        p.poly(sq(c), { color: 'rgba(245,197,66,0.55)', width: 0.8, key: 'cells' });
-        p.poly(sq(c).map((q) => matVec(A, q)), { color: 'rgba(255,107,213,0.6)', width: 0.8, key: 'cells' });
+        p.poly(sq(c), {
+          color: "rgba(245,197,66,0.55)",
+          width: 0.8,
+          key: "cells",
+        });
+        p.poly(
+          sq(c).map((q) => matVec(A, q)),
+          { color: "rgba(255,107,213,0.6)", width: 0.8, key: "cells" },
+        );
       }
     }
-    p.arrow([0, 0], col(A, 0), { color: C.c1, width: 2, key: 'col1' });
-    p.arrow([0, 0], col(A, 1), { color: C.c2, width: 2, key: 'col2' });
+    p.arrow([0, 0], col(A, 0), { color: C.c1, width: 2, key: "col1" });
+    p.arrow([0, 0], col(A, 1), { color: C.c2, width: 2, key: "col2" });
   };
 
-  const eds = panel.appendChild(document.createElement('div'));
-  eds.className = 'eds';
-  const med = matrixEditor(eds, { name: 'A', get: () => A, set: (B) => ((A = B), sync()) });
+  const eds = panel.appendChild(document.createElement("div"));
+  eds.className = "eds";
+  const med = matrixEditor(eds, {
+    name: "A",
+    get: () => A,
+    set: (B) => ((A = B), sync()),
+  });
   buttons(panel, [
-    { label: '원', on: () => ((shapeName = 'circle'), findCells(), sync()) },
-    { label: '얼룩', on: () => ((shapeName = 'blob'), findCells(), sync()) },
-    { label: 'F', on: () => ((shapeName = 'F'), findCells(), sync()) },
+    { label: "원", on: () => ((shapeName = "circle"), findCells(), sync()) },
+    { label: "얼룩", on: () => ((shapeName = "blob"), findCells(), sync()) },
+    { label: "F", on: () => ((shapeName = "F"), findCells(), sync()) },
   ]);
-  const tg = toggle(panel, `한 변 ${fmt(h)}짜리 작은 정사각형으로 채우기`, () => showCells, (b) => ((showCells = b), sync()));
+  const tg = toggle(
+    panel,
+    `한 변 ${fmt(h)}짜리 작은 정사각형으로 채우기`,
+    () => showCells,
+    (b) => ((showCells = b), sync()),
+  );
   const ro = readout(panel);
-  hint(panel, '작은 정사각형 하나하나가 모두 똑같은 평행사변형으로 갑니다. 그래서 정사각형으로 채운 넓이도, 도형 전체의 넓이도 같은 배율로 변합니다.');
+  hint(
+    panel,
+    "작은 정사각형 하나하나가 모두 똑같은 평행사변형으로 갑니다. 그래서 정사각형으로 채운 넓이도, 도형 전체의 넓이도 같은 배율로 변합니다.",
+  );
 
   function sync() {
     med.refresh();
@@ -100,14 +153,14 @@ const scene: SceneFn = (host, { bus, params }) => {
     const a1 = Math.abs(polygonArea(S.map((q) => matVec(A, q))));
     const d = det2(A);
     let html =
-      `<div>${chip('도형의 넓이', C.x, 'shape')} = ${fmt(a0, 3)}</div>` +
-      `<div>${chip('상의 넓이', C.y, 'image')} = ${fmt(a1, 3)}</div>` +
+      `<div>${chip("도형의 넓이", C.x, "shape")} = ${fmt(a0, 3)}</div>` +
+      `<div>${chip("상의 넓이", C.y, "image")} = ${fmt(a1, 3)}</div>` +
       `<div class="eq">비 = ${fmt(a1, 3)} ÷ ${fmt(a0, 3)} = <b>${fmt(a1 / a0, 3)}</b></div>` +
-      `<div>${chip('|det A|', C.ink, 'det')} = ${fmt(Math.abs(d), 3)}</div>`;
+      `<div>${chip("|det A|", C.ink, "det")} = ${fmt(Math.abs(d), 3)}</div>`;
     if (showCells) {
       const one = Math.abs(polygonArea(sq([0, 0]).map((q) => matVec(A, q))));
       html +=
-        `<div class="eq">${chip('작은 정사각형', C.x, 'cells')} ${cells.length}개 × ${fmt(h * h, 4)} = ${fmt(cells.length * h * h, 3)}</div>` +
+        `<div class="eq">${chip("작은 정사각형", C.x, "cells")} ${cells.length}개 × ${fmt(h * h, 4)} = ${fmt(cells.length * h * h, 3)}</div>` +
         `<div>그 상: 평행사변형 하나의 넓이 = ${fmt(one, 4)} (= ${fmt(h * h, 4)} × ${fmt(Math.abs(d), 3)})</div>` +
         `<div>${cells.length}개 × ${fmt(one, 4)} = ${fmt(cells.length * one, 3)}</div>`;
     }

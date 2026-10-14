@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.linear-name',
-  kind: 'prop',
+  id: "prop.linear-name",
+  kind: "prop",
   title: '"선형"이라는 이름: 1차식과 직선',
-  status: 'written',
-  requires: ['def.matvec', 'prop.linear-grid'],
+  status: "written",
+  requires: ["def.matvec", "prop.linear-grid"],
   predicts: [
     {
-      id: 'p-affine',
-      kind: 'choice',
+      id: "p-affine",
+      kind: "choice",
       q: String.raw`변환 $(x, y) \mapsto (2x + 1,\ y)$의 두 성분 $2x + 1$과 $y$는 모두 $x$와 $y$를 제곱하거나 서로 곱하지 않은 식이다. 이 변환은 선형 변환일까?`,
-      hints: [String.raw`[선형 변환이 원점을 어디로 보내야 했는지](n:def.linear-map) 떠올려 보라. 이 변환에 $(0, 0)$을 넣으면 무엇이 나오는가?`],
-      choices: ['아니다. 원점을 (1, 0)으로 보낸다', '그렇다. 성분이 모두 x, y를 제곱하거나 서로 곱하지 않은 식이다', '그렇다. 직선을 직선으로 보낸다', '알 수 없다. 기저의 상을 더 알아야 한다'],
+      hints: [
+        String.raw`[선형 변환이 원점을 어디로 보내야 했는지](n:def.linear-map) 떠올려 보라. 이 변환에 $(0, 0)$을 넣으면 무엇이 나오는가?`,
+      ],
+      choices: [
+        "아니다. 원점을 (1, 0)으로 보낸다",
+        "그렇다. 성분이 모두 x, y를 제곱하거나 서로 곱하지 않은 식이다",
+        "그렇다. 직선을 직선으로 보낸다",
+        "알 수 없다. 기저의 상을 더 알아야 한다",
+      ],
       answer: 0,
       why: [
         String.raw`$(0, 0) \mapsto (1, 0)$이다. 선형 변환은 원점을 원점에 두어야 하므로 선형이 아니다. 걸리는 것은 상수항 $+1$이다.`,
@@ -61,7 +68,12 @@ T(x, y) = xT(\mathbf{e}_1) + yT(\mathbf{e}_2) ∵ [기저의 상이 전부를 �
   checks: [
     {
       q: String.raw`다음 가운데 선형 변환은?`,
-      choices: [String.raw`$(x, y) \mapsto (3x - y,\ 0)$`, String.raw`$(x, y) \mapsto (x - 1,\ y)$`, String.raw`$(x, y) \mapsto (xy,\ y)$`, String.raw`$(x, y) \mapsto (x,\ y^2)$`],
+      choices: [
+        String.raw`$(x, y) \mapsto (3x - y,\ 0)$`,
+        String.raw`$(x, y) \mapsto (x - 1,\ y)$`,
+        String.raw`$(x, y) \mapsto (xy,\ y)$`,
+        String.raw`$(x, y) \mapsto (x,\ y^2)$`,
+      ],
       answer: 0,
       explain: String.raw`첫째는 두 성분이 $3x - y$와 $0 = 0x + 0y$로 모두 상수항이 없는 1차식이므로 위 명제의 (나)에 맞고, 선형이다. 둘째는 상수항 $-1$이 있어 원점을 $(-1, 0)$으로 보낸다. 셋째와 넷째는 문자끼리 곱한 항($xy$, $y^2$)이 있다. 예를 들어 넷째는 $T(0, 2) = (0, 4)$인데 $2T(0, 1) = (0, 2)$다.`,
     },

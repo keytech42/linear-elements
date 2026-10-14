@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.orthogonal-inverse',
-  kind: 'prop',
-  title: '직교 행렬의 역행렬은 전치다',
-  status: 'written',
-  requires: ['def.inverse', 'def.orthogonal-matrix'],
+  id: "prop.orthogonal-inverse",
+  kind: "prop",
+  title: "직교 행렬의 역행렬은 전치다",
+  status: "written",
+  requires: ["def.inverse", "def.orthogonal-matrix"],
   predicts: [
     {
-      id: 'p-cost',
-      kind: 'choice',
+      id: "p-cost",
+      kind: "choice",
       q: String.raw`직교 행렬 $Q$의 역행렬을 구하는 데 필요한 계산은?`,
-      hints: [String.raw`[직교 행렬의 조건](n:def.orthogonal-matrix)은 $Q^{\mathsf{T}}Q = I$였다. 이 식을 [역행렬의 정의](n:def.inverse)와 나란히 놓아 보라.`],
-      choices: ['행과 열을 맞바꾸기만 하면 된다. 곱셈도 나눗셈도 없다', '일반 역행렬 공식을 써야 한다', '행렬식으로 나누는 일만 하면 된다', '직교 행렬은 역행렬이 없다'],
+      hints: [
+        String.raw`[직교 행렬의 조건](n:def.orthogonal-matrix)은 $Q^{\mathsf{T}}Q = I$였다. 이 식을 [역행렬의 정의](n:def.inverse)와 나란히 놓아 보라.`,
+      ],
+      choices: [
+        "행과 열을 맞바꾸기만 하면 된다. 곱셈도 나눗셈도 없다",
+        "일반 역행렬 공식을 써야 한다",
+        "행렬식으로 나누는 일만 하면 된다",
+        "직교 행렬은 역행렬이 없다",
+      ],
       answer: 0,
       why: [
         String.raw`$Q^{\mathsf{T}}Q = I$이므로 $Q^{\mathsf{T}}$가 바로 되돌리는 행렬이다. 아래에서 반대 순서 $QQ^{\mathsf{T}} = I$도 보인다. 회전을 되돌리는 계산이 이렇게 싼 이유가 이것이다.`,
@@ -22,11 +29,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-rows',
-      kind: 'choice',
-      q: '열이 정규직교인 정사각 행렬(직교 행렬)은 행도 정규직교일까?',
-      hints: [String.raw`$Q^{-1} = Q^{\mathsf{T}}$이면 $QQ^{\mathsf{T}} = I$이기도 하다. $QQ^{\mathsf{T}}$의 성분은 $Q$의 무엇끼리의 내적인가?`],
-      choices: ['그렇다. 행도 정규직교다', '아니다. 열만 정규직교다', '회전일 때만 그렇다', '반사일 때만 그렇다'],
+      id: "p-rows",
+      kind: "choice",
+      q: "열이 정규직교인 정사각 행렬(직교 행렬)은 행도 정규직교일까?",
+      hints: [
+        String.raw`$Q^{-1} = Q^{\mathsf{T}}$이면 $QQ^{\mathsf{T}} = I$이기도 하다. $QQ^{\mathsf{T}}$의 성분은 $Q$의 무엇끼리의 내적인가?`,
+      ],
+      choices: [
+        "그렇다. 행도 정규직교다",
+        "아니다. 열만 정규직교다",
+        "회전일 때만 그렇다",
+        "반사일 때만 그렇다",
+      ],
       answer: 0,
       why: [
         String.raw`$QQ^{\mathsf{T}}$의 $i$행 $j$열 성분은 $Q$의 $i$번째 행과 $j$번째 행의 내적이다. 그것이 $I$이므로 행들도 정규직교다.`,

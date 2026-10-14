@@ -1,20 +1,34 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.svd-sum',
-  kind: 'prop',
-  title: '행렬 = 랭크 1 \'층\'들의 합',
-  status: 'written',
+  id: "prop.svd-sum",
+  kind: "prop",
+  title: "행렬 = 랭크 1 '층'들의 합",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.svd-layer', ko: "'층'", en: 'rank-one term', surfaces: ["'층'"], gloss: 'SVD의 한 항 σᵢuᵢvᵢᵀ(랭크 1 행렬)를 이 교재가 비유로 부르는 이름. 행렬은 \'층\'들의 합이고, σᵢ가 큰 \'층\'부터 줄을 선다. 비유이므로 언제나 작은따옴표를 붙인다.' }],
+    terms: [
+      {
+        id: "t.svd-layer",
+        ko: "'층'",
+        en: "rank-one term",
+        surfaces: ["'층'"],
+        gloss:
+          "SVD의 한 항 σᵢuᵢvᵢᵀ(랭크 1 행렬)를 이 교재가 비유로 부르는 이름. 행렬은 '층'들의 합이고, σᵢ가 큰 '층'부터 줄을 선다. 비유이므로 언제나 작은따옴표를 붙인다.",
+      },
+    ],
   },
-  requires: ['prop.svd', 'def.outer-product'],
+  requires: ["prop.svd", "def.outer-product"],
   predicts: [
     {
-      id: 'p-drop',
-      kind: 'choice',
+      id: "p-drop",
+      kind: "choice",
       q: String.raw`'층' 2를 버리고 '층' 1 $\sigma_1\mathbf{u}_1\mathbf{v}_1^{\mathsf{T}}$만 남기면, 출력은 어떻게 될까?`,
-      choices: [String.raw`모든 출력이 $\mathbf{u}_1$ 방향의 직선 위로 모인다`, String.raw`$\mathbf{x}$가 $\mathbf{v}_1$ 위에 있을 때만 바뀌고, 나머지는 그대로다`, '\'층\' 2는 작으니 아무것도 눈에 띄게 바뀌지 않는다', '모든 출력이 0이 된다'],
+      choices: [
+        String.raw`모든 출력이 $\mathbf{u}_1$ 방향의 직선 위로 모인다`,
+        String.raw`$\mathbf{x}$가 $\mathbf{v}_1$ 위에 있을 때만 바뀌고, 나머지는 그대로다`,
+        "'층' 2는 작으니 아무것도 눈에 띄게 바뀌지 않는다",
+        "모든 출력이 0이 된다",
+      ],
       answer: 0,
       why: [
         String.raw`'층' 1은 바깥곱이므로 랭크 1이다. 출력은 $(\mathbf{v}_1\cdot\mathbf{x})$배 한 $\mathbf{u}_1$뿐이다.`,
@@ -64,8 +78,13 @@ $$A\mathbf{x} = (\sigma_1\,\mathbf{v}_1\cdot\mathbf{x})\,\mathbf{u}_1 + (\sigma_
 오른쪽: [바깥곱의 작용](why:def.outer-product) $(\mathbf{u}\mathbf{v}^{\mathsf{T}})\mathbf{x} = (\mathbf{v}\cdot\mathbf{x})\mathbf{u}$를 '층'마다 쓰면 바로 위 식과 같다. 모든 $\mathbf{x}$에서 같으므로 두 행렬은 같다.`,
   checks: [
     {
-      q: '\'층\' 2를 끄고 \'층\' 1만 남긴 행렬 σ₁u₁v₁ᵀ의 랭크와 열공간은?',
-      choices: ['랭크 1, 열공간은 u₁ 방향의 직선', '랭크 1, 열공간은 v₁ 방향의 직선', '랭크 2, 열공간은 평면 전체', 'σ₁에 따라 다르다'],
+      q: "'층' 2를 끄고 '층' 1만 남긴 행렬 σ₁u₁v₁ᵀ의 랭크와 열공간은?",
+      choices: [
+        "랭크 1, 열공간은 u₁ 방향의 직선",
+        "랭크 1, 열공간은 v₁ 방향의 직선",
+        "랭크 2, 열공간은 평면 전체",
+        "σ₁에 따라 다르다",
+      ],
       answer: 0,
       explain: String.raw`바깥곱 $\mathbf{u}\mathbf{v}^{\mathsf{T}}$의 모든 열은 $\mathbf{u}$의 배수다. 그래서 출력은 모두 $\mathbf{u}_1$ 방향의 직선 위에 있다. $\mathbf{v}_1$은 "읽는" 방향이다. $\sigma_1 > 0$이기만 하면 랭크는 1이다.`,
     },

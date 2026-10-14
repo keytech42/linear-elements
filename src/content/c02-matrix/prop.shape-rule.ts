@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.shape-rule',
-  kind: 'prop',
-  title: '곱할 수 있는 조건: 안쪽 차원이 같아야 한다',
-  status: 'written',
-  requires: ['def.shape', 'def.composition'],
+  id: "prop.shape-rule",
+  kind: "prop",
+  title: "곱할 수 있는 조건: 안쪽 차원이 같아야 한다",
+  status: "written",
+  requires: ["def.shape", "def.composition"],
   predicts: [
     {
-      id: 'p-rule',
-      kind: 'choice',
+      id: "p-rule",
+      kind: "choice",
       q: String.raw`$A$가 2×3, $B$가 3×4이다. $AB$와 $BA$의 모양은?`,
       hints: [
         String.raw`$AB$는 $B$를 먼저 한다. $B$는 성분 몇 개를 받아 몇 개를 내놓는가? 그 출력을 $A$가 받을 수 있는가?`,
         String.raw`$BA$는 $A$를 먼저 한다. $A$의 출력은 성분 2개다. $B$는 성분 몇 개를 받는가?`,
       ],
-      choices: ['AB는 2×4이고, BA는 곱할 수 없다', 'AB는 3×3이고, BA는 4×2다', 'AB는 2×4이고, BA는 4×2다', '둘 다 곱할 수 없다'],
+      choices: [
+        "AB는 2×4이고, BA는 곱할 수 없다",
+        "AB는 3×3이고, BA는 4×2다",
+        "AB는 2×4이고, BA는 4×2다",
+        "둘 다 곱할 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`$B$: 4개 → 3개, 이어서 $A$: 3개 → 2개. 그래서 $AB$: 4개 → 2개, 곧 2×4다. $BA$는 $A$의 출력(2개)을 $B$가 받아야 하는데 $B$는 4개를 받으므로 이어지지 않는다.`,

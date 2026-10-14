@@ -1,25 +1,35 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.rotation-matrix',
-  kind: 'prop',
-  title: '회전 행렬 R_θ',
-  status: 'written',
-  introduces: { symbols: [{ tex: String.raw`R_\theta`, meaning: '각 θ만큼 시계 반대 방향으로 돌리는 회전 행렬' }] },
-  requires: ['exp.gallery', 'prop.cos-sin-identity'],
+  id: "prop.rotation-matrix",
+  kind: "prop",
+  title: "회전 행렬 R_θ",
+  status: "written",
+  introduces: {
+    symbols: [
+      {
+        tex: String.raw`R_\theta`,
+        meaning: "각 θ만큼 시계 반대 방향으로 돌리는 회전 행렬",
+      },
+    ],
+  },
+  requires: ["exp.gallery", "prop.cos-sin-identity"],
   predicts: [
     {
-      id: 'p-e2',
-      kind: 'point',
+      id: "p-e2",
+      kind: "point",
       q: String.raw`공식을 만들기 전에: 시계 반대 방향 60° 회전은 $\mathbf{e}_2$를 어디로 보낼까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`$\mathbf{e}_2$는 단위원 위 90° 자리에 있다. 60°를 더 돌면 몇 도 자리인가?`,
         String.raw`150° 자리는 왼쪽 위다. 그 점의 가로 좌표는 음수, 세로 좌표는 양수다. 30° 자리 $(\cos30°, \sin30°) \approx (0.87, 0.5)$를 세로축에 비친 점이다.`,
       ],
-      A: [[0.5, -0.8660254037844386], [0.8660254037844386, 0.5]],
+      A: [
+        [0.5, -0.8660254037844386],
+        [0.8660254037844386, 0.5],
+      ],
       x: [0, 1],
-      target: 'Ax',
-      show: ['circle', 'x'],
+      target: "Ax",
+      show: ["circle", "x"],
       tol: 0.15,
       reveal: String.raw`정답은 $(-0.87, 0.5)$, 곧 $(-\sin60°, \cos60°)$다. 일반적으로 $\theta$ 회전은 $\mathbf{e}_2$를 $(-\sin\theta, \cos\theta)$로 보낸다. 아래 증명이 그 이유다.`,
     },
@@ -45,7 +55,7 @@ $$R_\theta = \begin{bmatrix} \ca{\cos\theta} & \cb{-\sin\theta} \\ \ca{\sin\thet
 **둘째 열.** 먼저 사실 하나를 보이자. **점 $(a, b)$를 원점 중심으로 시계 반대 방향 90° 돌리면 $(-b, a)$가 된다.** 원점, $(a, 0)$, $(a, b)$를 꼭짓점으로 하는 직각삼각형을 통째로 90° 돌려 보라. 가로 변(길이 $a$, 오른쪽 방향)은 세로 변(길이 $a$, 위쪽 방향)이 되고, 세로 변(길이 $b$, 위쪽 방향)은 가로 변(길이 $b$, 왼쪽 방향)이 된다. 그래서 꼭짓점 $(a, b)$는 $(-b, a)$로 간다. $a$, $b$가 음수일 때도 방향이 함께 뒤집히므로 같은 식이 성립한다.
 
 $\mathbf{e}_2$는 $\mathbf{e}_1$을 90° 돌린 것이다. 회전을 두 번 하는 순서는 결과에 영향을 주지 않는다(90° 돌리고 $\theta$ 돌린 것과 $\theta$ 돌리고 90° 돌린 것은 둘 다 $90° + \theta$ 돌린 것이다). 그러므로 $\mathbf{e}_2$의 상은 "$\mathbf{e}_1$의 상 $(\cos\theta, \sin\theta)$를 90° 돌린 것", 곧 $(-\sin\theta, \cos\theta)$다. 검산으로 길이를 재면 $\sin^2\theta + \cos^2\theta = 1$([왜?](why:prop.cos-sin-identity))이다.`,
-  code: ['rotation'],
+  code: ["rotation"],
 };
 
 export default node;

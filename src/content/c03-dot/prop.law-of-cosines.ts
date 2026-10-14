@@ -1,19 +1,36 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.law-of-cosines',
-  kind: 'prop',
-  title: '코사인 법칙',
-  status: 'written',
-  introduces: { terms: [{ id: 't.law-of-cosines', ko: '코사인 법칙', en: 'law of cosines', gloss: '삼각형의 두 변 a, b와 끼인각 θ로 맞은편 변 c를 구하는 식: c² = a² + b² − 2ab cos θ. 피타고라스 정리를 직각이 아닌 삼각형으로 넓힌 것.' }] },
-  requires: ['prop.pythagoras', 'def.angle-trig'],
+  id: "prop.law-of-cosines",
+  kind: "prop",
+  title: "코사인 법칙",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.law-of-cosines",
+        ko: "코사인 법칙",
+        en: "law of cosines",
+        gloss:
+          "삼각형의 두 변 a, b와 끼인각 θ로 맞은편 변 c를 구하는 식: c² = a² + b² − 2ab cos θ. 피타고라스 정리를 직각이 아닌 삼각형으로 넓힌 것.",
+      },
+    ],
+  },
+  requires: ["prop.pythagoras", "def.angle-trig"],
   predicts: [
     {
-      id: 'p-obtuse',
-      kind: 'choice',
+      id: "p-obtuse",
+      kind: "choice",
       q: String.raw`두 변 $a$, $b$ 사이의 끼인각이 90°보다 **큰** 삼각형에서, 맞은편 변 $c$의 제곱 $c^2$은 $a^2 + b^2$과 비교해 어떨까?`,
-      hints: [String.raw`끼인각이 정확히 90°이면 [피타고라스 정리](n:prop.pythagoras)에 따라 $c^2 = a^2 + b^2$이다. 두 변을 그대로 둔 채 끼인각을 더 벌리면, 두 변의 끝 사이 거리 $c$는 길어지는가 짧아지는가?`],
-      choices: [String.raw`$a^2 + b^2$보다 크다`, String.raw`$a^2 + b^2$보다 작다`, String.raw`같다`, '삼각형마다 다르다'],
+      hints: [
+        String.raw`끼인각이 정확히 90°이면 [피타고라스 정리](n:prop.pythagoras)에 따라 $c^2 = a^2 + b^2$이다. 두 변을 그대로 둔 채 끼인각을 더 벌리면, 두 변의 끝 사이 거리 $c$는 길어지는가 짧아지는가?`,
+      ],
+      choices: [
+        String.raw`$a^2 + b^2$보다 크다`,
+        String.raw`$a^2 + b^2$보다 작다`,
+        String.raw`같다`,
+        "삼각형마다 다르다",
+      ],
       answer: 0,
       why: [
         String.raw`각을 벌릴수록 두 끝이 멀어진다. 아래 식에서 보정항 $-2ab\cos\theta$는 $\cos\theta < 0$이므로 양수가 된다.`,
@@ -23,14 +40,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-calc',
-      kind: 'choice',
+      id: "p-calc",
+      kind: "choice",
       q: String.raw`두 변이 3과 2이고 끼인각이 60°인 삼각형의 맞은편 변의 길이는?`,
       hints: [
         String.raw`$\cos60° = 0.5$다(단위원 위 60° 자리의 가로 좌표).`,
         String.raw`$c^2 = 3^2 + 2^2 - 2\cdot3\cdot2\cdot0.5$. 보정항의 부호에 주의하라.`,
       ],
-      choices: [String.raw`$\sqrt{7} \approx 2.65$`, String.raw`$\sqrt{13} \approx 3.61$`, String.raw`$\sqrt{19} \approx 4.36$`, '1'],
+      choices: [
+        String.raw`$\sqrt{7} \approx 2.65$`,
+        String.raw`$\sqrt{13} \approx 3.61$`,
+        String.raw`$\sqrt{19} \approx 4.36$`,
+        "1",
+      ],
       answer: 0,
       why: [
         String.raw`$9 + 4 - 6 = 7$.`,

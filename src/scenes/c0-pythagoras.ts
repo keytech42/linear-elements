@@ -10,34 +10,76 @@
 //   step:    처음 배치 0(배치 1) 또는 1(배치 2) (기본 0)
 //   numbers: 넓이 수치를 보일지 (기본 true). 예측 전에는 false로 둔다
 // 동기화 키: box (상자), tri (삼각형 넷), h2 (가운데 정사각형), a2, b2 (배치 2의 두 정사각형), a, b (직각변)
-import type { SceneFn } from './_lib/scene';
-import { layout, readout, hint } from './_lib/scene';
-import { Plane } from '../render/plane';
-import { C } from '../render/colors';
-import { polygonArea } from '../la/area';
-import { fmt, chip, buttons, animate, slider } from '../ui/widgets';
-import type { Vec } from '../la/vec';
+import type { SceneFn } from "./_lib/scene";
+import { layout, readout, hint } from "./_lib/scene";
+import { Plane } from "../render/plane";
+import { C } from "../render/colors";
+import { polygonArea } from "../la/area";
+import { fmt, chip, buttons, animate, slider } from "../ui/widgets";
+import type { Vec } from "../la/vec";
 
-const shift = (P: Vec[], d: Vec): Vec[] => P.map((v) => [v[0] + d[0], v[1] + d[1]]);
+const shift = (P: Vec[], d: Vec): Vec[] =>
+  P.map((v) => [v[0] + d[0], v[1] + d[1]]);
 
 /** 배치 1의 네 삼각형(꼭짓점 순서: 직각, a쪽 끝, b쪽 끝)과 배치 2로 가는 밀기 */
 function layoutOf(a: number, b: number) {
   const s = a + b;
   const tris: Vec[][] = [
-    [[0, 0], [a, 0], [0, b]],
-    [[s, 0], [s, a], [a, 0]],
-    [[s, s], [b, s], [s, a]],
-    [[0, s], [0, b], [b, s]],
+    [
+      [0, 0],
+      [a, 0],
+      [0, b],
+    ],
+    [
+      [s, 0],
+      [s, a],
+      [a, 0],
+    ],
+    [
+      [s, s],
+      [b, s],
+      [s, a],
+    ],
+    [
+      [0, s],
+      [0, b],
+      [b, s],
+    ],
   ];
-  const moves: Vec[] = [[0, a], [0, 0], [-b, 0], [a, -b]];
+  const moves: Vec[] = [
+    [0, a],
+    [0, 0],
+    [-b, 0],
+    [a, -b],
+  ];
   return {
     s,
     tris,
     moves,
-    box: [[0, 0], [s, 0], [s, s], [0, s]] as Vec[],
-    inner: [[a, 0], [s, a], [b, s], [0, b]] as Vec[],
-    sqA: [[0, 0], [a, 0], [a, a], [0, a]] as Vec[],
-    sqB: [[a, a], [s, a], [s, s], [a, s]] as Vec[],
+    box: [
+      [0, 0],
+      [s, 0],
+      [s, s],
+      [0, s],
+    ] as Vec[],
+    inner: [
+      [a, 0],
+      [s, a],
+      [b, s],
+      [0, b],
+    ] as Vec[],
+    sqA: [
+      [0, 0],
+      [a, 0],
+      [a, a],
+      [0, a],
+    ] as Vec[],
+    sqB: [
+      [a, a],
+      [s, a],
+      [s, s],
+      [a, s],
+    ] as Vec[],
   };
 }
 
@@ -53,29 +95,63 @@ const scene: SceneFn = (host, { bus, params }) => {
     const L = layoutOf(a, b);
     const o: Vec = [-L.s / 2, -L.s / 2];
     const O = (P: Vec[]) => shift(P, o);
-    p.poly(O(L.box), { color: C.ink, width: 1.5, key: 'box' });
-    if (t < 0.02) p.poly(O(L.inner), { fill: C.area, color: C.x, width: 2, key: 'h2' });
+    p.poly(O(L.box), { color: C.ink, width: 1.5, key: "box" });
+    if (t < 0.02)
+      p.poly(O(L.inner), { fill: C.area, color: C.x, width: 2, key: "h2" });
     if (t > 0.98) {
-      p.poly(O(L.sqA), { fill: C.c1, alpha: 0.22, color: C.c1, width: 1.5, key: 'a2' });
-      p.poly(O(L.sqB), { fill: C.c2, alpha: 0.22, color: C.c2, width: 1.5, key: 'b2' });
+      p.poly(O(L.sqA), {
+        fill: C.c1,
+        alpha: 0.22,
+        color: C.c1,
+        width: 1.5,
+        key: "a2",
+      });
+      p.poly(O(L.sqB), {
+        fill: C.c2,
+        alpha: 0.22,
+        color: C.c2,
+        width: 1.5,
+        key: "b2",
+      });
     }
     L.tris.forEach((T, k) => {
       const P = O(shift(T, [L.moves[k][0] * t, L.moves[k][1] * t]));
-      p.poly(P, { fill: C.gridStrong, color: C.dim, width: 1, key: 'tri' });
-      p.seg(P[0], P[1], { color: C.c1, width: 3, key: 'a' });
-      p.seg(P[0], P[2], { color: C.c2, width: 3, key: 'b' });
+      p.poly(P, { fill: C.gridStrong, color: C.dim, width: 1, key: "tri" });
+      p.seg(P[0], P[1], { color: C.c1, width: 3, key: "a" });
+      p.seg(P[0], P[2], { color: C.c2, width: 3, key: "b" });
       p.seg(P[1], P[2], { color: C.x, width: 2, alpha: 0.9 });
     });
     if (t < 0.02) {
       const c = O([[L.s / 2, L.s / 2]])[0];
-      p.text(c, 'h × h', { color: C.x, align: 'center', bold: true });
-      p.text(O([[a / 2, 0]])[0], 'a', { color: C.c1, dy: 14, align: 'center', bold: true });
-      p.text(O([[a + b / 2, 0]])[0], 'b', { color: C.c2, dy: 14, align: 'center', bold: true });
-      p.text(O([[a / 2 + 0.15, b / 2 + 0.15]])[0], 'h', { color: C.x, bold: true });
+      p.text(c, "h × h", { color: C.x, align: "center", bold: true });
+      p.text(O([[a / 2, 0]])[0], "a", {
+        color: C.c1,
+        dy: 14,
+        align: "center",
+        bold: true,
+      });
+      p.text(O([[a + b / 2, 0]])[0], "b", {
+        color: C.c2,
+        dy: 14,
+        align: "center",
+        bold: true,
+      });
+      p.text(O([[a / 2 + 0.15, b / 2 + 0.15]])[0], "h", {
+        color: C.x,
+        bold: true,
+      });
     }
     if (t > 0.98) {
-      p.text(O([[a / 2, a / 2]])[0], 'a × a', { color: C.c1, align: 'center', bold: true });
-      p.text(O([[a + b / 2, a + b / 2]])[0], 'b × b', { color: C.c2, align: 'center', bold: true });
+      p.text(O([[a / 2, a / 2]])[0], "a × a", {
+        color: C.c1,
+        align: "center",
+        bold: true,
+      });
+      p.text(O([[a + b / 2, a + b / 2]])[0], "b × b", {
+        color: C.c2,
+        align: "center",
+        bold: true,
+      });
     }
   };
 
@@ -83,16 +159,39 @@ const scene: SceneFn = (host, { bus, params }) => {
   const go = (to: number) => {
     stop?.();
     const from = t;
-    stop = animate(1400, (u) => ((t = from + (to - from) * u), sync()), () => (stop = null));
+    stop = animate(
+      1400,
+      (u) => ((t = from + (to - from) * u), sync()),
+      () => (stop = null),
+    );
   };
   buttons(panel, [
-    { label: '배치 1', on: () => go(0) },
-    { label: '배치 2', on: () => go(1) },
+    { label: "배치 1", on: () => go(0) },
+    { label: "배치 2", on: () => go(1) },
   ]);
-  const sa = slider(panel, { label: '직각변 a', min: 0.3, max: 3, step: 0.1, get: () => a, set: (v) => ((a = v), sync()), key: 'a' });
-  const sb = slider(panel, { label: '직각변 b', min: 0.3, max: 3, step: 0.1, get: () => b, set: (v) => ((b = v), sync()), key: 'b' });
+  const sa = slider(panel, {
+    label: "직각변 a",
+    min: 0.3,
+    max: 3,
+    step: 0.1,
+    get: () => a,
+    set: (v) => ((a = v), sync()),
+    key: "a",
+  });
+  const sb = slider(panel, {
+    label: "직각변 b",
+    min: 0.3,
+    max: 3,
+    step: 0.1,
+    get: () => b,
+    set: (v) => ((b = v), sync()),
+    key: "b",
+  });
   const ro = readout(panel);
-  hint(panel, '두 배치 모두 같은 상자 안에 같은 삼각형 네 개를 겹치지 않게 놓았습니다. 남은 부분을 비교해 보세요.');
+  hint(
+    panel,
+    "두 배치 모두 같은 상자 안에 같은 삼각형 네 개를 겹치지 않게 놓았습니다. 남은 부분을 비교해 보세요.",
+  );
 
   function sync() {
     sa.refresh();
@@ -101,14 +200,16 @@ const scene: SceneFn = (host, { bus, params }) => {
     const box = polygonArea(L.box);
     const tri = L.tris.reduce((s, T) => s + polygonArea(T), 0);
     if (!numbers) {
-      ro.set(`<div>${chip('상자', C.ink, 'box')}: 한 변 a + b = ${fmt(L.s)}</div><div>${chip('삼각형 넷', C.dim, 'tri')}: 두 배치에서 같은 조각</div><div class="dim">넓이 비교는 예측한 뒤에 봅니다.</div>`);
+      ro.set(
+        `<div>${chip("상자", C.ink, "box")}: 한 변 a + b = ${fmt(L.s)}</div><div>${chip("삼각형 넷", C.dim, "tri")}: 두 배치에서 같은 조각</div><div class="dim">넓이 비교는 예측한 뒤에 봅니다.</div>`,
+      );
     } else {
       ro.set(
-        `<div>${chip('상자', C.ink, 'box')} = (${fmt(a)} + ${fmt(b)})² = ${fmt(box, 3)}</div>` +
-          `<div>− ${chip('삼각형 넷', C.dim, 'tri')} = ${fmt(tri, 3)}</div>` +
+        `<div>${chip("상자", C.ink, "box")} = (${fmt(a)} + ${fmt(b)})² = ${fmt(box, 3)}</div>` +
+          `<div>− ${chip("삼각형 넷", C.dim, "tri")} = ${fmt(tri, 3)}</div>` +
           `<div class="eq">= 남은 넓이 ${fmt(box - tri, 3)}</div>` +
-          `<div>배치 1: ${chip('h × h', C.x, 'h2')} = ${fmt(polygonArea(L.inner), 3)}</div>` +
-          `<div>배치 2: ${chip('a × a', C.c1, 'a2')} + ${chip('b × b', C.c2, 'b2')} = ${fmt(polygonArea(L.sqA), 3)} + ${fmt(polygonArea(L.sqB), 3)} = ${fmt(polygonArea(L.sqA) + polygonArea(L.sqB), 3)}</div>`,
+          `<div>배치 1: ${chip("h × h", C.x, "h2")} = ${fmt(polygonArea(L.inner), 3)}</div>` +
+          `<div>배치 2: ${chip("a × a", C.c1, "a2")} + ${chip("b × b", C.c2, "b2")} = ${fmt(polygonArea(L.sqA), 3)} + ${fmt(polygonArea(L.sqB), 3)} = ${fmt(polygonArea(L.sqA) + polygonArea(L.sqB), 3)}</div>`,
       );
     }
     p.invalidate();

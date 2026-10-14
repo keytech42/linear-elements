@@ -1,7 +1,7 @@
 // 2장(def.transformation, def.linear-map, prop.linear-grid)의 장면이 쓰는 변환들.
 // 대부분은 일부러 "선형이 아닌" 변환이다. 선형 변환이 무엇인지는 선형이 아닌 것과 나란히 볼 때 또렷해진다.
-import { type Vec, add, scale, norm } from './vec';
-import { matVec, rotation, type Mat } from './mat';
+import { type Vec, add, scale, norm } from "./vec";
+import { matVec, rotation, type Mat } from "./mat";
 
 export type Map2 = (v: Vec) => Vec;
 
@@ -40,7 +40,11 @@ export function blendMap(T: Map2, s: number): Map2 {
  * def.linear-map — 덧셈을 지키는지 재 보기: T(u + w)와 T(u) + T(w)를 함께 돌려준다.
  * 선형 변환이면 두 값이 언제나 같다.
  */
-export function additivityPair(T: Map2, u: Vec, w: Vec): { ofSum: Vec; sumOf: Vec } {
+export function additivityPair(
+  T: Map2,
+  u: Vec,
+  w: Vec,
+): { ofSum: Vec; sumOf: Vec } {
   return { ofSum: T(add(u, w)), sumOf: add(T(u), T(w)) };
 }
 
@@ -48,6 +52,10 @@ export function additivityPair(T: Map2, u: Vec, w: Vec): { ofSum: Vec; sumOf: Ve
  * def.linear-map — 스칼라 곱을 지키는지 재 보기: T(cv)와 cT(v)를 함께 돌려준다.
  * 선형 변환이면 두 값이 언제나 같다.
  */
-export function homogeneityPair(T: Map2, c: number, v: Vec): { ofScaled: Vec; scaledOf: Vec } {
+export function homogeneityPair(
+  T: Map2,
+  c: number,
+  v: Vec,
+): { ofScaled: Vec; scaledOf: Vec } {
   return { ofScaled: T(scale(c, v)), scaledOf: scale(c, T(v)) };
 }

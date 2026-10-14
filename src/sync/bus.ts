@@ -30,24 +30,31 @@ export class SyncBus {
   /** root 안의 data-sync 요소들을 버스에 묶는다. */
   bindDom(root: HTMLElement): () => void {
     const over = (e: Event) => {
-      const el = (e.target as HTMLElement).closest?.('[data-sync]') as HTMLElement | null;
+      const el = (e.target as HTMLElement).closest?.(
+        "[data-sync]",
+      ) as HTMLElement | null;
       if (el && root.contains(el)) this.set(el.dataset.sync!);
     };
     const out = (e: PointerEvent) => {
-      const to = (e.relatedTarget as HTMLElement | null)?.closest?.('[data-sync]');
+      const to = (e.relatedTarget as HTMLElement | null)?.closest?.(
+        "[data-sync]",
+      );
       if (!to) this.set(null);
     };
-    root.addEventListener('pointerover', over);
-    root.addEventListener('pointerout', out);
+    root.addEventListener("pointerover", over);
+    root.addEventListener("pointerout", out);
     const off = this.on((key) => {
-      root.querySelectorAll<HTMLElement>('[data-sync]').forEach((el) => {
+      root.querySelectorAll<HTMLElement>("[data-sync]").forEach((el) => {
         const k = el.dataset.sync!;
-        el.classList.toggle('sync-hot', !!key && (k === key || related(key, k)));
+        el.classList.toggle(
+          "sync-hot",
+          !!key && (k === key || related(key, k)),
+        );
       });
     });
     return () => {
-      root.removeEventListener('pointerover', over);
-      root.removeEventListener('pointerout', out);
+      root.removeEventListener("pointerover", over);
+      root.removeEventListener("pointerout", out);
       off();
     };
   }
@@ -58,16 +65,21 @@ export class SyncBus {
  * 접두어가 붙은 키(예: B.a12 ↔ B.col2)도 같은 규칙을 따른다.
  */
 function related(a: string, b: string): boolean {
-  const pa = splitPrefix(a), pb = splitPrefix(b);
+  const pa = splitPrefix(a),
+    pb = splitPrefix(b);
   if (pa.prefix !== pb.prefix) return false;
-  const ea = /^a(\d)(\d)$/.exec(pa.key), cb = /^col(\d)$/.exec(pb.key);
+  const ea = /^a(\d)(\d)$/.exec(pa.key),
+    cb = /^col(\d)$/.exec(pb.key);
   if (ea && cb) return ea[2] === cb[1];
-  const eb = /^a(\d)(\d)$/.exec(pb.key), ca = /^col(\d)$/.exec(pa.key);
+  const eb = /^a(\d)(\d)$/.exec(pb.key),
+    ca = /^col(\d)$/.exec(pa.key);
   if (eb && ca) return eb[2] === ca[1];
   return false;
 }
 
 function splitPrefix(k: string): { prefix: string; key: string } {
-  const i = k.lastIndexOf('.');
-  return i < 0 ? { prefix: '', key: k } : { prefix: k.slice(0, i), key: k.slice(i + 1) };
+  const i = k.lastIndexOf(".");
+  return i < 0
+    ? { prefix: "", key: k }
+    : { prefix: k.slice(0, i), key: k.slice(i + 1) };
 }

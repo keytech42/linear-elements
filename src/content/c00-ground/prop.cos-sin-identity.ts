@@ -1,21 +1,21 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.cos-sin-identity',
-  kind: 'prop',
-  title: 'cos²θ + sin²θ = 1',
-  status: 'written',
-  requires: ['def.angle-trig', 'prop.pythagoras'],
+  id: "prop.cos-sin-identity",
+  kind: "prop",
+  title: "cos²θ + sin²θ = 1",
+  status: "written",
+  requires: ["def.angle-trig", "prop.pythagoras"],
   predicts: [
     {
-      id: 'p-cos',
-      kind: 'choice',
+      id: "p-cos",
+      kind: "choice",
       q: String.raw`$\sin\theta = 0.6$이고 $\theta$가 90°와 180° 사이에 있다. $\cos\theta$는?`,
       hints: [
         String.raw`점 $(\cos\theta, \sin\theta)$는 단위원 위에 있으므로 원점에서의 거리가 1이다. [거리의 식](n:def.distance)을 써 보라.`,
         String.raw`$\cos^2\theta = 1 - 0.36 = 0.64$이므로 $\cos\theta$는 $0.8$ 또는 $-0.8$이다. 어느 쪽인지는 $\theta$가 원의 어느 쪽에 있는지가 정한다.`,
       ],
-      choices: ['−0.8', '0.8', '0.4', '−0.4'],
+      choices: ["−0.8", "0.8", "0.4", "−0.4"],
       answer: 0,
       why: [
         String.raw`$\cos^2\theta = 0.64$이고, 90°와 180° 사이의 점은 왼쪽 위에 있으므로 가로 좌표가 음수다. 그래서 $-0.8$이다.`,

@@ -1,24 +1,45 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.spectral',
-  kind: 'prop',
-  title: '스펙트럼 정리: S = QΛQᵀ',
-  status: 'written',
+  id: "prop.spectral",
+  kind: "prop",
+  title: "스펙트럼 정리: S = QΛQᵀ",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.spectral', ko: '스펙트럼 정리', en: 'spectral theorem', gloss: '대칭 행렬은 고윳값이 모두 실수이고, 서로 수직인 단위 고유벡터로 이루어진 기저를 가진다: S = QΛQᵀ.' }],
+    terms: [
+      {
+        id: "t.spectral",
+        ko: "스펙트럼 정리",
+        en: "spectral theorem",
+        gloss:
+          "대칭 행렬은 고윳값이 모두 실수이고, 서로 수직인 단위 고유벡터로 이루어진 기저를 가진다: S = QΛQᵀ.",
+      },
+    ],
     symbols: [
-      { tex: String.raw`\Lambda`, meaning: '고윳값을 대각에 놓은 대각 행렬' },
-      { tex: String.raw`\mathbf{q}_i`, meaning: '대칭 행렬의 i번째 단위 고유벡터 (Q의 i번째 열)' },
+      { tex: String.raw`\Lambda`, meaning: "고윳값을 대각에 놓은 대각 행렬" },
+      {
+        tex: String.raw`\mathbf{q}_i`,
+        meaning: "대칭 행렬의 i번째 단위 고유벡터 (Q의 i번째 열)",
+      },
     ],
   },
-  requires: ['def.symmetric', 'prop.diagonalization', 'prop.transpose-dot', 'prop.orthogonal-inverse'],
+  requires: [
+    "def.symmetric",
+    "prop.diagonalization",
+    "prop.transpose-dot",
+    "prop.orthogonal-inverse",
+  ],
   predicts: [
     {
-      id: 'p-orth',
-      kind: 'choice',
-      q: '대칭 행렬에서, 고윳값이 서로 다른 두 고유벡터 사이의 각은?',
-      choices: ['언제나 90°', '행렬마다 다르다', '언제나 45°', '0° (같은 직선)'],
+      id: "p-orth",
+      kind: "choice",
+      q: "대칭 행렬에서, 고윳값이 서로 다른 두 고유벡터 사이의 각은?",
+      choices: [
+        "언제나 90°",
+        "행렬마다 다르다",
+        "언제나 45°",
+        "0° (같은 직선)",
+      ],
       answer: 0,
       why: [
         String.raw`아래 그림에서 행렬을 바꿔 확인하고, 증명은 이 노드의 끝에 있다. 앞 노드의 등식 $(S\mathbf{x})\cdot\mathbf{y} = \mathbf{x}\cdot(S\mathbf{y})$ 한 줄이면 된다.`,
@@ -28,14 +49,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-disc',
-      kind: 'choice',
+      id: "p-disc",
+      kind: "choice",
       q: String.raw`대칭 행렬 $\begin{bmatrix} s_{11} & s_{12} \\ s_{12} & s_{22} \end{bmatrix}$의 특성방정식의 판별식은 음수가 될 수 있을까?`,
       hints: [
         String.raw`대칭 행렬의 대각합은 $s_{11} + s_{22}$, 행렬식은 $s_{11}s_{22} - s_{12}^2$이다. 판별식 $(\operatorname{tr})^2 - 4\det$에 넣고 전개해 보라.`,
         String.raw`전개하면 $s_{11}^2 - 2s_{11}s_{22} + s_{22}^2 + 4s_{12}^2$이 된다. 앞의 세 항은 무엇의 제곱인가?`,
       ],
-      choices: ['될 수 없다', '될 수 있다. 회전처럼', String.raw`$\det S < 0$이면 음수가 된다`, String.raw`$s_{12}$가 크면 음수가 된다`],
+      choices: [
+        "될 수 없다",
+        "될 수 있다. 회전처럼",
+        String.raw`$\det S < 0$이면 음수가 된다`,
+        String.raw`$s_{12}$가 크면 음수가 된다`,
+      ],
       answer: 0,
       why: [
         String.raw`판별식을 정리하면 $(s_{11} - s_{22})^2 + 4s_{12}^2$, 곧 제곱의 합이 된다. 아래 [](ref:real)의 증명이 이것이다.`,
@@ -46,7 +72,10 @@ const node: NodeDef = {
     },
   ],
   openWhys: [
-    { q: 'n×n 대칭 행렬도 고윳값이 모두 실수이고, 서로 수직인 단위 고유벡터 n개를 언제나 가지는가? (일반적인 증명)', answeredBy: null },
+    {
+      q: "n×n 대칭 행렬도 고윳값이 모두 실수이고, 서로 수직인 단위 고유벡터 n개를 언제나 가지는가? (일반적인 증명)",
+      answeredBy: null,
+    },
   ],
   body: String.raw`[대칭 행렬](t:t.symmetric)의 고유벡터는 어떻게 생겼을까?
 
@@ -98,12 +127,17 @@ $$\lambda_1(\mathbf{q}_1\cdot\mathbf{q}_2) = (S\mathbf{q}_1)\cdot\mathbf{q}_2 = 
   checks: [
     {
       q: String.raw`$Q\Lambda Q^{\mathsf{T}}$ 꼴의 행렬(Q는 직교, Λ는 대각)은 언제나 대칭인가?`,
-      choices: ['언제나 대칭이다', 'Q가 회전일 때만 대칭이다', 'Λ의 성분이 양수일 때만 대칭이다', '대칭일 수 없다'],
+      choices: [
+        "언제나 대칭이다",
+        "Q가 회전일 때만 대칭이다",
+        "Λ의 성분이 양수일 때만 대칭이다",
+        "대칭일 수 없다",
+      ],
       answer: 0,
       explain: String.raw`$(Q\Lambda Q^{\mathsf{T}})^{\mathsf{T}} = (Q^{\mathsf{T}})^{\mathsf{T}}\Lambda^{\mathsf{T}}Q^{\mathsf{T}} = Q\Lambda Q^{\mathsf{T}}$이다(대각 행렬은 전치해도 같다). 그러므로 스펙트럼 정리는 양방향이다. 대칭 행렬은 정확히 "서로 수직인 축 방향으로 따로 늘이는 변환"이다.`,
     },
   ],
-  code: ['symEig'],
+  code: ["symEig"],
 };
 
 export default node;

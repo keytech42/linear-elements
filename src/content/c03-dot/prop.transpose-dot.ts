@@ -1,18 +1,20 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.transpose-dot',
-  kind: 'prop',
-  title: '전치의 정체: (Ax)·y = x·(Aᵀy)',
-  status: 'written',
-  requires: ['def.transpose'],
+  id: "prop.transpose-dot",
+  kind: "prop",
+  title: "전치의 정체: (Ax)·y = x·(Aᵀy)",
+  status: "written",
+  requires: ["def.transpose"],
   predicts: [
     {
-      id: 'p-same',
-      kind: 'choice',
+      id: "p-same",
+      kind: "choice",
       q: String.raw`$A = \begin{bmatrix} 1 & 2 \\ 0 & 1 \end{bmatrix}$, $\mathbf{x} = (1, 1)$, $\mathbf{y} = (2, -1)$이다. $(A\mathbf{x})\cdot\mathbf{y} = 5$다. 그렇다면 $\mathbf{x}\cdot(A^{\mathsf{T}}\mathbf{y})$는?`,
-      hints: [String.raw`직접 계산해 보라. $A^{\mathsf{T}} = \begin{bmatrix} 1 & 0 \\ 2 & 1 \end{bmatrix}$이므로 $A^{\mathsf{T}}\mathbf{y} = (2,\ 4 - 1)$이다. 그다음 $\mathbf{x}$와 내적.`],
-      choices: ['5', '3', '−5', '계산해 보기 전에는 아무 관계도 없다'],
+      hints: [
+        String.raw`직접 계산해 보라. $A^{\mathsf{T}} = \begin{bmatrix} 1 & 0 \\ 2 & 1 \end{bmatrix}$이므로 $A^{\mathsf{T}}\mathbf{y} = (2,\ 4 - 1)$이다. 그다음 $\mathbf{x}$와 내적.`,
+      ],
+      choices: ["5", "3", "−5", "계산해 보기 전에는 아무 관계도 없다"],
       answer: 0,
       why: [
         String.raw`$A^{\mathsf{T}}\mathbf{y} = (2, 3)$, $(1, 1)\cdot(2, 3) = 5$. 우연이 아니다. 아래 명제가 언제나 같다고 말한다.`,
@@ -22,14 +24,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-order',
-      kind: 'choice',
+      id: "p-order",
+      kind: "choice",
       q: String.raw`$(AB)^{\mathsf{T}}$는 무엇과 같을까?`,
       hints: [
         String.raw`$((AB)\mathbf{x})\cdot\mathbf{y} = (A(B\mathbf{x}))\cdot\mathbf{y}$에 이 노드의 식을 써서, $A$를 $\mathbf{y}$ 쪽으로 넘겨 보라.`,
         String.raw`$(B\mathbf{x})\cdot(A^{\mathsf{T}}\mathbf{y})$가 된다. 한 번 더, 이번에는 $B$를 넘겨라.`,
       ],
-      choices: [String.raw`$B^{\mathsf{T}}A^{\mathsf{T}}$`, String.raw`$A^{\mathsf{T}}B^{\mathsf{T}}$`, String.raw`$AB$`, String.raw`$BA$`],
+      choices: [
+        String.raw`$B^{\mathsf{T}}A^{\mathsf{T}}$`,
+        String.raw`$A^{\mathsf{T}}B^{\mathsf{T}}$`,
+        String.raw`$AB$`,
+        String.raw`$BA$`,
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{x}\cdot(B^{\mathsf{T}}(A^{\mathsf{T}}\mathbf{y}))$가 되므로 $\mathbf{y}$에 $A^{\mathsf{T}}$를 먼저, $B^{\mathsf{T}}$를 나중에 한다. 곧 $B^{\mathsf{T}}A^{\mathsf{T}}$다. 넘기는 순서대로 쌓이므로 순서가 뒤집힌다.`,

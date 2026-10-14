@@ -1,21 +1,36 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.vector-rules',
-  kind: 'prop',
-  title: '벡터 계산의 여덟 규칙',
-  status: 'written',
-  introduces: { terms: [{ id: 't.vector-space', ko: '벡터 공간', en: 'vector space', gloss: '덧셈과 스칼라 곱이 여덟 가지 규칙을 지키는 대상들의 모임. 화살표뿐 아니라 함수, 이미지도 해당한다.' }] },
-  requires: ['prop.add-componentwise', 'def.scalar-mul'],
+  id: "prop.vector-rules",
+  kind: "prop",
+  title: "벡터 계산의 여덟 규칙",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.vector-space",
+        ko: "벡터 공간",
+        en: "vector space",
+        gloss:
+          "덧셈과 스칼라 곱이 여덟 가지 규칙을 지키는 대상들의 모임. 화살표뿐 아니라 함수, 이미지도 해당한다.",
+      },
+    ],
+  },
+  requires: ["prop.add-componentwise", "def.scalar-mul"],
   predicts: [
     {
-      id: 'p-assoc',
-      kind: 'choice',
+      id: "p-assoc",
+      kind: "choice",
       q: String.raw`[](ref:scal-assoc), $c_1(c_2\mathbf{v}) = (c_1c_2)\mathbf{v}$를 성분으로 확인하려 한다. 첫째 성분에서 $c_1(c_2v_1) = (c_1c_2)v_1$이 성립하는 근거는 무엇일까?`,
       hints: [
         String.raw`이 등식에는 덧셈이 없고 곱셈만 세 번 있다. 양쪽은 무엇이 다른가? 곱하는 순서인가, 묶는 방법인가?`,
       ],
-      choices: [String.raw`곱셈의 [결합법칙](t:t.associative)`, String.raw`[분배법칙](t:t.distributive)`, String.raw`곱셈의 [교환법칙](t:t.commutative)`, '스칼라 곱의 정의 그 자체(근거가 따로 필요 없다)'],
+      choices: [
+        String.raw`곱셈의 [결합법칙](t:t.associative)`,
+        String.raw`[분배법칙](t:t.distributive)`,
+        String.raw`곱셈의 [교환법칙](t:t.commutative)`,
+        "스칼라 곱의 정의 그 자체(근거가 따로 필요 없다)",
+      ],
       answer: 0,
       why: [
         String.raw`세 수 $c_1, c_2, v_1$의 순서는 그대로이고 괄호의 위치만 바뀌었다. 묶는 방법을 바꿔도 곱이 같다는 것이 결합법칙이다.`,
@@ -25,14 +40,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-space',
-      kind: 'choice',
+      id: "p-space",
+      kind: "choice",
       q: String.raw`다음 모임에서, 모임 안의 것들끼리 더하거나 스칼라를 곱한 결과를 생각하자. 아래 정의에 따른 [벡터 공간](t:t.vector-space)이 **아닌** 것은?`,
       hints: [
         String.raw`정의의 첫 조건부터 보라. 더하거나 스칼라를 곱한 결과가 **모임 안에 남는가?** 스칼라는 음수일 수도 있다.`,
         String.raw`$(1, 2)$에 $-1$을 곱하면 무엇이 되는가? 그것은 어느 모임에서 벗어나는가?`,
       ],
-      choices: ['성분이 모두 0 이상인 평면 벡터 전체', '성분이 3개인 벡터 전체', '가로 100칸, 세로 100칸 흑백 이미지 전체(칸의 값으로 음수를 포함한 아무 수나 허용할 때)', String.raw`원점을 지나는 한 직선 위의 벡터 전체(예: $(1, 2)$의 스칼라 배 전체)`],
+      choices: [
+        "성분이 모두 0 이상인 평면 벡터 전체",
+        "성분이 3개인 벡터 전체",
+        "가로 100칸, 세로 100칸 흑백 이미지 전체(칸의 값으로 음수를 포함한 아무 수나 허용할 때)",
+        String.raw`원점을 지나는 한 직선 위의 벡터 전체(예: $(1, 2)$의 스칼라 배 전체)`,
+      ],
       answer: 0,
       why: [
         String.raw`$(1, 2)$는 이 모임에 있지만 $(-1)\cdot(1, 2) = (-1, -2)$는 없다. 스칼라 곱의 결과가 모임 밖으로 나가므로 벡터 공간이 아니다.`,
@@ -123,7 +143,7 @@ $-\mathbf{v} = (-1)\mathbf{v}$의 첫째 성분은 [$(-1)v_1 = -v_1$](why:prop.n
 둘째 성분(그리고 셋째 이후의 성분)에서도 같은 계산이 그대로 성립한다.`,
   checks: [
     {
-      q: '다음 가운데 여덟 규칙에 들어 있지 **않은** 것은?',
+      q: "다음 가운데 여덟 규칙에 들어 있지 **않은** 것은?",
       choices: [
         String.raw`두 벡터를 곱한 벡터 $\mathbf{u}\mathbf{w}$가 정해져 있다`,
         String.raw`$\mathbf{u} + \mathbf{w} = \mathbf{w} + \mathbf{u}$`,
@@ -134,8 +154,13 @@ $-\mathbf{v} = (-1)\mathbf{v}$의 첫째 성분은 [$(-1)v_1 = -v_1$](why:prop.n
       explain: String.raw`여덟 규칙에는 벡터끼리의 덧셈과, 수와 벡터의 곱(스칼라 곱)만 나온다. 벡터와 벡터를 곱하는 계산은 정하지 않았다. 수에서는 곱셈이 당연하지만 벡터에서는 아니다. 3장에서 벡터 두 개로 수 하나를 만드는 [내적](fwd:t.dot)을 따로 정의한다. 그것도 결과가 벡터가 아니라 수다.`,
     },
     {
-      q: '함수들의 벡터 공간에서 영벡터는 무엇인가?',
-      choices: ['어떤 입력에도 0을 내놓는 함수', '입력 0을 받으면 0을 내놓는 함수', '수 0', '함수의 모임에는 영벡터가 없다'],
+      q: "함수들의 벡터 공간에서 영벡터는 무엇인가?",
+      choices: [
+        "어떤 입력에도 0을 내놓는 함수",
+        "입력 0을 받으면 0을 내놓는 함수",
+        "수 0",
+        "함수의 모임에는 영벡터가 없다",
+      ],
       answer: 0,
       explain: String.raw`영벡터는 어떤 벡터에 더해도 그 벡터를 바꾸지 않는 것이다([](ref:add-zero)). 함수 $f$에 더해서 모든 입력의 출력을 바꾸지 않으려면, 더하는 함수가 **모든** 입력에서 0을 내놓아야 한다. "입력 0에서만 0"인 함수는 다른 입력에서 출력을 바꿔 버린다. 수 0은 함수가 아니므로 함수의 모임 안에 있지 않다.`,
     },

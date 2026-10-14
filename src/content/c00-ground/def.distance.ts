@@ -1,19 +1,31 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.distance',
-  kind: 'def',
-  title: '거리: 두 점 사이의 길이',
-  status: 'written',
-  introduces: { terms: [{ id: 't.distance', ko: '거리', en: 'distance', everyday: true, gloss: '두 점을 잇는 선분의 길이. 좌표로는 √(가로 차이² + 세로 차이²).' }] },
-  requires: ['prop.pythagoras', 'def.plane'],
+  id: "def.distance",
+  kind: "def",
+  title: "거리: 두 점 사이의 길이",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.distance",
+        ko: "거리",
+        en: "distance",
+        everyday: true,
+        gloss: "두 점을 잇는 선분의 길이. 좌표로는 √(가로 차이² + 세로 차이²).",
+      },
+    ],
+  },
+  requires: ["prop.pythagoras", "def.plane"],
   predicts: [
     {
-      id: 'p-d',
-      kind: 'choice',
+      id: "p-d",
+      kind: "choice",
       q: String.raw`두 점 $(1, 1)$과 $(4, 5)$ 사이의 거리는?`,
-      hints: [String.raw`한 점에서 다른 점으로 가로로 얼마, 세로로 얼마 움직이는가? 두 이동은 서로 수직이므로 직각삼각형의 두 직각변이 된다.`],
-      choices: ['5', '7', String.raw`$\sqrt{7}$`, '25'],
+      hints: [
+        String.raw`한 점에서 다른 점으로 가로로 얼마, 세로로 얼마 움직이는가? 두 이동은 서로 수직이므로 직각삼각형의 두 직각변이 된다.`,
+      ],
+      choices: ["5", "7", String.raw`$\sqrt{7}$`, "25"],
       answer: 0,
       why: [
         String.raw`가로 차이 3, 세로 차이 4. $\sqrt{9 + 16} = 5$.`,
@@ -23,14 +35,14 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-lattice',
-      kind: 'choice',
-      q: '원점에서 거리가 정확히 5이고, 두 좌표가 모두 정수인 점은 모두 몇 개일까?',
+      id: "p-lattice",
+      kind: "choice",
+      q: "원점에서 거리가 정확히 5이고, 두 좌표가 모두 정수인 점은 모두 몇 개일까?",
       hints: [
         String.raw`$x^2 + y^2 = 25$를 만족하는 정수 쌍을 찾는 문제다. 25를 두 제곱수의 합으로 쓰는 방법: $0 + 25$, $9 + 16$, $16 + 9$, $25 + 0$.`,
         String.raw`각 방법마다 좌표의 부호(±)를 바꿀 수 있다. 0은 부호를 바꿔도 같다는 점에 주의하라.`,
       ],
-      choices: ['12개', '4개', '8개', '무한히 많다'],
+      choices: ["12개", "4개", "8개", "무한히 많다"],
       answer: 0,
       why: [
         String.raw`$(\pm5, 0)$, $(0, \pm5)$로 4개, $(\pm3, \pm4)$로 4개, $(\pm4, \pm3)$으로 4개. 모두 12개다.`,
@@ -69,12 +81,12 @@ $Q$에서 $P$로 재든 $P$에서 $Q$로 재든 거리는 같다. 차이의 부�
   checks: [
     {
       q: String.raw`원점에서 점 $(-6, 8)$까지의 거리는?`,
-      choices: ['10', '2', '14', '100'],
+      choices: ["10", "2", "14", "100"],
       answer: 0,
       explain: String.raw`$\sqrt{36 + 64} = \sqrt{100} = 10$. 음수 좌표도 제곱하면 양수가 된다. 100은 거리의 제곱이다.`,
     },
   ],
-  code: ['distance'],
+  code: ["distance"],
 };
 
 export default node;

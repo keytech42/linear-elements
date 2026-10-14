@@ -1,21 +1,21 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.det-formula',
-  kind: 'prop',
-  title: '2×2 행렬식의 공식',
-  status: 'written',
-  requires: ['prop.det-uniform'],
+  id: "prop.det-formula",
+  kind: "prop",
+  title: "2×2 행렬식의 공식",
+  status: "written",
+  requires: ["prop.det-uniform"],
   predicts: [
     {
-      id: 'p-cut',
-      kind: 'choice',
+      id: "p-cut",
+      kind: "choice",
       q: String.raw`두 열이 $\mathbf{a}_1 = (3, 1)$, $\mathbf{a}_2 = (1, 2)$인 행렬이 단위 정사각형을 보낸 평행사변형의 넓이는?`,
       hints: [
         String.raw`평행사변형을 감싸는 가로 $3 + 1$, 세로 $1 + 2$인 상자를 그려라(아래 장면). 상자에서 평행사변형이 아닌 조각들을 떼어 내면 된다.`,
         String.raw`떼어 낼 조각: 밑변 3·높이 1인 직각삼각형 둘, 밑변 1·높이 2인 직각삼각형 둘, 1×1 직사각형 둘.`,
       ],
-      choices: ['5', '7', '12', '6'],
+      choices: ["5", "7", "12", "6"],
       answer: 0,
       why: [
         String.raw`상자 $4 \times 3 = 12$에서 $2\cdot\tfrac{3}{2} + 2\cdot\tfrac{2}{2} + 2\cdot1 = 7$을 빼면 5다. 공식으로는 $3\cdot2 - 1\cdot1 = 5$.`,
@@ -57,7 +57,7 @@ $\mathbf{a}_2$를 $\mathbf{a}_1$ 방향으로 밀어도(전단) 평행사변형�
 **경우 1: $a_{11} \ne 0$.** $\mathbf{a}_2$에서 $\mathbf{a}_1$의 $\frac{a_{12}}{a_{11}}$배를 빼서 $\mathbf{a}_2' = \mathbf{a}_2 - \frac{a_{12}}{a_{11}}\mathbf{a}_1$을 만든다. 첫째 성분은 $a_{12} - a_{12} = 0$, 둘째 성분은 $a_{22} - \frac{a_{12}a_{21}}{a_{11}}$이다. $\mathbf{a}_2$를 $\mathbf{a}_1$ 방향으로 민 것이므로 평행사변형의 밑변($\mathbf{a}_1$)과 높이는 그대로이고, 넓이와 향도 그대로다([밑변 × 높이](why:prop.parallelogram#main)). 이제 $\mathbf{a}_2' = (0,\ d)$, $d = a_{22} - \frac{a_{12}a_{21}}{a_{11}}$는 세로축 위에 있다. $\mathbf{a}_1$과 $\mathbf{a}_2'$가 만드는 평행사변형을 세로축 방향 변을 밑변으로 보면, 밑변의 길이는 $|d|$이고 높이는 $\mathbf{a}_1$의 가로 성분의 크기 $|a_{11}|$이다. 그러므로 넓이는 $|a_{11}d| = |a_{11}a_{22} - a_{12}a_{21}|$이다. 부호: $a_{11}d > 0$이면, 곧 $a_{11}$과 $d$의 부호가 같으면 $\mathbf{a}_1$(오른쪽 또는 왼쪽)에서 $\mathbf{a}_2'$(위 또는 아래)로 시계 반대 방향으로 돈다. 예를 들어 둘 다 양수이면 오른쪽에서 위쪽으로 돈다. 그러므로 부호까지 $a_{11}d = a_{11}a_{22} - a_{12}a_{21}$이다.
 
 **경우 2: $a_{11} = 0$.** 공식은 $-a_{12}a_{21}$이다. $\mathbf{a}_1 = (0, a_{21})$은 세로축 위에 있다. 이번에는 $\mathbf{a}_2$를 $\mathbf{a}_1$ 방향으로 밀어 둘째 성분을 0으로 만들면($a_{21} \ne 0$일 때) $\mathbf{a}_2' = (a_{12}, 0)$이 되고, 넓이는 $|a_{12}a_{21}|$이다. 부호는 $\mathbf{a}_1$이 위쪽($a_{21} > 0$)이고 $\mathbf{a}_2'$가 오른쪽($a_{12} > 0$)이면 위에서 오른쪽으로, 곧 시계 방향이므로 음수다. 그래서 $-a_{12}a_{21}$이다. $a_{21} = 0$이면 $\mathbf{a}_1 = \mathbf{0}$이라 넓이가 0이고, 공식도 0이다.`,
-  code: ['det2'],
+  code: ["det2"],
 };
 
 export default node;

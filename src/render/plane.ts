@@ -1,11 +1,11 @@
 // 2차원 평면 렌더러 (Canvas2D, 의존성 없음).
 // 좌표 규약: 수학 좌표(오른쪽이 x+, 위쪽이 y+). 화면 좌표는 아래쪽이 y+ 이므로 S()에서 y 부호를 뒤집는다.
 // 그리기 방식: 상태가 바뀌면 invalidate() → 다음 animation frame에서 draw()를 처음부터 다시 실행한다(즉시 모드).
-import type { Vec } from '../la/vec';
-import type { Mat } from '../la/mat';
-import { matVec } from '../la/mat';
-import { C } from './colors';
-import type { SyncBus } from '../sync/bus';
+import type { Vec } from "../la/vec";
+import type { Mat } from "../la/mat";
+import { matVec } from "../la/mat";
+import { C } from "./colors";
+import type { SyncBus } from "../sync/bus";
 
 export interface Handle {
   key: string;
@@ -65,22 +65,22 @@ export class Plane {
   constructor(host: HTMLElement, opts: PlaneOpts = {}) {
     this.range = this.baseRange = opts.range ?? 4;
     this.bus = opts.bus;
-    this.wrap = document.createElement('div');
-    this.wrap.className = 'plane';
-    this.canvas = document.createElement('canvas');
+    this.wrap = document.createElement("div");
+    this.wrap.className = "plane";
+    this.canvas = document.createElement("canvas");
     this.canvas.style.height = `${opts.height ?? 360}px`;
     this.wrap.appendChild(this.canvas);
     host.appendChild(this.wrap);
-    this.ctx = this.canvas.getContext('2d')!;
+    this.ctx = this.canvas.getContext("2d")!;
     if (!opts.noZoom) this.addZoom();
     this.ro = new ResizeObserver(() => this.resize());
     this.ro.observe(this.canvas);
     this.resize();
-    this.canvas.addEventListener('pointerdown', this.onDown);
-    this.canvas.addEventListener('pointermove', this.onMove);
-    this.canvas.addEventListener('pointerup', this.onUp);
-    this.canvas.addEventListener('pointercancel', this.onUp);
-    this.canvas.addEventListener('pointerleave', () => {
+    this.canvas.addEventListener("pointerdown", this.onDown);
+    this.canvas.addEventListener("pointermove", this.onMove);
+    this.canvas.addEventListener("pointerup", this.onUp);
+    this.canvas.addEventListener("pointercancel", this.onUp);
+    this.canvas.addEventListener("pointerleave", () => {
       if (!this.drag) this.bus?.set(null);
     });
     if (this.bus) this.offBus = this.bus.on(() => this.invalidate());
@@ -94,18 +94,18 @@ export class Plane {
   }
 
   private addZoom() {
-    const bar = document.createElement('div');
-    bar.className = 'plane-zoom';
+    const bar = document.createElement("div");
+    bar.className = "plane-zoom";
     const mk = (label: string, title: string, f: () => void) => {
-      const b = document.createElement('button');
+      const b = document.createElement("button");
       b.textContent = label;
       b.title = title;
       b.onclick = f;
       bar.appendChild(b);
     };
-    mk('−', '멀리 보기', () => this.setRange(this.range * 1.25));
-    mk('+', '가까이 보기', () => this.setRange(this.range / 1.25));
-    mk('⟲', '처음 크기로', () => this.setRange(this.baseRange));
+    mk("−", "멀리 보기", () => this.setRange(this.range * 1.25));
+    mk("+", "가까이 보기", () => this.setRange(this.range / 1.25));
+    mk("⟲", "처음 크기로", () => this.setRange(this.baseRange));
     this.wrap.appendChild(bar);
   }
 
@@ -145,7 +145,9 @@ export class Plane {
       const active = hd === this.drag || hd === this.hoverHandle;
       ctx.beginPath();
       ctx.arc(x, y, active ? 9 : 6, 0, Math.PI * 2);
-      ctx.strokeStyle = active ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.35)';
+      ctx.strokeStyle = active
+        ? "rgba(255,255,255,0.9)"
+        : "rgba(255,255,255,0.35)";
       ctx.lineWidth = 1.5;
       ctx.stroke();
     }
@@ -159,12 +161,18 @@ export class Plane {
   /** 수학 좌표 → 화면 픽셀 */
   S(v: Vec): [number, number] {
     const u = this.unit;
-    return [this.w / 2 + (v[0] - this.center[0]) * u, this.h / 2 - (v[1] - this.center[1]) * u];
+    return [
+      this.w / 2 + (v[0] - this.center[0]) * u,
+      this.h / 2 - (v[1] - this.center[1]) * u,
+    ];
   }
   /** 화면 픽셀 → 수학 좌표 */
   W(px: number, py: number): Vec {
     const u = this.unit;
-    return [(px - this.w / 2) / u + this.center[0], -(py - this.h / 2) / u + this.center[1]];
+    return [
+      (px - this.w / 2) / u + this.center[0],
+      -(py - this.h / 2) / u + this.center[1],
+    ];
   }
   /** 화면에 보이는 수학 좌표 범위 */
   get bounds() {
@@ -230,7 +238,15 @@ export class Plane {
    * 변환된 격자: 원래 격자선 x = k, y = k 를 A로 보낸 직선들.
    * 선형 변환이므로 직선은 직선으로 간다(prop.linear-grid). 그래서 양 끝점 두 개만 보내면 된다.
    */
-  tgrid(A: Mat, opts: { color?: string; extent?: number; fn?: (v: Vec) => Vec; samples?: number } = {}) {
+  tgrid(
+    A: Mat,
+    opts: {
+      color?: string;
+      extent?: number;
+      fn?: (v: Vec) => Vec;
+      samples?: number;
+    } = {},
+  ) {
     const { ctx } = this;
     const ext = opts.extent ?? Math.ceil(this.range * 2.5);
     ctx.lineWidth = 1;
@@ -239,7 +255,8 @@ export class Plane {
     const n = opts.fn ? (opts.samples ?? 60) : 1;
     for (let k = -ext; k <= ext; k++) {
       for (const dir of [0, 1]) {
-        ctx.strokeStyle = k === 0 ? 'rgba(150,190,255,0.85)' : (opts.color ?? C.tgrid);
+        ctx.strokeStyle =
+          k === 0 ? "rgba(150,190,255,0.85)" : (opts.color ?? C.tgrid);
         ctx.lineWidth = k === 0 ? 1.6 : 1;
         ctx.beginPath();
         for (let s = 0; s <= n; s++) {
@@ -264,17 +281,29 @@ export class Plane {
     ctx.lineTo(bx, by);
     ctx.stroke();
     this.reset();
-    if (st.key) this.hits.push({ key: st.key, d: (px, py) => segDist(px, py, ax, ay, bx, by) });
+    if (st.key)
+      this.hits.push({
+        key: st.key,
+        d: (px, py) => segDist(px, py, ax, ay, bx, by),
+      });
   }
 
   /** 점 p를 지나고 방향이 d인 직선(화면 끝까지) */
   line(p: Vec, d: Vec, st: Style = {}) {
     const L = this.range * 6;
     const n = Math.hypot(d[0], d[1]) || 1;
-    this.seg([p[0] - (d[0] / n) * L, p[1] - (d[1] / n) * L], [p[0] + (d[0] / n) * L, p[1] + (d[1] / n) * L], st);
+    this.seg(
+      [p[0] - (d[0] / n) * L, p[1] - (d[1] / n) * L],
+      [p[0] + (d[0] / n) * L, p[1] + (d[1] / n) * L],
+      st,
+    );
   }
 
-  arrow(from: Vec, to: Vec, st: Style & { label?: string; head?: number } = {}) {
+  arrow(
+    from: Vec,
+    to: Vec,
+    st: Style & { label?: string; head?: number } = {},
+  ) {
     const { ctx } = this;
     const [ax, ay] = this.S(from);
     const [bx, by] = this.S(to);
@@ -298,7 +327,11 @@ export class Plane {
     if (len > 0.5) ctx.fill();
     this.reset();
     if (st.label) this.text(to, st.label, { color, dx: 10, dy: -10 });
-    if (st.key) this.hits.push({ key: st.key, d: (px, py) => segDist(px, py, ax, ay, bx, by) });
+    if (st.key)
+      this.hits.push({
+        key: st.key,
+        d: (px, py) => segDist(px, py, ax, ay, bx, by),
+      });
   }
 
   poly(pts: Vec[], st: Style & { fill?: string } = {}) {
@@ -318,7 +351,7 @@ export class Plane {
       ctx.fill();
       ctx.globalAlpha = 1;
       if (hot) {
-        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fillStyle = "rgba(255,255,255,0.08)";
         ctx.fill();
       }
     }
@@ -329,12 +362,21 @@ export class Plane {
     }
     if (st.key) {
       const sp = pts.map((p) => this.S(p));
-      this.hits.push({ key: st.key, d: (px, py) => (pointInPoly(px, py, sp) ? 0 : 1e9) });
+      this.hits.push({
+        key: st.key,
+        d: (px, py) => (pointInPoly(px, py, sp) ? 0 : 1e9),
+      });
     }
   }
 
   /** 매개변수 곡선 t ↦ f(t) */
-  curve(f: (t: number) => Vec, t0: number, t1: number, n: number, st: Style = {}) {
+  curve(
+    f: (t: number) => Vec,
+    t0: number,
+    t1: number,
+    n: number,
+    st: Style = {},
+  ) {
     const { ctx } = this;
     this.stroke(st, C.ink, 2);
     ctx.beginPath();
@@ -357,36 +399,56 @@ export class Plane {
     ctx.globalAlpha = st.alpha ?? 1;
     ctx.fill();
     ctx.globalAlpha = 1;
-    if (st.key) this.hits.push({ key: st.key, d: (px, py) => Math.hypot(px - x, py - y) - 4 });
+    if (st.key)
+      this.hits.push({
+        key: st.key,
+        d: (px, py) => Math.hypot(px - x, py - y) - 4,
+      });
   }
 
-  text(p: Vec, s: string, o: { color?: string; dx?: number; dy?: number; align?: CanvasTextAlign; size?: number; bold?: boolean } = {}) {
+  text(
+    p: Vec,
+    s: string,
+    o: {
+      color?: string;
+      dx?: number;
+      dy?: number;
+      align?: CanvasTextAlign;
+      size?: number;
+      bold?: boolean;
+    } = {},
+  ) {
     const { ctx } = this;
     const [x, y] = this.S(p);
-    ctx.font = `${o.bold ? '600 ' : ''}${o.size ?? 14}px "Pretendard", system-ui, sans-serif`;
-    ctx.textAlign = o.align ?? 'left';
-    ctx.textBaseline = 'middle';
+    ctx.font = `${o.bold ? "600 " : ""}${o.size ?? 14}px "Pretendard", system-ui, sans-serif`;
+    ctx.textAlign = o.align ?? "left";
+    ctx.textBaseline = "middle";
     ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(14,17,22,0.85)';
+    ctx.strokeStyle = "rgba(14,17,22,0.85)";
     ctx.strokeText(s, x + (o.dx ?? 0), y + (o.dy ?? 0));
     ctx.fillStyle = o.color ?? C.ink;
     ctx.fillText(s, x + (o.dx ?? 0), y + (o.dy ?? 0));
   }
 
   /** 화면 고정 위치(픽셀)의 글 — 범례, 측정값 */
-  hud(lines: { text: string; color?: string }[], corner: 'tl' | 'tr' | 'bl' | 'br' = 'tl') {
+  hud(
+    lines: { text: string; color?: string }[],
+    corner: "tl" | "tr" | "bl" | "br" = "tl",
+  ) {
     const { ctx } = this;
     ctx.font = '13px "Pretendard", system-ui, sans-serif';
-    ctx.textBaseline = 'middle';
+    ctx.textBaseline = "middle";
     const lh = 19;
-    const right = corner[1] === 'r';
-    const bottom = corner[0] === 'b';
+    const right = corner[1] === "r";
+    const bottom = corner[0] === "b";
     lines.forEach((ln, i) => {
-      const y = bottom ? this.h - 14 - (lines.length - 1 - i) * lh : 16 + i * lh;
-      ctx.textAlign = right ? 'right' : 'left';
+      const y = bottom
+        ? this.h - 14 - (lines.length - 1 - i) * lh
+        : 16 + i * lh;
+      ctx.textAlign = right ? "right" : "left";
       const x = right ? this.w - 12 : 12;
       ctx.lineWidth = 3;
-      ctx.strokeStyle = 'rgba(14,17,22,0.9)';
+      ctx.strokeStyle = "rgba(14,17,22,0.9)";
       ctx.strokeText(ln.text, x, y);
       ctx.fillStyle = ln.color ?? C.dim;
       ctx.fillText(ln.text, x, y);
@@ -443,7 +505,7 @@ export class Plane {
       this.hoverHandle = hd;
       this.invalidate();
     }
-    this.canvas.style.cursor = hd ? 'grab' : 'default';
+    this.canvas.style.cursor = hd ? "grab" : "default";
     if (hd) {
       this.bus?.set(hd.key);
       return;
@@ -469,18 +531,31 @@ export class Plane {
   };
 }
 
-function segDist(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {
-  const dx = bx - ax, dy = by - ay;
+function segDist(
+  px: number,
+  py: number,
+  ax: number,
+  ay: number,
+  bx: number,
+  by: number,
+): number {
+  const dx = bx - ax,
+    dy = by - ay;
   const L = dx * dx + dy * dy;
-  const t = L === 0 ? 0 : Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L));
+  const t =
+    L === 0
+      ? 0
+      : Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / L));
   return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
 }
 
 function pointInPoly(x: number, y: number, pts: [number, number][]): boolean {
   let inside = false;
   for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
-    const [xi, yi] = pts[i], [xj, yj] = pts[j];
-    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+    const [xi, yi] = pts[i],
+      [xj, yj] = pts[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi)
+      inside = !inside;
   }
   return inside;
 }

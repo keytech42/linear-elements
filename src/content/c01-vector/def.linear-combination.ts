@@ -1,47 +1,66 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.linear-combination',
-  kind: 'def',
-  title: '선형 결합: 손잡이 두 개로 섞기',
-  status: 'written',
+  id: "def.linear-combination",
+  kind: "def",
+  title: "선형 결합: 손잡이 두 개로 섞기",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.linear-combination', ko: '선형 결합', en: 'linear combination', gloss: '벡터들에 각각 스칼라를 곱해서 더한 것: c₁𝐮 + c₂𝐰.' },
-      { id: 't.coefficient', ko: '계수', en: 'coefficient', gloss: '선형 결합에서 각 벡터에 곱하는 스칼라. (랭크와 혼동하지 않도록 rank는 "랭크"라 부른다)' },
+      {
+        id: "t.linear-combination",
+        ko: "선형 결합",
+        en: "linear combination",
+        gloss: "벡터들에 각각 스칼라를 곱해서 더한 것: c₁𝐮 + c₂𝐰.",
+      },
+      {
+        id: "t.coefficient",
+        ko: "계수",
+        en: "coefficient",
+        gloss:
+          '선형 결합에서 각 벡터에 곱하는 스칼라. (랭크와 혼동하지 않도록 rank는 "랭크"라 부른다)',
+      },
     ],
     symbols: [
-      { tex: 'c_1', meaning: '선형 결합의 첫째 계수' },
-      { tex: 'c_2', meaning: '선형 결합의 둘째 계수' },
+      { tex: "c_1", meaning: "선형 결합의 첫째 계수" },
+      { tex: "c_2", meaning: "선형 결합의 둘째 계수" },
     ],
   },
-  requires: ['prop.vector-rules'],
+  requires: ["prop.vector-rules"],
   predicts: [
     {
-      id: 'p-combo',
-      kind: 'point',
+      id: "p-combo",
+      kind: "point",
       q: String.raw`주황 화살표가 $\mathbf{u} = (2, 1)$, 청록 화살표가 $\mathbf{w} = (-1, 1)$이다. $0.5\,\mathbf{u} + 2\,\mathbf{w}$는 어디에서 끝날까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`[스칼라 곱](n:def.scalar-mul)을 먼저 하고, 그다음 [이어 붙인다](n:def.vector-add).`,
         String.raw`$0.5\,\mathbf{u} = (1, 0.5)$, $2\,\mathbf{w} = (-2, 2)$이다.`,
       ],
-      A: [[2, -1], [1, 1]],
+      A: [
+        [2, -1],
+        [1, 1],
+      ],
       x: [0.5, 2],
-      target: 'Ax',
-      show: ['cols'],
-      colLabels: ['u', 'w'],
-      colColors: ['u', 'w'],
+      target: "Ax",
+      show: ["cols"],
+      colLabels: ["u", "w"],
+      colColors: ["u", "w"],
       reveal: String.raw`정답은 $(-1, 2.5)$다(초록 화살표. 이름표 "Ax"는 2장의 표기다). 주황 화살표를 절반만 간 $(1, 0.5)$에서, 청록 화살표를 두 번 이어 가면 $(1 - 2,\ 0.5 + 2) = (-1, 2.5)$다. 계수를 서로 바꿔 $2\mathbf{u} + 0.5\mathbf{w}$를 계산했다면 $(4 - 0.5,\ 2 + 0.5) = (3.5, 2.5)$로, 그림의 범위 밖으로 나간다.`,
     },
     {
-      id: 'p-coef',
-      kind: 'choice',
+      id: "p-coef",
+      kind: "choice",
       q: String.raw`이번에는 거꾸로다. 같은 $\mathbf{u} = (2, 1)$, $\mathbf{w} = (-1, 1)$로 $c_1\mathbf{u} + c_2\mathbf{w} = (1, 4)$를 만들려면 $(c_1, c_2)$가 얼마여야 할까?`,
       hints: [
         String.raw`성분마다 식을 하나씩 세워라. 첫째 성분: $2c_1 - c_2 = 1$. 둘째 성분: $c_1 + c_2 = 4$.`,
         String.raw`두 식을 그대로 더하면 $c_2$가 사라진다. $3c_1 = $ 몇인가?`,
       ],
-      choices: [String.raw`$\left(\tfrac{5}{3}, \tfrac{7}{3}\right)$`, String.raw`$(1, 4)$`, String.raw`$(2, 3)$`, '만들 수 없다'],
+      choices: [
+        String.raw`$\left(\tfrac{5}{3}, \tfrac{7}{3}\right)$`,
+        String.raw`$(1, 4)$`,
+        String.raw`$(2, 3)$`,
+        "만들 수 없다",
+      ],
       answer: 0,
       why: [
         String.raw`두 식을 더하면 $3c_1 = 5$, 그러므로 $c_1 = \tfrac{5}{3}$이고 $c_2 = 4 - \tfrac{5}{3} = \tfrac{7}{3}$이다. 계수가 정수일 필요는 없다.`,
@@ -89,18 +108,28 @@ $$2c_1 - c_2 = 1, \qquad c_1 + c_2 = 4$$
   checks: [
     {
       q: String.raw`$\mathbf{u} = (1, 0)$, $\mathbf{w} = (1, 1)$일 때 $c_1\mathbf{u} + c_2\mathbf{w} = (3, 2)$가 되는 계수 $(c_1, c_2)$는?`,
-      choices: [String.raw`$(1, 2)$`, String.raw`$(3, 2)$`, String.raw`$(2, 1)$`, '만들 수 없다'],
+      choices: [
+        String.raw`$(1, 2)$`,
+        String.raw`$(3, 2)$`,
+        String.raw`$(2, 1)$`,
+        "만들 수 없다",
+      ],
       answer: 0,
       explain: String.raw`둘째 성분은 $\mathbf{w}$에서만 오므로 $c_2 = 2$다. 첫째 성분 $c_1 + c_2 = 3$에서 $c_1 = 1$이다. 확인: $(1, 0) + 2(1, 1) = (3, 2)$. $(3, 2)$를 고르면 $3(1, 0) + 2(1, 1) = (5, 2)$가 된다. 목표의 성분을 계수로 그대로 쓸 수 있는 것은 $(1, 0)$, $(0, 1)$로 섞을 때뿐이다.`,
     },
     {
       q: String.raw`$\mathbf{u}$, $\mathbf{w}$가 무엇이든 **언제나** 선형 결합으로 만들 수 있는 벡터를 모두 고르면?`,
-      choices: [String.raw`$\mathbf{0}$, $\mathbf{u}$, $\mathbf{w}$, $\mathbf{u} + \mathbf{w}$ 모두`, String.raw`$\mathbf{0}$만`, String.raw`$\mathbf{u}$와 $\mathbf{w}$만`, '평면의 모든 벡터'],
+      choices: [
+        String.raw`$\mathbf{0}$, $\mathbf{u}$, $\mathbf{w}$, $\mathbf{u} + \mathbf{w}$ 모두`,
+        String.raw`$\mathbf{0}$만`,
+        String.raw`$\mathbf{u}$와 $\mathbf{w}$만`,
+        "평면의 모든 벡터",
+      ],
       answer: 0,
       explain: String.raw`계수를 $(0, 0)$, $(1, 0)$, $(0, 1)$, $(1, 1)$로 두면 차례로 $\mathbf{0}$, $\mathbf{u}$, $\mathbf{w}$, $\mathbf{u} + \mathbf{w}$다. "평면의 모든 벡터"는 $\mathbf{u}$와 $\mathbf{w}$가 같은 직선 위에 있으면 틀린다. 그때는 그 직선 위의 벡터만 만들 수 있다.`,
     },
   ],
-  code: ['linComb'],
+  code: ["linComb"],
 };
 
 export default node;

@@ -1,18 +1,24 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.noncommutative',
-  kind: 'prop',
-  title: '행렬 곱은 순서를 바꾸면 달라진다',
-  status: 'written',
-  requires: ['prop.matmul-columns', 'exp.gallery'],
+  id: "prop.noncommutative",
+  kind: "prop",
+  title: "행렬 곱은 순서를 바꾸면 달라진다",
+  status: "written",
+  requires: ["prop.matmul-columns", "exp.gallery"],
   predicts: [
     {
-      id: 'p-swap',
-      kind: 'choice',
+      id: "p-swap",
+      kind: "choice",
       q: String.raw`90° 회전 $R$과 가로 2배 늘이기 $D$가 있다. "$D$ 다음 $R$"($RD$)과 "$R$ 다음 $D$"($DR$)는 $\mathbf{e}_1$을 같은 곳으로 보낼까?`,
-      hints: [String.raw`두 순서를 한 단계씩 따라가라. $RD$: $\mathbf{e}_1 \xmapsto{D} (2, 0) \xmapsto{R}$ ? $DR$: $\mathbf{e}_1 \xmapsto{R} (0, 1) \xmapsto{D}$ ?`],
-      choices: ['다른 곳으로 보낸다', '같은 곳으로 보낸다. 같은 두 변환을 하므로', '같은 곳으로 보낸다. 넓이 배율이 같으므로'],
+      hints: [
+        String.raw`두 순서를 한 단계씩 따라가라. $RD$: $\mathbf{e}_1 \xmapsto{D} (2, 0) \xmapsto{R}$ ? $DR$: $\mathbf{e}_1 \xmapsto{R} (0, 1) \xmapsto{D}$ ?`,
+      ],
+      choices: [
+        "다른 곳으로 보낸다",
+        "같은 곳으로 보낸다. 같은 두 변환을 하므로",
+        "같은 곳으로 보낸다. 넓이 배율이 같으므로",
+      ],
       answer: 0,
       why: [
         String.raw`$RD$는 $\mathbf{e}_1 \xmapsto{D} (2, 0) \xmapsto{R} (0, 2)$, $DR$은 $\mathbf{e}_1 \xmapsto{R} (0, 1) \xmapsto{D} (0, 1)$이다. 늘이기를 **돌리기 전에** 하면 가로 방향이 늘어나고, **돌린 뒤에** 하면 (원래 세로였던) 지금의 가로 방향이 늘어난다.`,
@@ -21,14 +27,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-center',
-      kind: 'choice',
+      id: "p-center",
+      kind: "choice",
       q: String.raw`다음 가운데 **어떤 행렬과도** 순서를 바꿔 곱해도 같은($AM = MA$) 행렬 $M$은?`,
       hints: [
         String.raw`후보마다 반례를 찾아보라. 예를 들어 대각선 밖이 0인 $\begin{bmatrix} 2 & 0 \\ 0 & 1 \end{bmatrix}$과 전단 $\begin{bmatrix} 1 & 1 \\ 0 & 1 \end{bmatrix}$을 두 순서로 곱해 보라.`,
         String.raw`"모든 방향을 똑같이 다루는" 변환이라면, 먼저 하든 나중에 하든 상관이 없을 것이다.`,
       ],
-      choices: [String.raw`$2I$처럼 [항등 행렬](t:t.identity)의 수배`, '대각선 밖이 모두 0인 모든 행렬', '모든 회전 행렬', '넓이를 바꾸지 않는 모든 행렬'],
+      choices: [
+        String.raw`$2I$처럼 [항등 행렬](t:t.identity)의 수배`,
+        "대각선 밖이 모두 0인 모든 행렬",
+        "모든 회전 행렬",
+        "넓이를 바꾸지 않는 모든 행렬",
+      ],
       answer: 0,
       why: [
         String.raw`$(cI)A = cA = A(cI)$이다. 모든 방향을 똑같이 $c$배 하므로 앞에서 하든 뒤에서 하든 같다.`,

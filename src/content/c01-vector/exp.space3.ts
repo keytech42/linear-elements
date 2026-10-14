@@ -1,22 +1,32 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.space3',
-  kind: 'exp',
-  title: '세 번째 손잡이: 3차원',
-  status: 'written',
-  requires: ['def.dimension'],
-  openWhys: [{ q: '3차원 공간에서 선형 독립인 벡터 셋은 언제나 공간 전체를 스팬하는가? 넷은 언제나 종속인가?', answeredBy: null }],
+  id: "exp.space3",
+  kind: "exp",
+  title: "세 번째 손잡이: 3차원",
+  status: "written",
+  requires: ["def.dimension"],
+  openWhys: [
+    {
+      q: "3차원 공간에서 선형 독립인 벡터 셋은 언제나 공간 전체를 스팬하는가? 넷은 언제나 종속인가?",
+      answeredBy: null,
+    },
+  ],
   predicts: [
     {
-      id: 'p-plane',
-      kind: 'choice',
+      id: "p-plane",
+      kind: "choice",
       q: String.raw`$\mathbb{R}^3$에서 $\mathbf{u} = (1, 0, 0)$, $\mathbf{w} = (0, 1, 1)$의 [스팬](t:t.span)은 무엇일까?`,
       hints: [
         String.raw`두 벡터는 평행한가? 평행하지 않다면 [스팬은 직선보다 크다](n:def.span).`,
         String.raw`$c_1\mathbf{u} + c_2\mathbf{w} = (c_1, c_2, c_2)$다. 둘째 성분과 셋째 성분 사이에 늘 성립하는 관계가 있는가?`,
       ],
-      choices: [String.raw`가로축($\mathbf{e}_1$ 방향)을 품고 비스듬히 기울어진, 원점을 지나는 평면`, String.raw`바닥 평면(셋째 성분이 0인 평면)`, String.raw`공간 전체`, '원점을 지나는 직선'],
+      choices: [
+        String.raw`가로축($\mathbf{e}_1$ 방향)을 품고 비스듬히 기울어진, 원점을 지나는 평면`,
+        String.raw`바닥 평면(셋째 성분이 0인 평면)`,
+        String.raw`공간 전체`,
+        "원점을 지나는 직선",
+      ],
       answer: 0,
       why: [
         String.raw`스팬의 벡터는 모두 $(c_1, c_2, c_2)$ 꼴, 곧 둘째 성분과 셋째 성분이 같은 벡터다. $c_2 = 0$이면 가로축이고, $c_2$가 커질수록 높이도 함께 올라간다. 바닥에서 45° 기울어진 평면이다.`,
@@ -26,14 +36,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-third',
-      kind: 'choice',
+      id: "p-third",
+      kind: "choice",
       q: String.raw`여기에 셋째 벡터 $\mathbf{v} = (2, 3, 3)$을 보태면 스팬은 어떻게 될까?`,
       hints: [
         String.raw`$\mathbf{v}$가 이미 $\mathbf{u}$, $\mathbf{w}$의 스팬 안에 있는지 보라. 앞 관문의 꼴 $(c_1, c_2, c_2)$와 비교하라.`,
         String.raw`첫째 성분에서 $c_1 = 2$, 둘째 성분에서 $c_2 = 3$이다. 셋째 성분도 맞는가?`,
       ],
-      choices: ['그대로 같은 평면이다', '공간 전체가 된다', '다른 평면으로 바뀐다', '직선으로 줄어든다'],
+      choices: [
+        "그대로 같은 평면이다",
+        "공간 전체가 된다",
+        "다른 평면으로 바뀐다",
+        "직선으로 줄어든다",
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{v} = 2\mathbf{u} + 3\mathbf{w}$이므로 이미 닿을 수 있던 곳이다. 새 방향을 보태지 못한다. 세 벡터는 선형 종속이다.`,
@@ -74,7 +89,12 @@ $\mathbb{R}^3$의 벡터는 성분이 세 개다: 가로, 세로, 높이. [표�
   checks: [
     {
       q: String.raw`$(1, 0, 0)$, $(0, 1, 0)$, $(1, 1, 0)$의 스팬은?`,
-      choices: ['바닥 평면(셋째 성분이 0인 평면)', '공간 전체', '원점을 지나는 직선', '바닥 평면과 그 위의 직선 하나'],
+      choices: [
+        "바닥 평면(셋째 성분이 0인 평면)",
+        "공간 전체",
+        "원점을 지나는 직선",
+        "바닥 평면과 그 위의 직선 하나",
+      ],
       answer: 0,
       explain: String.raw`세 벡터 모두 셋째 성분이 0이므로 선형 결합도 셋째 성분이 0이다. 바닥 평면을 벗어날 수 없다. 처음 두 벡터가 이미 바닥 평면 전체를 스팬하고, $(1, 1, 0) = (1, 0, 0) + (0, 1, 0)$은 새 방향을 보태지 못한다. 벡터가 셋이라는 이유로 공간 전체를 고르기 쉽다.`,
     },

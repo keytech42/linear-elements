@@ -1,18 +1,33 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.outer-product',
-  kind: 'def',
-  title: '바깥곱: 랭크 1 행렬',
-  status: 'written',
-  introduces: { terms: [{ id: 't.outer-product', ko: '바깥곱', en: 'outer product', gloss: '열벡터 × 행벡터 = 𝐮𝐯ᵀ. 랭크가 1인 행렬: 입력을 한 방향(𝐯)으로만 읽고, 한 방향(𝐮)으로만 내보낸다.' }] },
-  requires: ['def.rank', 'def.transpose', 'prop.row-picture'],
+  id: "def.outer-product",
+  kind: "def",
+  title: "바깥곱: 랭크 1 행렬",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.outer-product",
+        ko: "바깥곱",
+        en: "outer product",
+        gloss:
+          "열벡터 × 행벡터 = 𝐮𝐯ᵀ. 랭크가 1인 행렬: 입력을 한 방향(𝐯)으로만 읽고, 한 방향(𝐮)으로만 내보낸다.",
+      },
+    ],
+  },
+  requires: ["def.rank", "def.transpose", "prop.row-picture"],
   predicts: [
     {
-      id: 'p-line',
-      kind: 'choice',
+      id: "p-line",
+      kind: "choice",
       q: String.raw`$\mathbf{u} = (1, 2)$, $\mathbf{v} = (1, 0.5)$일 때 행렬 $\mathbf{u}\mathbf{v}^{\mathsf{T}}$는 평면 전체를 무엇으로 보낼까?`,
-      choices: [String.raw`$\mathbf{u}$ 방향의 직선 하나`, String.raw`$\mathbf{v}$ 방향의 직선 하나`, '평면 전체 (모양만 바뀐다)', '원점 한 점'],
+      choices: [
+        String.raw`$\mathbf{u}$ 방향의 직선 하나`,
+        String.raw`$\mathbf{v}$ 방향의 직선 하나`,
+        "평면 전체 (모양만 바뀐다)",
+        "원점 한 점",
+      ],
       answer: 0,
       why: [
         String.raw`열의 관점으로 보면 모든 열이 $\mathbf{u}$의 배수다. 아래에서 세 관점으로 확인한다.`,
@@ -49,18 +64,28 @@ $m \times n$ 행렬은 숫자 $mn$개를 담는다. 랭크 1 행렬은 $\mathbf{
   checks: [
     {
       q: String.raw`$\mathbf{u} = (1, -1, 2)$, $\mathbf{v} = (3, 0)$일 때 $\mathbf{u}\mathbf{v}^{\mathsf{T}}$의 모양과 둘째 열은?`,
-      choices: [String.raw`3×2, 둘째 열 $(0, 0, 0)$`, String.raw`2×3, 둘째 열 $(-3, 0)$`, String.raw`3×2, 둘째 열 $(3, -3, 6)$`, '곱할 수 없다'],
+      choices: [
+        String.raw`3×2, 둘째 열 $(0, 0, 0)$`,
+        String.raw`2×3, 둘째 열 $(-3, 0)$`,
+        String.raw`3×2, 둘째 열 $(3, -3, 6)$`,
+        "곱할 수 없다",
+      ],
       answer: 0,
       explain: String.raw`$(3\times1)(1\times2) = 3\times2$다. $j$번째 열은 $v_j\mathbf{u}$이고 $v_2 = 0$이므로 둘째 열은 영벡터다. 첫째 열이 $3\mathbf{u} = (3, -3, 6)$이다.`,
     },
     {
       q: String.raw`랭크 1인 $A = \mathbf{u}\mathbf{v}^{\mathsf{T}}$가 0으로 보내는 입력들의 모임(영공간)은?`,
-      choices: [String.raw`$\mathbf{v}$에 수직인 모든 입력`, String.raw`$\mathbf{u}$에 수직인 모든 입력`, String.raw`$\mathbf{v}$ 방향의 직선`, String.raw`$\mathbf{0}$ 하나뿐`],
+      choices: [
+        String.raw`$\mathbf{v}$에 수직인 모든 입력`,
+        String.raw`$\mathbf{u}$에 수직인 모든 입력`,
+        String.raw`$\mathbf{v}$ 방향의 직선`,
+        String.raw`$\mathbf{0}$ 하나뿐`,
+      ],
       answer: 0,
       explain: String.raw`$A\mathbf{x} = (\mathbf{v}\cdot\mathbf{x})\mathbf{u}$이고 $\mathbf{u} \ne \mathbf{0}$이므로, $A\mathbf{x} = \mathbf{0}$은 $\mathbf{v}\cdot\mathbf{x} = 0$과 같다. "읽는 방향" $\mathbf{v}$에 수직인 입력은 읽히지 않는다. $\mathbf{u}$는 출력 쪽 방향이라 입력의 영공간과는 관계가 없다.`,
     },
   ],
-  code: ['outer'],
+  code: ["outer"],
 };
 
 export default node;

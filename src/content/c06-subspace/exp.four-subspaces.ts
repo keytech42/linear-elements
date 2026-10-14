@@ -1,19 +1,37 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.four-subspaces',
-  kind: 'exp',
-  title: '네 기본 부분공간 지도',
-  status: 'written',
-  introduces: { terms: [{ id: 't.left-null', ko: '왼쪽 영공간', en: 'left null space', surfaces: ['좌영공간'], gloss: 'Aᵀ의 영공간. 줄여서 좌영공간. 열공간과 직교하는, 출력 공간에서 닿을 수 없는 방향들.' }] },
-  requires: ['prop.rank-nullity', 'prop.row-null-perp', 'def.transpose'],
+  id: "exp.four-subspaces",
+  kind: "exp",
+  title: "네 기본 부분공간 지도",
+  status: "written",
+  introduces: {
+    terms: [
+      {
+        id: "t.left-null",
+        ko: "왼쪽 영공간",
+        en: "left null space",
+        surfaces: ["좌영공간"],
+        gloss:
+          "Aᵀ의 영공간. 줄여서 좌영공간. 열공간과 직교하는, 출력 공간에서 닿을 수 없는 방향들.",
+      },
+    ],
+  },
+  requires: ["prop.rank-nullity", "prop.row-null-perp", "def.transpose"],
   predicts: [
     {
-      id: 'p-split',
-      kind: 'choice',
+      id: "p-split",
+      kind: "choice",
       q: String.raw`입력 $\mathbf{x}$를 행공간 조각 $\mathbf{x}_r$과 영공간 조각 $\mathbf{x}_n$의 합으로 나누었다. $A\mathbf{x}$는?`,
-      hints: [String.raw`[선형이므로](n:def.linear-map) $A\mathbf{x} = A\mathbf{x}_r + A\mathbf{x}_n$이다. $A\mathbf{x}_n$은?`],
-      choices: [String.raw`$A\mathbf{x}_r$`, String.raw`$A\mathbf{x}_n$`, String.raw`$\mathbf{0}$`, String.raw`$\mathbf{x}_r + \mathbf{x}_n$`],
+      hints: [
+        String.raw`[선형이므로](n:def.linear-map) $A\mathbf{x} = A\mathbf{x}_r + A\mathbf{x}_n$이다. $A\mathbf{x}_n$은?`,
+      ],
+      choices: [
+        String.raw`$A\mathbf{x}_r$`,
+        String.raw`$A\mathbf{x}_n$`,
+        String.raw`$\mathbf{0}$`,
+        String.raw`$\mathbf{x}_r + \mathbf{x}_n$`,
+      ],
       answer: 0,
       why: [
         String.raw`$A\mathbf{x}_n = \mathbf{0}$이므로 출력은 행공간 조각만으로 정해진다. 영공간 쪽은 출력에 아무 흔적도 남기지 않는다.`,
@@ -23,11 +41,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-dims',
-      kind: 'choice',
-      q: '랭크 1인 2×2 행렬의 네 공간(행공간, 영공간, 열공간, 좌영공간)의 차원은 차례로?',
-      hints: [String.raw`입력 2 = 행공간 + 영공간, 출력 2 = 열공간 + 좌영공간. 행공간과 열공간의 차원은 둘 다 랭크다(아래).`],
-      choices: ['1, 1, 1, 1', '1, 1, 2, 0', '2, 0, 1, 1', '1, 2, 1, 2'],
+      id: "p-dims",
+      kind: "choice",
+      q: "랭크 1인 2×2 행렬의 네 공간(행공간, 영공간, 열공간, 좌영공간)의 차원은 차례로?",
+      hints: [
+        String.raw`입력 2 = 행공간 + 영공간, 출력 2 = 열공간 + 좌영공간. 행공간과 열공간의 차원은 둘 다 랭크다(아래).`,
+      ],
+      choices: ["1, 1, 1, 1", "1, 1, 2, 0", "2, 0, 1, 1", "1, 2, 1, 2"],
       answer: 0,
       why: [
         String.raw`네 공간이 모두 직선이다. 입력 평면은 행공간 직선과 영공간 직선으로, 출력 평면은 열공간 직선과 좌영공간 직선으로 나뉜다.`,
@@ -62,8 +82,8 @@ $$\dim(\text{행공간}) = \dim(\text{열공간}) = \operatorname{rank}A$$
 이 지도는 각 공간이 몇 차원인지는 말해 주지만, 각 공간을 펼치는 **좋은 기저**, 그리고 행공간의 방향 하나하나가 열공간의 어느 방향으로 얼마나 늘어나 가는지는 말해 주지 않는다. 9장의 [특이값 분해](fwd:t.svd)가 이 지도에 좌표를 그려 넣는다.`,
   checks: [
     {
-      q: '4×3 행렬의 랭크가 3이다. 영공간과 좌영공간의 차원은?',
-      choices: ['0과 1', '1과 0', '0과 0', '1과 1'],
+      q: "4×3 행렬의 랭크가 3이다. 영공간과 좌영공간의 차원은?",
+      choices: ["0과 1", "1과 0", "0과 0", "1과 1"],
       answer: 0,
       explain: String.raw`입력 3 − 랭크 3 = 0(영공간은 원점뿐, 서로 다른 입력은 서로 다른 출력). 출력 4 − 랭크 3 = 1(출력 공간에 닿지 못하는 방향이 하나 남는다). 그래서 $A\mathbf{x} = \mathbf{b}$는 해가 없거나 하나다.`,
     },

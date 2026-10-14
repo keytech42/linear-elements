@@ -1,21 +1,26 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.arith-first',
-  kind: 'prop',
-  title: '공리에서 나오는 첫 결과',
-  status: 'written',
-  requires: ['ax.arith'],
+  id: "prop.arith-first",
+  kind: "prop",
+  title: "공리에서 나오는 첫 결과",
+  status: "written",
+  requires: ["ax.arith"],
   predicts: [
     {
-      id: 'p-zero',
-      kind: 'choice',
+      id: "p-zero",
+      kind: "choice",
       q: String.raw`"어떤 수에 0을 곱하면 0이다"($0 \times a = 0$)를 공리 목록에 따로 넣어야 할까?`,
       hints: [
         String.raw`[0의 공리](ref:ax.arith#zero-add)에 따르면 $0 + 0 = 0$이다. 그러므로 $0 \times a = (0 + 0) \times a$다.`,
         String.raw`$(0 + 0) \times a$에 분배법칙을 쓰면 $0 \times a + 0 \times a$가 된다(곱하는 수가 오른쪽에 있어도 분배법칙을 쓸 수 있는 이유는 아래에서 증명한다). 이제 양쪽에 $0 \times a$의 덧셈 역원을 더해 보라.`,
       ],
-      choices: ['넣지 않아도 된다. 나머지 공리로 증명된다', '넣어야 한다. 0을 곱하는 규칙은 다른 공리 어디에도 없다', '넣지 않아도 된다. 점 배열이 0줄이면 점이 하나도 없으니까', '수에 따라 다르다'],
+      choices: [
+        "넣지 않아도 된다. 나머지 공리로 증명된다",
+        "넣어야 한다. 0을 곱하는 규칙은 다른 공리 어디에도 없다",
+        "넣지 않아도 된다. 점 배열이 0줄이면 점이 하나도 없으니까",
+        "수에 따라 다르다",
+      ],
       answer: 0,
       why: [
         String.raw`아래의 [](ref:zero-times)와 그 증명이 답이다. 곱셈의 교환법칙과 분배법칙, 덧셈의 결합법칙, 0과 덧셈 역원의 공리, 그리고 등호의 규칙만 쓴다.`,
@@ -25,11 +30,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-square',
-      kind: 'choice',
+      id: "p-square",
+      kind: "choice",
       q: String.raw`$(a + b)^2 = a^2 + 2ab + b^2$에서, 가운데 항 $2ab$는 어느 공리들로 생기는가?`,
-      hints: [String.raw`$(a + b)^2 = (a + b)(a + b)$다. 왼쪽 괄호 $(a + b)$를 한 덩어리로 보고 분배법칙을 한 번 쓰면 $(a + b)a + (a + b)b$가 된다. 여기서 한 번 더.`],
-      choices: ['분배법칙을 두 번 쓰고, 곱셈의 교환법칙으로 ab와 ba를 하나로 모은다', '분배법칙을 한 번 쓰면 바로 나온다', '결합법칙만으로 나온다', '교환법칙만으로 나온다'],
+      hints: [
+        String.raw`$(a + b)^2 = (a + b)(a + b)$다. 왼쪽 괄호 $(a + b)$를 한 덩어리로 보고 분배법칙을 한 번 쓰면 $(a + b)a + (a + b)b$가 된다. 여기서 한 번 더.`,
+      ],
+      choices: [
+        "분배법칙을 두 번 쓰고, 곱셈의 교환법칙으로 ab와 ba를 하나로 모은다",
+        "분배법칙을 한 번 쓰면 바로 나온다",
+        "결합법칙만으로 나온다",
+        "교환법칙만으로 나온다",
+      ],
       answer: 0,
       why: [
         String.raw`$(a + b)a + (a + b)b = a^2 + ba + ab + b^2$이고(오른쪽 분배법칙), $ba = ab$(교환법칙)이므로 $ab + ab = 2ab$다. 마지막 걸음은 다시 분배법칙($ab + ab = (1 + 1)ab$)이다. 아래 [](ref:square)의 증명이 이 걸음을 하나씩 적는다.`,
@@ -254,8 +266,13 @@ a - 0 = a + (-0) ∵ 빼기의 뜻([](ref:ax.arith#neg))
 ∴ $a - 0 = a$다.`,
   checks: [
     {
-      q: '다음 가운데 공리 목록에 없고, 공리에서 증명한 것은?',
-      choices: [String.raw`$-(-a) = a$`, String.raw`$a + (-a) = 0$`, String.raw`$a \neq 0$이면 $a \times \tfrac{1}{a} = 1$`, String.raw`$1 \times a = a$`],
+      q: "다음 가운데 공리 목록에 없고, 공리에서 증명한 것은?",
+      choices: [
+        String.raw`$-(-a) = a$`,
+        String.raw`$a + (-a) = 0$`,
+        String.raw`$a \neq 0$이면 $a \times \tfrac{1}{a} = 1$`,
+        String.raw`$1 \times a = a$`,
+      ],
       answer: 0,
       explain: String.raw`$-(-a) = a$는 위의 [](ref:double-neg)다. "덧셈 역원은 하나뿐"([](ref:inverse-unique))을 거쳐 증명했다. 나머지 셋은 [](ref:ax.arith#neg), [](ref:ax.arith#recip), [1의 공리](ref:ax.arith#one-mul) 그대로다. 어떤 것을 공리로 삼을지는 고르기 나름이지만, 될 수 있는 대로 적게 고르는 것이 유클리드 이래의 전통이다. 증명할 수 있는 것을 공리에 넣지 않아야, 공리 하나하나가 무엇을 떠받치는지 드러난다.`,
     },

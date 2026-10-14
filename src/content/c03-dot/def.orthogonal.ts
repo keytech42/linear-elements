@@ -1,24 +1,42 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.orthogonal',
-  kind: 'def',
-  title: '직교와 정규직교',
-  status: 'written',
+  id: "def.orthogonal",
+  kind: "def",
+  title: "직교와 정규직교",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.orthogonal', ko: '직교', en: 'orthogonal', gloss: '두 벡터의 내적이 0인 관계. 기하적으로는 서로 수직. 영벡터는 모든 벡터와 직교한다.' },
-      { id: 't.orthonormal', ko: '정규직교', en: 'orthonormal', gloss: '서로 직교하고 각각의 길이가 1인 벡터들의 모임.' },
+      {
+        id: "t.orthogonal",
+        ko: "직교",
+        en: "orthogonal",
+        gloss:
+          "두 벡터의 내적이 0인 관계. 기하적으로는 서로 수직. 영벡터는 모든 벡터와 직교한다.",
+      },
+      {
+        id: "t.orthonormal",
+        ko: "정규직교",
+        en: "orthonormal",
+        gloss: "서로 직교하고 각각의 길이가 1인 벡터들의 모임.",
+      },
     ],
   },
-  requires: ['prop.dot-geometric'],
+  requires: ["prop.dot-geometric"],
   predicts: [
     {
-      id: 'p-zerovec',
-      kind: 'choice',
+      id: "p-zerovec",
+      kind: "choice",
       q: String.raw`영벡터 $\mathbf{0}$은 $(1, 2)$와 직교할까?`,
-      hints: [String.raw`"수직"을 각으로 정의하면 영벡터는 방향이 없어서 판정할 수 없다. 그런데 아래 정의는 각이 아니라 무엇으로 직교를 판정하는가?`],
-      choices: ['그렇다. 내적이 0이므로', '아니다. 영벡터는 방향이 없어 각을 잴 수 없으므로', '판정할 수 없다', '아니다. 영벡터는 길이가 0이므로'],
+      hints: [
+        String.raw`"수직"을 각으로 정의하면 영벡터는 방향이 없어서 판정할 수 없다. 그런데 아래 정의는 각이 아니라 무엇으로 직교를 판정하는가?`,
+      ],
+      choices: [
+        "그렇다. 내적이 0이므로",
+        "아니다. 영벡터는 방향이 없어 각을 잴 수 없으므로",
+        "판정할 수 없다",
+        "아니다. 영벡터는 길이가 0이므로",
+      ],
       answer: 0,
       why: [
         String.raw`$\mathbf{0}\cdot(1, 2) = 0$이다. 직교를 내적으로 정의하면 영벡터도 판정되고, 모든 벡터와 직교한다.`,
@@ -28,11 +46,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-perp',
-      kind: 'choice',
+      id: "p-perp",
+      kind: "choice",
       q: String.raw`$(a, b)$에 직교하고 길이가 같은 벡터는? (영벡터가 아닌 $(a, b)$)`,
-      hints: [String.raw`$(a, b)\cdot(p, q) = ap + bq$가 0이 되려면 $(p, q)$를 어떻게 고르면 되는가? 성분의 자리를 바꾸고 한쪽에 부호를 붙여 보라.`],
-      choices: ['(−b, a)', '(b, a)', '(−a, −b)', '(a, −b)'],
+      hints: [
+        String.raw`$(a, b)\cdot(p, q) = ap + bq$가 0이 되려면 $(p, q)$를 어떻게 고르면 되는가? 성분의 자리를 바꾸고 한쪽에 부호를 붙여 보라.`,
+      ],
+      choices: ["(−b, a)", "(b, a)", "(−a, −b)", "(a, −b)"],
       answer: 0,
       why: [
         String.raw`$a(-b) + ba = 0$이고 길이는 $\sqrt{b^2 + a^2}$로 같다. 2장에서 본 [90° 회전](n:prop.rotation-matrix)의 결과와 같다. 반대쪽 $(b, -a)$도 답이다.`,
@@ -62,7 +82,7 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$(3, t)$가 $(2, -6)$과 직교하는 $t$는?`,
-      choices: ['1', '−1', '3', '9'],
+      choices: ["1", "−1", "3", "9"],
       answer: 0,
       explain: String.raw`$3\cdot2 + t\cdot(-6) = 6 - 6t = 0$에서 $t = 1$. 직교 조건은 방정식 하나로 바뀐다.`,
     },

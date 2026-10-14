@@ -1,13 +1,13 @@
 // 고윳값·고유벡터. 두 가지 길을 둔다.
 //  1) eig2: 2×2 일반 행렬. 특성방정식 λ² − (대각합)λ + (행렬식) = 0 을 근의 공식으로 푼다. (prop.char-poly)
 //  2) symEig: n×n 대칭 행렬. 야코비(Jacobi) 회전을 되풀이해 대각 행렬로 만든다. (prop.spectral)
-import type { Mat } from './mat';
-import { trace, det2, identity } from './mat';
-import { type Vec, normalize } from './vec';
+import type { Mat } from "./mat";
+import { trace, det2, identity } from "./mat";
+import { type Vec, normalize } from "./vec";
 
 export type Eig2 =
-  | { kind: 'real'; values: [number, number]; vectors: [Vec, Vec] | [Vec]; }
-  | { kind: 'complex'; re: number; im: number };
+  | { kind: "real"; values: [number, number]; vectors: [Vec, Vec] | [Vec] }
+  | { kind: "complex"; re: number; im: number };
 
 /**
  * prop.char-poly — det(A − λI) = 0 을 풀어 2×2 행렬의 고윳값을 구한다.
@@ -17,7 +17,8 @@ export function eig2(A: Mat): Eig2 {
   const t = trace(A);
   const d = det2(A);
   const disc = t * t - 4 * d;
-  if (disc < -1e-12) return { kind: 'complex', re: t / 2, im: Math.sqrt(-disc) / 2 };
+  if (disc < -1e-12)
+    return { kind: "complex", re: t / 2, im: Math.sqrt(-disc) / 2 };
   const r = Math.sqrt(Math.max(disc, 0));
   const l1 = (t + r) / 2;
   const l2 = (t - r) / 2;
@@ -26,10 +27,17 @@ export function eig2(A: Mat): Eig2 {
     // 중근: A = λI 이면 모든 방향이 고유 방향이고, 아니면(예: 전단) 고유 방향이 하나뿐이다.
     const isScalar = Math.abs(A[0][1]) < 1e-12 && Math.abs(A[1][0]) < 1e-12;
     return isScalar
-      ? { kind: 'real', values: [l1, l2], vectors: [[1, 0], [0, 1]] }
-      : { kind: 'real', values: [l1, l2], vectors: [v1] };
+      ? {
+          kind: "real",
+          values: [l1, l2],
+          vectors: [
+            [1, 0],
+            [0, 1],
+          ],
+        }
+      : { kind: "real", values: [l1, l2], vectors: [v1] };
   }
-  return { kind: 'real', values: [l1, l2], vectors: [v1, eigvecFor(A, l2)] };
+  return { kind: "real", values: [l1, l2], vectors: [v1, eigvecFor(A, l2)] };
 }
 
 function eigvecFor(A: Mat, l: number): Vec {
@@ -47,13 +55,18 @@ function eigvecFor(A: Mat, l: number): Vec {
  * 야코비 방법: 비대각 성분 하나를 0으로 만드는 회전을 반복한다. 회전들을 모두 곱한 것이 Q다.
  * 반환: values는 내림차순, vectors[k]는 values[k]의 단위 고유벡터.
  */
-export function symEig(S: Mat, tol = 1e-13, maxSweeps = 60): { values: number[]; vectors: Vec[] } {
+export function symEig(
+  S: Mat,
+  tol = 1e-13,
+  maxSweeps = 60,
+): { values: number[]; vectors: Vec[] } {
   const n = S.length;
   const a = S.map((r) => r.slice());
   const Q = identity(n);
   for (let sweep = 0; sweep < maxSweeps; sweep++) {
     let off = 0;
-    for (let p = 0; p < n; p++) for (let q = p + 1; q < n; q++) off += a[p][q] * a[p][q];
+    for (let p = 0; p < n; p++)
+      for (let q = p + 1; q < n; q++) off += a[p][q] * a[p][q];
     if (off < tol * tol) break;
     for (let p = 0; p < n; p++) {
       for (let q = p + 1; q < n; q++) {
@@ -83,7 +96,9 @@ export function symEig(S: Mat, tol = 1e-13, maxSweeps = 60): { values: number[];
       }
     }
   }
-  const order = Array.from({ length: n }, (_, i) => i).sort((i, j) => a[j][j] - a[i][i]);
+  const order = Array.from({ length: n }, (_, i) => i).sort(
+    (i, j) => a[j][j] - a[i][i],
+  );
   return {
     values: order.map((i) => a[i][i]),
     vectors: order.map((i) => Q.map((r) => r[i])),

@@ -1,24 +1,27 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.basis-determines',
-  kind: 'prop',
-  title: '기저의 상이 전부를 결정한다',
-  status: 'written',
-  requires: ['def.linear-map', 'def.basis'],
+  id: "prop.basis-determines",
+  kind: "prop",
+  title: "기저의 상이 전부를 결정한다",
+  status: "written",
+  requires: ["def.linear-map", "def.basis"],
   predicts: [
     {
-      id: 'p-land',
-      kind: 'point',
+      id: "p-land",
+      kind: "point",
       q: String.raw`선형 변환 $T$가 $\mathbf{e}_1$을 $(1, 0.5)$로(주황), $\mathbf{e}_2$를 $(-0.5, 1)$로(청록) 보낸다. $\mathbf{x} = (-1, 2)$(노랑)는 어디로 갈까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`$\mathbf{x}$를 표준 기저로 적으면 $-1\cdot\mathbf{e}_1 + 2\cdot\mathbf{e}_2$다. 음수 계수에 주의하라.`,
         String.raw`상 = $-1\cdot$(주황 화살표) $+ 2\cdot$(청록 화살표). 주황을 뒤집고, 그 끝에 청록을 두 번 이어 붙여 보라.`,
       ],
-      A: [[1, -0.5], [0.5, 1]],
+      A: [
+        [1, -0.5],
+        [0.5, 1],
+      ],
       x: [-1, 2],
-      target: 'Ax',
-      show: ['cols', 'x'],
+      target: "Ax",
+      show: ["cols", "x"],
       reveal: String.raw`정답은 $(-2, 1.5)$다: $-1\cdot(1, 0.5) + 2\cdot(-0.5, 1) = (-1 - 1,\ -0.5 + 2)$. 입력의 좌표가 그대로 **기저의 상의 계수**가 된다. 아래 명제가 이것이다.`,
     },
   ],
@@ -50,7 +53,7 @@ $$T(\mathbf{x}) = T(x_1\mathbf{e}_1 + x_2\mathbf{e}_2) = x_1T(\mathbf{e}_1) + x_
   checks: [
     {
       q: String.raw`선형 변환이 $\mathbf{e}_1$을 $(3, 1)$로, $\mathbf{e}_2$를 $(0, 2)$로 보낸다. $(1, 1)$의 상은?`,
-      choices: ['(3, 3)', '(3, 2)', '(0, 2)', '(4, 2)'],
+      choices: ["(3, 3)", "(3, 2)", "(0, 2)", "(4, 2)"],
       answer: 0,
       explain: String.raw`$(1, 1) = \mathbf{e}_1 + \mathbf{e}_2$이므로 $(3, 1) + (0, 2) = (3, 3)$이다. 그림으로는 주황 화살표 끝에 청록 화살표를 이어 붙인 자리다. $(4, 2)$는 성분을 섞어 더한 실수다.`,
     },

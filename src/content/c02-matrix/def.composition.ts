@@ -1,27 +1,43 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.composition',
-  kind: 'def',
-  title: '합성과 행렬 곱',
-  status: 'written',
+  id: "def.composition",
+  kind: "def",
+  title: "합성과 행렬 곱",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.composition', ko: '합성', en: 'composition', gloss: '한 변환을 한 뒤 이어서 다른 변환을 하는 것을 하나의 변환으로 본 것.' },
-      { id: 't.matmul', ko: '행렬 곱', en: 'matrix multiplication', gloss: 'AB = "B를 먼저, 그다음 A"를 하는 합성 변환의 행렬.' },
+      {
+        id: "t.composition",
+        ko: "합성",
+        en: "composition",
+        gloss:
+          "한 변환을 한 뒤 이어서 다른 변환을 하는 것을 하나의 변환으로 본 것.",
+      },
+      {
+        id: "t.matmul",
+        ko: "행렬 곱",
+        en: "matrix multiplication",
+        gloss: 'AB = "B를 먼저, 그다음 A"를 하는 합성 변환의 행렬.',
+      },
     ],
   },
-  requires: ['def.matvec'],
+  requires: ["def.matvec"],
   predicts: [
     {
-      id: 'p-two',
-      kind: 'point',
+      id: "p-two",
+      kind: "point",
       q: String.raw`먼저 가로로 2배 늘이고($B = \begin{bmatrix} 2 & 0 \\ 0 & 1 \end{bmatrix}$), 그다음 시계 반대 방향 90° 돌린다($A = \begin{bmatrix} 0 & -1 \\ 1 & 0 \end{bmatrix}$). 두 단계를 마친 뒤 $\mathbf{e}_1$은 어디에 있을까?`,
-      hints: [String.raw`한 단계씩 따라가라. 늘이기 뒤 $\mathbf{e}_1$은 $(2, 0)$이다. 이 화살표를 90° 돌리면?`],
-      A: [[0, -1], [2, 0]],
+      hints: [
+        String.raw`한 단계씩 따라가라. 늘이기 뒤 $\mathbf{e}_1$은 $(2, 0)$이다. 이 화살표를 90° 돌리면?`,
+      ],
+      A: [
+        [0, -1],
+        [2, 0],
+      ],
       x: [1, 0],
-      target: 'Ax',
-      show: ['x'],
+      target: "Ax",
+      show: ["x"],
       reveal: String.raw`정답은 $(0, 2)$다. $(2, 0)$을 90° 돌리면 위쪽을 가리키는 길이 2짜리 화살표가 된다. 두 단계를 하나로 합친 변환의 첫째 열이 바로 이것이다.`,
     },
   ],
@@ -50,7 +66,11 @@ $$A(B(\mathbf{u} + \mathbf{w})) = A(B\mathbf{u} + B\mathbf{w}) = A(B\mathbf{u}) 
   checks: [
     {
       q: String.raw`$AB$와 "$A$를 먼저 한 뒤 $B$를 하는 것" 가운데 같은 것은?`,
-      choices: ['어느 것도 같다고 할 수 없다. AB는 B를 먼저 한다', '같다. 왼쪽부터 읽는다', '같다. 순서는 상관없다'],
+      choices: [
+        "어느 것도 같다고 할 수 없다. AB는 B를 먼저 한다",
+        "같다. 왼쪽부터 읽는다",
+        "같다. 순서는 상관없다",
+      ],
       answer: 0,
       explain: String.raw`$(AB)\mathbf{x} = A(B\mathbf{x})$이므로 $B$가 먼저다. "$A$ 먼저, 그다음 $B$"의 행렬은 $BA$다. 둘이 같은지는 다음다음 노드에서 다룬다(대개 다르다).`,
     },

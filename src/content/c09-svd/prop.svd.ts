@@ -1,25 +1,39 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.svd',
-  kind: 'prop',
-  title: 'A = UΣVᵀ: 회전, 늘이기, 회전',
-  status: 'written',
+  id: "prop.svd",
+  kind: "prop",
+  title: "A = UΣVᵀ: 회전, 늘이기, 회전",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.svd', ko: '특이값 분해', en: 'singular value decomposition', surfaces: ['SVD'], gloss: '모든 행렬을 (직교 행렬)(대각 행렬)(직교 행렬)의 곱 UΣVᵀ로 쓰는 것. 회전(또는 반사) → 축 방향 늘이기 → 회전(또는 반사).' }],
+    terms: [
+      {
+        id: "t.svd",
+        ko: "특이값 분해",
+        en: "singular value decomposition",
+        surfaces: ["SVD"],
+        gloss:
+          "모든 행렬을 (직교 행렬)(대각 행렬)(직교 행렬)의 곱 UΣVᵀ로 쓰는 것. 회전(또는 반사) → 축 방향 늘이기 → 회전(또는 반사).",
+      },
+    ],
     symbols: [
-      { tex: 'U', meaning: '열 = 왼쪽 특이벡터인 직교 행렬' },
-      { tex: String.raw`\Sigma`, meaning: '특이값을 대각에 놓은 행렬' },
-      { tex: 'V', meaning: '열 = 오른쪽 특이벡터인 직교 행렬' },
+      { tex: "U", meaning: "열 = 왼쪽 특이벡터인 직교 행렬" },
+      { tex: String.raw`\Sigma`, meaning: "특이값을 대각에 놓은 행렬" },
+      { tex: "V", meaning: "열 = 오른쪽 특이벡터인 직교 행렬" },
     ],
   },
-  requires: ['prop.svd-ata', 'prop.orthogonal-inverse'],
+  requires: ["prop.svd-ata", "prop.orthogonal-inverse"],
   predicts: [
     {
-      id: 'p-vt',
-      kind: 'choice',
+      id: "p-vt",
+      kind: "choice",
       q: String.raw`세 단계 가운데 첫째인 $V^{\mathsf{T}}$는 우특이벡터 $\mathbf{v}_1$을 어디로 보낼까?`,
-      choices: [String.raw`$\mathbf{e}_1$`, String.raw`$\mathbf{v}_1$ 그대로`, String.raw`$\sigma_1\mathbf{u}_1$`, String.raw`$\mathbf{u}_1$`],
+      choices: [
+        String.raw`$\mathbf{e}_1$`,
+        String.raw`$\mathbf{v}_1$ 그대로`,
+        String.raw`$\sigma_1\mathbf{u}_1$`,
+        String.raw`$\mathbf{u}_1$`,
+      ],
       answer: 0,
       why: [
         String.raw`$V^{\mathsf{T}}$의 행이 $\mathbf{v}_1, \mathbf{v}_2$이므로 $V^{\mathsf{T}}\mathbf{v}_1 = (\mathbf{v}_1\cdot\mathbf{v}_1,\ \mathbf{v}_2\cdot\mathbf{v}_1) = (1, 0)$이다.`,
@@ -29,13 +43,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-flip',
-      kind: 'choice',
+      id: "p-flip",
+      kind: "choice",
       q: String.raw`$\det A < 0$인 행렬(거울에 비친 것처럼 뒤집는 변환)을 $U\Sigma V^{\mathsf{T}}$로 쓰면, 뒤집힘은 어디에 들어갈까?`,
       hints: [
         String.raw`직교 행렬의 행렬식은 $+1$ 또는 $-1$이고, $\det\Sigma = \sigma_1\sigma_2 \ge 0$이다. [행렬식은 곱을 곱으로 보낸다](n:prop.det-product).`,
       ],
-      choices: [String.raw`$U$와 $V$ 가운데 한쪽 (반사인 직교 행렬)`, String.raw`$\Sigma$의 음수 특이값`, '뒤집는 변환은 이렇게 분해할 수 없다', String.raw`$U$와 $V$ 양쪽 모두`],
+      choices: [
+        String.raw`$U$와 $V$ 가운데 한쪽 (반사인 직교 행렬)`,
+        String.raw`$\Sigma$의 음수 특이값`,
+        "뒤집는 변환은 이렇게 분해할 수 없다",
+        String.raw`$U$와 $V$ 양쪽 모두`,
+      ],
       answer: 0,
       why: [
         String.raw`직교 행렬의 행렬식은 $+1$(회전) 또는 $-1$(반사)이다. $\det A = \det U\cdot\sigma_1\sigma_2\cdot\det V^{\mathsf{T}}$가 음수가 되려면 둘 가운데 한쪽만 $-1$이어야 한다.`,
@@ -102,20 +121,25 @@ $$A = A(VV^{\mathsf{T}}) = (AV)V^{\mathsf{T}} = U\Sigma V^{\mathsf{T}}$$
       q: String.raw`2×2 행렬에서 $\sigma_1\sigma_2 = |\det A|$인 이유는?`,
       choices: [
         String.raw`$\det A = \det U \cdot \det\Sigma \cdot \det V^{\mathsf{T}}$이고, 직교 행렬의 행렬식은 ±1이며 $\det\Sigma = \sigma_1\sigma_2$이기 때문`,
-        '특이값은 원래 행렬식을 나눠 가진 것이라고 정의했기 때문',
-        '우연히 위 예에서만 성립한다',
+        "특이값은 원래 행렬식을 나눠 가진 것이라고 정의했기 때문",
+        "우연히 위 예에서만 성립한다",
       ],
       answer: 0,
       explain: String.raw`[행렬식은 곱을 곱으로 보낸다](n:prop.det-product). 직교 행렬은 넓이를 바꾸지 않으므로 행렬식이 $+1$(회전) 또는 $-1$(반사)이다. 남는 넓이 배율은 $\Sigma$의 $\sigma_1\sigma_2$뿐이다. 기하로 말하면, 단위원(넓이 π)이 반지름 $\sigma_1, \sigma_2$인 타원(넓이 $\pi\sigma_1\sigma_2$)이 된다. 부호는 $U$와 $V$에 반사가 홀수 번 들어갔는지가 정한다.`,
     },
     {
       q: String.raw`$A = U\Sigma V^{\mathsf{T}}$에서 $A\mathbf{v}_2$는?`,
-      choices: [String.raw`$\sigma_2\mathbf{u}_2$`, String.raw`$\sigma_2\mathbf{v}_2$`, String.raw`$\mathbf{u}_2$`, String.raw`$\sigma_1\mathbf{u}_1$`],
+      choices: [
+        String.raw`$\sigma_2\mathbf{u}_2$`,
+        String.raw`$\sigma_2\mathbf{v}_2$`,
+        String.raw`$\mathbf{u}_2$`,
+        String.raw`$\sigma_1\mathbf{u}_1$`,
+      ],
       answer: 0,
       explain: String.raw`세 단계로 따라가면 $V^{\mathsf{T}}\mathbf{v}_2 = \mathbf{e}_2 \mapsto \Sigma\mathbf{e}_2 = \sigma_2\mathbf{e}_2 \mapsto U(\sigma_2\mathbf{e}_2) = \sigma_2\mathbf{u}_2$다. $\sigma_2\mathbf{v}_2$를 고른 경우는 $\mathbf{v}_2$를 $A$의 고유벡터로 착각한 것이다. 특이벡터는 출발 방향($\mathbf{v}$)과 도착 방향($\mathbf{u}$)이 다르다.`,
     },
   ],
-  code: ['svd2', 'svd'],
+  code: ["svd2", "svd"],
 };
 
 export default node;

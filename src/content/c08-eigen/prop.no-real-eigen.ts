@@ -1,18 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.no-real-eigen',
-  kind: 'prop',
-  title: '회전에는 실수 고유벡터가 없다',
-  status: 'written',
-  requires: ['prop.char-poly', 'prop.rotation-matrix'],
+  id: "prop.no-real-eigen",
+  kind: "prop",
+  title: "회전에는 실수 고유벡터가 없다",
+  status: "written",
+  requires: ["prop.char-poly", "prop.rotation-matrix"],
   predicts: [
     {
-      id: 'p-angles',
-      kind: 'choice',
+      id: "p-angles",
+      kind: "choice",
       q: String.raw`회전 $R_\theta$ ($0° \le \theta < 360°$)가 실수 고유벡터를 **가지는** 각 $\theta$를 모두 고르면?`,
-      hints: [String.raw`회전은 모든 방향을 같은 각 $\theta$만큼 돌린다. 화살표가 돌아간 뒤에도 처음과 **같은 직선** 위에 있으려면, 몇 도를 돌아야 하는가?`],
-      choices: ['0°와 180°뿐', '0°뿐', '90°의 배수(0°, 90°, 180°, 270°)', '없다. 회전에는 언제나 고유벡터가 없다'],
+      hints: [
+        String.raw`회전은 모든 방향을 같은 각 $\theta$만큼 돌린다. 화살표가 돌아간 뒤에도 처음과 **같은 직선** 위에 있으려면, 몇 도를 돌아야 하는가?`,
+      ],
+      choices: [
+        "0°와 180°뿐",
+        "0°뿐",
+        "90°의 배수(0°, 90°, 180°, 270°)",
+        "없다. 회전에는 언제나 고유벡터가 없다",
+      ],
       answer: 0,
       why: [
         String.raw`같은 직선 위에 남으려면 0°(같은 방향) 또는 180°(반대 방향)만큼 돌아야 한다. 아래에서 판별식으로 같은 결론을 얻는다.`,
@@ -22,14 +29,19 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-stretch',
-      kind: 'choice',
+      id: "p-stretch",
+      kind: "choice",
       q: String.raw`30° 돌린 뒤 가로로 4배 늘이는 변환 $M = \begin{bmatrix} 4 & 0 \\ 0 & 1 \end{bmatrix}R_{30°}$에 실수 고유 방향이 있을까?`,
       hints: [
         String.raw`판별식 $(\operatorname{tr}M)^2 - 4\det M$의 부호만 알면 된다. [행렬식은 곱을 곱으로 보낸다](n:prop.det-product).`,
         String.raw`$\det M = 4\cdot\det R_{30°} = 4$. $M = \begin{bmatrix} 4\cos30° & -4\sin30° \\ \sin30° & \cos30° \end{bmatrix}$이므로 $\operatorname{tr}M = 5\cos30° \approx 4.33$이다.`,
       ],
-      choices: ['있다. 늘이기가 회전을 이긴다', '없다. 회전이 들어 있으므로', '있다. 다만 고윳값이 음수다', '모든 방향이 고유 방향이다'],
+      choices: [
+        "있다. 늘이기가 회전을 이긴다",
+        "없다. 회전이 들어 있으므로",
+        "있다. 다만 고윳값이 음수다",
+        "모든 방향이 고유 방향이다",
+      ],
       answer: 0,
       why: [
         String.raw`판별식은 $(5\cos30°)^2 - 16 = 18.75 - 16 = 2.75 > 0$이다. 서로 다른 실수 고윳값(약 2.99와 1.34)이 둘 있다.`,
@@ -39,7 +51,12 @@ const node: NodeDef = {
       ],
     },
   ],
-  openWhys: [{ q: '판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?', answeredBy: null }],
+  openWhys: [
+    {
+      q: "판별식이 음수일 때 나오는 복소수 근은 기하적으로 무엇을 뜻하는가?",
+      answeredBy: null,
+    },
+  ],
   body: String.raw`[회전](t:t.rotation)은 모든 벡터를 같은 각만큼 돌린다. 그렇다면 회전에서 자기 직선 위에 남는 벡터가 있을 수 있을까?
 
 ::predict p-angles
@@ -74,7 +91,12 @@ $$(2\cos\theta)^2 - 4\cdot1 = 4(\cos^2\theta - 1) = -4\sin^2\theta$$
   checks: [
     {
       q: String.raw`$\begin{bmatrix} 0 & 1 \\ -1 & 0 \end{bmatrix}$에 실수 고유벡터가 있는가?`,
-      choices: ['없다. 시계 방향 90° 회전이다', '있다. e₁ 방향', '있다. 모든 방향', '있다. 대각선 방향'],
+      choices: [
+        "없다. 시계 방향 90° 회전이다",
+        "있다. e₁ 방향",
+        "있다. 모든 방향",
+        "있다. 대각선 방향",
+      ],
       answer: 0,
       explain: String.raw`첫째 열 $(0, -1)$: $\mathbf{e}_1$이 아래쪽을 가리키게 된다. 둘째 열 $(1, 0)$: $\mathbf{e}_2$가 오른쪽을 가리키게 된다. 시계 방향 90° 회전이다. 대각합 0, 행렬식 1이므로 판별식은 $0 - 4 = -4 < 0$이다.`,
     },

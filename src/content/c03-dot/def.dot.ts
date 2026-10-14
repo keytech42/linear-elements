@@ -1,25 +1,43 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.dot',
-  kind: 'def',
-  title: '내적',
-  status: 'written',
+  id: "def.dot",
+  kind: "def",
+  title: "내적",
+  status: "written",
   introduces: {
-    terms: [{ id: 't.dot', ko: '내적', en: 'dot product', gloss: '두 벡터의 같은 자리 성분끼리 곱해서 모두 더한 수. 길이와 각도를 함께 담는다.' }],
-    symbols: [{ tex: String.raw`\mathbf{u}\cdot\mathbf{v}`, meaning: '벡터 u와 v의 내적' }],
+    terms: [
+      {
+        id: "t.dot",
+        ko: "내적",
+        en: "dot product",
+        gloss:
+          "두 벡터의 같은 자리 성분끼리 곱해서 모두 더한 수. 길이와 각도를 함께 담는다.",
+      },
+    ],
+    symbols: [
+      {
+        tex: String.raw`\mathbf{u}\cdot\mathbf{v}`,
+        meaning: "벡터 u와 v의 내적",
+      },
+    ],
   },
-  requires: ['def.norm'],
+  requires: ["def.norm"],
   predicts: [
     {
-      id: 'p-cross',
-      kind: 'choice',
+      id: "p-cross",
+      kind: "choice",
       q: String.raw`$\|\mathbf{u} + \mathbf{w}\|^2$을 성분으로 전개하면, $\|\mathbf{u}\|^2 + \|\mathbf{w}\|^2$에 무엇이 더 붙을까? (2차원)`,
       hints: [
         String.raw`$\mathbf{u} + \mathbf{w}$의 첫째 성분은 $u_1 + w_1$이다. $(u_1 + w_1)^2$을 [전개](n:prop.arith-first#square)하면?`,
         String.raw`$(u_1 + w_1)^2 + (u_2 + w_2)^2$을 전개해 $u$끼리, $w$끼리, 섞인 것끼리 모아 보라.`,
       ],
-      choices: [String.raw`$2(u_1w_1 + u_2w_2)$`, '아무것도 붙지 않는다 (언제나 피타고라스)', String.raw`$2\|\mathbf{u}\|\,\|\mathbf{w}\|$`, String.raw`$u_1w_2 + u_2w_1$`],
+      choices: [
+        String.raw`$2(u_1w_1 + u_2w_2)$`,
+        "아무것도 붙지 않는다 (언제나 피타고라스)",
+        String.raw`$2\|\mathbf{u}\|\,\|\mathbf{w}\|$`,
+        String.raw`$u_1w_2 + u_2w_1$`,
+      ],
       answer: 0,
       why: [
         String.raw`$(u_1 + w_1)^2 + (u_2 + w_2)^2 = (u_1^2 + u_2^2) + (w_1^2 + w_2^2) + 2(u_1w_1 + u_2w_2)$. 가운데의 "섞인 항"이 이 노드의 주인공이다.`,
@@ -29,11 +47,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-zero',
-      kind: 'choice',
+      id: "p-zero",
+      kind: "choice",
       q: String.raw`$(2, -1)\cdot(1, 2)$는?`,
-      hints: [String.raw`같은 자리끼리 곱한 뒤 **더한다**. 결과는 벡터가 아니라 수 하나다.`],
-      choices: ['0', '4', '벡터 (2, −2)', '−4'],
+      hints: [
+        String.raw`같은 자리끼리 곱한 뒤 **더한다**. 결과는 벡터가 아니라 수 하나다.`,
+      ],
+      choices: ["0", "4", "벡터 (2, −2)", "−4"],
       answer: 0,
       why: [
         String.raw`$2\cdot1 + (-1)\cdot2 = 2 - 2 = 0$. 내적이 0이라는 것의 뜻은 다음다음 노드에서 밝혀진다(그림을 그려 두 화살표가 어떻게 놓였는지 보라).`,
@@ -74,12 +94,12 @@ $$\mathbf{u}\cdot\mathbf{v} = u_1v_1 + u_2v_2 \quad (\text{성분이 } n\text{�
   checks: [
     {
       q: String.raw`$\mathbf{u}\cdot\mathbf{u} = 9$이고 $\mathbf{w}\cdot\mathbf{w} = 4$, $\mathbf{u}\cdot\mathbf{w} = -3$이다. $\|\mathbf{u} + \mathbf{w}\|^2$은?`,
-      choices: ['7', '13', '19', '10'],
+      choices: ["7", "13", "19", "10"],
       answer: 0,
       explain: String.raw`$\|\mathbf{u}\|^2 + 2\,\mathbf{u}\cdot\mathbf{w} + \|\mathbf{w}\|^2 = 9 - 6 + 4 = 7$. 성분을 몰라도 세 내적만으로 계산된다. 13은 섞인 항을 빠뜨린 것, 10은 섞인 항에 2를 곱하지 않은 것이다.`,
     },
   ],
-  code: ['dot'],
+  code: ["dot"],
 };
 
 export default node;

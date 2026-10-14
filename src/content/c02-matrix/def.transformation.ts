@@ -1,28 +1,52 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.transformation',
-  kind: 'def',
-  title: '변환: 벡터를 받아 벡터를 내놓는 규칙',
-  status: 'written',
+  id: "def.transformation",
+  kind: "def",
+  title: "변환: 벡터를 받아 벡터를 내놓는 규칙",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.transformation', ko: '변환', en: 'transformation', gloss: '벡터 하나를 받으면 벡터 하나를 정해서 내놓는 규칙(함수).' },
-      { id: 't.image', ko: '상', en: 'image', boundary: true, everyMention: true, gloss: '변환 T가 입력 𝐯에 짝지어 둔 출력 T(𝐯)를 T에 의한 𝐯의 상(像)이라 한다. 직선이나 원처럼 벡터 여럿을 모은 것의 상은 그 벡터들의 상을 모두 모은 것이다.' },
+      {
+        id: "t.transformation",
+        ko: "변환",
+        en: "transformation",
+        gloss: "벡터 하나를 받으면 벡터 하나를 정해서 내놓는 규칙(함수).",
+      },
+      {
+        id: "t.image",
+        ko: "상",
+        en: "image",
+        boundary: true,
+        everyMention: true,
+        gloss:
+          "변환 T가 입력 𝐯에 짝지어 둔 출력 T(𝐯)를 T에 의한 𝐯의 상(像)이라 한다. 직선이나 원처럼 벡터 여럿을 모은 것의 상은 그 벡터들의 상을 모두 모은 것이다.",
+      },
     ],
     symbols: [
-      { tex: 'T', meaning: '변환' },
-      { tex: String.raw`\mapsto`, meaning: '왼쪽의 입력을 오른쪽으로 보낸다(maps to). 변환의 규칙을 적을 때 쓴다' },
+      { tex: "T", meaning: "변환" },
+      {
+        tex: String.raw`\mapsto`,
+        meaning:
+          "왼쪽의 입력을 오른쪽으로 보낸다(maps to). 변환의 규칙을 적을 때 쓴다",
+      },
     ],
   },
-  requires: ['def.vector'],
+  requires: ["def.vector"],
   predicts: [
     {
-      id: 'p-free',
-      kind: 'choice',
+      id: "p-free",
+      kind: "choice",
       q: String.raw`어떤 변환이 $(1, 0)$을 $(2, 1)$로, $(2, 0)$을 $(3, 5)$로 보낸다는 것만 알려져 있다. $(3, 0)$은 어디로 갈까?`,
-      hints: [String.raw`$(3, 0)$은 $(1, 0) + (2, 0)$이기도 하고 $(1, 0)$의 3배이기도 하다. 그런데 "$(3, 0)$의 상은 $(1, 0)$의 상과 $(2, 0)$의 상을 더한 것과 같다"는 보장이 어디에 있었는가?`],
-      choices: ['이것만으로는 알 수 없다', '(4, 9): 같은 간격으로 이어진다', '(6, 3): (1, 0)의 상을 3배 한 것', '(5, 6): 두 상을 더한 것'],
+      hints: [
+        String.raw`$(3, 0)$은 $(1, 0) + (2, 0)$이기도 하고 $(1, 0)$의 3배이기도 하다. 그런데 "$(3, 0)$의 상은 $(1, 0)$의 상과 $(2, 0)$의 상을 더한 것과 같다"는 보장이 어디에 있었는가?`,
+      ],
+      choices: [
+        "이것만으로는 알 수 없다",
+        "(4, 9): 같은 간격으로 이어진다",
+        "(6, 3): (1, 0)의 상을 3배 한 것",
+        "(5, 6): 두 상을 더한 것",
+      ],
       answer: 0,
       why: [
         String.raw`변환은 입력마다 출력을 **하나** 정하기만 하면 된다. 다른 입력의 출력에 대해서는 아무것도 보장하지 않는다.`,
@@ -32,11 +56,18 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-transl',
-      kind: 'choice',
+      id: "p-transl",
+      kind: "choice",
       q: String.raw`평면의 모든 점을 오른쪽으로 1칸 옮기는 변환을 했다. 점 $P$에서 점 $Q$로 가는 화살표(변위)는 어떻게 될까?`,
-      hints: [String.raw`$P$와 $Q$가 **둘 다** 오른쪽으로 1칸 움직인다. 두 점 사이의 [변위](n:def.numberline)는 "$Q$의 좌표 − $P$의 좌표"다.`],
-      choices: ['그대로다. 두 점이 함께 옮겨지므로', '오른쪽으로 1칸 길어진다', '오른쪽으로 1칸 옮겨진 같은 모양의 화살표가 되므로, 다른 벡터가 된다', '점의 위치에 따라 다르다'],
+      hints: [
+        String.raw`$P$와 $Q$가 **둘 다** 오른쪽으로 1칸 움직인다. 두 점 사이의 [변위](n:def.numberline)는 "$Q$의 좌표 − $P$의 좌표"다.`,
+      ],
+      choices: [
+        "그대로다. 두 점이 함께 옮겨지므로",
+        "오른쪽으로 1칸 길어진다",
+        "오른쪽으로 1칸 옮겨진 같은 모양의 화살표가 되므로, 다른 벡터가 된다",
+        "점의 위치에 따라 다르다",
+      ],
       answer: 0,
       why: [
         String.raw`$(Q + (1, 0)) - (P + (1, 0)) = Q - P$. 두 점이 같이 움직이면 그 사이의 이동은 변하지 않는다.`,
@@ -89,7 +120,7 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$T(x, y) = (y, x)$는 $(2, -1)$을 어디로 보내는가?`,
-      choices: ['(−1, 2)', '(2, −1)', '(1, −2)', '(−2, 1)'],
+      choices: ["(−1, 2)", "(2, −1)", "(1, −2)", "(−2, 1)"],
       answer: 0,
       explain: String.raw`규칙대로 두 성분의 자리를 바꾼다. 기하로는 대각선 $y = x$를 거울로 삼아 비친 것이다.`,
     },

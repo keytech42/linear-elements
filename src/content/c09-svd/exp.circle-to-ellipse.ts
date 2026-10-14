@@ -1,21 +1,32 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'exp.circle-to-ellipse',
-  kind: 'exp',
-  title: '아무 행렬이나 단위원을 타원으로 보낸다',
-  status: 'written',
-  requires: ['prop.sym-ellipse'],
+  id: "exp.circle-to-ellipse",
+  kind: "exp",
+  title: "아무 행렬이나 단위원을 타원으로 보낸다",
+  status: "written",
+  requires: ["prop.sym-ellipse"],
   openWhys: [
-    { q: '대칭이 아닌 행렬도 단위원을 정확히 타원으로 보내는가?', answeredBy: 'prop.svd' },
-    { q: '가장 많이 늘어나는 입력 방향과 가장 적게 늘어나는 입력 방향은 왜 언제나 서로 수직인가?', answeredBy: 'prop.svd-ata' },
+    {
+      q: "대칭이 아닌 행렬도 단위원을 정확히 타원으로 보내는가?",
+      answeredBy: "prop.svd",
+    },
+    {
+      q: "가장 많이 늘어나는 입력 방향과 가장 적게 늘어나는 입력 방향은 왜 언제나 서로 수직인가?",
+      answeredBy: "prop.svd-ata",
+    },
   ],
   predicts: [
     {
-      id: 'p-shape',
-      kind: 'choice',
-      q: '대칭이 아닌 행렬은 단위원을 어떤 모양으로 보낼까?',
-      choices: ['타원 (납작해지면 선분)', '한쪽이 불룩한 달걀 모양', '평행사변형', '행렬마다 아무 모양이나 될 수 있다'],
+      id: "p-shape",
+      kind: "choice",
+      q: "대칭이 아닌 행렬은 단위원을 어떤 모양으로 보낼까?",
+      choices: [
+        "타원 (납작해지면 선분)",
+        "한쪽이 불룩한 달걀 모양",
+        "평행사변형",
+        "행렬마다 아무 모양이나 될 수 있다",
+      ],
       answer: 0,
       why: [
         String.raw`아래 그림으로 확인하고, 증명은 이 장의 셋째 노드에서 한다.`,
@@ -25,13 +36,13 @@ const node: NodeDef = {
       ],
     },
     {
-      id: 'p-angle',
-      kind: 'choice',
-      q: '단위원 위에서 가장 많이 늘어나는 입력 방향과 가장 적게 늘어나는 입력 방향 사이의 각은?',
+      id: "p-angle",
+      kind: "choice",
+      q: "단위원 위에서 가장 많이 늘어나는 입력 방향과 가장 적게 늘어나는 입력 방향 사이의 각은?",
       hints: [
         String.raw`같은 직선 위의 두 단위 입력 $\mathbf{x}$와 $-\mathbf{x}$는 [똑같은 길이로 늘어난다](n:def.linear-map). 그렇다면 \"가장 많이\"와 \"가장 적게\"가 같은 직선일 수 있는가?`,
       ],
-      choices: ['0° (같은 직선)', '45°', '90°', '행렬마다 다르다'],
+      choices: ["0° (같은 직선)", "45°", "90°", "행렬마다 다르다"],
       answer: 2,
       why: [
         String.raw`같은 직선 위의 단위 입력은 $\mathbf{x}$와 $-\mathbf{x}$뿐이고, 둘은 똑같은 길이로 늘어난다. 그러니 가장 많이 늘어나는 방향과 가장 적게 늘어나는 방향이 같은 직선이라면, 모든 방향이 똑같이 늘어나는 경우(예: 회전)뿐이다.`,
@@ -78,13 +89,22 @@ const node: NodeDef = {
   checks: [
     {
       q: String.raw`$A = \begin{bmatrix} 3 & 0 \\ 0 & 1 \end{bmatrix}$일 때, 단위원 위의 입력 가운데 가장 많이 늘어나는 방향과 그 길이는?`,
-      choices: [String.raw`$\mathbf{e}_1$ 방향, 길이 3`, String.raw`$\mathbf{e}_2$ 방향, 길이 3`, String.raw`$(1, 1)$ 방향, 길이 4`, '모든 방향이 똑같이 늘어난다'],
+      choices: [
+        String.raw`$\mathbf{e}_1$ 방향, 길이 3`,
+        String.raw`$\mathbf{e}_2$ 방향, 길이 3`,
+        String.raw`$(1, 1)$ 방향, 길이 4`,
+        "모든 방향이 똑같이 늘어난다",
+      ],
       answer: 0,
       explain: String.raw`단위 입력 $(\cos\theta, \sin\theta)$의 출력은 $(3\cos\theta, \sin\theta)$이고, 그 길이의 제곱은 $9\cos^2\theta + \sin^2\theta = 1 + 8\cos^2\theta$다. 이 값은 $\cos^2\theta = 1$, 곧 $\mathbf{e}_1$ 방향에서 가장 커서 길이 3이 된다. $(1, 1)$ 방향(단위 길이로 맞춘 것)의 출력 길이는 $\sqrt{(9 + 1)/2} = \sqrt{5}$로 3보다 작다.`,
     },
     {
       q: String.raw`회전 행렬 $R_\theta$는 단위원을 무엇으로 보내는가? 그리고 "가장 많이 늘어나는 방향"은?`,
-      choices: ['단위원 자신. 모든 방향이 똑같이(1배) 늘어나므로 가장 많이 늘어나는 방향이 하나로 정해지지 않는다', '긴 축이 θ 방향인 타원', '선분'],
+      choices: [
+        "단위원 자신. 모든 방향이 똑같이(1배) 늘어나므로 가장 많이 늘어나는 방향이 하나로 정해지지 않는다",
+        "긴 축이 θ 방향인 타원",
+        "선분",
+      ],
       answer: 0,
       explain: String.raw`[회전은 길이를 바꾸지 않는다](n:prop.orthogonal-preserves). 그래서 상은 단위원 그대로이고, 모든 입력 방향의 늘어난 길이가 1이다. 이처럼 두 [특이값](fwd:t.singular-value)이 같으면 "그 방향"은 하나로 정해지지 않는다. 이 경우는 [특이값 분해](fwd:t.svd)가 하나로 정해지는지를 다룰 때 다시 나온다.`,
     },

@@ -1,20 +1,25 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.ata-symmetric',
-  kind: 'prop',
-  title: 'AᵀA는 대칭이고, ‖Ax‖² = x·(AᵀAx)',
-  status: 'written',
-  requires: ['prop.transpose-dot', 'def.symmetric', 'def.norm'],
+  id: "prop.ata-symmetric",
+  kind: "prop",
+  title: "AᵀA는 대칭이고, ‖Ax‖² = x·(AᵀAx)",
+  status: "written",
+  requires: ["prop.transpose-dot", "def.symmetric", "def.norm"],
   predicts: [
     {
-      id: 'p-entry',
-      kind: 'choice',
+      id: "p-entry",
+      kind: "choice",
       q: String.raw`$A$의 두 열을 $\mathbf{a}_1, \mathbf{a}_2$라 하자. $A^{\mathsf{T}}A$의 1행 2열 성분은 무엇일까?`,
       hints: [
         String.raw`$A^{\mathsf{T}}A$의 1행 2열 성분은 $A^{\mathsf{T}}$의 1행과 $A$의 2열의 내적이다([왜?](n:prop.row-picture)). $A^{\mathsf{T}}$의 1행은 $A$의 무엇인가?`,
       ],
-      choices: [String.raw`$\mathbf{a}_1 \cdot \mathbf{a}_2$ (두 열의 내적)`, String.raw`$a_{12}a_{21}$ (A의 대각선 밖 두 성분의 곱)`, String.raw`$\|\mathbf{a}_1\|\,\|\mathbf{a}_2\|$ (두 열의 길이의 곱)`, '언제나 0'],
+      choices: [
+        String.raw`$\mathbf{a}_1 \cdot \mathbf{a}_2$ (두 열의 내적)`,
+        String.raw`$a_{12}a_{21}$ (A의 대각선 밖 두 성분의 곱)`,
+        String.raw`$\|\mathbf{a}_1\|\,\|\mathbf{a}_2\|$ (두 열의 길이의 곱)`,
+        "언제나 0",
+      ],
       answer: 0,
       why: [
         String.raw`$A^{\mathsf{T}}$의 1행은 $A$의 1열이다. 행렬 곱의 성분 하나는 (왼쪽 행렬의 행)·(오른쪽 행렬의 열)이므로 $\mathbf{a}_1\cdot\mathbf{a}_2$다.`,
@@ -68,12 +73,17 @@ $$\|A\mathbf{x}\|^2 = (A\mathbf{x})\cdot(A\mathbf{x}) = \mathbf{x}\cdot\big(A^{\
   checks: [
     {
       q: String.raw`$A$의 두 열이 서로 직교하고 길이가 각각 2와 3이다. $A^{\mathsf{T}}A$는?`,
-      choices: [String.raw`$\begin{bmatrix} 4 & 0 \\ 0 & 9 \end{bmatrix}$`, String.raw`$\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$`, String.raw`$I$`, '열의 성분을 모르면 알 수 없다'],
+      choices: [
+        String.raw`$\begin{bmatrix} 4 & 0 \\ 0 & 9 \end{bmatrix}$`,
+        String.raw`$\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$`,
+        String.raw`$I$`,
+        "열의 성분을 모르면 알 수 없다",
+      ],
       answer: 0,
       explain: String.raw`$(A^{\mathsf{T}}A)_{ij} = \mathbf{a}_i\cdot\mathbf{a}_j$다. 대각선은 길이의 제곱 4와 9, 대각선 밖은 직교하므로 0이다. 열의 구체적 성분을 몰라도 길이와 내적만 알면 된다. $A^{\mathsf{T}}A$는 열들 사이의 **길이와 각도 정보만** 담는다는 뜻이다. $\begin{bmatrix} 2 & 0 \\ 0 & 3 \end{bmatrix}$은 제곱을 빠뜨린 것이다.`,
     },
   ],
-  code: ['matMul', 'transpose'],
+  code: ["matMul", "transpose"],
 };
 
 export default node;

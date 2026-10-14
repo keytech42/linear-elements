@@ -1,49 +1,75 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'def.basis',
-  kind: 'def',
-  title: '기저와 좌표',
-  status: 'written',
+  id: "def.basis",
+  kind: "def",
+  title: "기저와 좌표",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.basis', ko: '기저', en: 'basis', gloss: '공간 전체를 스팬하면서 선형 독립인 벡터들. 공간에 좌표를 매기는 자.' },
-      { id: 't.coord-vector', ko: '좌표벡터', en: 'coordinate vector', surfaces: ['좌표 벡터'], gloss: '기저 u, w에 대해 v = c₁u + c₂w일 때 계수 c₁, c₂를 세로로 세운 벡터. 같은 v라도 기저가 바뀌면 좌표벡터가 바뀐다.' },
-      { id: 't.std-basis', ko: '표준 기저', en: 'standard basis', gloss: '𝐞₁ = (1, 0), 𝐞₂ = (0, 1)처럼 한 성분만 1인 벡터들.' },
+      {
+        id: "t.basis",
+        ko: "기저",
+        en: "basis",
+        gloss:
+          "공간 전체를 스팬하면서 선형 독립인 벡터들. 공간에 좌표를 매기는 자.",
+      },
+      {
+        id: "t.coord-vector",
+        ko: "좌표벡터",
+        en: "coordinate vector",
+        surfaces: ["좌표 벡터"],
+        gloss:
+          "기저 u, w에 대해 v = c₁u + c₂w일 때 계수 c₁, c₂를 세로로 세운 벡터. 같은 v라도 기저가 바뀌면 좌표벡터가 바뀐다.",
+      },
+      {
+        id: "t.std-basis",
+        ko: "표준 기저",
+        en: "standard basis",
+        gloss: "𝐞₁ = (1, 0), 𝐞₂ = (0, 1)처럼 한 성분만 1인 벡터들.",
+      },
     ],
     symbols: [
-      { tex: String.raw`\mathbf{e}_1`, meaning: '첫째 표준 기저 벡터' },
-      { tex: String.raw`\mathbf{e}_2`, meaning: '둘째 표준 기저 벡터' },
-      { tex: String.raw`\mathbf{e}_3`, meaning: '셋째 표준 기저 벡터(3차원)' },
+      { tex: String.raw`\mathbf{e}_1`, meaning: "첫째 표준 기저 벡터" },
+      { tex: String.raw`\mathbf{e}_2`, meaning: "둘째 표준 기저 벡터" },
+      { tex: String.raw`\mathbf{e}_3`, meaning: "셋째 표준 기저 벡터(3차원)" },
     ],
   },
-  requires: ['def.independence'],
+  requires: ["def.independence"],
   predicts: [
     {
-      id: 'p-place',
-      kind: 'point',
+      id: "p-place",
+      kind: "point",
       q: String.raw`기저가 주황 $\mathbf{u} = (2, 1)$과 청록 $\mathbf{w} = (1, 2)$이다. 이 기저에 대한 좌표가 $(-1,\ 1.5)$인 점은 어디에 있을까? 분홍 점을 끌어 놓아라.`,
       hints: [
         String.raw`좌표 $(c_1, c_2)$는 "$\mathbf{u}$ 방향으로 $c_1$걸음, $\mathbf{w}$ 방향으로 $c_2$걸음", 곧 [선형 결합](n:def.linear-combination) $c_1\mathbf{u} + c_2\mathbf{w}$다.`,
         String.raw`$-\mathbf{u} = (-2, -1)$, $1.5\,\mathbf{w} = (1.5, 3)$이다. 둘을 이어 붙여라.`,
       ],
-      A: [[2, 1], [1, 2]],
+      A: [
+        [2, 1],
+        [1, 2],
+      ],
       x: [-1, 1.5],
-      target: 'Ax',
-      show: ['cols'],
-      colLabels: ['u', 'w'],
-      colColors: ['u', 'w'],
+      target: "Ax",
+      show: ["cols"],
+      colLabels: ["u", "w"],
+      colColors: ["u", "w"],
       reveal: String.raw`정답은 표준 좌표로 $(-0.5, 2)$인 점이다(초록 화살표 끝. 함께 그려진 초록 격자가 이 기저의 기울어진 격자다). $-(2, 1) + 1.5\,(1, 2) = (-2 + 1.5,\ -1 + 3)$. $(-1, 1.5)$에 놓았다면 이 기저의 좌표를 보통의 가로·세로 좌표로 읽은 것이다. 좌표는 **어떤 자로 재는가**에 따라 달라진다.`,
     },
     {
-      id: 'p-read',
-      kind: 'choice',
+      id: "p-read",
+      kind: "choice",
       q: String.raw`같은 기저 $\mathbf{u} = (2, 1)$, $\mathbf{w} = (1, 2)$로 재면, 표준 좌표로 $(3, 0)$인 점의 좌표는 무엇일까?`,
       hints: [
         String.raw`$c_1(2, 1) + c_2(1, 2) = (3, 0)$을 성분마다 적으면 $2c_1 + c_2 = 3$, $c_1 + 2c_2 = 0$이다.`,
         String.raw`둘째 식에서 $c_1 = -2c_2$다. 이것을 첫째 식에 넣어라.`,
       ],
-      choices: [String.raw`$(2, -1)$`, String.raw`$(3, 0)$`, String.raw`$(-1, 2)$`, String.raw`$(1, 1)$`],
+      choices: [
+        String.raw`$(2, -1)$`,
+        String.raw`$(3, 0)$`,
+        String.raw`$(-1, 2)$`,
+        String.raw`$(1, 1)$`,
+      ],
       answer: 0,
       why: [
         String.raw`$2\cdot(2, 1) - (1, 2) = (4 - 1,\ 2 - 2) = (3, 0)$이다.`,
@@ -93,19 +119,29 @@ $$c_1 = \frac{3\cdot2 - 0\cdot1}{3} = 2, \qquad c_2 = \frac{2\cdot0 - 1\cdot3}{3
 > 좌표 $(c_1, c_2)$를 받아 점 $c_1\mathbf{u} + c_2\mathbf{w}$를 내놓는 계산은, 2장에서 [행렬-벡터 곱](fwd:t.matvec)이라는 이름으로 다시 나온다. 그 반대, 곧 점을 받아 이 기저에 대한 좌표를 돌려주는 계산은 7장의 [기저 변환](fwd:t.change-of-basis)이 된다.`,
   checks: [
     {
-      q: '다음 가운데 평면의 기저인 것은?',
-      choices: [String.raw`$(1, 1)$, $(1, -1)$`, String.raw`$(1, 0)$, $(0, 1)$, $(1, 1)$`, String.raw`$(2, 1)$, $(-4, -2)$`, String.raw`$(0, 0)$, $(1, 0)$`],
+      q: "다음 가운데 평면의 기저인 것은?",
+      choices: [
+        String.raw`$(1, 1)$, $(1, -1)$`,
+        String.raw`$(1, 0)$, $(0, 1)$, $(1, 1)$`,
+        String.raw`$(2, 1)$, $(-4, -2)$`,
+        String.raw`$(0, 0)$, $(1, 0)$`,
+      ],
       answer: 0,
       explain: String.raw`첫째는 평행하지 않으므로 기저다. 둘째는 평면을 스팬하지만 선형 종속이므로 기저가 아니다(한 점에 좌표가 여러 개 붙는다). 셋째는 $(-4, -2) = -2(2, 1)$로 평행하다. 넷째는 영벡터가 끼어 있어 종속이고 스팬도 직선뿐이다. 기저에는 **스팬**과 **독립** 두 조건이 다 필요하다.`,
     },
     {
       q: String.raw`기저를 $\mathbf{e}_2$, $\mathbf{e}_1$의 순서로 잡으면, $(-2, 5)$의 좌표는?`,
-      choices: [String.raw`$(5, -2)$`, String.raw`$(-2, 5)$`, String.raw`$(2, -5)$`, '순서가 바뀌면 기저가 아니다'],
+      choices: [
+        String.raw`$(5, -2)$`,
+        String.raw`$(-2, 5)$`,
+        String.raw`$(2, -5)$`,
+        "순서가 바뀌면 기저가 아니다",
+      ],
       answer: 0,
       explain: String.raw`$(-2, 5) = 5\,\mathbf{e}_2 + (-2)\,\mathbf{e}_1$이므로, 기저의 순서대로 계수를 적으면 $(5, -2)$다. $(-2, 5)$는 표준 기저 $\mathbf{e}_1$, $\mathbf{e}_2$의 순서로 읽은 것이다. 순서를 바꿔도 여전히 기저다. 좌표의 순서만 바뀐다.`,
     },
   ],
-  code: ['reachCoeffs'],
+  code: ["reachCoeffs"],
 };
 
 export default node;

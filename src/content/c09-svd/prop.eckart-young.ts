@@ -1,33 +1,55 @@
-import type { NodeDef } from '../schema';
+import type { NodeDef } from "../schema";
 
 const node: NodeDef = {
-  id: 'prop.eckart-young',
-  kind: 'prop',
-  title: '가장 좋은 랭크 k 근사 (에카르트–영)',
-  status: 'written',
+  id: "prop.eckart-young",
+  kind: "prop",
+  title: "가장 좋은 랭크 k 근사 (에카르트–영)",
+  status: "written",
   introduces: {
     terms: [
-      { id: 't.low-rank', ko: '저랭크 근사', en: 'low-rank approximation', gloss: '랭크가 k 이하인 행렬 가운데 원래 행렬과 가장 가까운 것을 찾는 일.' },
-      { id: 't.frobenius', ko: '프로베니우스 노름', en: 'Frobenius norm', gloss: '행렬의 모든 성분을 제곱해 더한 값의 제곱근. 행렬을 숫자 mn개짜리 긴 벡터로 보고 잰 길이.' },
+      {
+        id: "t.low-rank",
+        ko: "저랭크 근사",
+        en: "low-rank approximation",
+        gloss:
+          "랭크가 k 이하인 행렬 가운데 원래 행렬과 가장 가까운 것을 찾는 일.",
+      },
+      {
+        id: "t.frobenius",
+        ko: "프로베니우스 노름",
+        en: "Frobenius norm",
+        gloss:
+          "행렬의 모든 성분을 제곱해 더한 값의 제곱근. 행렬을 숫자 mn개짜리 긴 벡터로 보고 잰 길이.",
+      },
     ],
     symbols: [
-      { tex: 'k', meaning: '저랭크 근사에서 남기는 \'층\'의 수' },
-      { tex: 'A_k', meaning: '앞의 k개 \'층\'만 더한 랭크 k 근사' },
-      { tex: String.raw`\|A\|_F`, meaning: '행렬 A의 프로베니우스 노름' },
+      { tex: "k", meaning: "저랭크 근사에서 남기는 '층'의 수" },
+      { tex: "A_k", meaning: "앞의 k개 '층'만 더한 랭크 k 근사" },
+      { tex: String.raw`\|A\|_F`, meaning: "행렬 A의 프로베니우스 노름" },
     ],
   },
-  requires: ['prop.svd-sum'],
-  openWhys: [{ q: '일반적인 m×n 행렬과 아무 k에 대해서도 A_k가 가장 가깝다는 것의 완전한 증명은?', answeredBy: null }],
+  requires: ["prop.svd-sum"],
+  openWhys: [
+    {
+      q: "일반적인 m×n 행렬과 아무 k에 대해서도 A_k가 가장 가깝다는 것의 완전한 증명은?",
+      answeredBy: null,
+    },
+  ],
   predicts: [
     {
-      id: 'p-err',
-      kind: 'choice',
+      id: "p-err",
+      kind: "choice",
       q: String.raw`특이값이 3, 2, 1인 3×3 행렬에서 앞의 '층' 하나만 남기고 나머지 두 '층'을 버렸다. 원래 행렬과의 거리(프로베니우스 노름)는 얼마일까?`,
       hints: [
         String.raw`버린 것은 '층' 2와 '층' 3이다. 남은 차이 $A - (\text{'층' 1})$은 그 두 '층'의 합이다.`,
         String.raw`두 '층'은 서로 수직인 방향 $\mathbf{u}_2, \mathbf{u}_3$으로 내보낸다. 수직인 두 화살표를 합친 길이는 [피타고라스 정리](n:prop.pythagoras)로 잰다.`,
       ],
-      choices: [String.raw`$\sqrt{5} \approx 2.24$`, '3 (= 2 + 1)', '2 (버린 것 가운데 가장 큰 특이값)', '1'],
+      choices: [
+        String.raw`$\sqrt{5} \approx 2.24$`,
+        "3 (= 2 + 1)",
+        "2 (버린 것 가운데 가장 큰 특이값)",
+        "1",
+      ],
       answer: 0,
       why: [
         String.raw`버린 두 '층'은 서로 직교하는 방향에 놓여 있어서, 거리의 제곱이 $2^2 + 1^2 = 5$로 더해진다. 피타고라스 정리와 같은 모양이다. 아래 [](ref:error)의 증명이 이것이다.`,
@@ -80,18 +102,23 @@ $$\|A - B\|_F^2 = \|(A - B)\mathbf{w}\|^2 + \|(A - B)\mathbf{w}'\|^2 \ \ge\ \|(A
   checks: [
     {
       q: String.raw`특이값이 $10, 3, 1, 0.5$인 4×4 행렬을 랭크 2로 가장 잘 근사했을 때 오차 $\|A - A_2\|_F$는?`,
-      choices: [String.raw`$\sqrt{1.25} \approx 1.118$`, '1.5', '1', String.raw`$\sqrt{9 + 1} \approx 3.16$`],
+      choices: [
+        String.raw`$\sqrt{1.25} \approx 1.118$`,
+        "1.5",
+        "1",
+        String.raw`$\sqrt{9 + 1} \approx 3.16$`,
+      ],
       answer: 0,
       explain: String.raw`버린 특이값은 1과 0.5이므로 오차의 제곱은 $1^2 + 0.5^2 = 1.25$다. 특이값을 그대로 더한 1.5는 제곱을 빠뜨린 것이다. 1은 가장 큰 버린 특이값 $\sigma_3$뿐인데, 이 값은 다른 노름(스펙트럼 노름)에서의 오차다. 마지막 선택지는 남긴 '층'을 버린 '층'으로 착각한 것이다.`,
     },
     {
       q: '전체 크기 ‖A‖_F² = 110.25 (= 10² + 3² + 1² + 0.5²)일 때, 랭크 1 근사가 담는 "에너지"의 비율은?',
-      choices: ['100/110.25 ≈ 90.7%', '10/14.5 ≈ 69%', '25%', '알 수 없다'],
+      choices: ["100/110.25 ≈ 90.7%", "10/14.5 ≈ 69%", "25%", "알 수 없다"],
       answer: 0,
       explain: String.raw`$\|A_1\|_F^2 = \sigma_1^2 = 100$이다. '층'들은 서로 직교하므로(보조 사실을 생각하라) 에너지가 제곱의 합으로 나뉜다. 그래서 특이값을 제곱해서 비교해야 한다. 특이값이 빠르게 줄어드는 행렬일수록 앞의 '층' 몇 개에 거의 모든 것이 담긴다. 다음 노드의 그림이 그런 예다.`,
     },
   ],
-  code: ['lowRankInto', 'frobenius'],
+  code: ["lowRankInto", "frobenius"],
 };
 
 export default node;
