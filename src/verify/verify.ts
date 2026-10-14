@@ -103,6 +103,7 @@ export const RULES: Record<string, { level: Level; text: string }> = {
   P027: { level: 'error', text: '검토 기록(reviews.json)에 없는 노드 id' },
   P030: { level: 'error', text: '이름표(label)·참조(ref) 오류(없는 이름표, 두 번 선언, 뒤쪽 노드, 글과 이름이 다름, 번호를 손으로 적음, 번호 이름표를 공리·명제 노드 밖에 둠)' },
   P032: { level: 'error', text: '명제와 그 증명의 짝이 맞지 않음(증명이 있는 명제 노드에 명제 이름표가 없음, 명제가 여럿인데 ::proves가 빠짐, 없는 명제를 가리키는 ::proves)' },
+  P034: { level: 'error', text: '결론 기호 ∴가 앞 문장에 이어 붙어 있음(줄을 바꿔 ∴로 시작한다. 원고에서 그 줄을 새 줄로 시작하면 화면에서도 새 줄이 된다)' },
   P033: { level: 'error', text: '의의 칩과 내용의 짝이 맞지 않음([..](sig:키)의 키가 significance에 없음, 또는 significance의 키를 아무 칩도 쓰지 않음)' },
   P031: { level: 'error', text: '참조 표시 없이 "공리 n", "명제 n", "증명 n", "규칙 n", "n번", "0의 공리", "1 ⇔ 2"처럼 적음([](ref:…)로 적거나, 항목 앞에 이름을 드러내 적을 것)' },
   P029: { level: 'error', text: '뒤에서 답한다는 질문(openWhys)과 답하는 자리의 표지(::answers)가 짝이 맞지 않음' },
@@ -260,6 +261,15 @@ export function verify(books: Book[], sceneIds: Set<string>, codeIndex: Map<stri
     }
     fixJosaAfterNames(allBlocks, pn);
     for (const m of unmarkedNumbers(allBlocks, pn)) push('P031', n.id, `"${m}"`);
+    // 결론은 줄을 바꿔 ∴로 시작한다. 문장 끝(마침표, 닫는 괄호) 바로 뒤에 같은 줄로 이어 쓴 "∴ "를 잡는다.
+    // "결론 문장 맨 앞의 ∴는"처럼 기호 자체를 말하는 자리는 문장 끝 뒤가 아니므로 잡히지 않는다.
+    for (const b of walkBlocks(allBlocks)) {
+      const runs = b.t === 'p' ? [b.c] : b.t === 'ul' ? b.items : [];
+      for (const c of runs) {
+        const m = /[.)][ \t]*∴\s.{0,24}/.exec(plainText(c));
+        if (m) push('P034', n.id, `"${m[0]}…": 줄을 바꿔 ∴로 시작한다`);
+      }
+    }
     // 의의 칩과 그 내용
     const sigUsed = new Set(inlines.flatMap((x) => (x.t === 'sig' ? [x.key] : [])));
     for (const k of sigUsed) if (!pn.sig.has(k)) push('P033', n.id, `sig:${k}: significance에 없는 키`);

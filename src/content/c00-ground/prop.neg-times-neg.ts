@@ -82,7 +82,8 @@ a + (-1)a = 1a + (-1)a ∵ [1의 공리](ref:ax.arith#one-mul) $1 \times a = a$�
 = 0 \times a ∵ $1 + (-1) = 0$을 대입([](ref:ax.arith#neg): $-1$은 1에 더해 0이 되는 수다)
 = 0 ∵ [0을 곱하면 0](why:prop.arith-first#zero-times)
 
-위의 등식 줄에 따라 $a + (-1)a = 0$이다. 한편 [](ref:ax.arith#neg)에 따라 $a + (-a) = 0$이다. ∴ $a$에 더해 0을 만드는 수는 하나뿐이므로([](ref:prop.arith-first#inverse-unique)) $(-1)a = -a$다.
+위의 등식 줄에 따라 $a + (-1)a = 0$이다. 한편 [](ref:ax.arith#neg)에 따라 $a + (-a) = 0$이다.
+∴ $a$에 더해 0을 만드는 수는 하나뿐이므로([](ref:prop.arith-first#inverse-unique)) $(-1)a = -a$다.
 
 뒤의 식 $a(-b) = -(ab)$는 앞의 식을 두 번 쓰고 괄호를 옮겨 얻는다.
 
@@ -172,7 +173,8 @@ $s \ge 0$, $t \ge 0$이고 $s \times s = t \times t$라 하자. 보일 것은 $s
 = ss + (-(tt)) ∵ 덧셈의 교환법칙과 [0의 공리](ref:ax.arith#zero-add)
 = ss - tt ∵ 빼기의 뜻
 
-가정 $ss = tt$를 대입하면 $ss - tt = tt - tt = 0$이다([](ref:ax.arith#neg)). ∴ $(s + t)(s - t) = 0$이다.
+가정 $ss = tt$를 대입하면 $ss - tt = tt - tt = 0$이다([](ref:ax.arith#neg)).
+∴ $(s + t)(s - t) = 0$이다.
 
 2단계. [곱이 0이면 한쪽은 0](why:prop.arith-first#zero-product)이므로, $s + t \neq 0$이면 $s - t = 0$이다. 두 경우를 본다.
 
@@ -189,7 +191,8 @@ $s \ge 0$, $t \ge 0$이고 $s \times s = t \times t$라 하자. 보일 것은 $s
 
 **방법.** 1이 0이 아니라는 것은 공리에 있다. 그러면 1은 양수이거나 음수다. $-1$이 양수라고 하면 모순이 생긴다는 것을 보인다.
 
-[](ref:ax.arith#zero-one)에 따라 $1 \neq 0$이므로, [](ref:ax.arith#positive)에 따라 1이 양수이거나 $-1$이 양수다. $-1$이 양수라고 해 보자. 그러면 [](ref:ax.arith#pos-closed)에 따라 양수끼리의 곱 $(-1)(-1)$도 양수인데, [](ref:minus-one-sq)에 따라 $(-1)(-1) = 1$이다. 그러면 1과 $-1$이 모두 양수가 되어, "셋 가운데 꼭 하나"라는 [](ref:ax.arith#positive)에 어긋난다. ∴ 1은 양수다.
+[](ref:ax.arith#zero-one)에 따라 $1 \neq 0$이므로, [](ref:ax.arith#positive)에 따라 1이 양수이거나 $-1$이 양수다. $-1$이 양수라고 해 보자. 그러면 [](ref:ax.arith#pos-closed)에 따라 양수끼리의 곱 $(-1)(-1)$도 양수인데, [](ref:minus-one-sq)에 따라 $(-1)(-1) = 1$이다. 그러면 1과 $-1$이 모두 양수가 되어, "셋 가운데 꼭 하나"라는 [](ref:ax.arith#positive)에 어긋난다.
+∴ 1은 양수다.
 
 그러므로 [](ref:ax.arith#pos-closed)에 따라 $2 = 1 + 1$도 양수이고, [](ref:ax.arith#positive)에 따라 양수는 0이 아니다. 또 $-(-1) = 1$이 양수이므로 음수의 뜻에 따라 $-1$은 음수이고, 마찬가지로 0이 아니다. 같은 방법으로 $3 = 2 + 1$, $4 = 3 + 1$, …도 모두 양수다.`,
 };

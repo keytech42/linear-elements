@@ -56,7 +56,8 @@ T(x, y) = xT(\mathbf{e}_1) + yT(\mathbf{e}_2) ∵ [기저의 상이 전부를 �
 
 ∴ (나)가 성립한다.
 
-**(나) ⇒ (가).** (나)가 성립한다고 하자. $A = \begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix}$이라 두면, [행렬-벡터 곱을 성분으로 풀어 쓴 것](why:def.matvec)에 따라 $A(x, y) = (a_{11}x + a_{12}y,\ a_{21}x + a_{22}y) = T(x, y)$다. 곧 $T$는 $\mathbf{x} \mapsto A\mathbf{x}$와 같은 변환이다. 그리고 [아무 행렬이나 이렇게 만든 변환은 언제나 선형](why:def.matvec)이다. ∴ $T$는 선형이다.`,
+**(나) ⇒ (가).** (나)가 성립한다고 하자. $A = \begin{bmatrix} a_{11} & a_{12} \\ a_{21} & a_{22} \end{bmatrix}$이라 두면, [행렬-벡터 곱을 성분으로 풀어 쓴 것](why:def.matvec)에 따라 $A(x, y) = (a_{11}x + a_{12}y,\ a_{21}x + a_{22}y) = T(x, y)$다. 곧 $T$는 $\mathbf{x} \mapsto A\mathbf{x}$와 같은 변환이다. 그리고 [아무 행렬이나 이렇게 만든 변환은 언제나 선형](why:def.matvec)이다.
+∴ $T$는 선형이다.`,
   checks: [
     {
       q: String.raw`다음 가운데 선형 변환은?`,

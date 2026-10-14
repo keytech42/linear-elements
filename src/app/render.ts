@@ -239,6 +239,8 @@ function renderInline(x: Inline): Node {
       a.append(badge, ' ', renderInlines(x.c));
       return a;
     }
+    case 'br':
+      return document.createElement('br');
     case 'word': {
       const w = document.createElement('span');
       w.className = 'word';

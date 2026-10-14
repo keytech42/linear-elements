@@ -43,6 +43,8 @@ export type Inline =
   | { t: 'sig'; key: string; c: Inline[] }
   /** 낱말 자체를 가리키는 자리. 용어로 읽지 않는다 */
   | { t: 'word'; v: string }
+  /** 문단 안의 줄바꿈. 결론(∴)으로 시작하는 줄 앞에만 생긴다 */
+  | { t: 'br' }
   | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
   | { t: 'why'; to: string; key?: string; q: string }
   | { t: 'link'; to: string; key?: string; c: Inline[] }
@@ -154,8 +156,8 @@ export function parseBlocks(src: string): Block[] {
         // 다음 줄이 들여쓰기로 이어지면 같은 항목이다.
         let text = lines[i].trim().replace(bullet, '');
         i++;
-        while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !bullet.test(lines[i].trim())) text += ' ' + lines[i++].trim();
-        items.push(parseInline(text));
+        while (i < lines.length && /^\s{2,}\S/.test(lines[i]) && !bullet.test(lines[i].trim())) text += '\n' + lines[i++].trim();
+        items.push(joinLines(text.split('\n')));
       }
       out.push({ t: 'ul', items, ordered, ...(start !== 1 ? { start } : {}) });
       continue;
@@ -179,8 +181,25 @@ export function parseBlocks(src: string): Block[] {
     }
     const buf: string[] = [];
     while (i < lines.length && !isBlank(lines[i]) && !/^\s*(\$\$|::|### |- |\d+\. |>)/.test(lines[i])) buf.push(lines[i++].trim());
-    out.push({ t: 'p', c: parseInline(buf.join(' ')) });
+    out.push({ t: 'p', c: joinLines(buf) });
   }
+  return out;
+}
+
+/** 문단(또는 목록 항목)의 줄을 잇는다. 줄은 보통 공백으로 이어지지만, 결론 기호 ∴로 시작하는 줄은 새 줄에서 시작한다(STYLE 4-2). */
+function joinLines(lines: string[]): Inline[] {
+  const out: Inline[] = [];
+  let cur: string[] = [];
+  const flush = () => cur.length && out.push(...parseInline(cur.join(' ')));
+  for (const l of lines) {
+    if (l.startsWith('∴') && cur.length) {
+      flush();
+      cur = [];
+      out.push({ t: 'br' });
+    }
+    cur.push(l);
+  }
+  flush();
   return out;
 }
 
@@ -354,6 +373,7 @@ export function plainText(list: Inline[]): string {
       if (x.t === 'math') return x.tex;
       if (x.t === 'why') return x.q;
       if (x.t === 'word') return `“${x.v}”`;
+      if (x.t === 'br') return '\n';
       return 'c' in x ? plainText(x.c) : '';
     })
     .join('');

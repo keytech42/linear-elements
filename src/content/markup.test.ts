@@ -205,6 +205,17 @@ describe('검증기 규칙', () => {
     expect(rules(mk([{ ...n, significance: {} }]))).toContain('P033'); // 내용 없는 칩
     expect(rules(mk([{ ...n, body: '뜻이다.' }]))).toContain('P033'); // 칩 없는 내용
   });
+  it('결론 ∴: 새 줄로 시작하면 문단 안에서 줄을 바꾸고, 앞 문장에 이어 쓰면 P034', () => {
+    expect(parseBlocks('가는 나다.\n∴ 다는 라다.')).toEqual([{ t: 'p', c: [{ t: 'text', v: '가는 나다.' }, { t: 'br' }, { t: 'text', v: '∴ 다는 라다.' }] }]);
+    // 보통 줄은 그대로 공백으로 잇는다
+    expect(parseBlocks('가는\n나다.')).toEqual([{ t: 'p', c: [{ t: 'text', v: '가는 나다.' }] }]);
+    const p034 = (body: string) => rules(mk([{ id: 'e.c', kind: 'exp', title: '', status: 'written', body }])).filter((x) => x === 'P034').length;
+    expect(p034('가는 나다. ∴ 다는 라다.')).toBe(1);
+    expect(p034('가는 나다([](ref:e.c#x)). ∴ 다는 라다.'.replace('[](ref:e.c#x)', '근거'))).toBe(1);
+    expect(p034('가는 나다.\n∴ 다는 라다.')).toBe(0);
+    // 기호 자체를 말하는 자리는 잡지 않는다
+    expect(p034('결론 문장 맨 앞의 ∴는 "그러므로"라고 읽는다.')).toBe(0);
+  });
   it('증명 표지와 키가 달린 왜? 칩', () => {
     expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });
     expect(parseInline('[왜?](why:p.y#m1)')[0]).toMatchObject({ t: 'why', to: 'p.y', key: 'm1' });
