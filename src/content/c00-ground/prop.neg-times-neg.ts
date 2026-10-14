@@ -77,18 +77,18 @@ const node: NodeDef = {
 **방법.** $(-1)a$가 $a$의 덧셈 역원이라는 것을 보이면 된다. 어떤 수가 $a$의 덧셈 역원인지 알아보는 방법은 하나뿐이다. $a$에 더해 0이 되는지 본다. 그리고 그런 수는 [하나뿐](why:prop.arith-first#inverse-unique)이다.
 
 ::chain
-a + (-1)a = 1a + (-1)a ∵ [1의 공리](ref:ax.arith#one-mul) $1 \times a = a$를 대입
-= \big(1 + (-1)\big)a ∵ [오른쪽 분배법칙](why:prop.arith-first#right-dist)
-= 0 \times a ∵ [](ref:ax.arith#neg)
+a + (-1)a = 1a + (-1)a ∵ [1의 공리](ref:ax.arith#one-mul) $1 \times a = a$를 거꾸로 대입(대칭률)
+= \big(1 + (-1)\big)a ∵ [오른쪽 분배법칙](why:prop.arith-first#right-dist)을 거꾸로 씀(대칭률)
+= 0 \times a ∵ $1 + (-1) = 0$을 대입([](ref:ax.arith#neg): $-1$은 1에 더해 0이 되는 수다)
 = 0 ∵ [0을 곱하면 0](why:prop.arith-first#zero-times)
 
-∴ $(-1)a$는 $a$에 더해 0을 만드는 수이고, 그런 수는 하나뿐이므로 $(-1)a = -a$다.
+위의 등식 줄에 따라 $a + (-1)a = 0$이다. 한편 [](ref:ax.arith#neg)에 따라 $a + (-a) = 0$이다. ∴ $a$에 더해 0을 만드는 수는 하나뿐이므로([](ref:prop.arith-first#inverse-unique)) $(-1)a = -a$다.
 
 뒤의 식 $a(-b) = -(ab)$는 앞의 식을 두 번 쓰고 괄호를 옮겨 얻는다.
 
 ::chain
-a(-b) = a\big((-1)b\big) ∵ 앞의 식 $-b = (-1)b$를 대입
-= \big(a(-1)\big)b ∵ 곱셈의 결합법칙
+a(-b) = a\big((-1)b\big) ∵ 앞의 식 $(-1)b = -b$를 거꾸로 대입(대칭률)
+= \big(a(-1)\big)b ∵ 곱셈의 결합법칙을 거꾸로 씀(대칭률)
 = \big((-1)a\big)b ∵ 곱셈의 교환법칙 $a(-1) = (-1)a$를 대입
 = (-1)(ab) ∵ 곱셈의 결합법칙
 = -(ab) ∵ 앞의 식
@@ -114,12 +114,12 @@ a(-b) = a\big((-1)b\big) ∵ 앞의 식 $-b = (-1)b$를 대입
 **방법.** [](ref:neg-one)로 $-a$와 $-b$를 $(-1)a$와 $(-1)b$로 바꿔 적는다. 그다음 곱셈의 결합법칙과 교환법칙으로 $-1$ 둘을 한데 모으고, [](ref:minus-one-sq)로 1로 바꾼다.
 
 ::chain
-(-a)(-b) = \big((-1)a\big)\big((-1)b\big) ∵ [](ref:neg-one)을 두 번 대입
+(-a)(-b) = \big((-1)a\big)\big((-1)b\big) ∵ [](ref:neg-one)을 거꾸로, 두 번 대입(대칭률)
 = (-1)\Big(a\big((-1)b\big)\Big) ∵ 곱셈의 결합법칙
-= (-1)\Big(\big(a(-1)\big)b\Big) ∵ 곱셈의 결합법칙
+= (-1)\Big(\big(a(-1)\big)b\Big) ∵ 곱셈의 결합법칙을 거꾸로 씀(대칭률)
 = (-1)\Big(\big((-1)a\big)b\Big) ∵ 곱셈의 교환법칙 $a(-1) = (-1)a$를 대입
 = (-1)\big((-1)(ab)\big) ∵ 곱셈의 결합법칙
-= \big((-1)(-1)\big)(ab) ∵ 곱셈의 결합법칙
+= \big((-1)(-1)\big)(ab) ∵ 곱셈의 결합법칙을 거꾸로 씀(대칭률)
 = 1 \times (ab) ∵ [](ref:minus-one-sq)
 = ab ∵ [1의 공리](ref:ax.arith#one-mul)
 
@@ -128,7 +128,7 @@ a(-b) = a\big((-1)b\big) ∵ 앞의 식 $-b = (-1)b$를 대입
 이제 $a$와 $b$가 음수라 하자. 음수의 뜻에 따라 $-a$와 $-b$는 양수다. 보일 것은 $ab$가 양수라는 것이다.
 
 ::chain
-ab = \big(-(-a)\big)\big(-(-b)\big) ∵ [덧셈 역원의 덧셈 역원은 자기 자신](why:prop.arith-first#double-neg)을 대입
+ab = \big(-(-a)\big)\big(-(-b)\big) ∵ [덧셈 역원의 덧셈 역원은 자기 자신](why:prop.arith-first#double-neg)을 거꾸로 대입(대칭률)
 = (-a)(-b) ∵ 바로 위의 식에 $a$ 대신 $-a$, $b$ 대신 $-b$를 넣음
 
 ∴ $ab$는 양수 $-a$와 양수 $-b$의 곱이므로, [](ref:ax.arith#pos-closed)에 따라 양수다.
@@ -151,7 +151,7 @@ ab = \big(-(-a)\big)\big(-(-b)\big) ∵ [덧셈 역원의 덧셈 역원은 자�
 
 **제곱근은 하나뿐이다.**
 
-[](ref:ax.arith#sqrt)는 0 이상인 수 $a$에 대해 "제곱하면 $a$가 되는 0 이상의 수"가 있다고 말하고, 그 수를 $\sqrt{a}$라 부른다. 그런데 하나를 가리키는 이름을 붙이려면 그런 수가 하나뿐이어야 한다. 앞 노드에서 $-a$라는 이름을 붙이기 전에 [덧셈 역원이 하나뿐](why:prop.arith-first#inverse-unique)임을 먼저 보인 것과 같은 까닭이다.
+[](ref:ax.arith#sqrt)는 0 이상인 수 $a$에 대해 "제곱하면 $a$가 되는 0 이상의 수"가 있다고 말하고, 그 수를 $\sqrt{a}$라 부른다. 그런데 하나를 가리키는 이름을 붙이려면 그런 수가 하나뿐이어야 한다. 앞 노드에서 [덧셈 역원이 하나뿐](why:prop.arith-first#inverse-unique)임을 보여, [](ref:ax.arith#neg)가 붙인 이름 $-a$가 수 하나를 가리키게 한 것과 같은 까닭이다.
 
 $s \ge 0$, $t \ge 0$이고 $s \times s = t \times t$라 하자. 보일 것은 $s = t$다.
 
@@ -164,10 +164,10 @@ $s \ge 0$, $t \ge 0$이고 $s \times s = t \times t$라 하자. 보일 것은 $s
 = (s + t)s + (s + t)(-t) ∵ 분배법칙([](ref:ax.arith#distrib))
 = (s + t)s + \big(-((s + t)t)\big) ∵ [](ref:neg-one)의 $a(-b) = -(ab)$
 = (ss + ts) + \big(-(st + tt)\big) ∵ [오른쪽 분배법칙](why:prop.arith-first#right-dist), 두 번
-= (ss + ts) + (-1)(st + tt) ∵ [](ref:neg-one)의 $(-1)a = -a$를 거꾸로 대입
+= (ss + ts) + (-1)(st + tt) ∵ [](ref:neg-one)의 $(-1)a = -a$를 거꾸로 대입(대칭률)
 = (ss + ts) + \big((-1)(st) + (-1)(tt)\big) ∵ 분배법칙([](ref:ax.arith#distrib))
 = (ss + ts) + \big(-(st) + (-(tt))\big) ∵ [](ref:neg-one)
-= ss + \Big(\big(ts + (-(st))\big) + (-(tt))\Big) ∵ 덧셈의 결합법칙, 두 번
+= ss + \Big(\big(ts + (-(st))\big) + (-(tt))\Big) ∵ 덧셈의 결합법칙, 두 번(둘째는 거꾸로 씀, 대칭률)
 = ss + \big(0 + (-(tt))\big) ∵ $ts = st$(곱셈의 교환법칙)이므로 [](ref:ax.arith#neg)에 따라 $ts + (-(st)) = 0$
 = ss + (-(tt)) ∵ 덧셈의 교환법칙과 [0의 공리](ref:ax.arith#zero-add)
 = ss - tt ∵ 빼기의 뜻

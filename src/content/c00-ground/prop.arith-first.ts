@@ -70,7 +70,7 @@ const node: NodeDef = {
 공리 가운데 0이 들어가는 등식은 $a + 0 = a$([0의 공리](ref:ax.arith#zero-add))와 $a + (-a) = 0$([](ref:ax.arith#neg))인데, 둘 다 덧셈에 관한 것이다. 그런데 $0 \times a$는 곱셈이다. 곱셈과 덧셈을 하나의 등식으로 잇는 공리는 분배법칙 하나뿐이므로, $0 \times a$에 대해 무엇이든 알아내려면 분배법칙을 거쳐야 한다. 분배법칙을 쓰려면 덧셈이 있어야 하므로, 0을 $0 + 0$으로 바꿔 적는다.
 
 ::chain
-0 \times a = (0 + 0) \times a ∵ [0의 공리](ref:ax.arith#zero-add) $0 + 0 = 0$을 대입
+0 \times a = (0 + 0) \times a ∵ [0의 공리](ref:ax.arith#zero-add) $0 + 0 = 0$을 거꾸로 대입(대칭률)
 = 0 \times a + 0 \times a ∵ 오른쪽 분배법칙([](ref:right-dist))
 
 곧 $0 \times a$는 "자기 자신을 더해도 그대로인 수"다. 이 등식의 양쪽에 $0 \times a$의 덧셈 역원을 더하면([대입](t:t.substitution)에 따라 양쪽은 여전히 같다), 왼쪽은 0이 되고 오른쪽에는 $0 \times a$ 하나가 남는다. ∴ $0 \times a = 0$이다. 단계마다의 근거는 아래 [](ref:zero-times)의 증명에 있다. 공리 목록에 0을 곱하는 규칙은 없지만, 분배법칙이 0을 곱하는 일까지 묶어 두고 있었다.
@@ -120,7 +120,7 @@ const node: NodeDef = {
 1단계.
 
 ::chain
-0a = (0 + 0)a ∵ [0의 공리](ref:ax.arith#zero-add) $0 + 0 = 0$을 대입
+0a = (0 + 0)a ∵ [0의 공리](ref:ax.arith#zero-add) $0 + 0 = 0$을 거꾸로 대입(대칭률)
 = 0a + 0a ∵ 오른쪽 분배법칙([](ref:right-dist))
 
 2단계. 1단계에서 얻은 등식 $0a = 0a + 0a$의 양쪽에 $-(0a)$를 더한다. 대입에 따라 양쪽은 여전히 같다.
@@ -153,7 +153,7 @@ $$\tfrac{1}{a}(ab) = \tfrac{1}{a} \times 0$$
 2단계. 왼쪽은 괄호를 옮겨 $\tfrac{1}{a}$와 $a$를 짝지으면 $b$가 된다. 오른쪽은 [](ref:zero-times)로 0이다.
 
 ::chain
-\tfrac{1}{a}(ab) = \Big(\tfrac{1}{a} \times a\Big)b ∵ 곱셈의 결합법칙(짝지으려고 괄호를 옮긴다)
+\tfrac{1}{a}(ab) = \Big(\tfrac{1}{a} \times a\Big)b ∵ 곱셈의 결합법칙을 거꾸로 씀(대칭률). 짝지으려고 괄호를 옮긴다
 = 1 \times b ∵ $\tfrac{1}{a} \times a = a \times \tfrac{1}{a} = 1$(곱셈의 교환법칙, [](ref:ax.arith#recip))
 = b ∵ [1의 공리](ref:ax.arith#one-mul)
 
@@ -174,10 +174,10 @@ $$\tfrac{1}{a}(ab) = \tfrac{1}{a} \times 0$$
 = (a + b)a + (a + b)b ∵ 분배법칙([](ref:ax.arith#distrib)), 왼쪽의 $a + b$를 한 덩어리로 본다
 = (aa + ba) + (ab + bb) ∵ 오른쪽 분배법칙([](ref:right-dist)), 두 번
 = aa + \big(ba + (ab + bb)\big) ∵ 덧셈의 결합법칙
-= aa + \big((ba + ab) + bb\big) ∵ 덧셈의 결합법칙
+= aa + \big((ba + ab) + bb\big) ∵ 덧셈의 결합법칙을 거꾸로 씀(대칭률)
 = aa + \big((ab + ab) + bb\big) ∵ 곱셈의 교환법칙 $ba = ab$를 대입
-= aa + \big((1 \times ab + 1 \times ab) + bb\big) ∵ [1의 공리](ref:ax.arith#one-mul)
-= aa + \big((1 + 1)ab + bb\big) ∵ 오른쪽 분배법칙([](ref:right-dist))
+= aa + \big((1 \times ab + 1 \times ab) + bb\big) ∵ [1의 공리](ref:ax.arith#one-mul) $1 \times ab = ab$를 거꾸로 씀(대칭률)
+= aa + \big((1 + 1)ab + bb\big) ∵ 오른쪽 분배법칙([](ref:right-dist))을 거꾸로 씀(대칭률)
 = a^2 + \big(2ab + b^2\big) ∵ $1 + 1 = 2$, 그리고 제곱의 뜻
 
 ∴ $(a + b)^2 = a^2 + (2ab + b^2)$이다. 덧셈의 결합법칙에 따라 세 수를 어떻게 묶어 더해도 값이 같으므로, 괄호를 빼고 $a^2 + 2ab + b^2$로 적는다(규약).
@@ -193,9 +193,9 @@ $a + b = 0$이고 $a + c = 0$이라 하자. 보일 것은 $b = c$다.
 **방법.** $b$에 0을 더해도 $b$다. 그 0을 $a + c$로 바꿔 넣고 괄호를 옮기면 $a + b$가 생기고, 그것이 0이 되어 $c$만 남는다.
 
 ::chain
-b = b + 0 ∵ [0의 공리](ref:ax.arith#zero-add)
-= b + (a + c) ∵ 가정 $a + c = 0$을 대입
-= (b + a) + c ∵ 덧셈의 결합법칙
+b = b + 0 ∵ [0의 공리](ref:ax.arith#zero-add) $b + 0 = b$를 거꾸로 씀(대칭률)
+= b + (a + c) ∵ 가정 $a + c = 0$을 거꾸로 대입(대칭률)
+= (b + a) + c ∵ 덧셈의 결합법칙을 거꾸로 씀(대칭률)
 = (a + b) + c ∵ 덧셈의 교환법칙
 = 0 + c ∵ 가정 $a + b = 0$을 대입
 = c + 0 ∵ 덧셈의 교환법칙
@@ -206,9 +206,9 @@ b = b + 0 ∵ [0의 공리](ref:ax.arith#zero-add)
 역수도 같은 방법이다. $ab = 1$이고 $ac = 1$이라 하자. 위 계산에서 덧셈을 곱셈으로, 0을 1로 바꾼다.
 
 ::chain
-b = b \times 1 ∵ 곱셈의 교환법칙과 [1의 공리](ref:ax.arith#one-mul)($b \times 1 = 1 \times b = b$)
-= b(ac) ∵ 가정 $ac = 1$을 대입
-= (ba)c ∵ 곱셈의 결합법칙
+b = b \times 1 ∵ 곱셈의 교환법칙과 [1의 공리](ref:ax.arith#one-mul)($b \times 1 = 1 \times b = b$)를 거꾸로 씀(대칭률)
+= b(ac) ∵ 가정 $ac = 1$을 거꾸로 대입(대칭률)
+= (ba)c ∵ 곱셈의 결합법칙을 거꾸로 씀(대칭률)
 = (ab)c ∵ 곱셈의 교환법칙
 = 1 \times c ∵ 가정 $ab = 1$을 대입
 = c ∵ [1의 공리](ref:ax.arith#one-mul)
