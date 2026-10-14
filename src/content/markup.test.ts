@@ -198,6 +198,13 @@ describe('검증기 규칙', () => {
     expect(p030(withAx('[](ahead:p.z#none)')).join()).toContain('없는 이름표');
     expect(p030(withAx('[](ref:p.z#u)')).join()).toContain('ahead:');
   });
+  it('의의 칩: 파싱과 P033', () => {
+    expect(parseInline('[왜 알아야 하나](sig:why)')[0]).toMatchObject({ t: 'sig', key: 'why' });
+    const n = { id: 'd.s', kind: 'def' as const, title: '', status: 'written' as const, body: '뜻이다. [왜 알아야 하나](sig:why)', significance: { why: '쓰임이 많다.' } };
+    expect(rules(mk([n]))).not.toContain('P033');
+    expect(rules(mk([{ ...n, significance: {} }]))).toContain('P033'); // 내용 없는 칩
+    expect(rules(mk([{ ...n, body: '뜻이다.' }]))).toContain('P033'); // 칩 없는 내용
+  });
   it('증명 표지와 키가 달린 왜? 칩', () => {
     expect(parseBlocks('::proves two\n\n증명')[0]).toEqual({ t: 'proves', key: 'two' });
     expect(parseInline('[왜?](why:p.y#m1)')[0]).toMatchObject({ t: 'why', to: 'p.y', key: 'm1' });

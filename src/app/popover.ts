@@ -3,7 +3,8 @@
 // 페이지를 떠나지 않고 답을 엿볼 수 있게 하는 것이 목적이다(읽던 흐름을 끊지 않기).
 import { V, NODE_BY_ID, BOOK_OF } from './data';
 import { KIND_LABEL } from '../content/schema';
-import { renderInlines, firstParagraph } from './render';
+import { renderInlines, renderBlocks, firstParagraph } from './render';
+import { SyncBus } from '../sync/bus';
 import { progress } from './state';
 
 let pop: HTMLDivElement | null = null;
@@ -18,7 +19,7 @@ export function installPopovers(root: HTMLElement) {
   pop.addEventListener('pointerleave', hide);
 
   root.addEventListener('pointerover', (e) => {
-    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-term], a.why, a.nlink, a.ref, .chip-node');
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node');
     if (!el || el === current) return;
     clearTimeout(timer);
     timer = window.setTimeout(() => show(el), 220);
@@ -26,7 +27,7 @@ export function installPopovers(root: HTMLElement) {
   root.addEventListener('pointerout', (e) => {
     const to = e.relatedTarget as Node | null;
     if (to && pop!.contains(to)) return;
-    const el = (e.target as HTMLElement).closest('[data-term], a.why, a.nlink, a.ref, .chip-node');
+    const el = (e.target as HTMLElement).closest('[data-term], a.why, a.nlink, a.ref, a.sig, .chip-node');
     if (el) {
       clearTimeout(timer);
       timer = window.setTimeout(hide, 180);
@@ -53,6 +54,20 @@ function show(el: HTMLElement) {
     const node = NODE_BY_ID.get(home.node)!;
     pop.innerHTML = `<div class="pop-kicker">용어 · ${d.en ?? ''}</div><div class="pop-title">${d.ko}</div><p>${escape(d.gloss)}</p>
       <div class="pop-foot">정의한 곳: ${BOOK_OF.get(node.id)!.num}장 · ${KIND_LABEL[node.kind]} — ${escape(node.title)}${progress.isDone(node.id) ? ' ✓' : ' <span class="warn-dot">아직 읽지 않음</span>'}</div>`;
+  } else if (el.dataset.sig) {
+    // 의의 칩: 지금 읽는 노드의 significance[키]
+    const node = location.hash.match(/^#\/n\/([^?]+)/)?.[1] ?? '';
+    const blocks = V.parsed.get(node)?.sig.get(el.dataset.sig);
+    if (!blocks) return;
+    const kick = document.createElement('div');
+    kick.className = 'pop-kicker';
+    kick.textContent = '의의 · 왜 알아야 하나';
+    const body = document.createElement('div');
+    body.appendChild(renderBlocks(blocks, { bus: new SyncBus(), cleanups: [], noScenes: true, node }));
+    const foot = document.createElement('div');
+    foot.className = 'pop-foot';
+    foot.textContent = '누르면 이 문단 아래에 펼쳐 둡니다. 한 번 더 누르면 접습니다.';
+    pop.append(kick, body, foot);
   } else if (el.dataset.ref) {
     const l = V.labels.get(el.dataset.ref);
     if (!l) return;

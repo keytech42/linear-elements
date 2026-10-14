@@ -227,6 +227,18 @@ function renderInline(x: Inline): Node {
       c.textContent = x.v;
       return c;
     }
+    case 'sig': {
+      // 의의 칩: 마우스를 올리면 미리보기(popover.ts), 누르면 그 문단 아래에 펼친다(reader.ts). 같은 노드의 significance[key]를 보인다.
+      const a = document.createElement('a');
+      a.className = 'sig';
+      a.href = '#';
+      a.dataset.sig = x.key;
+      const badge = document.createElement('span');
+      badge.className = 'sig-badge';
+      badge.textContent = '의의';
+      a.append(badge, ' ', renderInlines(x.c));
+      return a;
+    }
     case 'word': {
       const w = document.createElement('span');
       w.className = 'word';

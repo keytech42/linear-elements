@@ -345,6 +345,30 @@ export function renderNode(main: HTMLElement, id: string, view?: string | null):
       const key = a.dataset.ref?.split('#')[1];
       depart({ node: id, scroll: here(), q: a.dataset.q ?? '' }, { to: a.dataset.to ?? '', via: 'why', targets: key ? [`lbl-${key}`] : [] });
     }
+    // 의의 칩: 그 칩이 있는 문단(목록 줄, 등식 줄) 바로 아래에 펼치고, 다시 누르면 접는다. 휴대폰처럼 마우스를 올릴 수 없는 곳에서도 읽을 수 있다.
+    const sg = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.sig');
+    if (sg) {
+      e.preventDefault();
+      const key = sg.dataset.sig ?? '';
+      const host = sg.closest<HTMLElement>('li, p, .chain, .gate, .note') ?? sg.parentElement!;
+      const open = host.nextElementSibling?.matches(`.sig-panel[data-sig="${CSS.escape(key)}"]`) ? (host.nextElementSibling as HTMLElement) : null;
+      if (open) open.remove();
+      else {
+        const blocks = V.parsed.get(id)?.sig.get(key);
+        if (blocks) {
+          const panel = document.createElement('div');
+          panel.className = 'sig-panel';
+          panel.dataset.sig = key;
+          const lab = document.createElement('div');
+          lab.className = 'sig-panel-label';
+          lab.textContent = '의의';
+          panel.append(lab, renderBlocks(blocks, ctx));
+          host.after(panel);
+        }
+      }
+      sg.classList.toggle('open', !open);
+      return;
+    }
     const pl = (e.target as HTMLElement).closest<HTMLAnchorElement>('a.proof-link');
     if (pl) {
       e.preventDefault();

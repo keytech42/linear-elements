@@ -117,6 +117,12 @@ export interface NodeDef {
   checks?: Check[];
   /** 예측 관문들. 본문에 `::predict id` 로 놓는다. */
   predicts?: Predict[];
+  /**
+   * 의의: "이것을 왜 알아야 하나"에 대한 짧은 답(블록 마크업). 키마다 하나.
+   * 본문의 그 물음이 생기는 자리에 [물음](sig:키) 칩으로 놓는다. 마우스를 올리면 미리보기로, 누르면 그 문단 아래에 펼쳐진다(P033).
+   * 다음 내용 전체가 기대는 동기는 본문에 쓰고, 일부 독자만 품을 물음의 답을 여기에 쓴다.
+   */
+  significance?: Record<string, string>;
   /** 이 노드의 수학을 구현한 함수 이름(src/la/*.ts의 export). 앱에서 원문 그대로 보여 준다. */
   code?: string[];
 }

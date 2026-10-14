@@ -30,6 +30,7 @@
 //                         마우스를 올리면 그 항목의 글이 뜨고, 누르면 그 자리로 간다. 표시 없는 "공리 n" "명제 n"은 P031.
 //   [](ahead:노드id#키)  앞질러 가기: 뒤 노드의 이름표를 가리킨다("그것은 뒤의 명제 5에서 증명한다"). 이름은 참조처럼 채워지고 ↷가 붙는다.
 //                         누르면 그 명제의 증명으로 건너뛴다(관문을 펼쳐 열고 알린다). 근거로 쓰는 자리(증명, 등식 줄의 근거 칸)에는 둘 수 없다 (P030).
+//   [물음](sig:키)        의의 칩: "이것을 왜 알아야 하나". 내용은 노드의 significance[키]에 적는다 (P033)
 //   [낱말](word:)         낱말을 쓰지 않고 낱말 자체를 가리킨다(다른 문서가 부르는 이름 등). 따옴표로 그려지고,
 //                         용어 자동 링크와 어휘 검사(P008)에서 빠진다.
 
@@ -38,6 +39,8 @@ export type Inline =
   | { t: 'b'; c: Inline[] }
   | { t: 'math'; tex: string }
   | { t: 'code'; v: string }
+  /** 의의 칩. 내용은 노드의 significance[key] */
+  | { t: 'sig'; key: string; c: Inline[] }
   /** 낱말 자체를 가리키는 자리. 용어로 읽지 않는다 */
   | { t: 'word'; v: string }
   | { t: 'def' | 'term' | 'fwd'; id: string; c: Inline[] }
@@ -181,7 +184,7 @@ export function parseBlocks(src: string): Block[] {
   return out;
 }
 
-const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'ahead', 'word'] as const;
+const LINK_KINDS = ['def', 't', 'fwd', 'why', 'n', 'sync', 'label', 'ref', 'ahead', 'word', 'sig'] as const;
 
 export function parseInline(src: string): Inline[] {
   const out: Inline[] = [];
@@ -234,6 +237,7 @@ export function parseInline(src: string): Inline[] {
           const inner = src.slice(i + 1, close);
           const [, kind, id] = m;
           if (kind === 'word') out.push({ t: 'word', v: inner });
+          else if (kind === 'sig') out.push({ t: 'sig', key: id, c: parseInline(inner) });
           else if (kind === 'why') {
             const k = id.indexOf('#');
             out.push(k >= 0 ? { t: 'why', to: id.slice(0, k), key: id.slice(k + 1), q: inner } : { t: 'why', to: id, q: inner });
